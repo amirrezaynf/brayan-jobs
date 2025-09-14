@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { useState, useEffect, useRef } from 'react';
 
@@ -393,7 +393,7 @@ export default function HomePage() {
                                             <p className="text-gray-400 text-sm flex-grow">{job.description}</p>
                                             <div className="border-t border-gray-700 mt-4 pt-4 flex justify-between items-center">
                                                 <span className="text-lg font-semibold gold-text">{job.salary}</span>
-                                                <a href="#" className="text-sm px-4 py-2 rounded-lg bg-yellow-500 text-black hover:bg-yellow-500 hover:text-black transition">ارسال رزومه</a>
+                                                <a href="/jobsingle" className="text-sm px-4 py-2 rounded-lg bg-yellow-500 text-black hover:bg-yellow-500 hover:text-black transition">ارسال رزومه</a>
                                             </div>
                                         </div>
                                     ))}
