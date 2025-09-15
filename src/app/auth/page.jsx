@@ -14,6 +14,9 @@ import {
   Eye,
   EyeOff,
   ArrowRight,
+  Hash,
+  Briefcase ,
+  Smile ,
   CheckCircle,
 } from "lucide-react";
 
@@ -565,11 +568,11 @@ export default function AuthPage() {
                                 }
                                 className="bg-gray-700/50 border border-gray-600 text-gray-200 text-sm rounded-lg block w-full p-2.5 pr-10 appearance-none"
                               >
-                                <option>فناوری اطلاعات</option>
-                                <option>مالی و حسابداری</option>
-                                <option>مهندسی</option>
-                                <option>پزشکی و سلامت</option>
-                                <option>هنر و طراحی</option>
+                                <option className="bg-gray-800">فناوری اطلاعات</option>
+                                <option className="bg-gray-800">مالی و حسابداری</option>
+                                <option className="bg-gray-800">مهندسی</option>
+                                <option className="bg-gray-800">پزشکی و سلامت</option>
+                                <option className="bg-gray-800">هنر و طراحی</option>
                               </select>
                               <IconWrapper>
                                 <Briefcase size={18} />
@@ -596,10 +599,10 @@ export default function AuthPage() {
                                   }
                                   className="bg-gray-700/50 border border-gray-600 text-gray-200 text-sm rounded-lg block w-full p-2.5 pr-10 appearance-none"
                                 >
-                                  <option>دیپلم</option>
-                                  <option>کارشناسی</option>
-                                  <option>کارشناسی ارشد</option>
-                                  <option>دکتری</option>
+                                  <option className="bg-gray-800">دیپلم</option>
+                                  <option className="bg-gray-800">کارشناسی</option>
+                                  <option className="bg-gray-800">کارشناسی ارشد</option>
+                                  <option className="bg-gray-800">دکتری</option>
                                 </select>
                                 <IconWrapper>
                                   <GraduationCap size={18} className="top-3 absolute " />
