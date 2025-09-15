@@ -115,9 +115,13 @@ export default function HomePage() {
             <div className="bg-[#121212]">
                 <header className="dark-bg shadow-lg shadow-black/20 sticky top-0 z-40">
                     <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-                        <div className="flex items-center space-x-4 space-x-reverse">
+                        <div className="flex  items-center space-x-4 space-x-reverse">
                             <LogoIcon />
-                            <h1 className="text-xl font-bold text-white">پلتفرم استخدامی <span className="gold-text">دکتر برایان اعتماد</span></h1>
+                            <div className="flex flex-col   items-center ">
+                            <h1 className="text-lg font-bold text-white">پلتفرم استخدامی <span className="gold-text">دکتر برایان اعتماد</span></h1>
+                            <span className=" text-sm relative left-3 text-gray-300">جایی که استعداد ایرانی شکوفا می‌شود.</span>
+                            </div>
+                            
                         </div>
 
                         <nav className="hidden lg:flex items-center space-x-8 space-x-reverse font-semibold">

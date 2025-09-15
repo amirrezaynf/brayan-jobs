@@ -4,18 +4,17 @@ import { useState, useEffect } from "react";
 import {
   Gem,
   User,
+  Phone,
   Lock,
   Mail,
-  Phone,
-  Hash,
-  Smile,
-  Briefcase,
-  GraduationCap,
-  ArrowRight,
-  CheckCircle,
-  Building,
   Calendar,
   MapPin,
+  GraduationCap,
+  Building,
+  Eye,
+  EyeOff,
+  ArrowRight,
+  CheckCircle,
 } from "lucide-react";
 
 // You might need to install lucide-react: npm install lucide-react
@@ -280,6 +279,16 @@ export default function AuthPage() {
         `}</style>
         <div className="w-full max-w-md z-10">
           <div className="text-center mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <a
+                href="/"
+                className="flex items-center gap-2 px-3 py-2 bg-yellow-500 text-black rounded-lg  transition-colors text-sm"
+              >
+                <ArrowRight size={16} />
+                بازگشت
+              </a>
+              <div className="flex-1"></div>
+            </div>
             <h1 className="text-4xl font-bold text-yellow-400 tracking-wider">
               دکتر برایان اعتماد
             </h1>
@@ -593,7 +602,7 @@ export default function AuthPage() {
                                   <option>دکتری</option>
                                 </select>
                                 <IconWrapper>
-                                  <GraduationCap size={18} />
+                                  <GraduationCap size={18} className="top-3 absolute " />
                                 </IconWrapper>
                               </div>
                             </div>

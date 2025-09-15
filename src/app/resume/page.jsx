@@ -10,6 +10,7 @@ import {
   Send,
   Trash2,
   ChevronDown,
+  ArrowRight,
 } from "lucide-react";
 
 // کامپوننت اختصاصی برای بخش آپلود فایل
@@ -166,6 +167,16 @@ export default function ResumePage() {
       <div className="container mx-auto px-4 py-8 md:py-12">
         <div className="max-w-3xl mx-auto border border-gray-700 rounded-xl shadow-lg shadow-yellow-500/10 overflow-hidden">
           <div className="px-6 py-8 sm:px-10">
+            {/* Back Button */}
+            <div className="flex items-center justify-between mb-6">
+              <a
+                href="/"
+                className="flex items-center gap-2 px-4 py-2 bg-yellow-500 text-black rounded-lg  transition-colors"
+              >
+                <ArrowRight size={16} />
+                بازگشت به صفحه اصلی
+              </a>
+            </div>
             {/* Header Section */}
             <div className="text-center mb-8">
               <h1 className="text-3xl font-bold text-white">

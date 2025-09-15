@@ -13,7 +13,7 @@ const FormInput = ({ id, label, type = "text", placeholder }) => (
       type={type}
       id={id}
       name={id}
-      className="w-full  border border-gray-600 rounded-lg px-4 py-2.5 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition"
+      className="w-full  border border-gray-600 rounded-lg px-4 py-2.5 text-white placeholder-gray-400 focus:outline-none focus:ring-2  transition"
       placeholder={placeholder}
     />
   </div>
@@ -30,7 +30,7 @@ const FormSelect = ({ id, label, children }) => (
     <select
       id={id}
       name={id}
-      className="w-full  border border-gray-600 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition"
+      className="w-full  border border-gray-600 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2  transition"
     >
       {children}
     </select>
@@ -49,7 +49,7 @@ const FormTextarea = ({ id, label, placeholder, rows = 4 }) => (
       id={id}
       name={id}
       rows={rows}
-      className="w-full  border border-gray-600 rounded-lg px-4 py-2.5 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition"
+      className="w-full  border border-gray-600 rounded-lg px-4 py-2.5 text-white placeholder-gray-400 focus:outline-none focus:ring-2  transition"
       placeholder={placeholder}
     ></textarea>
   </div>
@@ -72,9 +72,9 @@ export default function PostJobTab() {
               placeholder="مثال: توسعه‌دهنده Front-End"
             />
             <FormSelect id="contract-type" label="نوع قرارداد">
-              <option>تمام وقت</option>
-              <option>پاره وقت</option>
-              <option>پروژه‌ای</option>
+              <option className="bg-black/90">تمام وقت</option>
+              <option className="bg-black/90">پاره وقت</option>
+              <option className="bg-black/90">پروژه‌ای</option>
             </FormSelect>
             <FormInput
               id="work-hours"
@@ -99,9 +99,9 @@ export default function PostJobTab() {
           <h3 className="text-lg font-semibold mb-4">شرایط احراز</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormSelect id="gender" label="جنسیت">
-              <option>خانم</option>
-              <option>آقا</option>
-              <option>هردو</option>
+              <option className="bg-black/90">خانم</option>
+              <option className="bg-black/90">آقا</option>
+              <option className="bg-black/90">هردو</option>
             </FormSelect>
             <FormInput
               id="experience"
