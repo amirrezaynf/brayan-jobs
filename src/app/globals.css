@@ -1,4 +1,3 @@
-@import url('https://cdn.fontcdn.ir/Font/Persian/Yekan_Bakh/YekanBakh.css');
 
 @import "tailwindcss";
 
@@ -19,11 +18,11 @@
 }
 
 body, html {
-  font-family: 'Yekan Bakh', 'Tahoma', sans-serif !important;
+  font-family: 'Yekan Bakh', 'Tahoma', sans-serif ;
 }
 
 input, button, select, textarea, div, p, h1, h2, h3, h4, h5, h6, span, label {
-  font-family: 'Yekan Bakh', 'Tahoma', sans-serif !important;
+  font-family: 'Yekan Bakh', 'Tahoma', sans-serif ;
 }
 
 
