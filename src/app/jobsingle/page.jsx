@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react';
-import { Briefcase, MapPin, Calendar, FileText, GraduationCap, DollarSign, User, Award, ShieldCheck, Mail, Phone, UploadCloud, ChevronsRight } from 'lucide-react';
+import { Briefcase, MapPin, Calendar, FileText, GraduationCap, DollarSign, User, Award, ShieldCheck, Mail, Phone, UploadCloud, ChevronsRight, Trash, Trash2 } from 'lucide-react';
 
 // A custom component for detail items to avoid repetition
 const DetailItem = ({ icon: Icon, label, value }) => (
@@ -36,36 +36,84 @@ const FileUpload = ({ id, label, multiple = false }) => {
 
   const handleFileChange = (e) => {
     if (e.target.files) {
-      setFiles(Array.from(e.target.files).map(file => file.name));
+      const newFiles = Array.from(e.target.files).map(file => file.name);
+      if (multiple) {
+        // Add new files to existing ones
+        setFiles(prevFiles => [...prevFiles, ...newFiles]);
+      } else {
+        // Replace existing file
+        setFiles(newFiles);
+      }
     }
+  };
+
+  const handleClick = () => {
+    document.getElementById(id).click();
+  };
+
+  const removeFile = (indexToRemove) => {
+    setFiles(files.filter((_, index) => index !== indexToRemove));
+  };
+
+  const clearAllFiles = () => {
+    setFiles([]);
+    // Reset the input value
+    const input = document.getElementById(id);
+    if (input) input.value = '';
   };
 
   return (
     <div>
-      <label htmlFor={id} className="block text-sm font-medium text-gray-300 mb-2 text-right">
+      <label className="block text-sm font-medium text-gray-300 mb-2 text-right">
         {label} <span className="text-yellow-400">*</span>
       </label>
-      <label
-        htmlFor={id}
-        className="relative flex flex-col items-center justify-center w-full h-32 px-4 transition  border-2 border-gray-700 border-dashed rounded-lg cursor-pointer hover:border-yellow-400"
+      <div
+        onClick={handleClick}
+        className="relative flex flex-col items-center justify-center w-full h-32 px-4 transition border-2 border-gray-700 border-dashed rounded-lg cursor-pointer hover:border-yellow-400"
       >
         <div className="flex flex-col items-center justify-center pt-5 pb-6">
           <UploadCloud className="w-8 h-8 mb-4 text-gray-500" />
           <p className="mb-2 text-sm text-gray-400">
             <span className="font-semibold text-yellow-400">برای آپلود کلیک کنید</span> یا فایل‌ها را بکشید و رها کنید
           </p>
-          <p className="text-xs text-gray-500">SVG, PNG, JPG or PDF</p>
+          <p className="text-xs text-gray-500">
+            {multiple ? ' فایل های خود را انتخاب کنید- SVG, PNG, JPG or PDF' : 'SVG, PNG, JPG or PDF'}
+          </p>
         </div>
         <input id={id} type="file" className="hidden" multiple={multiple} onChange={handleFileChange} />
-      </label>
+      </div>
       {files.length > 0 && (
         <div className="mt-2 text-xs text-gray-400 text-right">
-          <p className="font-semibold">فایل‌های انتخاب شده:</p>
-          <ul className="list-disc pr-5">
+          <div className="flex items-center justify-between mb-2">
+            <p className="font-semibold">فایل‌های انتخاب شده: ({files.length})</p>
+            {multiple && files.length > 1 && (
+              <button
+                type="button"
+                onClick={clearAllFiles}
+                className="text-red-400 hover:text-red-300 text-xs underline"
+              >
+                حذف همه
+              </button>
+            )}
+          </div>
+          <ul className="space-y-1">
             {files.map((file, index) => (
-              <li key={index}>{file}</li>
+              <li key={index} className="flex items-center justify-between  rounded px-3 py-2">
+                <span className="truncate flex-1">{file}</span>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeFile(index);
+                  }}
+                  className="text-red-400 hover:text-red-300 text-sm font-bold ml-2 flex-shrink-0"
+                >
+                  <Trash2 className='w-4'/>
+                </button>
+              </li>
             ))}
           </ul>
+          
         </div>
       )}
     </div>

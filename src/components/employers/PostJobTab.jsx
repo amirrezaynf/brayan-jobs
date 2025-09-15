@@ -1,9 +1,14 @@
 // components/employers/PostJobTab.js
-import { Briefcase } from 'lucide-react';
+import { Briefcase } from "lucide-react";
 
-const FormInput = ({ id, label, type = 'text', placeholder }) => (
+const FormInput = ({ id, label, type = "text", placeholder }) => (
   <div>
-    <label htmlFor={id} className="block text-sm font-medium text-gray-300 mb-2">{label}</label>
+    <label
+      htmlFor={id}
+      className="block text-sm font-medium text-gray-300 mb-2"
+    >
+      {label}
+    </label>
     <input
       type={type}
       id={id}
@@ -16,7 +21,12 @@ const FormInput = ({ id, label, type = 'text', placeholder }) => (
 
 const FormSelect = ({ id, label, children }) => (
   <div>
-    <label htmlFor={id} className="block text-sm font-medium text-gray-300 mb-2">{label}</label>
+    <label
+      htmlFor={id}
+      className="block text-sm font-medium text-gray-300 mb-2"
+    >
+      {label}
+    </label>
     <select
       id={id}
       name={id}
@@ -29,7 +39,12 @@ const FormSelect = ({ id, label, children }) => (
 
 const FormTextarea = ({ id, label, placeholder, rows = 4 }) => (
   <div>
-    <label htmlFor={id} className="block text-sm font-medium text-gray-300 mb-2">{label}</label>
+    <label
+      htmlFor={id}
+      className="block text-sm font-medium text-gray-300 mb-2"
+    >
+      {label}
+    </label>
     <textarea
       id={id}
       name={id}
@@ -51,20 +66,32 @@ export default function PostJobTab() {
         <div className="border-b border-gray-700  pb-8">
           <h3 className="text-lg font-semibold mb-4">اطلاعات اصلی آگهی</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormInput id="job-title" label="عنوان شغلی" placeholder="مثال: توسعه‌دهنده Front-End" />
+            <FormInput
+              id="job-title"
+              label="عنوان شغلی"
+              placeholder="مثال: توسعه‌دهنده Front-End"
+            />
             <FormSelect id="contract-type" label="نوع قرارداد">
               <option>تمام وقت</option>
               <option>پاره وقت</option>
               <option>پروژه‌ای</option>
             </FormSelect>
-            <FormInput id="work-hours" label="ساعات کاری" placeholder="مثال: شنبه تا چهارشنبه ۹ الی ۱۷" />
+            <FormInput
+              id="work-hours"
+              label="ساعات کاری"
+              placeholder="مثال: شنبه تا چهارشنبه ۹ الی ۱۷"
+            />
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:col-span-2">
               <FormInput id="country" label="کشور" placeholder="ایران" />
               <FormInput id="province" label="استان" placeholder="تهران" />
               <FormInput id="city" label="شهرستان" placeholder="تهران" />
             </div>
             <div className="md:col-span-2">
-              <FormTextarea id="company-description" label="توضیحات موسسه و آگهی" placeholder="درباره شرکت خود و موقعیت شغلی توضیح دهید..." />
+              <FormTextarea
+                id="company-description"
+                label="توضیحات موسسه و آگهی"
+                placeholder="درباره شرکت خود و موقعیت شغلی توضیح دهید..."
+              />
             </div>
           </div>
         </div>
@@ -76,17 +103,34 @@ export default function PostJobTab() {
               <option>آقا</option>
               <option>هردو</option>
             </FormSelect>
-            <FormInput id="experience" label="سابقه کار" placeholder="مثال: حداقل ۳ سال" />
+            <FormInput
+              id="experience"
+              label="سابقه کار"
+              placeholder="مثال: حداقل ۳ سال"
+            />
             <div className="md:col-span-2">
-              <FormTextarea id="requirements-details" label="توضیحات تکمیلی شرایط" placeholder="مهارت‌های نرم و سخت مورد نیاز..." rows={5} />
+              <FormTextarea
+                id="requirements-details"
+                label="توضیحات تکمیلی شرایط"
+                placeholder="مهارت‌های نرم و سخت مورد نیاز..."
+                rows={5}
+              />
             </div>
           </div>
         </div>
         <div>
           <h3 className="text-lg font-semibold mb-4">حقوق و مزایا</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormInput id="salary-range" label="محدوده حقوق (تومان)" placeholder="مثال: از ۲۰,۰۰۰,۰۰۰ تا ۲۵,۰۰۰,۰۰۰" />
-            <FormInput id="benefits" label="تسهیلات و مزایا" placeholder="بیمه تکمیلی، پاداش، ساعت کاری منعطف و..." />
+            <FormInput
+              id="salary-range"
+              label="محدوده حقوق (تومان)"
+              placeholder="مثال: از ۲۰,۰۰۰,۰۰۰ تا ۲۵,۰۰۰,۰۰۰"
+            />
+            <FormInput
+              id="benefits"
+              label="تسهیلات و مزایا"
+              placeholder="بیمه تکمیلی، پاداش، ساعت کاری منعطف و..."
+            />
           </div>
         </div>
         <div className="pt-6 text-left">

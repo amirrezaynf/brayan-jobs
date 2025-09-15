@@ -5,7 +5,8 @@ import { useState } from 'react';
 import DashboardTab from '@/components/employers/DashboardTab';
 import PostJobTab from '@/components/employers/PostJobTab';
 import MyJobsTab from '@/components/employers/MyJobsTab';
-import { LayoutDashboard, FilePlus2, FileText } from 'lucide-react';
+import ResumesTab from '@/components/employers/ResumesTab';
+import { LayoutDashboard, FilePlus2, FileText, Users } from 'lucide-react';
 
 export default function EmployersPage() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -14,6 +15,7 @@ export default function EmployersPage() {
     { id: 'dashboard', label: 'پیشخوان', icon: <LayoutDashboard size={20} /> },
     { id: 'post-job', label: 'ثبت آگهی جدید', icon: <FilePlus2 size={20} /> },
     { id: 'my-jobs', label: 'آگهی‌های من', icon: <FileText size={20} /> },
+    { id: 'resumes', label: 'مدیریت رزومه‌ها', icon: <Users size={20} /> },
   ];
 
   const renderContent = () => {
@@ -24,6 +26,8 @@ export default function EmployersPage() {
         return <PostJobTab />;
       case 'my-jobs':
         return <MyJobsTab />;
+      case 'resumes':
+        return <ResumesTab />;
       default:
         return <DashboardTab />;
     }

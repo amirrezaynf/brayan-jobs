@@ -1,4 +1,7 @@
 "use client";
+import SalaryRangeSlider from '@/components/SalaryRangeInput';
+import Slider from 'rc-slider';
+import 'rc-slider/assets/index.css'; 
 
 import React, { useState, useEffect, useRef } from 'react';
 
@@ -24,12 +27,12 @@ const jobCategories = [
 
 // Mock data for job cards
 const jobListings = [
-    { id: 1, title: 'کارشناس ارشد فروش', company: 'دیجی‌کالا', logo: 'D', location: 'تهران', type: 'تمام وقت', description: 'مسلط به فنون مذاکره و فروش سازمانی. دارای حداقل ۳ سال سابقه کار مرتبط.', salary: 'توافقی' },
-    { id: 2, title: 'توسعه‌دهنده Backend (Node.js)', company: 'کافه‌بازار', logo: 'CB', location: 'تهران (دورکاری)', type: 'تمام وقت', description: 'تجربه کار با میکروسرویس‌ها، دیتابیس‌های SQL و NoSQL. آشنایی با Docker مزیت محسوب می‌شود.', salary: '۴۰ - ۵۰ میلیون' },
-    { id: 3, title: 'طراح UI/UX', company: 'اسنپ', logo: 'S', location: 'اصفهان', type: 'پاره‌وقت', description: 'مسلط به Figma و Adobe XD. توانایی طراحی پروتوتایپ‌های تعاملی و User Flow.', salary: 'توافقی' },
-    { id: 4, title: 'مدیر محصول', company: 'همراه اول', logo: 'MCI', location: 'شیراز', type: 'تمام وقت', description: 'توانایی تعریف Roadmap محصول و مدیریت بک‌لاگ. تجربه کار در محیط Agile.', salary: '۵۰ میلیون به بالا' },
-    { id: 5, title: 'کارشناس دیجیتال مارکتینگ', company: 'بانک پاسارگاد', logo: 'BP', location: 'مشهد', type: 'پروژه‌ای', description: 'مسلط به SEO، Google Ads و کمپین‌های شبکه‌های اجتماعی. توانایی تحلیل داده و گزارش‌دهی.', salary: 'توافقی' },
-    { id: 6, title: 'مهندس DevOps', company: 'یکتانت', logo: 'Y', location: 'تهران', type: 'تمام وقت', description: 'تجربه کار با ابزارهای CI/CD، Kubernetes و سیستم‌های مانیتورینگ مانند Prometheus.', salary: '۶۰ میلیون به بالا' },
+    { id: 1, title: 'کارشناس ارشد فروش', company: 'دیجی‌کالا', logo: 'D', location: 'تهران', type: 'تمام وقت', description: 'مسلط به فنون مذاکره و فروش سازمانی. دارای حداقل ۳ سال سابقه کار مرتبط.', salary: 'توافقی', isVip: true },
+    { id: 2, title: 'توسعه‌دهنده Backend (Node.js)', company: 'کافه‌بازار', logo: 'CB', location: 'تهران (دورکاری)', type: 'تمام وقت', description: 'تجربه کار با میکروسرویس‌ها، دیتابیس‌های SQL و NoSQL. آشنایی با Docker مزیت محسوب می‌شود.', salary: '۴۰ - ۵۰ میلیون', isVip: false },
+    { id: 3, title: 'طراح UI/UX', company: 'اسنپ', logo: 'S', location: 'اصفهان', type: 'پاره‌وقت', description: 'مسلط به Figma و Adobe XD. توانایی طراحی پروتوتایپ‌های تعاملی و User Flow.', salary: 'توافقی', isVip: true },
+    { id: 4, title: 'مدیر محصول', company: 'همراه اول', logo: 'MCI', location: 'شیراز', type: 'تمام وقت', description: 'توانایی تعریف Roadmap محصول و مدیریت بک‌لاگ. تجربه کار در محیط Agile.', salary: '۵۰ میلیون به بالا', isVip: true },
+    { id: 5, title: 'کارشناس دیجیتال مارکتینگ', company: 'بانک پاسارگاد', logo: 'BP', location: 'مشهد', type: 'پروژه‌ای', description: 'مسلط به SEO، Google Ads و کمپین‌های شبکه‌های اجتماعی. توانایی تحلیل داده و گزارش‌دهی.', salary: 'توافقی', isVip: false },
+    { id: 6, title: 'مهندس DevOps', company: 'یکتانت', logo: 'Y', location: 'تهران', type: 'تمام وقت', description: 'تجربه کار با ابزارهای CI/CD، Kubernetes و سیستم‌های مانیتورینگ مانند Prometheus.', salary: '۶۰ میلیون به بالا', isVip: true },
 ];
 
 // Helper component for Icons
@@ -40,6 +43,7 @@ const SearchIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" heig
 const LogoIcon = () => <svg className="w-10 h-10 gold-text" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>;
 const MenuIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" /></svg>;
 const XIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>;
+const StarIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon></svg>;
 
 
 // Custom Select Component Logic encapsulated within the main page
@@ -126,7 +130,7 @@ export default function HomePage() {
                            
                             <div className="flex items-center space-x-4 space-x-reverse">
                                 <a href="/employers" className="text-gray-300 hover:gold-text transition">بخش کارفرمایان</a>
-                                <a href="/auth" className="px-5 py-2 rounded-lg gold-bg text-black font-semibold hover:opacity-90 transition duration-300">ورود / ثبت نام</a>
+                                <a href="/auth" className="px-5 py-2 rounded-lg gold-bg text-black  hover:opacity-90 transition duration-300">ورود / ثبت نام</a>
                             </div>
                         </div>
                         
@@ -203,7 +207,7 @@ export default function HomePage() {
                             <aside className="lg:w-1/4">
                                 <div className="dark-card p-6 rounded-xl sticky top-28">
                                     <h3 className="text-xl font-bold mb-6 border-b-2 border-gray-700 pb-3">فیلترهای پیشرفته</h3>
-                                    <div>
+                                    {/* <div>
                                         <label htmlFor="salary-range" className="block mb-4 text-md font-medium text-gray-300">محدوده حقوق (تومان)</label>
                                         <input type="range" id="salary-range" min="0" max="100000000" step="1000000" value={salary} onChange={(e) => setSalary(Number(e.target.value))} className="w-full h-2 rounded-lg appearance-none cursor-pointer" />
                                         <div className="flex justify-between text-sm text-gray-400 mt-2">
@@ -211,7 +215,8 @@ export default function HomePage() {
                                             <span id="salary-value" className="font-bold gold-text">{salary.toLocaleString('fa-IR')}</span>
                                             <span>۱۰۰م+</span>
                                         </div>
-                                    </div>
+                                    </div> */}
+                                    <SalaryRangeSlider />
                                     <div className="border-t border-gray-700 my-6"></div>
                                     <div>
                                         <label className="block mb-4 text-md font-medium text-gray-300">حوزه کاری</label>
@@ -232,11 +237,21 @@ export default function HomePage() {
                             <div className="lg:w-3/4">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     {jobListings.map(job => (
-                                        <div key={job.id} className="job-card dark-card rounded-xl p-6 flex flex-col">
+                                        <div key={job.id} className="job-card dark-card rounded-xl p-6 flex flex-col relative">
+                                           
                                             <div className="flex items-start justify-between">
                                                 <div>
-                                                    <h4 className="text-xl font-bold text-white">{job.title}</h4>
+                                                   <div className='flex gap-2 items-center'>
+                                                   <h4 className="text-xl font-bold text-white">{job.title}</h4>
+                                                   {job.isVip && (
+                                                <div className="w-fit flex !items-center gap-1 px-2 py-1 text-xs font-bold rounded-full bg-gradient-to-r from-yellow-500 to-orange-600 text-white shadow-lg">
+                                                    <StarIcon />
+                                                    <span>VIP</span>
+                                                </div>
+                                            )}
+                                                   </div>
                                                     <p className="text-gray-400 mt-1">{job.company}</p>
+                                                 
                                                 </div>
                                                 <img src={`https://placehold.co/50x50/FBBF24/121212?text=${job.logo}`} alt={`${job.company} Logo`} className="rounded-full" />
                                             </div>

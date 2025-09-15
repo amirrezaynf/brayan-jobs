@@ -342,7 +342,7 @@ export default function AuthPage() {
                     <FormInput
                       name="phone"
                       type="tel"
-                      placeholder="شماره تلفن"
+                      placeholder="ایمیل یا شماره تلفن"
                       icon={<Phone size={18} />}
                       value={loginData.phone}
                       onChange={(e) => handleInputChange(setLoginData, e)}
@@ -656,7 +656,7 @@ export default function AuthPage() {
                     <FormInput
                       name="phone"
                       type="tel"
-                      placeholder="شماره تلفن"
+                      placeholder="  ایمیل یا شماره تلفن"
                       icon={<Phone size={18} />}
                       value={employerLoginData.phone}
                       onChange={(e) =>
@@ -713,7 +713,7 @@ export default function AuthPage() {
                             <FormInput
                               name="contact"
                               type="tel"
-                              placeholder="شماره تلفن"
+                              placeholder=" ایمیل یا شماره تلفن"
                               icon={<Phone size={18} />}
                               value={employerRegisterData.contact}
                               onChange={(e) =>
