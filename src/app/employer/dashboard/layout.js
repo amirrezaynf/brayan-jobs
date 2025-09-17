@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { COMPANY_DATA, loadCompanyData } from "@/constants/companyData";
 
 // کامپوننت GlobalStyles را می‌توان در یک layout بالاتر یا همینجا قرار داد
 const GlobalStyles = () => (
@@ -212,38 +213,85 @@ const Sidebar = () => {
   );
 };
 
-const Topbar = () => (
-  <header className="flex items-center justify-between p-6 bg-gray-900 border-b border-gray-800 sticky top-0 z-40">
-    <div className="flex items-center space-x-4">
-      <Link
-        href="/employer/dashboard/vacancies"
-        className="bg-yellow-400 text-gray-900 px-5 py-2 rounded-lg hover:bg-yellow-300 transition duration-300 font-bold flex items-center"
-      >
-        <span className="ml-2">ثبت آگهی استخدام</span>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5"
-          viewBox="0 0 20 20"
-          fill="currentColor"
+const Topbar = () => {
+  const [companyData, setCompanyData] = useState(COMPANY_DATA);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+    const loadedData = loadCompanyData();
+    setCompanyData(loadedData);
+
+    // Listen for company data changes
+    const handleDataChange = (event) => {
+      setCompanyData(event.detail);
+    };
+
+    window.addEventListener("companyDataChanged", handleDataChange);
+
+    return () => {
+      window.removeEventListener("companyDataChanged", handleDataChange);
+    };
+  }, []);
+
+  // Use default data for server-side rendering to avoid hydration mismatch
+  const displayData = isClient ? companyData : COMPANY_DATA;
+
+  // Get the display name based on user preference
+  const displayName = isClient
+    ? displayData.displayNamePreference === "english" &&
+      displayData.companyNameEn &&
+      displayData.companyNameEn.trim()
+      ? displayData.companyNameEn
+      : displayData.companyName || "پروفایل شرکت"
+    : COMPANY_DATA.companyName;
+
+  return (
+    <header className="flex items-center justify-between p-6 bg-gray-900 border-b border-gray-800 sticky top-0 z-40">
+      <div className="flex items-center space-x-4">
+        <Link
+          href="/employer/dashboard/vacancies"
+          className="bg-yellow-400 text-gray-900 px-5 py-2 rounded-lg hover:bg-yellow-300 transition duration-300 font-bold flex items-center"
         >
-          <path
-            fillRule="evenodd"
-            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-            clipRule="evenodd"
-          />
-        </svg>
-      </Link>
-    </div>
-    <div className="flex items-center space-x-4" style={{ direction: "rtl" }}>
-      <div className="flex items-center ml-4">
-        <div className="h-10 w-10 bg-yellow-400 rounded-full flex items-center justify-center text-gray-900 font-bold text-lg">
-          S
-        </div>
-        <span className="mr-2  ml-4 text-white font-medium">اسم سازمان</span>
+          <span className="ml-2">ثبت آگهی استخدام</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </Link>
       </div>
-    </div>
-  </header>
-);
+      <div className="flex items-center space-x-4" style={{ direction: "rtl" }}>
+        <Link
+          href="/employer/dashboard/profile"
+          className="flex items-center ml-4 hover:bg-gray-800 rounded-lg px-3 py-2 transition-colors duration-200"
+        >
+          <div className="h-10 w-10 bg-yellow-400 rounded-full flex items-center justify-center text-gray-900 font-bold text-lg overflow-hidden">
+            {displayData.companyLogo ? (
+              <img
+                src={displayData.companyLogo}
+                alt="Company Logo"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              displayName.charAt(0)
+            )}
+          </div>
+          <span className="mr-2 ml-4 text-white font-medium">
+            {displayName}
+          </span>
+        </Link>
+      </div>
+    </header>
+  );
+};
 
 export default function DashboardLayout({ children }) {
   return (

@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function VacanciesPage() {
   const [filter, setFilter] = useState("active");
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [vacancies, setVacancies] = useState([]);
+  const [editingJob, setEditingJob] = useState(null);
   const [newJob, setNewJob] = useState({
     title: "",
     description: "",
@@ -13,30 +15,120 @@ export default function VacanciesPage() {
     location: "",
     type: "full-time",
     category: "",
+    gender: "both",
+    education: "",
+    experience: "",
+    militaryService: "",
+    benefits: [],
+    responsibilities: "",
+    skills: "",
+    companyDescription: "",
+    workHours: "",
+    probationPeriod: "",
+    insurance: "",
+    remoteWork: false,
+    travelRequired: false,
+    urgent: false,
   });
 
-  // Mock data for vacancies
-  const vacancies = [
-    {
-      title: "توسعه‌دهنده Front-End (React)",
-      status: "active",
-      applicants: 25,
-      date: "۱۴۰۳/۰۶/۲۰",
-    },
-    {
-      title: "کارشناس بازاریابی دیجیتال",
-      status: "active",
-      applicants: 42,
-      date: "۱۴۰۳/۰۶/۱۸",
-    },
-    {
-      title: "طراح UI/UX",
-      status: "expired",
-      applicants: 89,
-      date: "۱۴۰۳/۰۵/۱۰",
-    },
-    { title: "مدیر محصول", status: "draft", applicants: 0, date: "۱۴۰۳/۰۶/۲۲" },
-  ];
+  // Load jobs from localStorage on component mount
+  useEffect(() => {
+    loadJobs();
+  }, []);
+
+  // Function to load jobs from localStorage
+  const loadJobs = () => {
+    if (typeof window !== "undefined") {
+      const savedJobs = localStorage.getItem("postedJobs");
+      if (savedJobs) {
+        setVacancies(JSON.parse(savedJobs));
+      }
+    }
+  };
+
+  // Function to save jobs to localStorage
+  const saveJobs = (jobs) => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("postedJobs", JSON.stringify(jobs));
+    }
+  };
+
+  // Function to show success message
+  const showSuccessMessage = (message) => {
+    const successMessage = document.createElement("div");
+    successMessage.className =
+      "fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50";
+    successMessage.textContent = message;
+    document.body.appendChild(successMessage);
+
+    // Remove the message after 3 seconds
+    setTimeout(() => {
+      if (document.body.contains(successMessage)) {
+        document.body.removeChild(successMessage);
+      }
+    }, 3000);
+  };
+
+  // Function to handle editing a job
+  const handleEditJob = (job) => {
+    setEditingJob(job);
+    setNewJob({
+      title: job.title || "",
+      description: job.description || "",
+      requirements: job.requirements || "",
+      salary: job.salary || "",
+      location: job.location || "",
+      type: job.type || "full-time",
+      category: job.category || "",
+      gender: job.gender || "both",
+      education: job.education || "",
+      experience: job.experience || "",
+      militaryService: job.militaryService || "",
+      benefits: Array.isArray(job.benefits) ? job.benefits : [],
+      responsibilities: job.responsibilities || "",
+      skills: job.skills || "",
+      companyDescription: job.companyDescription || "",
+      workHours: job.workHours || "",
+      probationPeriod: job.probationPeriod || "",
+      insurance: job.insurance || "",
+      remoteWork: job.remoteWork || false,
+      travelRequired: job.travelRequired || false,
+      urgent: job.urgent || false,
+    });
+    setShowCreateForm(true);
+  };
+
+  // Function to handle viewing a job
+  const handleViewJob = (job) => {
+    // Navigate to single job page with job ID
+    if (typeof window !== "undefined") {
+      window.location.href = `/jobsingle?id=${job.id}`;
+    }
+  };
+
+  // Function to handle deleting a job
+  const handleDeleteJob = (job) => {
+    // Show confirmation dialog
+    const confirmDelete = window.confirm(
+      `آیا مطمئن هستید که می‌خواهید آگهی "${job.title}" را حذف کنید؟`
+    );
+
+    if (!confirmDelete) return;
+
+    // Remove from vacancies list
+    const updatedVacancies = vacancies.filter((v) => v.id !== job.id);
+    setVacancies(updatedVacancies);
+    saveJobs(updatedVacancies);
+
+    // Remove from global jobs list
+    if (typeof window !== "undefined") {
+      const existingJobs = JSON.parse(localStorage.getItem("allJobs") || "[]");
+      const updatedAllJobs = existingJobs.filter((j) => j.id !== job.id);
+      localStorage.setItem("allJobs", JSON.stringify(updatedAllJobs));
+    }
+
+    showSuccessMessage("آگهی با موفقیت حذف شد!");
+  };
 
   const filteredVacancies = vacancies.filter((v) => {
     if (filter === "all") return true;
@@ -58,8 +150,60 @@ export default function VacanciesPage() {
       return;
     }
 
-    // Here you would typically send the data to your backend
-    console.log("New job posting:", newJob);
+    if (editingJob) {
+      // Update existing job
+      const updatedJob = {
+        ...editingJob,
+        ...newJob,
+        updatedAt: new Date().toISOString(),
+      };
+
+      const updatedVacancies = vacancies.map((job) =>
+        job.id === editingJob.id ? updatedJob : job
+      );
+      setVacancies(updatedVacancies);
+      saveJobs(updatedVacancies);
+
+      // Update global jobs list
+      if (typeof window !== "undefined") {
+        const existingJobs = JSON.parse(
+          localStorage.getItem("allJobs") || "[]"
+        );
+        const updatedAllJobs = existingJobs.map((job) =>
+          job.id === editingJob.id ? updatedJob : job
+        );
+        localStorage.setItem("allJobs", JSON.stringify(updatedAllJobs));
+      }
+
+      setEditingJob(null);
+      showSuccessMessage("آگهی با موفقیت بروزرسانی شد!");
+    } else {
+      // Create new job
+      const jobToSave = {
+        ...newJob,
+        id: Date.now().toString(),
+        applicants: 0,
+        date: new Date().toLocaleDateString("fa-IR"),
+        createdAt: new Date().toISOString(),
+        status: "active",
+      };
+
+      // Add to vacancies list
+      const updatedVacancies = [jobToSave, ...vacancies];
+      setVacancies(updatedVacancies);
+      saveJobs(updatedVacancies);
+
+      // Add to global jobs list since all jobs are now active
+      if (typeof window !== "undefined") {
+        const existingJobs = JSON.parse(
+          localStorage.getItem("allJobs") || "[]"
+        );
+        const updatedAllJobs = [jobToSave, ...existingJobs];
+        localStorage.setItem("allJobs", JSON.stringify(updatedAllJobs));
+      }
+
+      showSuccessMessage("آگهی با موفقیت منتشر شد!");
+    }
 
     // Reset form and hide it
     setNewJob({
@@ -70,11 +214,22 @@ export default function VacanciesPage() {
       location: "",
       type: "full-time",
       category: "",
+      gender: "both",
+      education: "",
+      experience: "",
+      militaryService: "",
+      benefits: [],
+      responsibilities: "",
+      skills: "",
+      companyDescription: "",
+      workHours: "",
+      probationPeriod: "",
+      insurance: "",
+      remoteWork: false,
+      travelRequired: false,
+      urgent: false,
     });
     setShowCreateForm(false);
-
-    // Show success message
-    alert("آگهی با موفقیت منتشر شد!");
   };
 
   return (
@@ -93,16 +248,7 @@ export default function VacanciesPage() {
             >
               منقضی شده
             </button>
-            <button
-              onClick={() => setFilter("draft")}
-              className={`px-4 py-1.5 rounded-md text-sm ${
-                filter === "draft"
-                  ? "bg-yellow-400 text-gray-900"
-                  : "text-gray-400"
-              }`}
-            >
-              پیش‌نویس
-            </button>
+
             <button
               onClick={() => setFilter("active")}
               className={`px-4 py-1.5 rounded-md text-sm ${
@@ -125,7 +271,12 @@ export default function VacanciesPage() {
             </button>
           </div>
           <button
-            onClick={() => setShowCreateForm(!showCreateForm)}
+            onClick={() => {
+              setShowCreateForm(!showCreateForm);
+              if (showCreateForm) {
+                setEditingJob(null);
+              }
+            }}
             className="bg-yellow-400 text-gray-900 px-6 py-2 rounded-lg hover:bg-yellow-300 transition duration-300 font-bold flex items-center shadow-lg shadow-yellow-500/20"
           >
             <span className="ml-2">
@@ -158,7 +309,7 @@ export default function VacanciesPage() {
           className="bg-gray-800 rounded-lg p-6 mb-6 border border-gray-700"
         >
           <h2 className="text-xl font-bold text-white mb-6 text-right">
-            ایجاد آگهی استخدام جدید
+            {editingJob ? "ویرایش آگهی استخدام" : "ایجاد آگهی استخدام جدید"}
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -286,18 +437,246 @@ export default function VacanciesPage() {
                 required
               />
             </div>
+
+            {/* جنسیت */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2 text-right">
+                جنسیت
+              </label>
+              <select
+                value={newJob.gender}
+                onChange={(e) =>
+                  setNewJob({ ...newJob, gender: e.target.value })
+                }
+                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-right"
+              >
+                <option value="both">آقا و خانم</option>
+                <option value="male">آقا</option>
+                <option value="female">خانم</option>
+              </select>
+            </div>
+
+            {/* تحصیلات */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2 text-right">
+                حداقل تحصیلات
+              </label>
+              <select
+                value={newJob.education}
+                onChange={(e) =>
+                  setNewJob({ ...newJob, education: e.target.value })
+                }
+                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-right"
+              >
+                <option value="">انتخاب تحصیلات</option>
+                <option value="diploma">دیپلم</option>
+                <option value="associate">کاردانی</option>
+                <option value="bachelor">کارشناسی</option>
+                <option value="master">کارشناسی ارشد</option>
+                <option value="phd">دکتری</option>
+              </select>
+            </div>
+
+            {/* سابقه کاری */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2 text-right">
+                سابقه کاری
+              </label>
+              <select
+                value={newJob.experience}
+                onChange={(e) =>
+                  setNewJob({ ...newJob, experience: e.target.value })
+                }
+                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-right"
+              >
+                <option value="">انتخاب سابقه</option>
+                <option value="fresh">تازه‌کار</option>
+                <option value="1-2">۱-۲ سال</option>
+                <option value="2-5">۲-۵ سال</option>
+                <option value="5+">بیش از ۵ سال</option>
+              </select>
+            </div>
+
+            {/* وضعیت سربازی */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2 text-right">
+                وضعیت سربازی
+              </label>
+              <select
+                value={newJob.militaryService}
+                onChange={(e) =>
+                  setNewJob({ ...newJob, militaryService: e.target.value })
+                }
+                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-right"
+              >
+                <option value="">انتخاب وضعیت</option>
+                <option value="completed">پایان خدمت</option>
+                <option value="exempt">معاف</option>
+                <option value="not-required">نیازی نیست</option>
+              </select>
+            </div>
+
+            {/* ساعت کاری */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2 text-right">
+                ساعت کاری
+              </label>
+              <input
+                type="text"
+                value={newJob.workHours}
+                onChange={(e) =>
+                  setNewJob({ ...newJob, workHours: e.target.value })
+                }
+                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-right"
+                placeholder="مثال: ۹ صبح تا ۶ عصر"
+              />
+            </div>
+
+            {/* بیمه */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2 text-right">
+                بیمه
+              </label>
+              <select
+                value={newJob.insurance}
+                onChange={(e) =>
+                  setNewJob({ ...newJob, insurance: e.target.value })
+                }
+                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-right"
+              >
+                <option value="">انتخاب بیمه</option>
+                <option value="full">بیمه کامل</option>
+                <option value="basic">بیمه پایه</option>
+                <option value="none">بدون بیمه</option>
+              </select>
+            </div>
+
+            {/* دوره آزمایشی */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2 text-right">
+                دوره آزمایشی
+              </label>
+              <input
+                type="text"
+                value={newJob.probationPeriod}
+                onChange={(e) =>
+                  setNewJob({ ...newJob, probationPeriod: e.target.value })
+                }
+                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-right"
+                placeholder="مثال: ۳ ماه"
+              />
+            </div>
+
+            {/* مزایا و تسهیلات */}
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2 text-right">
+                مزایا و تسهیلات
+              </label>
+              <textarea
+                value={newJob.benefits.join("\n")}
+                onChange={(e) =>
+                  setNewJob({
+                    ...newJob,
+                    benefits: e.target.value
+                      .split("\n")
+                      .filter((b) => b.trim()),
+                  })
+                }
+                rows={3}
+                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-right resize-vertical"
+                placeholder="هر مزیت را در یک خط جداگانه وارد کنید&#10;مثال: بیمه تکمیلی&#10;ساعت کاری شناور&#10;اتاق بازی"
+              />
+            </div>
+
+            {/* مسئولیت‌ها */}
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2 text-right">
+                مسئولیت‌ها
+              </label>
+              <textarea
+                value={newJob.responsibilities}
+                onChange={(e) =>
+                  setNewJob({ ...newJob, responsibilities: e.target.value })
+                }
+                rows={3}
+                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-right resize-vertical"
+                placeholder="مسئولیت‌های اصلی این موقعیت را شرح دهید..."
+              />
+            </div>
+
+            {/* مهارت‌های مورد نیاز */}
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2 text-right">
+                مهارت‌های مورد نیاز
+              </label>
+              <textarea
+                value={newJob.skills}
+                onChange={(e) =>
+                  setNewJob({ ...newJob, skills: e.target.value })
+                }
+                rows={3}
+                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-right resize-vertical"
+                placeholder="مهارت‌های فنی و نرم مورد نیاز را وارد کنید..."
+              />
+            </div>
+
+            {/* گزینه‌های اضافی */}
+            <div className="md:col-span-2">
+              <div className="flex flex-wrap gap-6">
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={newJob.remoteWork}
+                    onChange={(e) =>
+                      setNewJob({ ...newJob, remoteWork: e.target.checked })
+                    }
+                    className="ml-2 w-4 h-4 text-yellow-400 bg-gray-700 border-gray-600 rounded focus:ring-yellow-400 focus:ring-2"
+                  />
+                  <span className="text-sm text-gray-300">امکان دورکاری</span>
+                </label>
+
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={newJob.travelRequired}
+                    onChange={(e) =>
+                      setNewJob({ ...newJob, travelRequired: e.target.checked })
+                    }
+                    className="ml-2 w-4 h-4 text-yellow-400 bg-gray-700 border-gray-600 rounded focus:ring-yellow-400 focus:ring-2"
+                  />
+                  <span className="text-sm text-gray-300">نیاز به سفر</span>
+                </label>
+
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={newJob.urgent}
+                    onChange={(e) =>
+                      setNewJob({ ...newJob, urgent: e.target.checked })
+                    }
+                    className="ml-2 w-4 h-4 text-yellow-400 bg-gray-700 border-gray-600 rounded focus:ring-yellow-400 focus:ring-2"
+                  />
+                  <span className="text-sm text-gray-300">فوری</span>
+                </label>
+              </div>
+            </div>
           </div>
 
           {/* Action Buttons */}
           <div className="flex justify-end space-x-4 mt-8">
             <button
-              onClick={() => setShowCreateForm(false)}
+              onClick={() => {
+                setShowCreateForm(false);
+                setEditingJob(null);
+              }}
               className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition duration-300"
             >
               لغو
             </button>
             <button className="px-6 py-3 bg-yellow-400 text-gray-900 rounded-lg hover:bg-yellow-300 transition duration-300 font-bold flex items-center">
-              <span className="ml-2">انتشار آگهی</span>
+              <span className="ml-2">
+                {editingJob ? "بروزرسانی آگهی" : "انتشار آگهی"}
+              </span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -353,11 +732,23 @@ export default function VacanciesPage() {
                   </span>
                 </td>
                 <td className="p-3 space-x-2 space-x-reverse">
-                  <button className="text-gray-400 hover:text-yellow-400">
+                  <button
+                    onClick={() => handleEditJob(job)}
+                    className="text-gray-400 hover:text-yellow-400 transition-colors"
+                  >
                     ویرایش
                   </button>
-                  <button className="text-gray-400 hover:text-yellow-400">
+                  <button
+                    onClick={() => handleViewJob(job)}
+                    className="text-gray-400 hover:text-yellow-400 transition-colors"
+                  >
                     مشاهده
+                  </button>
+                  <button
+                    onClick={() => handleDeleteJob(job)}
+                    className="text-gray-400 hover:text-red-400 transition-colors"
+                  >
+                    حذف
                   </button>
                 </td>
               </tr>

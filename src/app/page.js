@@ -25,8 +25,19 @@ const jobCategories = [
   "هنر و رسانه",
 ];
 
-// Mock data for job cards
-const jobListings = [
+// Function to load jobs from localStorage
+const loadJobsFromStorage = () => {
+  if (typeof window !== "undefined") {
+    const savedJobs = localStorage.getItem("allJobs");
+    if (savedJobs) {
+      return JSON.parse(savedJobs);
+    }
+  }
+  return [];
+};
+
+// Mock data for job cards (fallback if no jobs are posted)
+const mockJobListings = [
   {
     id: 1,
     title: "کارشناس ارشد فروش",
@@ -293,8 +304,16 @@ export default function HomePage() {
   const [salary, setSalary] = useState(15000000);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [jobListings, setJobListings] = useState([]);
 
   const cities = selectedProvince ? iranianProvinces[selectedProvince] : [];
+
+  // Load jobs from localStorage on component mount
+  useEffect(() => {
+    const loadedJobs = loadJobsFromStorage();
+    // If no jobs are posted, use mock data
+    setJobListings(loadedJobs.length > 0 ? loadedJobs : mockJobListings);
+  }, []);
 
   useEffect(() => {
     setSelectedCity(""); // Reset city when province changes
@@ -327,6 +346,9 @@ export default function HomePage() {
             </div>
 
             <nav className="hidden lg:flex items-center space-x-8 space-x-reverse font-semibold">
+              <a href="/employers" className="header-link text-gray-300">
+                کارفرمایان
+              </a>
               <a href="/resume" className="header-link text-gray-300">
                 ثبت رزومه
               </a>
@@ -382,7 +404,16 @@ export default function HomePage() {
                 </button>
               </div>
               <nav className="flex flex-col space-y-6 text-lg items-start">
-                <a href="#" className="header-link text-gray-300 w-full pb-2">
+                <a
+                  href="/employers"
+                  className="header-link text-gray-300 w-full pb-2"
+                >
+                  کارفرمایان
+                </a>
+                <a
+                  href="/resume"
+                  className="header-link text-gray-300 w-full pb-2"
+                >
                   ثبت رزومه
                 </a>
                 <a href="#" className="header-link text-gray-300 w-full pb-2">
@@ -548,58 +579,73 @@ export default function HomePage() {
 
               <div className="lg:w-3/4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {jobListings.map((job) => (
-                    <div
-                      key={job.id}
-                      className="job-card dark-card rounded-xl p-6 flex flex-col relative"
-                    >
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <div className="flex gap-2 items-center">
-                            <h4 className="text-xl font-bold text-white">
-                              {job.title}
-                            </h4>
-                            {job.isVip && (
-                              <div className="w-fit flex !items-center gap-1 px-2 py-1 text-xs font-bold rounded-full bg-gradient-to-r from-yellow-500 to-orange-600 text-white shadow-lg">
-                                <StarIcon />
-                                <span>VIP</span>
-                              </div>
-                            )}
+                  {jobListings.map((job) => {
+                    // Handle different data structures (posted jobs vs mock data)
+                    const isPostedJob = job.status !== undefined;
+                    const companyName = isPostedJob
+                      ? "دکتر برایان اعتماد"
+                      : job.company;
+                    const logo = isPostedJob ? "DB" : job.logo;
+                    const location = isPostedJob ? job.location : job.location;
+                    const jobType = isPostedJob ? job.type : job.type;
+                    const salary = isPostedJob
+                      ? job.salary || "توافقی"
+                      : job.salary;
+                    const isVip = isPostedJob ? job.urgent : job.isVip;
+
+                    return (
+                      <div
+                        key={job.id}
+                        className="job-card dark-card rounded-xl p-6 flex flex-col relative"
+                      >
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <div className="flex gap-2 items-center">
+                              <h4 className="text-xl font-bold text-white">
+                                {job.title}
+                              </h4>
+                              {isVip && (
+                                <div className="w-fit flex !items-center gap-1 px-2 py-1 text-xs font-bold rounded-full bg-gradient-to-r from-yellow-500 to-orange-600 text-white shadow-lg">
+                                  <StarIcon />
+                                  <span>VIP</span>
+                                </div>
+                              )}
+                            </div>
+                            <p className="text-gray-400 mt-1">{companyName}</p>
                           </div>
-                          <p className="text-gray-400 mt-1">{job.company}</p>
+                          <img
+                            src={`https://placehold.co/50x50/FBBF24/121212?text=${logo}`}
+                            alt={`${companyName} Logo`}
+                            className="rounded-full"
+                          />
                         </div>
-                        <img
-                          src={`https://placehold.co/50x50/FBBF24/121212?text=${job.logo}`}
-                          alt={`${job.company} Logo`}
-                          className="rounded-full"
-                        />
+                        <div className="flex items-center text-gray-400 text-sm space-x-3 space-x-reverse my-4">
+                          <span className="flex items-center">
+                            <LocationIcon />
+                            {location}
+                          </span>
+                          <span className="flex items-center">
+                            <ClockIcon />
+                            {jobType}
+                          </span>
+                        </div>
+                        <p className="text-gray-400 text-sm flex-grow">
+                          {job.description}
+                        </p>
+                        <div className="border-t border-gray-700 mt-4 pt-4 flex justify-between items-center">
+                          <span className="text-lg font-semibold gold-text">
+                            {salary}
+                          </span>
+                          <a
+                            href={`/jobsingle?id=${job.id}`}
+                            className="text-sm px-4 py-2 rounded-lg bg-yellow-500 text-black hover:bg-yellow-500 hover:text-black transition"
+                          >
+                            ارسال رزومه
+                          </a>
+                        </div>
                       </div>
-                      <div className="flex items-center text-gray-400 text-sm space-x-3 space-x-reverse my-4">
-                        <span className="flex items-center">
-                          <LocationIcon />
-                          {job.location}
-                        </span>
-                        <span className="flex items-center">
-                          <ClockIcon />
-                          {job.type}
-                        </span>
-                      </div>
-                      <p className="text-gray-400 text-sm flex-grow">
-                        {job.description}
-                      </p>
-                      <div className="border-t border-gray-700 mt-4 pt-4 flex justify-between items-center">
-                        <span className="text-lg font-semibold gold-text">
-                          {job.salary}
-                        </span>
-                        <a
-                          href="/jobsingle"
-                          className="text-sm px-4 py-2 rounded-lg bg-yellow-500 text-black hover:bg-yellow-500 hover:text-black transition"
-                        >
-                          ارسال رزومه
-                        </a>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
                 <div className="flex justify-center mt-12">
                   <nav className="flex items-center space-x-2 space-x-reverse">

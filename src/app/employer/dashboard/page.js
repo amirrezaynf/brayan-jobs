@@ -1,12 +1,31 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { COMPANY_DATA, loadCompanyData } from "@/constants/companyData";
 
 // ======================================================================
 // کامپوننت صفحه داشبورد کارفرمایان (بازطراحی‌شده)
 // ======================================================================
 export default function EmployerDashboardPage() {
+  const [companyData, setCompanyData] = useState(COMPANY_DATA);
+
+  useEffect(() => {
+    const loadedData = loadCompanyData();
+    setCompanyData(loadedData);
+
+    // Listen for company data changes
+    const handleDataChange = (event) => {
+      setCompanyData(event.detail);
+    };
+
+    window.addEventListener("companyDataChanged", handleDataChange);
+
+    return () => {
+      window.removeEventListener("companyDataChanged", handleDataChange);
+    };
+  }, []);
+
   return (
     <div className="space-y-8">
       {/* Welcome Section */}
@@ -14,7 +33,7 @@ export default function EmployerDashboardPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-white mb-2">
-              به داشبورد کارفرمایان خوش آمدید
+              به داشبورد {companyData.companyName} خوش آمدید
             </h1>
             <p className="text-gray-400">
               مدیریت آگهی‌های استخدامی و نظارت بر عملکرد استخدامی سازمان شما

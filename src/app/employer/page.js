@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { COMPANY_DATA, loadCompanyData } from "@/constants/companyData";
 
 // استایل‌های سراسری
 const GlobalStyles = () => (
@@ -58,9 +59,31 @@ const GlobalStyles = () => (
 // کامپوننت صفحه داشبورد کارفرمایان (بازطراحی‌شده)
 // ======================================================================
 export default function EmployerDashboardPage() {
+  const [companyData, setCompanyData] = useState(COMPANY_DATA);
+  const [isClient, setIsClient] = useState(false);
   const [activeTab, setActiveTab] = useState("home"); // برای مدیریت تب‌های اصلی داشبورد
   const [activeVacancyFilter, setActiveVacancyFilter] = useState("active"); // برای فیلتر آگهی‌ها
   const [activeWalletTab, setActiveWalletTab] = useState("overview"); // برای مدیریت تب‌های کیف پول
+
+  useEffect(() => {
+    setIsClient(true);
+    const loadedData = loadCompanyData();
+    setCompanyData(loadedData);
+
+    // Listen for company data changes
+    const handleDataChange = (event) => {
+      setCompanyData(event.detail);
+    };
+
+    window.addEventListener("companyDataChanged", handleDataChange);
+
+    return () => {
+      window.removeEventListener("companyDataChanged", handleDataChange);
+    };
+  }, []);
+
+  // Use default data for server-side rendering to avoid hydration mismatch
+  const displayData = isClient ? companyData : COMPANY_DATA;
 
   // داده‌های کیف پول
   const walletTransactions = [
@@ -379,7 +402,9 @@ export default function EmployerDashboardPage() {
                 <div className="text-right">
                   <h1 className="text-xl font-bold text-white">
                     پلتفرم استخدام{" "}
-                    <span className="text-yellow-400">دکتر برایان اعتماد</span>{" "}
+                    <span className="text-yellow-400">
+                      {companyData.companyName}
+                    </span>{" "}
                   </h1>
                   <p className="text-xs text-gray-200">پلتفرم اعتماد و تخصص</p>
                 </div>
@@ -412,17 +437,26 @@ export default function EmployerDashboardPage() {
                 </button>
 
                 {/* User Profile / Organization Name */}
-                <div
-                  className="flex items-center space-x-4"
+                <Link
+                  href="/employer/dashboard/profile"
+                  className="flex items-center space-x-4 hover:bg-gray-800 rounded-lg px-3 py-2 transition-colors duration-200"
                   style={{ direction: "rtl" }}
                 >
                   <span className="text-white pl-4 font-medium">
-                    اسم سازمان
+                    {displayData.companyName}
                   </span>
-                  <div className="h-10 w-10 bg-yellow-400 rounded-full flex items-center justify-center text-gray-900 font-bold text-lg">
-                    S
+                  <div className="h-10 w-10 bg-yellow-400 rounded-full flex items-center justify-center text-gray-900 font-bold text-lg overflow-hidden">
+                    {displayData.companyLogo ? (
+                      <img
+                        src={displayData.companyLogo}
+                        alt="Company Logo"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      displayData.companyName.charAt(0)
+                    )}
                   </div>
-                </div>
+                </Link>
               </div>
             </div>
           </header>
@@ -774,28 +808,38 @@ export default function EmployerDashboardPage() {
                   </h2>
                   <div className="bg-gray-800 rounded-lg p-6 flex flex-col md:flex-row items-center justify-between text-right space-y-4 md:space-y-0 md:space-x-8">
                     <div className="flex items-center space-x-4">
-                      <div className="h-16 w-16 bg-gradient-to-br from-yellow-400/20 to-yellow-600/30 rounded-full flex items-center justify-center text-yellow-400 font-bold text-2xl border-2 border-yellow-400/50">
-                        E
+                      <div className="h-16 w-16 bg-gradient-to-br from-yellow-400/20 to-yellow-600/30 rounded-full flex items-center justify-center text-yellow-400 font-bold text-2xl border-2 border-yellow-400/50 overflow-hidden">
+                        {companyData.companyLogo ? (
+                          <img
+                            src={companyData.companyLogo}
+                            alt="Company Logo"
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          companyData.companyName.charAt(0)
+                        )}
                       </div>
                       <div className=" flex space-x-2">
-                        <p className="text-white font-semibold pl-2">etmad</p>
+                        <p className="text-white font-semibold pl-2">
+                          {companyData.companyName}
+                        </p>
                         <p className="text-gray-400 text-sm">
-                          آمیربرهان پرورانی فر
+                          {companyData.city}
                         </p>
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4 text-gray-300 text-sm">
                       <div className="flex items-center justify-end">
-                        <span className="ml-2">-</span>
+                        <span className="ml-2">{companyData.phone}</span>
                         <span>تلفن ثابت</span>
                       </div>
                       <div className="flex items-center justify-end">
-                        <span className="ml-2">۰۹۹۰۴۶۸۸۵۶۱۴</span>
+                        <span className="ml-2">{companyData.mobile}</span>
                         <span>موبایل</span>
                       </div>
                       <div className="flex items-center justify-end">
-                        <span className="ml-2">-</span>
-                        <span>مسئول</span>
+                        <span className="ml-2">{companyData.email}</span>
+                        <span>ایمیل</span>
                       </div>
                     </div>
                     <button className="bg-yellow-400 text-gray-900 px-6 py-2 rounded-lg hover:bg-yellow-300 transition duration-300 font-bold w-full md:w-auto mt-4 md:mt-0">
