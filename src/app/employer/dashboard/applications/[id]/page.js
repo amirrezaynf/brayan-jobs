@@ -3270,7 +3270,7 @@ const getResumeData = (id) => {
 
 // کامپوننت بخش مهارت‌ها
 const SkillsSection = ({ skills }) => (
-  <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
+  <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800">
     <h3 className="text-xl font-bold text-white mb-4 text-right">مهارت‌ها</h3>
     <div className="flex flex-wrap gap-2">
       {skills.map((skill, index) => (
@@ -3287,7 +3287,7 @@ const SkillsSection = ({ skills }) => (
 
 // کامپوننت بخش تجربه کاری
 const ExperienceSection = ({ experience }) => (
-  <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
+  <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800">
     <h3 className="text-xl font-bold text-white mb-6 text-right">تجربه کاری</h3>
     <div className="space-y-6">
       {experience.map((exp) => (
@@ -3324,7 +3324,7 @@ const ExperienceSection = ({ experience }) => (
 
 // کامپوننت بخش تحصیلات
 const EducationSection = ({ education }) => (
-  <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
+  <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800">
     <h3 className="text-xl font-bold text-white mb-6 text-right">تحصیلات</h3>
     <div className="space-y-4">
       {education.map((edu) => (
@@ -3345,7 +3345,7 @@ const EducationSection = ({ education }) => (
 
 // کامپوننت بخش گواهی‌نامه‌ها
 const CertificationsSection = ({ certifications }) => (
-  <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
+  <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800">
     <h3 className="text-xl font-bold text-white mb-6 text-right">
       گواهی‌نامه‌ها
     </h3>
@@ -3367,7 +3367,7 @@ const CertificationsSection = ({ certifications }) => (
 
 // کامپوننت بخش زبان‌ها
 const LanguagesSection = ({ languages }) => (
-  <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
+  <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800">
     <h3 className="text-xl font-bold text-white mb-4 text-right">زبان‌ها</h3>
     <div className="space-y-2">
       {languages.map((lang, index) => (
@@ -3486,7 +3486,7 @@ export default function ResumeViewPage() {
   return (
     <div className="min-h-screen bg-gray-950">
       {/* Header با ناوبری و اکشن‌ها */}
-      <div className="bg-gray-900 border-b border-gray-800 sticky top-0 z-10">
+      <div className="bg-[#1e1e1e] border-b border-gray-800 sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4 space-x-reverse">
@@ -3606,7 +3606,7 @@ export default function ResumeViewPage() {
       {/* محتوای اصلی */}
       <div className="max-w-6xl mx-auto px-6 py-8">
         {/* هدر رزومه */}
-        <div className="bg-gray-900 rounded-xl p-8 border border-gray-800 mb-8">
+        <div className="bg-[#1e1e1e] rounded-xl p-8 border border-gray-800 mb-8">
           <div className="flex items-start space-x-6 space-x-reverse">
             {/* تصویر پروفایل */}
             <div
@@ -3791,7 +3791,7 @@ export default function ResumeViewPage() {
 
         {/* پورتفولیو */}
         {resume.portfolio && resume.portfolio.length > 0 && (
-          <div className="mt-8 bg-gray-900 rounded-xl p-6 border border-gray-800">
+          <div className="mt-8 bg-[#1e1e1e] rounded-xl p-6 border border-gray-800">
             <h3 className="text-xl font-bold text-white mb-6 text-right">
               پورتفولیو
             </h3>

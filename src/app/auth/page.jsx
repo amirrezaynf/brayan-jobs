@@ -15,8 +15,8 @@ import {
   EyeOff,
   ArrowRight,
   Hash,
-  Briefcase ,
-  Smile ,
+  Briefcase,
+  Smile,
   CheckCircle,
 } from "lucide-react";
 
@@ -242,7 +242,7 @@ export default function AuthPage() {
 
   return (
     <div
-      className="min-h-screen bg-gray-900 text-gray-200 grid grid-cols-1 lg:grid-cols-2"
+      className="min-h-screen bg-[#1e1e1e] text-gray-200 grid grid-cols-1 lg:grid-cols-2"
       dir="rtl"
     >
       {/* Right Side - Form */}
@@ -375,7 +375,7 @@ export default function AuthPage() {
                     >
                       ورود به حساب کاربری
                     </button>
-                    <div className="mt-6 flex items-center justify-center text-xs text-gray-400 p-3 bg-gray-900/50 rounded-lg border border-gray-700">
+                    <div className="mt-6 flex items-center justify-center text-xs text-gray-400 p-3 bg-[#1e1e1e]/50 rounded-lg border border-gray-700">
                       {/* Lucide Gem Icon */}
                       <Gem
                         className="w-4 h-4 ml-2 flex-shrink-0 text-cyan-400"
@@ -568,11 +568,19 @@ export default function AuthPage() {
                                 }
                                 className="bg-gray-700/50 border border-gray-600 text-gray-200 text-sm rounded-lg block w-full p-2.5 pr-10 appearance-none"
                               >
-                                <option className="bg-gray-800">فناوری اطلاعات</option>
-                                <option className="bg-gray-800">مالی و حسابداری</option>
+                                <option className="bg-gray-800">
+                                  فناوری اطلاعات
+                                </option>
+                                <option className="bg-gray-800">
+                                  مالی و حسابداری
+                                </option>
                                 <option className="bg-gray-800">مهندسی</option>
-                                <option className="bg-gray-800">پزشکی و سلامت</option>
-                                <option className="bg-gray-800">هنر و طراحی</option>
+                                <option className="bg-gray-800">
+                                  پزشکی و سلامت
+                                </option>
+                                <option className="bg-gray-800">
+                                  هنر و طراحی
+                                </option>
                               </select>
                               <IconWrapper>
                                 <Briefcase size={18} />
@@ -600,12 +608,19 @@ export default function AuthPage() {
                                   className="bg-gray-700/50 border border-gray-600 text-gray-200 text-sm rounded-lg block w-full p-2.5 pr-10 appearance-none"
                                 >
                                   <option className="bg-gray-800">دیپلم</option>
-                                  <option className="bg-gray-800">کارشناسی</option>
-                                  <option className="bg-gray-800">کارشناسی ارشد</option>
+                                  <option className="bg-gray-800">
+                                    کارشناسی
+                                  </option>
+                                  <option className="bg-gray-800">
+                                    کارشناسی ارشد
+                                  </option>
                                   <option className="bg-gray-800">دکتری</option>
                                 </select>
                                 <IconWrapper>
-                                  <GraduationCap size={18} className="top-3 absolute " />
+                                  <GraduationCap
+                                    size={18}
+                                    className="top-3 absolute "
+                                  />
                                 </IconWrapper>
                               </div>
                             </div>
@@ -975,7 +990,7 @@ export default function AuthPage() {
           src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?q=80&w=1887&auto=format&fit=crop"
           className="absolute inset-0 h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gray-900/75"></div>
+        <div className="absolute inset-0 bg-[#1e1e1e]/75"></div>
         <div className="relative flex flex-col items-center justify-center h-full p-12 text-center">
           <h2 className="text-3xl font-bold text-white tracking-wider">
             آینده شغلی خود را بسازید

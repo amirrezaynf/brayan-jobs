@@ -170,9 +170,9 @@ export default function EmployerDashboardPage() {
   return (
     <>
       <GlobalStyles />
-      <div className="flex min-h-screen bg-gray-950 text-gray-200">
+      <div className="flex min-h-screen  text-gray-200">
         {/* Sidebar */}
-        <aside className="fixed right-0 top-0 h-full w-64 bg-gray-900 border-l border-gray-800 shadow-lg p-6 flex flex-col items-center z-50">
+        <aside className="fixed right-0 top-0 h-full w-64 bg-[#1e1e1e] border-l border-gray-800 shadow-lg p-6 flex flex-col items-center z-50">
           <div className="mb-10 text-center">
             <Link href="/" className="flex items-center justify-center">
               <svg
@@ -467,7 +467,7 @@ export default function EmployerDashboardPage() {
             {activeTab === "home" && (
               <div className="space-y-8">
                 {/* Section: ثبت آگهی استخدام (Quick Access) */}
-                <div className="bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-800">
+                <div className="bg-[#1e1e1e] rounded-xl p-6 shadow-lg border border-gray-800">
                   <div className="flex items-center justify-between mb-6">
                     <h2 className="text-xl font-bold text-white text-right">
                       ثبت آگهی استخدام
@@ -522,7 +522,7 @@ export default function EmployerDashboardPage() {
                 {/* Section: Overview Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   {/* Card: آگهی‌های فعال */}
-                  <div className="bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-800 flex flex-col justify-between">
+                  <div className="bg-[#1e1e1e] rounded-xl p-6 shadow-lg border border-gray-800 flex flex-col justify-between">
                     <div className="flex justify-between items-center mb-4">
                       <div className="text-yellow-400 bg-yellow-400/10 rounded-full p-2">
                         <svg
@@ -553,7 +553,7 @@ export default function EmployerDashboardPage() {
                   </div>
 
                   {/* Card: تعداد داوطلبان */}
-                  <div className="bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-800 flex flex-col justify-between">
+                  <div className="bg-[#1e1e1e] rounded-xl p-6 shadow-lg border border-gray-800 flex flex-col justify-between">
                     <div className="flex justify-between items-center mb-4">
                       <div className="text-blue-400 bg-blue-400/10 rounded-full p-2">
                         <svg
@@ -584,7 +584,7 @@ export default function EmployerDashboardPage() {
                   </div>
 
                   {/* Card: امتیاز عملکرد استخدامی */}
-                  <div className="bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-800 flex flex-col justify-between">
+                  <div className="bg-[#1e1e1e] rounded-xl p-6 shadow-lg border border-gray-800 flex flex-col justify-between">
                     <div className="flex justify-between items-center mb-4">
                       <div className="text-green-400 bg-green-400/10 rounded-full p-2">
                         <svg
@@ -618,7 +618,7 @@ export default function EmployerDashboardPage() {
                   </div>
 
                   {/* Card: موجودی کیف پول */}
-                  <div className="bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-800 flex flex-col justify-between">
+                  <div className="bg-[#1e1e1e] rounded-xl p-6 shadow-lg border border-gray-800 flex flex-col justify-between">
                     <div className="flex justify-between items-center mb-4">
                       <div className="text-yellow-400 bg-yellow-400/10 rounded-full p-2">
                         <svg
@@ -655,7 +655,7 @@ export default function EmployerDashboardPage() {
                 {/* Section: آمار سریع */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {/* بازدیدها */}
-                  <div className="bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-800">
+                  <div className="bg-[#1e1e1e] rounded-xl p-6 shadow-lg border border-gray-800">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-lg font-semibold text-white">
                         بازدید آگهی‌ها
@@ -684,7 +684,7 @@ export default function EmployerDashboardPage() {
                   </div>
 
                   {/* نرخ پاسخگویی */}
-                  <div className="bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-800">
+                  <div className="bg-[#1e1e1e] rounded-xl p-6 shadow-lg border border-gray-800">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-lg font-semibold text-white">
                         نرخ پاسخگویی
@@ -711,7 +711,7 @@ export default function EmployerDashboardPage() {
                   </div>
 
                   {/* میانگین زمان استخدام */}
-                  <div className="bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-800">
+                  <div className="bg-[#1e1e1e] rounded-xl p-6 shadow-lg border border-gray-800">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-lg font-semibold text-white">
                         میانگین زمان استخدام
@@ -741,7 +741,7 @@ export default function EmployerDashboardPage() {
                 </div>
 
                 {/* Section: آگهی‌های من */}
-                <div className="bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-800">
+                <div className="bg-[#1e1e1e] rounded-xl p-6 shadow-lg border border-gray-800">
                   <h2 className="text-xl font-bold mb-4 text-white text-right">
                     آگهی‌های من
                   </h2>
@@ -802,7 +802,7 @@ export default function EmployerDashboardPage() {
                 </div>
 
                 {/* Section: پروفایل سازمان */}
-                <div className="bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-800">
+                <div className="bg-[#1e1e1e] rounded-xl p-6 shadow-lg border border-gray-800">
                   <h2 className="text-xl font-bold mb-4 text-white text-right">
                     پروفایل سازمان
                   </h2>
@@ -947,7 +947,7 @@ export default function EmployerDashboardPage() {
                         </p>
                       </div>
 
-                      <div className="bg-gray-900 rounded-xl p-8 border border-gray-800">
+                      <div className="bg-[#1e1e1e] rounded-xl p-8 border border-gray-800">
                         <div className="flex items-center justify-between mb-4">
                           <h3 className="text-lg font-semibold text-white">
                             هزینه‌های ماه جاری
@@ -977,7 +977,7 @@ export default function EmployerDashboardPage() {
                         </p>
                       </div>
 
-                      <div className="bg-gray-900 rounded-xl p-8 border border-gray-800">
+                      <div className="bg-[#1e1e1e] rounded-xl p-8 border border-gray-800">
                         <div className="flex items-center justify-between mb-4">
                           <h3 className="text-lg font-semibold text-white">
                             میانگین هزینه روزانه
@@ -1010,7 +1010,7 @@ export default function EmployerDashboardPage() {
 
                     {/* Quick Actions */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
+                      <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800">
                         <h3 className="text-lg font-semibold text-white mb-4">
                           افزایش موجودی
                         </h3>
@@ -1036,7 +1036,7 @@ export default function EmployerDashboardPage() {
                         </div>
                       </div>
 
-                      <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
+                      <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800">
                         <h3 className="text-lg font-semibold text-white mb-4">
                           روش‌های پرداخت
                         </h3>
@@ -1086,7 +1086,7 @@ export default function EmployerDashboardPage() {
                       {walletPackages.map((pkg, index) => (
                         <div
                           key={index}
-                          className={`bg-gray-900 rounded-xl p-8 border transition-all duration-200 ${
+                          className={`bg-[#1e1e1e] rounded-xl p-8 border transition-all duration-200 ${
                             pkg.popular
                               ? "border-yellow-400 shadow-lg shadow-yellow-400/10"
                               : "border-gray-800"
@@ -1159,7 +1159,7 @@ export default function EmployerDashboardPage() {
                       </div>
                     </div>
 
-                    <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
+                    <div className="bg-[#1e1e1e] rounded-xl border border-gray-800 overflow-hidden">
                       <table className="w-full text-right">
                         <thead className="bg-gray-800">
                           <tr className="text-gray-400 text-sm">
@@ -1215,25 +1215,25 @@ export default function EmployerDashboardPage() {
 
                     {/* Transaction Summary */}
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                      <div className="bg-gray-900 rounded-xl p-6 border border-gray-800 text-center">
+                      <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800 text-center">
                         <p className="text-2xl font-bold text-green-400 mb-2">
                           ۱,۲۰۰,۰۰۰
                         </p>
                         <p className="text-sm text-gray-400">کل واریزی‌ها</p>
                       </div>
-                      <div className="bg-gray-900 rounded-xl p-6 border border-gray-800 text-center">
+                      <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800 text-center">
                         <p className="text-2xl font-bold text-red-400 mb-2">
                           ۵۲۰,۰۰۰
                         </p>
                         <p className="text-sm text-gray-400">کل برداشت‌ها</p>
                       </div>
-                      <div className="bg-gray-900 rounded-xl p-6 border border-gray-800 text-center">
+                      <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800 text-center">
                         <p className="text-2xl font-bold text-blue-400 mb-2">
                           ۲۵,۰۰۰
                         </p>
                         <p className="text-sm text-gray-400">بازگشت وجه</p>
                       </div>
-                      <div className="bg-gray-900 rounded-xl p-6 border border-gray-800 text-center">
+                      <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800 text-center">
                         <p className="text-2xl font-bold text-yellow-400 mb-2">
                           ۲,۵۰۰,۰۰۰
                         </p>

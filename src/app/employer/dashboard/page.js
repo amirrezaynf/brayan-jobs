@@ -60,7 +60,7 @@ export default function EmployerDashboardPage() {
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Active Vacancies */}
-        <div className="bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-800 flex flex-col justify-between">
+        <div className="bg-[#1e1e1e] rounded-xl p-6 shadow-lg border border-gray-800 flex flex-col justify-between">
           <div className="flex justify-between items-center mb-4">
             <div className="text-yellow-400 bg-yellow-400/10 rounded-full p-2">
               <svg
@@ -87,7 +87,7 @@ export default function EmployerDashboardPage() {
         </div>
 
         {/* Total Applicants */}
-        <div className="bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-800 flex flex-col justify-between">
+        <div className="bg-[#1e1e1e] rounded-xl p-6 shadow-lg border border-gray-800 flex flex-col justify-between">
           <div className="flex justify-between items-center mb-4">
             <div className="text-blue-400 bg-blue-400/10 rounded-full p-2">
               <svg
@@ -114,7 +114,7 @@ export default function EmployerDashboardPage() {
         </div>
 
         {/* Performance Score */}
-        <div className="bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-800 flex flex-col justify-between">
+        <div className="bg-[#1e1e1e] rounded-xl p-6 shadow-lg border border-gray-800 flex flex-col justify-between">
           <div className="flex justify-between items-center mb-4">
             <div className="text-green-400 bg-green-400/10 rounded-full p-2">
               <svg
@@ -141,7 +141,7 @@ export default function EmployerDashboardPage() {
         </div>
 
         {/* Wallet Balance */}
-        <div className="bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-800 flex flex-col justify-between">
+        <div className="bg-[#1e1e1e] rounded-xl p-6 shadow-lg border border-gray-800 flex flex-col justify-between">
           <div className="flex justify-between items-center mb-4">
             <div className="text-yellow-400 bg-yellow-400/10 rounded-full p-2">
               <svg
@@ -171,7 +171,7 @@ export default function EmployerDashboardPage() {
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Create New Job Posting */}
-        <div className="bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-800">
+        <div className="bg-[#1e1e1e] rounded-xl p-6 shadow-lg border border-gray-800">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-white">ثبت آگهی جدید</h3>
             <div className="text-yellow-400 bg-yellow-400/10 rounded-full p-2">
@@ -215,7 +215,7 @@ export default function EmployerDashboardPage() {
         </div>
 
         {/* Recent Activity */}
-        <div className="bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-800">
+        <div className="bg-[#1e1e1e] rounded-xl p-6 shadow-lg border border-gray-800">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-white">
               فعالیت‌های اخیر
@@ -266,7 +266,7 @@ export default function EmployerDashboardPage() {
       </div>
 
       {/* Performance Overview */}
-      <div className="bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-800">
+      <div className="bg-[#1e1e1e] rounded-xl p-6 shadow-lg border border-gray-800">
         <h3 className="text-lg font-semibold text-white mb-4">
           نمای کلی عملکرد
         </h3>
