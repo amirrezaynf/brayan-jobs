@@ -1,9 +1,9 @@
 import Footer from "@/components/layout/Footer";
-import AdsAndFilters from "@/components/layout/TodayAd";
-import JobSearch from "@/components/layout/JobSearch";
+import AdsAndFilters from "@/components/layout/home/TodayAd";
+import JobSearch from "@/components/layout/home/JobSearch";
 import HeroSection from "@/components/modules/HomePage/Hero/HomePageHeroSection";
-import BenefitsSection from "@/components/layout/BenefitsSection";
-import ImportantBrands from "@/components/layout/ImportantBrands";
+import BenefitsSection from "@/components/modules/HomePage/BenefitsSection";
+import ImportantBrands from "@/components/modules/HomePage/ImportantBrands";
 
 export default function HomePage() {
   return (
@@ -15,7 +15,6 @@ export default function HomePage() {
           <HeroSection />
           <BenefitsSection />
           <JobSearch />
-
 
           <AdsAndFilters />
 

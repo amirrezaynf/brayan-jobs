@@ -1,6 +1,5 @@
-
-import SalaryRangeSlider from "@/components/SalaryRangeInput";
-import AdCard from "../ui/AdCard";
+import SalaryRangeSlider from "@/components/ui/SalaryRangeInput";
+import AdCard from "../../ui/AdCard";
 
 // Data for job categories
 const jobCategories = [
@@ -156,20 +155,15 @@ const StarIcon = () => (
   </svg>
 );
 
-
-
 export default function TodayAd() {
-
   return (
     <section className="container mx-auto px-6 py-16">
       <div>
-      <h2 className="text-3xl font-bold text-center mb-10 gold-text">
-آگهی های مهم امروز        </h2>
-      
+        <h2 className="text-3xl font-bold text-center mb-10 gold-text">
+          آگهی های مهم امروز{" "}
+        </h2>
       </div>
       <div className="flex flex-col lg:flex-row gap-8">
-        
-        
         <div className="">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {jobListings.map((job) => (
