@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import CustomSelect from "../ui/CustomSelect";
+import CustomInput from "../ui/CustomInput";
 
 // Data for countries
 const countries = {
@@ -337,12 +338,7 @@ export default function JobSearch() {
                 عنوان شغلی، شرکت یا...
               </label>
               <div className="relative">
-                <input
-                  type="text"
-                  id="search-job"
-                  className="w-full p-3 pl-10 rounded-lg bg-[#2a2a2a] border border-[#444] focus:border-yellow-500 focus:ring-yellow-500 transition placeholder:text-gray-400"
-                  placeholder="مثلا: توسعه‌دهنده React"
-                />
+                <CustomInput placeholder="مثلا: توسعه‌دهنده React"/>
                 <span className="absolute left-3 top-4 text-gray-500">
                   <SearchIcon />
                 </span>

@@ -1,7 +1,7 @@
 import Footer from "@/components/layout/Footer";
 import AdsAndFilters from "@/components/layout/TodayAd";
 import JobSearch from "@/components/layout/JobSearch";
-import HeroSection from "@/components/layout/HeroSection";
+import HeroSection from "@/components/modules/HomePage/Hero/HomePageHeroSection";
 import BenefitsSection from "@/components/layout/BenefitsSection";
 import ImportantBrands from "@/components/layout/ImportantBrands";
 
