@@ -9,12 +9,14 @@ export default function VacanciesPage() {
   const [editingJob, setEditingJob] = useState(null);
   const [newJob, setNewJob] = useState({
     title: "",
+    company: "",
     description: "",
     requirements: "",
     salary: "",
     location: "",
     type: "full-time",
     category: "",
+    specialization: "",
     gender: "both",
     education: "",
     experience: "",
@@ -74,12 +76,14 @@ export default function VacanciesPage() {
     setEditingJob(job);
     setNewJob({
       title: job.title || "",
+      company: job.company || "",
       description: job.description || "",
       requirements: job.requirements || "",
       salary: job.salary || "",
       location: job.location || "",
       type: job.type || "full-time",
       category: job.category || "",
+      specialization: job.specialization || "",
       gender: job.gender || "both",
       education: job.education || "",
       experience: job.experience || "",
@@ -141,6 +145,7 @@ export default function VacanciesPage() {
     // Basic validation
     if (
       !newJob.title.trim() ||
+      !newJob.company.trim() ||
       !newJob.description.trim() ||
       !newJob.requirements.trim() ||
       !newJob.location.trim() ||
@@ -208,12 +213,14 @@ export default function VacanciesPage() {
     // Reset form and hide it
     setNewJob({
       title: "",
+      company: "",
       description: "",
       requirements: "",
       salary: "",
       location: "",
       type: "full-time",
       category: "",
+      specialization: "",
       gender: "both",
       education: "",
       experience: "",
@@ -313,6 +320,23 @@ export default function VacanciesPage() {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* رتبه/توضیح شرکت */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2 text-right">
+                نام شرکت *
+              </label>
+              <input
+                type="text"
+                value={newJob.company}
+                onChange={(e) =>
+                  setNewJob({ ...newJob, company: e.target.value })
+                }
+                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-right"
+                placeholder="مثال: شرکت فناوری اطلاعات پارامکس"
+                required
+              />
+            </div>
+
             {/* عنوان آگهی */}
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-300 mb-2 text-right">

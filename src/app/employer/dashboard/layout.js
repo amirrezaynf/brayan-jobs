@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import { COMPANY_DATA, loadCompanyData } from "@/constants/companyData";
 
 // کامپوننت GlobalStyles را می‌توان در یک layout بالاتر یا همینجا قرار داد
@@ -275,9 +276,11 @@ const Topbar = () => {
         >
           <div className="h-10 w-10 bg-yellow-400 rounded-full flex items-center justify-center text-gray-900 font-bold text-lg overflow-hidden">
             {displayData.companyLogo ? (
-              <img
+              <Image
                 src={displayData.companyLogo}
                 alt="Company Logo"
+                width={40}
+                height={40}
                 className="w-full h-full object-cover"
               />
             ) : (

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 // Sample jobs data (normally would come from API)
 const sampleJobs = [
@@ -51,14 +51,12 @@ const sampleJobs = [
 
 export default function JobsPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [jobs, setJobs] = useState([]);
 
-  // Get search parameters and set some default jobs
+  // Set some default jobs
   useEffect(() => {
-    // In a real app, this would be an API call with the search parameters
     setJobs(sampleJobs);
-  }, [searchParams]);
+  }, []);
 
   const handleViewJob = (jobId) => {
     router.push(`/jobsingle?id=${jobId}`);

@@ -1,39 +1,21 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 
-// Import filtering components
-
-import CustomSelect from "@/components/ui/select/CustomSelect";
-
-// Job categories and filter data
-const jobCategories = [
-  "برنامه‌نویسی",
-  "طراحی گرافیک",
-  "بازاریابی",
-  "مدیریت پروژه",
-  "تکنولوژی اطلاعات",
-  "مالی و حسابداری",
-  "بازاریابی دیجیتال",
-  "منابع انسانی",
-  "سایر",
-];
-
-// Sample advertisement data (normally would come from API)
 const sampleAdvertisements = [
   {
     id: 1,
     title: "آگهی استخدام توسعه‌دهنده React",
     company: "شرکت فناوری اطلاعات پارامکس",
     location: "تهران",
-    description:
-      "جستجوی توسعه‌دهنده React باتجربه برای پروژه‌های بزرگ. نیازمندی‌ها شامل تجربه عملی حداقل ۳ ساله در توسعه برنامه‌های وب با استفاده از React.js، دانش عمیق به JavaScript و TypeScript، تجربه کار با Redux یا Context API، و آشنایی با Next.js است. مسئولیت‌ها شامل توسعه کامپوننت‌های UI، بهینه‌سازی عملکرد برنامه، و همکاری با تیم بک‌اند برای پیاده‌سازی APIها می‌شود.",
+    description: "جستجوی توسعه‌دهنده React باتجربه برای پروژه‌های بزرگ",
     category: "فناوری اطلاعات",
     specialization: "برنامه‌نویسی وب",
     type: "تمام وقت",
     salary: "۱۵,۰۰۰,۰۰۰ تومان",
     applicants: 12,
-    date: "۱۴۰۳/۰۶/۲۰",
+    date: "2024-09-11",
     urgent: true,
     gender: "male",
     education: "bachelor",
@@ -56,14 +38,13 @@ const sampleAdvertisements = [
     title: "طراح UI/UX برای اپلیکیشن موبایل",
     company: "استارتاپ تهیکس",
     location: "اصفهان",
-    description:
-      "طراحی رابط کاربری جذاب برای اپلیکیشن‌های موبایل. نیازمندی‌ها شامل تجربه حداقل ۲ ساله در طراحی رابط کاربری، مهارت بالا در استفاده از Figma یا Adobe XD، درک عمیق از اصول UX design، و توانایی تولید نمونه‌های اولیه تعاملی (Prototyping) است.",
+    description: "طراحی رابط کاربری جذاب برای اپلیکیشن‌های موبایل",
     category: "طراحی و گرافیک",
     specialization: "طراحی UI/UX",
     type: "پاره وقت",
     salary: "۸,۰۰۰,۰۰۰ تومان",
     applicants: 8,
-    date: "۱۴۰۳/۰۶/۱۹",
+    date: "2024-09-10",
     urgent: false,
     gender: "both",
     education: "associate",
@@ -85,14 +66,13 @@ const sampleAdvertisements = [
     title: "مدیر محصول دیجیتال",
     company: "شرکت بازرگانی پارسه",
     location: "مشهد",
-    description:
-      "مدیریت محصول برای پلتفرم‌های دیجیتال B2B. مسئولیت‌های کلیدی شامل تحقیقات بازار، تعریف استراتژی محصول، همکاری با تیم‌های مهندسی و طراحی، مدیریت Roadmap محصول، و تحلیل داده‌های کاربران است.",
+    description: "مدیریت محصول برای پلتفرم‌های دیجیتال B2B",
     category: "مدیریت پروژه",
     specialization: "مدیریت محصول",
     type: "تمام وقت",
     salary: "۱۸,۰۰۰,۰۰۰ تومان",
     applicants: 5,
-    date: "۱۴۰۳/۰۶/۱۸",
+    date: "2024-09-09",
     urgent: true,
     gender: "both",
     education: "master",
@@ -117,13 +97,13 @@ const sampleAdvertisements = [
     company: "آژانس تبلیغات مدیا",
     location: "شیراز",
     description:
-      "بهینه‌سازی وب‌سایت‌ها و پیاده‌سازی استراتژی‌های بازاریابی دیجیتال. شامل تکنیک‌های SEO پیشرفته، مدیریت تبلیغات گوگل، گوگل آنالیتیکس، و استراتژی‌های محتوایی است.",
+      "بهینه‌سازی وب‌سایت‌ها و پیاده‌سازی استراتژی‌های بازاریابی دیجیتال",
     category: "بازاریابی و فروش",
     specialization: "SEO/SEM",
     type: "تمام وقت",
     salary: "۱۲,۰۰۰,۰۰۰ تومان",
     applicants: 15,
-    date: "۱۴۰۳/۰۶/۱۷",
+    date: "2024-09-08",
     urgent: false,
     gender: "both",
     education: "bachelor",
@@ -146,14 +126,13 @@ const sampleAdvertisements = [
     title: "توسعه‌دهنده Node.js - Backend",
     company: "شرکت نرم‌افزاری آپادانا",
     location: "کرج",
-    description:
-      "توسعه سرویس‌های سمت سرور با استفاده از Node.js. شامل طراحی و پیاده‌سازی میکروسرویس‌ها، توسعه RESTful APIها، و ادغام با پایگاه داده‌های مختلف است.",
+    description: "توسعه سرویس‌های سمت سرور با استفاده از Node.js",
     category: "فناوری اطلاعات",
     specialization: "پایگاه داده",
     type: "تمام وقت",
     salary: "۱۶,۰۰۰,۰۰۰ تومان",
     applicants: 9,
-    date: "۱۴۰۳/۰۶/۱۶",
+    date: "2024-09-07",
     urgent: false,
     gender: "male",
     education: "bachelor",
@@ -176,14 +155,13 @@ const sampleAdvertisements = [
     title: "کارشناس منابع انسانی",
     company: "شرکت صنعتی بهین",
     location: "تبریز",
-    description:
-      "مدیریت فرآیندهای استخدامی و روابط کارکنان. شامل جذب و گزینش داریاران، مدیریت روابط کاری، اجرا برنامه‌های اداری و منابع انسانی است.",
+    description: "مدیریت فرآیندهای استخدامی و روابط کارکنان",
     category: "منابع انسانی",
     specialization: "استخدام و گزینش",
     type: "تمام وقت",
     salary: "۱۱,۰۰۰,۰۰۰ تومان",
     applicants: 22,
-    date: "۱۴۰۳/۰۶/۱۵",
+    date: "2024-09-06",
     urgent: true,
     gender: "female",
     education: "bachelor",
@@ -202,6 +180,66 @@ const sampleAdvertisements = [
       "محیط کاری آرام",
     ],
   },
+  {
+    id: 7,
+    title: "برنامه‌نویس Full Stack",
+    company: "استارتاپ فن‌دون",
+    location: "اصفهان",
+    description: "توسعه پروژه‌های بزرگ با تکنولوژی‌های مدرن",
+    category: "فناوری اطلاعات",
+    specialization: "برنامه‌نویسی وب",
+    type: "تمام وقت",
+    salary: "توافقی",
+    applicants: 7,
+    date: "2024-09-05",
+    urgent: false,
+    gender: "both",
+    education: "bachelor",
+    experience: "2-5",
+    militaryService: "completed",
+    responsibilities:
+      "توسعه کامل برنامه‌های وب، کار با فریمورک‌های مدرن، پیاده‌سازی فوی Frontend و Backend، بهینه‌سازی عملکرد، همکاری تیمی",
+    requirements:
+      "تجربه در React/Node.js، آشنایی با MongoDB، تجربه Docker، مهارت Git، درک معماری MVC",
+    skills: "React.js, Node.js, MongoDB, Docker, Git, Full Stack Development",
+    benefits: [
+      "محیط پویا و نوآورانه",
+      "یادگیری تکنولوژی‌های جدید",
+      "کیفیت کار متناسب با سن",
+      "تسهیلات مناسب",
+    ],
+  },
+  {
+    id: 8,
+    title: "مدیر بازاریابی دیجیتال",
+    company: "آژانس تبلیغاتی راهکار",
+    location: "تهران",
+    description: "مدیریت استراتژی بازاریابی دیجیتال و فروش آنلاین",
+    category: "بازاریابی و فروش",
+    specialization: "بازاریابی دیجیتال",
+    type: "تمام وقت",
+    salary: "توافقی",
+    applicants: 14,
+    date: "2024-09-04",
+    urgent: false,
+    gender: "both",
+    education: "master",
+    experience: "5+",
+    militaryService: "completed",
+    responsibilities:
+      "مدیریت استراتژی بازاریابی دیجیتال، اجرای کمپین‌های تبلیغاتی، تحلیل رده‌ها و داده‌های فروش، توسعه استراتژی‌های جدید، رهبری تیم بازاریابی، گزارش‌دهی به مدیریت ارشد",
+    requirements:
+      "۵+ سال تجربه بازاریابی دیجیتال، مهارت پیشرفته گوگل آنالیتیکس، تجربه مدیریت تیم، درک SEO و SEM پیشرفته، مهارت ارتباطات عالی",
+    skills:
+      "Digital Marketing, Google Analytics, SEO/SEM, Team Leadership, Strategy Planning",
+    benefits: [
+      "درآمد جذاب",
+      "کیفیت کار در آژانس برتر",
+      "زمان کاری انعطاف‌پذیر",
+      "آموزش و توسعه مداوم",
+      "بیمه کامل",
+    ],
+  },
 ];
 
 export default function AdvertisementDetailsPage() {
@@ -209,51 +247,8 @@ export default function AdvertisementDetailsPage() {
   const router = useRouter();
   const [ad, setAd] = useState(null);
 
-  // Filter states for functionality
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedLocation, setSelectedLocation] = useState("");
-  const [hasBenefits, setHasBenefits] = useState(false);
-  const [militaryService, setMilitaryService] = useState(false);
-  const [remoteWork, setRemoteWork] = useState(false);
-
-  // Filter function (you would typically call an API here)
-  const applyFilters = () => {
-    console.log("Applying filters:", {
-      selectedCategory,
-      selectedLocation,
-      hasBenefits,
-      militaryService,
-      remoteWork,
-    });
-
-    // You could filter the advertisements array here
-    // const filteredAds = sampleAdvertisements.filter(ad => {
-    //   if (selectedCategory && ad.category !== selectedCategory) return false;
-    //   if (hasBenefits && !ad.benefits?.length) return false;
-    //   if (militaryService && ad.militaryService === 'not-required') return false;
-    //   if (remoteWork && !ad.remoteWork) return false;
-    //   return true;
-    // });
-
-    // For now, just log filters
-    if (selectedCategory) {
-      console.log(`Filtering by category: ${selectedCategory}`);
-    }
-    if (hasBenefits) {
-      console.log("Filtering by ads with benefits");
-    }
-    if (militaryService) {
-      console.log("Filtering by military service options");
-    }
-    if (remoteWork) {
-      console.log("Filtering by remote work availability");
-    }
-  };
-
   useEffect(() => {
     const adId = parseInt(params.id);
-
-    // Find the advertisement by ID
     const foundAd = sampleAdvertisements.find((ad) => ad.id === adId);
 
     if (foundAd) {
@@ -285,7 +280,7 @@ export default function AdvertisementDetailsPage() {
             آگهی یافت نشد
           </h1>
           <p className="text-gray-400 mb-6">
-            آگهی مورد نظر شما وجود ندارد یا حذف شده است.
+            آگهی مورد نظر شما پیدا نشد یا دیگر موجود نیست.
           </p>
           <button
             onClick={() => router.back()}
@@ -301,39 +296,10 @@ export default function AdvertisementDetailsPage() {
   return (
     <div className="min-h-screen bg-[#121212] text-white font-sans" dir="rtl">
       <div className="container mx-auto px-4 py-12 md:py-20">
-        {/* Header */}
-        <header className="text-center mb-12 md:mb-16">
-          <p className="text-yellow-300 mb-2 text-4xl font-bold">
-            {ad.company}
-          </p>
-        </header>
-
-        {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Job Details */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Job Title Header */}
-            <div className="bg-[#1a1a1a] rounded-2xl p-6 border border-gray-700">
-              <div className="flex items-start justify-between mb-6">
-                <div>
-                  <h2 className="text-2xl font-bold mb-3">{ad.title}</h2>
-                  <div className="flex items-center gap-6 text-gray-400">
-                    <span>{ad.location}</span>
-                    <span>{ad.applicants} متقاضی</span>
-                    <span>{ad.date}</span>
-                  </div>
-                </div>
-                {ad.urgent && (
-                  <span className="bg-yellow-500/20 text-yellow-400 text-sm px-3 py-1 rounded-full font-medium">
-                    فوری
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {/* Ultra-Compact Card-Based Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Job Details */}
+          <div className="space-y-6">
             <div className="bg-[#1a1a1a] rounded-xl border border-gray-700 overflow-hidden">
-              {/* Header Section */}
               <div className="bg-gradient-to-r from-gray-800 to-gray-900 px-6 py-4 border-b border-gray-600">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3 space-x-reverse">
@@ -357,455 +323,133 @@ export default function AdvertisementDetailsPage() {
                         {ad.title}
                       </h2>
                       <div className="flex items-center space-x-4 space-x-reverse text-xs text-gray-400 mt-1">
-                        <span className="flex items-center">
-                          <svg
-                            className="w-3 h-3 ml-1"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                            ></path>
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                            ></path>
-                          </svg>
-                          {ad.location}
-                        </span>
-                        <span className="flex items-center">
-                          <svg
-                            className="w-3 h-3 ml-1"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-6a6 6 0 00-9-5.197m13.5-.5l-2.5 2.5"
-                            ></path>
-                          </svg>
-                          {ad.applicants}
-                        </span>
+                        <span>{ad.location}</span>
+                        <span>{ad.applicants} متقاضی</span>
                         <span>{ad.date}</span>
                       </div>
                     </div>
                   </div>
                   {ad.urgent && (
-                    <div className="bg-gradient-to-r from-red-500 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center">
-                      <svg
-                        className="w-3 h-3 ml-1"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M13 10V3L4 14h7v7l9-11h-7z"
-                        ></path>
-                      </svg>
+                    <div className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-medium">
                       فوری
                     </div>
                   )}
                 </div>
               </div>
 
-              {/* Complete Job Details Sections */}
-              <div className="p-6 space-y-6">
-                {/* Job Description */}
-                <div className="bg-gray-800/30 rounded-lg p-4">
-                  <h4 className="text-sm font-semibold text-yellow-300 mb-3 flex items-center border-b border-yellow-500/30 pb-2">
-                    <svg
-                      className="w-4 h-4 ml-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                      ></path>
-                    </svg>
+              <div className="p-6">
+                <div className="bg-gray-800/30 rounded-lg p-4 mb-4">
+                  <h4 className="text-sm font-semibold text-yellow-300 mb-3">
                     شرح شغلی
                   </h4>
-                  <div className="text-white text-sm leading-relaxed whitespace-pre-line">
+                  <p className="text-white text-sm leading-relaxed">
                     {ad.description}
-                  </div>
+                  </p>
                 </div>
 
-                {/* Requirements Section */}
-                {ad.requirements && (
-                  <div className="bg-gray-800/30 rounded-lg p-4">
-                    <h4 className="text-sm font-semibold text-yellow-300 mb-3 flex items-center border-b border-yellow-500/30 pb-2">
-                      <svg
-                        className="w-4 h-4 ml-2"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                        ></path>
-                      </svg>
-                      شرایط و الزامات
-                    </h4>
-                    <div className="text-white text-sm leading-relaxed whitespace-pre-line">
-                      {ad.requirements}
-                    </div>
-                  </div>
-                )}
-
-                {/* Detailed Eligibility Criteria */}
-                <div className="bg-gray-800/50 rounded-lg p-4">
-                  <h4 className="text-sm font-semibold text-yellow-300 mb-4 flex items-center border-b border-yellow-500/30 pb-2">
-                    <svg
-                      className="w-4 h-4 ml-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M9 12l2 2 4-4-4-4-2 2"
-                      ></path>
-                    </svg>
-                    شرایط احراز دقیق
+                <div className="bg-gray-800/30 rounded-lg p-4 mb-4">
+                  <h4 className="text-sm font-semibold text-yellow-300 mb-3">
+                    الزامات
                   </h4>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {/* جنسیت */}
-                    <div className="bg-gray-700/30 rounded-lg p-3 text-center">
-                      <div className="text-xs text-gray-400 mb-1">جنسیت</div>
-                      <div className="text-white text-sm font-medium">
-                        {ad.gender === "male"
-                          ? "آقا"
-                          : ad.gender === "female"
-                          ? "خانم"
-                          : "آقا و خانم"}
-                      </div>
-                    </div>
-
-                    {/* تحصیلات */}
-                    <div className="bg-gray-700/30 rounded-lg p-3 text-center">
-                      <div className="text-xs text-gray-400 mb-1">تحصیلات</div>
-                      <div className="text-white text-sm font-medium">
-                        {ad.education === "diploma"
-                          ? "دیپلم"
-                          : ad.education === "associate"
-                          ? "کاردانی"
-                          : ad.education === "bachelor"
-                          ? "کارشناسی"
-                          : ad.education === "master"
-                          ? "کارشناسی ارشد"
-                          : "دکتری"}
-                      </div>
-                    </div>
-
-                    {/* سابقه کاری */}
-                    <div className="bg-gray-700/30 rounded-lg p-3 text-center">
-                      <div className="text-xs text-gray-400 mb-1">
-                        سابقه کاری
-                      </div>
-                      <div className="text-white text-sm font-medium">
-                        {ad.experience === "fresh"
-                          ? "تازه‌کار"
-                          : ad.experience === "1-2"
-                          ? "۱-۲ سال"
-                          : ad.experience === "2-5"
-                          ? "۲-۵ سال"
-                          : "بیش از ۵ سال"}
-                      </div>
-                    </div>
-
-                    {/* وضعیت سربازی */}
-                    <div className="bg-gray-700/30 rounded-lg p-3 text-center">
-                      <div className="text-xs text-gray-400 mb-1">
-                        وضعیت سربازی
-                      </div>
-                      <div className="text-white text-sm font-medium">
-                        {ad.militaryService === "completed"
-                          ? "پایان خدمت"
-                          : ad.militaryService === "exempted"
-                          ? "معاف"
-                          : "نیازی نیست"}
-                      </div>
-                    </div>
-
-                    {/* ساعت کاری */}
-                    {ad.workHours && (
-                      <div className="bg-gray-700/30 rounded-lg p-3 text-center">
-                        <div className="text-xs text-gray-400 mb-1">
-                          ساعت کاری
-                        </div>
-                        <div className="text-white text-sm font-medium">
-                          {ad.workHours}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* بیمه */}
-                    {ad.insurance && (
-                      <div className="bg-gray-700/30 rounded-lg p-3 text-center">
-                        <div className="text-xs text-gray-400 mb-1">بیمه</div>
-                        <div className="text-white text-sm font-medium">
-                          {ad.insurance === "full"
-                            ? "بیمه کامل"
-                            : ad.insurance === "basic"
-                            ? "بیمه پایه"
-                            : "بدون بیمه"}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* دوره آزمایشی */}
-                    {ad.probationPeriod && (
-                      <div className="bg-gray-700/30 rounded-lg p-3 text-center">
-                        <div className="text-xs text-gray-400 mb-1">
-                          دوره آزمایشی
-                        </div>
-                        <div className="text-white text-sm font-medium">
-                          {ad.probationPeriod}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Special Options */}
-                  {(ad.remoteWork || ad.travelRequired) && (
-                    <div className="mt-4 p-3 bg-gray-700/50 rounded-lg">
-                      <div className="text-xs text-gray-400 mb-2 text-center">
-                        گزینه‌های ویژه
-                      </div>
-                      <div className="flex justify-center flex-wrap gap-3">
-                        {ad.remoteWork && (
-                          <span className="bg-blue-500/20 text-blue-300 text-xs px-3 py-1 rounded-full border border-blue-500/30">
-                            امکان دورکاری
-                          </span>
-                        )}
-                        {ad.travelRequired && (
-                          <span className="bg-purple-500/20 text-purple-300 text-xs px-3 py-1 rounded-full border border-purple-500/30">
-                            نیاز به سفر
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  )}
+                  <p className="text-white text-sm leading-relaxed">
+                    {ad.requirements}
+                  </p>
                 </div>
 
-                {/* Skills & Benefits Row */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {/* مهارت‌های مورد نیاز */}
-                  {ad.skills && (
-                    <div className="bg-gray-800/30 rounded-lg p-4">
-                      <h4 className="text-sm font-semibold text-yellow-300 mb-3 flex items-center border-b border-yellow-500/30 pb-2">
-                        <svg
-                          className="w-4 h-4 ml-2"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-                          ></path>
-                        </svg>
-                        مهارت‌های مورد نیاز
-                      </h4>
-                      <div className="text-white text-sm leading-relaxed">
-                        {ad.skills}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* مزایا و تسهیلات */}
-                  {ad.benefits && ad.benefits.length > 0 && (
-                    <div className="bg-gray-800/30 rounded-lg p-4">
-                      <h4 className="text-sm font-semibold text-yellow-300 mb-3 flex items-center border-b border-yellow-500/30 pb-2">
-                        <svg
-                          className="w-4 h-4 ml-2"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                          ></path>
-                        </svg>
-                        مزایا و تسهیلات
-                      </h4>
-                      <div className="flex flex-wrap gap-2">
-                        {ad.benefits.map((benefit, index) => (
-                          <span
-                            key={index}
-                            className="bg-yellow-400/15 text-yellow-300 text-xs px-2 py-1 rounded border border-yellow-400/30"
-                          >
-                            {benefit}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                <div className="bg-gray-800/30 rounded-lg p-4 mb-4">
+                  <h4 className="text-sm font-semibold text-yellow-300 mb-3">
+                    مهارت‌های مورد نیاز
+                  </h4>
+                  <p className="text-white text-sm">{ad.skills}</p>
                 </div>
 
-                {/* Responsibilities */}
-                {ad.responsibilities && (
-                  <div className="bg-gray-800/30 rounded-lg p-4">
-                    <h4 className="text-sm font-semibold text-yellow-300 mb-3 flex items-center border-b border-yellow-500/30 pb-2">
-                      <svg
-                        className="w-4 h-4 ml-2"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"
-                        ></path>
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M8 5a2 2 0 012-2h4a2 2 0 012 2v0M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5z"
-                        ></path>
-                      </svg>
-                      مسئولیت‌ها
-                    </h4>
-                    <div className="text-white text-sm leading-relaxed whitespace-pre-line">
-                      {ad.responsibilities}
-                    </div>
+                <div className="bg-gray-800/30 rounded-lg p-4 mb-4">
+                  <h4 className="text-sm font-semibold text-yellow-300 mb-3">
+                    مزایا و تسهیلات
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {ad.benefits.length > 0 ? (
+                      ad.benefits.map((benefit, index) => (
+                        <span
+                          key={index}
+                          className="bg-yellow-400/15 text-yellow-300 text-xs px-2 py-1 rounded border border-yellow-400/30"
+                        >
+                          {benefit}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-white text-sm">
+                        مزایای خاصی ذکر نشده است
+                      </span>
+                    )}
                   </div>
-                )}
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Right Column - Company Info and Application */}
+          {/* Company Info */}
           <div className="space-y-6">
-            {/* Company Information */}
             <div className="bg-[#1a1a1a] rounded-2xl p-6 border border-gray-700">
               <h3 className="text-xl font-bold mb-4">اطلاعات شرکت</h3>
-              <div className="space-y-4">
-                <div className="text-center p-4 bg-[#2a2a2a] rounded-lg">
-                  <div className="w-16 h-16 bg-yellow-400/10 rounded-full mx-auto mb-3 flex items-center justify-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="32"
-                      height="32"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      className="text-yellow-400"
-                    >
-                      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                    </svg>
-                  </div>
-                  <h4 className="font-semibold text-lg">{ad.company}</h4>
-                  <p className="text-gray-400 text-sm">{ad.location}</p>
-                </div>
+              <div className="text-center mb-4">
+                <h4 className="font-semibold text-lg">{ad.company}</h4>
+                <p className="text-gray-400 text-sm">{ad.location}</p>
+              </div>
 
-                <div className="grid grid-cols-1 gap-3">
-                  <div className="flex justify-between items-center p-2 bg-[#2a2a2a] rounded-lg">
-                    <span className="text-gray-400">تحصیلات:</span>
-                    <span>
-                      {ad.education === "diploma"
-                        ? "دیپلم"
-                        : ad.education === "associate"
-                        ? "کاردانی"
-                        : ad.education === "bachelor"
-                        ? "کارشناسی"
-                        : ad.education === "master"
-                        ? "کارشناسی ارشد"
-                        : "دکتری"}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center p-2 bg-[#2a2a2a] rounded-lg">
-                    <span className="text-gray-400">حقوق:</span>
-                    <span className="text-yellow-300 font-semibold">
-                      {ad.salary || "توافقی"}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center p-2 bg-[#2a2a2a] rounded-lg">
-                    <span className="text-gray-400">سابقه:</span>
-                    <span>
-                      {ad.experience === "fresh"
-                        ? "تازه‌کار"
-                        : ad.experience === "1-2"
-                        ? "۱-۲ سال"
-                        : ad.experience === "2-5"
-                        ? "۲-۵ سال"
-                        : "بیش از ۵ سال"}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center p-2 bg-[#2a2a2a] rounded-lg">
-                    <span className="text-gray-400">وضعیت نظام:</span>
-                    <span>
-                      {ad.militaryService === "completed"
-                        ? "پایان خدمت"
-                        : ad.militaryService === "exempted"
-                        ? "معاف"
-                        : "نیازی نیست"}
-                    </span>
-                  </div>
+              <div className="grid grid-cols-1 gap-3">
+                <div className="flex justify-between items-center p-2 bg-[#2a2a2a] rounded-lg">
+                  <span className="text-gray-400">حقوق:</span>
+                  <span className="text-yellow-300 font-semibold">
+                    {ad.salary}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center p-2 bg-[#2a2a2a] rounded-lg">
+                  <span className="text-gray-400">نوع همکاری:</span>
+                  <span>{ad.type}</span>
+                </div>
+                <div className="flex justify-between items-center p-2 bg-[#2a2a2a] rounded-lg">
+                  <span className="text-gray-400">جنسیت:</span>
+                  <span>
+                    {ad.gender === "male"
+                      ? "آقا"
+                      : ad.gender === "female"
+                      ? "خانم"
+                      : "آقا و خانم"}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center p-2 bg-[#2a2a2a] rounded-lg">
+                  <span className="text-gray-400">تحصیلات:</span>
+                  <span>
+                    {ad.education === "bachelor"
+                      ? "کارشناسی"
+                      : ad.education === "master"
+                      ? "کارشناسی ارشد"
+                      : "سایر"}
+                  </span>
                 </div>
               </div>
             </div>
 
-            {/* Application Section */}
             <div className="bg-[#1a1a1a] rounded-2xl p-6 border border-gray-700">
               <h3 className="text-xl font-bold mb-4 text-center">
-                علاقه‌مندی به این موقعیت
+                درخواست همکاری
               </h3>
-              <p className="text-gray-400 text-center mb-6 text-sm">
-                برای ارسال رزومه خود روی دکمه زیر کلیک کنید
+              <p className="text-gray-400 text-center text-sm mb-4">
+                برای درخواست این موقعیت لطفا وارد حساب کاربری خود شوید
               </p>
-
-              <div className="space-y-4">
-                <button className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-bold py-3 px-6 rounded-lg hover:shadow-lg hover:shadow-yellow-500/20 transform hover:-translate-y-0.5 transition-all duration-300">
-                  ارسال رزومه مستقیم
-                </button>
-
-                <div className="flex items-center my-4">
-                  <div className="flex-grow border-t border-gray-600"></div>
-                  <span className="flex-shrink mx-4 text-gray-500 text-sm">
-                    یا
-                  </span>
-                  <div className="flex-grow border-t border-gray-600"></div>
-                </div>
-
-                <button className="w-full bg-[#2a2a2a] hover:bg-gray-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-300">
-                  ایجاد پروفایل کاربری
-                </button>
-
+              <button className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-3 px-6 rounded-lg transition-colors duration-200">
+                🔐 ورود و درخواست همکاری
+              </button>
+              <div className="text-center mt-4">
+                <p className="text-xs text-gray-500 mb-2">
+                  حساب کاربری ندارید؟
+                </p>
                 <button
-                  onClick={() => router.back()}
-                  className="w-full bg-gray-700 hover:bg-gray-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-300"
+                  onClick={() => router.push("/auth?mode=register")}
+                  className="text-sm text-yellow-400 hover:text-yellow-300 underline"
                 >
-                  بازگشت به نتایج
+                  ثبت نام کنید
                 </button>
               </div>
             </div>

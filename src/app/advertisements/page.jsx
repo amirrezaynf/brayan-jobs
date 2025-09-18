@@ -22,7 +22,7 @@ const sampleAdvertisements = [
     type: "تمام وقت",
     salary: "۱۵,۰۰۰,۰۰۰ تومان",
     applicants: 12,
-    date: "۱۴۰۳/۰۶/۲۰",
+    date: "2024-09-11",
     urgent: true,
   },
   {
@@ -36,7 +36,7 @@ const sampleAdvertisements = [
     type: "پاره وقت",
     salary: "۸,۰۰۰,۰۰۰ تومان",
     applicants: 8,
-    date: "۱۴۰۳/۰۶/۱۹",
+    date: "2024-09-10",
     urgent: false,
   },
   {
@@ -50,7 +50,7 @@ const sampleAdvertisements = [
     type: "تمام وقت",
     salary: "۱۸,۰۰۰,۰۰۰ تومان",
     applicants: 5,
-    date: "۱۴۰۳/۰۶/۱۸",
+    date: "2024-09-09",
     urgent: true,
   },
   {
@@ -65,7 +65,7 @@ const sampleAdvertisements = [
     type: "تمام وقت",
     salary: "۱۲,۰۰۰,۰۰۰ تومان",
     applicants: 15,
-    date: "۱۴۰۳/۰۶/۱۷",
+    date: "2024-09-08",
     urgent: false,
   },
   {
@@ -79,7 +79,7 @@ const sampleAdvertisements = [
     type: "تمام وقت",
     salary: "۱۶,۰۰۰,۰۰۰ تومان",
     applicants: 9,
-    date: "۱۴۰۳/۰۶/۱۶",
+    date: "2024-09-07",
     urgent: false,
   },
   {
@@ -93,20 +93,51 @@ const sampleAdvertisements = [
     type: "تمام وقت",
     salary: "۱۱,۰۰۰,۰۰۰ تومان",
     applicants: 22,
-    date: "۱۴۰۳/۰۶/۱۵",
+    date: "2024-09-06",
     urgent: true,
+  },
+  {
+    id: 7,
+    title: "برنامه‌نویس Full Stack",
+    company: "استارتاپ فن‌دون",
+    location: "اصفهان",
+    description: "توسعه پروژه‌های بزرگ با تکنولوژی‌های مدرن",
+    category: "فناوری اطلاعات",
+    specialization: "برنامه‌نویسی وب",
+    type: "تمام وقت",
+    salary: "توافقی",
+    applicants: 7,
+    date: "2024-09-05",
+    urgent: false,
+  },
+  {
+    id: 8,
+    title: "مدیر بازاریابی دیجیتال",
+    company: "آژانس تبلیغاتی راهکار",
+    location: "تهران",
+    description: "مدیریت استراتژی بازاریابی دیجیتال و فروش آنلاین",
+    category: "بازاریابی و فروش",
+    specialization: "بازاریابی دیجیتال",
+    type: "تمام وقت",
+    salary: "توافقی",
+    applicants: 14,
+    date: "2024-09-04",
+    urgent: false,
   },
 ];
 
 export default function AdvertisementsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [ads, setAds] = useState([]);
-  const [filteredAds, setFilteredAds] = useState([]);
+  const [ads, setAds] = useState(sampleAdvertisements);
+  const [filteredAds, setFilteredAds] = useState([...sampleAdvertisements]);
   const [searchFilter, setSearchFilter] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [sortBy, setSortBy] = useState("newest");
   const [salaryRange, setSalaryRange] = useState([5000000, 50000000]); // Default salary range
+  const [showNegotiable, setShowNegotiable] = useState(false); // Default: show all salaries (both negotiable and fixed)
+  const [showNoLimit, setShowNoLimit] = useState(false); // Default: apply normal salary limits
+  const [showRangeFilter, setShowRangeFilter] = useState(false); // Default: show range filter option
 
   // Get search parameters
   const userType = searchParams.get("userType");
@@ -132,6 +163,8 @@ export default function AdvertisementsPage() {
     }
 
     setFilteredAds(filtered);
+    // Also set ads initially to filtered data
+    setAds(filtered);
   }, [jobCategory, specialization]);
 
   // Apply basic filters
@@ -158,12 +191,53 @@ export default function AdvertisementsPage() {
       result = result.filter((ad) => ad.category === activeCategory);
     }
 
-    // Salary range filter
+    // Salary range and negotiable filter
     result = result.filter((ad) => {
+      // Check if the salary is negotiable
+      const isNegotiableSalary = ad.salary.toLowerCase().includes("توافقی");
+
+      // If showNoLimit is enabled, show all jobs without salary filtering
+      if (showNoLimit) {
+        return true;
+      }
+
+      // If showNegotiable is enabled, show only negotiable jobs
+      if (showNegotiable) {
+        return isNegotiableSalary;
+      }
+
+      // If showRangeFilter is enabled, show only fixed salary jobs within range
+      if (showRangeFilter) {
+        if (isNegotiableSalary) {
+          return false; // Exclude negotiable jobs when filtering by range
+        }
+        // Parse the Persian salary string to numbers
+        const persianDigits = ad.salary.match(/[\u06F0-\u06F9]/g);
+        if (!persianDigits) return false; // Exclude if no valid digits found
+
+        // Convert Persian digits to English digits
+        const englishDigits = persianDigits
+          .map((digit) => {
+            const charCode = digit.charCodeAt(0);
+            const baseCharCode = "\u06F0".charCodeAt(0);
+            return String(charCode - baseCharCode);
+          })
+          .join("");
+
+        const salaryNum = parseInt(englishDigits, 10);
+
+        return salaryNum >= salaryRange[0] && salaryNum <= salaryRange[1];
+      }
+
+      // Default case (no specific filter enabled) - show all ads
+      if (isNegotiableSalary) {
+        return true; // Include negotiable jobs when no specific filter is enabled
+      }
+
+      // For fixed salaries in default case, apply range filter
       // Parse the Persian salary string to numbers
-      // Extract only Persian digits (۱۲۳۴۵۶۷۸۹۰)
       const persianDigits = ad.salary.match(/[\u06F0-\u06F9]/g);
-      if (!persianDigits) return salaryRange[0] <= 0; // Show all if no digits found
+      if (!persianDigits) return false; // Exclude if no valid digits found
 
       // Convert Persian digits to English digits
       const englishDigits = persianDigits
@@ -207,7 +281,10 @@ export default function AdvertisementsPage() {
     selectedCategory,
     sortBy,
     salaryRange,
-    jobCategory,
+    showNegotiable,
+    showNoLimit,
+    showRangeFilter,
+    jobCategory || "",
   ]);
 
   const handleViewAd = (adId) => {
@@ -241,7 +318,7 @@ export default function AdvertisementsPage() {
         <div className="bg-[#2a2a2a] rounded-xl p-6 mb-8 border border-gray-700">
           <div>
             {/* Main Search Filters */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div>
                 <input
                   type="text"
@@ -280,6 +357,9 @@ export default function AdvertisementsPage() {
                     setSelectedCategory("");
                     setSortBy("newest");
                     setSalaryRange([5000000, 50000000]);
+                    setShowNegotiable(false);
+                    setShowNoLimit(false);
+                    setShowRangeFilter(false);
                   }}
                   className="bg-[#2a2a2a] hover:bg-gray-500 text-white px-4 py-2 rounded-lg transition-colors duration-200 border border-gray-600"
                 >
@@ -289,10 +369,16 @@ export default function AdvertisementsPage() {
             </div>
 
             {/* Salary Range Slider - Now Below */}
-            <div className="border-t border-gray-600 pt-6">
+            <div className="border-t border-gray-600 pt-4">
               <SalaryRangeSlider
                 value={salaryRange}
                 onChange={setSalaryRange}
+                showNegotiable={showNegotiable}
+                onNegotiableChange={setShowNegotiable}
+                showNoLimit={showNoLimit}
+                onNoLimitChange={setShowNoLimit}
+                showRangeFilter={showRangeFilter}
+                onRangeFilterChange={setShowRangeFilter}
                 min={1000000}
                 max={100000000}
               />
