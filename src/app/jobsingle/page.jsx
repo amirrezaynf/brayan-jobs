@@ -1,5 +1,6 @@
 "use client";
-import React, { useState, useEffect } from "react";
+export const dynamic = "force-dynamic";
+import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   Briefcase,
@@ -161,7 +162,7 @@ const FileUpload = ({ id, label, multiple = false }) => {
   );
 };
 
-export default function JobPostingPage() {
+function JobPostingPageContent() {
   const searchParams = useSearchParams();
   const [jobData, setJobData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -387,7 +388,7 @@ export default function JobPostingPage() {
 
           {/* --- Right Column: Application Form --- */}
           <div className="lg:col-span-1">
-            <div className="sticky top-8  p-8 rounded-2xl border border-gray-800 shadow-lg shadow-black/20">
+            <div className="sticky top-8 p-8 rounded-2xl border border-gray-800 shadow-lg shadow-black/20">
               <h2 className="text-2xl font-bold text-center mb-4">
                 ارسال رزومه
               </h2>
@@ -469,7 +470,7 @@ export default function JobPostingPage() {
                     name="description"
                     rows="4"
                     placeholder="اگر نکته‌ای دارید اینجا بنویسید..."
-                    className="w-full  border border-gray-700 text-white rounded-lg px-4 py-3 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-all duration-300 placeholder-gray-500"
+                    className="w-full border border-gray-700 text-white rounded-lg px-4 py-3 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition-all duration-300 placeholder-gray-500"
                   ></textarea>
                 </div>
 
@@ -485,5 +486,22 @@ export default function JobPostingPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function JobPostingPage() {
+  return (
+    <Suspense
+      fallback={
+        <div
+          className="bg-[#121212] min-h-screen text-white font-sans flex items-center justify-center"
+          dir="rtl"
+        >
+          <div className="text-yellow-400 text-xl">در حال بارگذاری...</div>
+        </div>
+      }
+    >
+      <JobPostingPageContent />
+    </Suspense>
   );
 }
