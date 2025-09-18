@@ -59,13 +59,7 @@ export default function EmployersPage() {
                 آگهی‌های خود را مدیریت کرده و بهترین متخصصان را استخدام کنید.
               </p>
             </div>
-            <a
-              href="/"
-              className="flex items-center gap-2 px-4 py-2 bg-yellow-500 text-black rounded-lg  transition-colors"
-            >
-              <ArrowRight size={16} />
-              بازگشت به صفحه اصلی
-            </a>
+            
           </div>
         </header>
 
