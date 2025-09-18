@@ -329,55 +329,8 @@ export default function JobSearch() {
         <div className="dark-card p-6 rounded-xl shadow-2xl shadow-black/30">
           {/* First Row - Job Search, Job Category, Specialization, User Type */}
           <div className="grid  grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-            {/* Job Search Input */}
-            <div>
-              <label
-                htmlFor="search-job"
-                className="block mb-2 text-sm font-medium text-gray-400"
-              >
-                عنوان شغلی، شرکت یا...
-              </label>
-              <div className="relative">
-                <CustomInput placeholder="مثلا: توسعه‌دهنده React" />
-                <span className="absolute left-3 top-4 text-gray-500">
-                  <SearchIcon />
-                </span>
-              </div>
-            </div>
-
-            {/* Job Category */}
-            <div>
-              <label className="block mb-2 text-sm font-medium text-gray-400 flex items-center gap-2">
-                <CategoryIcon />
-                دسته‌بندی شغلی
-              </label>
-              <CustomSelect
-                options={jobCategories}
-                value={jobCategory}
-                onChange={setJobCategory}
-                placeholder="انتخاب دسته‌بندی"
-              />
-            </div>
-
-            {/* Specialization */}
-            <div>
-              <label className="block mb-2 text-sm font-medium text-gray-400 flex items-center gap-2">
-                <SpecializationIcon />
-                تخصص
-              </label>
-              <CustomSelect
-                options={specializations}
-                value={specialization}
-                onChange={setSpecialization}
-                placeholder={
-                  jobCategory ? "انتخاب تخصص" : "ابتدا دسته‌بندی را انتخاب کنید"
-                }
-                disabled={!jobCategory}
-              />
-            </div>
-
             {/* User Type - Radio Buttons */}
-            <div className="flex items-center gap-5 md:mt-5">
+            <div className="flex items-center gap-5 md:mt-6.5 bg-[#2a2a2a] border border-[#444] rounded-lg h-fit pr-5 py-3.5">
               <label className="text-sm font-medium text-gray-400 flex items-center  gap-2">
                 <UserIcon />
                 جستجو در
@@ -419,6 +372,52 @@ export default function JobSearch() {
                   </label>
                 ))}
               </div>
+            </div>
+            {/* Job Search Input */}
+            <div>
+              <label
+                htmlFor="search-job"
+                className="block mb-2 text-sm font-medium text-gray-400"
+              >
+                عنوان شغلی، شرکت یا...
+              </label>
+              <div className="relative">
+                <CustomInput placeholder="مثلا: توسعه‌دهنده React" />
+                <span className="absolute left-3 top-4 text-gray-500">
+                  <SearchIcon />
+                </span>
+              </div>
+            </div>
+
+            {/* Job Category */}
+            <div>
+              <label className=" mb-2 text-sm font-medium text-gray-400 flex items-center gap-2">
+                <CategoryIcon />
+                دسته‌بندی شغلی
+              </label>
+              <CustomSelect
+                options={jobCategories}
+                value={jobCategory}
+                onChange={setJobCategory}
+                placeholder="انتخاب دسته‌بندی"
+              />
+            </div>
+
+            {/* Specialization */}
+            <div>
+              <label className="block mb-2 text-sm font-medium text-gray-400 flex items-center gap-2">
+                <SpecializationIcon />
+                تخصص
+              </label>
+              <CustomSelect
+                options={specializations}
+                value={specialization}
+                onChange={setSpecialization}
+                placeholder={
+                  jobCategory ? "انتخاب تخصص" : "ابتدا دسته‌بندی را انتخاب کنید"
+                }
+                disabled={!jobCategory}
+              />
             </div>
           </div>
 

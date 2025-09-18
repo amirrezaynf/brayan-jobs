@@ -9,7 +9,7 @@ import Header from "@/components/layout/Header";
 export default function HomePage() {
   return (
     <>
-      <div className="bg-[#121212]">
+      <div className="">
         {/* Mobile Menu Panel */}
 
         <main>
