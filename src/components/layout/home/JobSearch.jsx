@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import CustomSelect from "../../ui/CustomSelect";
-import CustomInput from "../../ui/CustomInput";
+import CustomSelect from "../../ui/select/CustomSelect";
+import CustomInput from "../../ui/input/CustomInput";
 
 // Data for countries
 const countries = {

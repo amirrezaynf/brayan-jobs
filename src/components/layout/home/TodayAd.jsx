@@ -1,5 +1,5 @@
-import SalaryRangeSlider from "@/components/ui/SalaryRangeInput";
-import AdCard from "../../ui/AdCard";
+import SalaryRangeSlider from "@/components/ui/range/SalaryRangeInput";
+import AdCard from "../../ui/card/AdCard";
 
 // Data for job categories
 const jobCategories = [

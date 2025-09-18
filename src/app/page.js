@@ -1,9 +1,10 @@
 import Footer from "@/components/layout/Footer";
 import AdsAndFilters from "@/components/layout/home/TodayAd";
 import JobSearch from "@/components/layout/home/JobSearch";
-import HeroSection from "@/components/modules/HomePage/Hero/HomePageHeroSection";
-import BenefitsSection from "@/components/modules/HomePage/BenefitsSection";
-import ImportantBrands from "@/components/modules/HomePage/ImportantBrands";
+import BenefitsSection from "@/components/modules/home/BenefitsSection";
+import HeroSection from "@/components/modules/home/hero/HomePageHeroSection";
+import ImportantBrands from "@/components/modules/home/ImportantBrands";
+import Header from "@/components/layout/Header";
 
 export default function HomePage() {
   return (
@@ -12,12 +13,13 @@ export default function HomePage() {
         {/* Mobile Menu Panel */}
 
         <main>
+          <Header />
           <HeroSection />
-          <BenefitsSection />
           <JobSearch />
 
           <AdsAndFilters />
 
+          <BenefitsSection />
           <ImportantBrands />
         </main>
 
