@@ -169,13 +169,7 @@ export default function ResumePage() {
           <div className="px-6 py-8 sm:px-10">
             {/* Back Button */}
             <div className="flex items-center justify-between mb-6">
-              <a
-                href="/"
-                className="flex items-center gap-2 px-4 py-2 bg-yellow-500 text-black rounded-lg  transition-colors"
-              >
-                <ArrowRight size={16} />
-                بازگشت به صفحه اصلی
-              </a>
+             
             </div>
             {/* Header Section */}
             <div className="text-center mb-8">

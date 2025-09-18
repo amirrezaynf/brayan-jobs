@@ -289,49 +289,6 @@ export default function EmployersPage() {
   return (
     <div className="bg-[#0f0f0f] min-h-screen text-white font-sans" dir="rtl">
       {/* Header */}
-      <header className="bg-[#1a1a1a] shadow-lg shadow-black/20 sticky top-0 z-40">
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="flex items-center space-x-4 space-x-reverse">
-            <Link href="/" className="flex items-center">
-              <svg
-                className="w-8 h-8 text-yellow-400"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z"
-                />
-              </svg>
-              <span className="text-white font-bold text-lg mr-3">
-                دکتر برایان اعتماد
-              </span>
-            </Link>
-          </div>
-
-          <nav className="hidden lg:flex items-center space-x-8 space-x-reverse">
-            <Link href="/" className="hover:text-yellow-400 transition-colors">
-              صفحه اصلی
-            </Link>
-            <Link
-              href="/resume"
-              className="hover:text-yellow-400 transition-colors"
-            >
-              ثبت رزومه
-            </Link>
-            <Link
-              href="/employer"
-              className="bg-yellow-400 text-black px-4 py-2 rounded-lg hover:bg-yellow-300 transition-colors"
-            >
-              بخش کارفرمایان
-            </Link>
-          </nav>
-        </div>
-      </header>
 
       {/* Hero Section */}
       <section className="relative h-[50vh] flex items-center justify-center text-center overflow-hidden">
