@@ -25,6 +25,8 @@ import {
   MessageCircle,
   Bookmark,
 } from "lucide-react";
+import CustomSelect from "@/components/ui/select/CustomSelect";
+import Pagination from "@/components/ui/pagination/Pagination";
 
 // کامپوننت نمایش سطح مهارت
 const SkillLevel = ({ level }) => {
@@ -82,7 +84,7 @@ const JobSeekerCard = ({ jobSeeker, onViewProfile, onContact, onBookmark }) => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 hover:border-yellow-400/30 transition-all duration-300 hover:shadow-xl hover:shadow-yellow-400/10">
+    <div className="bg-black/30 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 hover:border-yellow-400/30 transition-all duration-300 hover:shadow-xl hover:shadow-yellow-400/10">
       {/* Header کارت */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-4">
@@ -240,6 +242,8 @@ export default function JobSeekersLandingPage() {
   const [selectedProvince, setSelectedProvince] = useState("all");
   const [selectedLocation, setSelectedLocation] = useState("all");
   const [sortBy, setSortBy] = useState("recent");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6; // تعداد کارجو در هر صفحه
 
   // داده‌های نمونه کارجوها
   const jobSeekers = [
@@ -251,7 +255,7 @@ export default function JobSeekersLandingPage() {
       city: "تهران",
       province: "تهران",
       profileImage:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+        "https://images.unsplash.com/photo-1472099645785-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
       lastExperience:
         "توسعه‌دهنده ارشد React در شرکت فناوری پارس با ۳ سال تجربه در پروژه‌های بزرگ",
       topSkills: [
@@ -407,6 +411,252 @@ export default function JobSeekersLandingPage() {
       responseRate: 95,
       isBookmarked: false,
     },
+    {
+      id: 7,
+      firstName: "امیر",
+      lastName: "حسینی",
+      jobTitle: "مهندس امنیت سایبری",
+      city: "تهران",
+      province: "تهران",
+      profileImage:
+        "https://images.unsplash.com/photo-1519085360753-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      lastExperience:
+        "متخصص امنیت سایبری در بانک مرکزی با تجربه در حفاظت از زیرساخت‌های حیاتی",
+      topSkills: [
+        "Cybersecurity",
+        "Penetration Testing",
+        "Network Security",
+        "CISSP",
+        "Ethical Hacking",
+        "Firewall",
+      ],
+      languages: [
+        { language: "انگلیسی", proficiency: "حرفه‌ای" },
+        { language: "روسی", proficiency: "متوسط" },
+      ],
+      expectedSalary: "22000000",
+      profileViews: 245,
+      lastUpdate: "۱ ساعت پیش",
+      responseRate: 90,
+      isBookmarked: false,
+    },
+    {
+      id: 8,
+      firstName: "نگار",
+      lastName: "موسوی",
+      jobTitle: "مهندس یادگیری ماشین",
+      city: "اصفهان",
+      province: "اصفهان",
+      profileImage:
+        "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      lastExperience:
+        "محقق یادگیری ماشین در مرکز تحقیقات فناوری با انتشار ۱۰ مقاله علمی",
+      topSkills: [
+        "Machine Learning",
+        "Deep Learning",
+        "TensorFlow",
+        "PyTorch",
+        "Computer Vision",
+        "NLP",
+      ],
+      languages: [
+        { language: "انگلیسی", proficiency: "حرفه‌ای" },
+        { language: "فرانسوی", proficiency: "پیشرفته" },
+      ],
+      expectedSalary: "25000000",
+      profileViews: 312,
+      lastUpdate: "۳ ساعت پیش",
+      responseRate: 87,
+      isBookmarked: true,
+    },
+    {
+      id: 9,
+      firstName: "رضا",
+      lastName: "کاظمی",
+      jobTitle: "معمار نرم‌افزار",
+      city: "شیراز",
+      province: "فارس",
+      profileImage:
+        "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      lastExperience:
+        "معمار نرم‌افزار ارشد در شرکت تکنولوژی پیشرو با طراحی سیستم‌های مقیاس‌پذیر",
+      topSkills: [
+        "System Architecture",
+        "Microservices",
+        "Cloud Computing",
+        "Scalability",
+        "Design Patterns",
+        "API Design",
+      ],
+      languages: [{ language: "انگلیسی", proficiency: "حرفه‌ای" }],
+      expectedSalary: "28000000",
+      profileViews: 189,
+      lastUpdate: "۶ ساعت پیش",
+      responseRate: 93,
+      isBookmarked: false,
+    },
+    {
+      id: 10,
+      firstName: "سارا",
+      lastName: "جعفری",
+      jobTitle: "متخصص بازاریابی دیجیتال",
+      city: "مشهد",
+      province: "خراسان رضوی",
+      profileImage:
+        "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      lastExperience:
+        "مدیر بازاریابی دیجیتال در آژانس تبلیغاتی با موفقیت در کمپین‌های ملی",
+      topSkills: [
+        "Digital Marketing",
+        "SEO/SEM",
+        "Social Media",
+        "Google Analytics",
+        "Content Strategy",
+        "PPC",
+      ],
+      languages: [
+        { language: "انگلیسی", proficiency: "پیشرفته" },
+        { language: "ترکی", proficiency: "متوسط" },
+      ],
+      expectedSalary: "16000000",
+      profileViews: 134,
+      lastUpdate: "۴ ساعت پیش",
+      responseRate: 89,
+      isBookmarked: false,
+    },
+    {
+      id: 11,
+      firstName: "کامران",
+      lastName: "عباسی",
+      jobTitle: "مهندس بلاک‌چین",
+      city: "تبریز",
+      province: "آذربایجان شرقی",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      lastExperience:
+        "توسعه‌دهنده بلاک‌چین در استارتاپ فین‌تک با تجربه در ارزهای دیجیتال",
+      topSkills: [
+        "Blockchain",
+        "Solidity",
+        "Ethereum",
+        "Smart Contracts",
+        "Web3",
+        "Cryptocurrency",
+      ],
+      languages: [{ language: "انگلیسی", proficiency: "پیشرفته" }],
+      expectedSalary: "30000000",
+      profileViews: 267,
+      lastUpdate: "۲ ساعت پیش",
+      responseRate: 82,
+      isBookmarked: true,
+    },
+    {
+      id: 12,
+      firstName: "لیلا",
+      lastName: "رستمی",
+      jobTitle: "مهندس کیفیت نرم‌افزار",
+      city: "کرج",
+      province: "البرز",
+      profileImage:
+        "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      lastExperience:
+        "مهندس QA ارشد در شرکت نرم‌افزاری با تخصص در تست اتوماسیون",
+      topSkills: [
+        "Software Testing",
+        "Test Automation",
+        "Selenium",
+        "JIRA",
+        "API Testing",
+        "Performance Testing",
+      ],
+      languages: [{ language: "انگلیسی", proficiency: "پیشرفته" }],
+      expectedSalary: "14000000",
+      profileViews: 98,
+      lastUpdate: "۱ روز پیش",
+      responseRate: 91,
+      isBookmarked: false,
+    },
+    {
+      id: 13,
+      firstName: "بهزاد",
+      lastName: "قاسمی",
+      jobTitle: "مهندس شبکه",
+      city: "اهواز",
+      province: "خوزستان",
+      profileImage:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      lastExperience:
+        "مهندس شبکه در شرکت مخابرات با تجربه در طراحی و پیاده‌سازی شبکه‌های پیچیده",
+      topSkills: [
+        "Network Engineering",
+        "Cisco",
+        "CCNP",
+        "Routing & Switching",
+        "Network Security",
+        "MPLS",
+      ],
+      languages: [{ language: "انگلیسی", proficiency: "متوسط" }],
+      expectedSalary: "17000000",
+      profileViews: 145,
+      lastUpdate: "۷ ساعت پیش",
+      responseRate: 86,
+      isBookmarked: false,
+    },
+    {
+      id: 14,
+      firstName: "شیدا",
+      lastName: "نوروزی",
+      jobTitle: "طراح گرافیک",
+      city: "ساری",
+      province: "مازندران",
+      profileImage:
+        "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      lastExperience:
+        "طراح گرافیک خلاق در آژانس تبلیغاتی با پورتفولیو قوی در برندسازی",
+      topSkills: [
+        "Graphic Design",
+        "Adobe Creative Suite",
+        "Branding",
+        "Logo Design",
+        "Print Design",
+        "Typography",
+      ],
+      languages: [
+        { language: "انگلیسی", proficiency: "پیشرفته" },
+        { language: "ایتالیایی", proficiency: "مبتدی" },
+      ],
+      expectedSalary: "11000000",
+      profileViews: 76,
+      lastUpdate: "۵ ساعت پیش",
+      responseRate: 94,
+      isBookmarked: false,
+    },
+    {
+      id: 15,
+      firstName: "آرش",
+      lastName: "میرزایی",
+      jobTitle: "مهندس سخت‌افزار",
+      city: "کرمان",
+      province: "کرمان",
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+      lastExperience:
+        "مهندس سخت‌افزار در شرکت الکترونیک با تخصص در طراحی مدارات دیجیتال",
+      topSkills: [
+        "Hardware Engineering",
+        "PCB Design",
+        "Embedded Systems",
+        "FPGA",
+        "Circuit Design",
+        "Microcontrollers",
+      ],
+      languages: [{ language: "انگلیسی", proficiency: "پیشرفته" }],
+      expectedSalary: "19000000",
+      profileViews: 112,
+      lastUpdate: "۸ ساعت پیش",
+      responseRate: 88,
+      isBookmarked: false,
+    },
   ];
 
   const categories = [
@@ -443,6 +693,13 @@ export default function JobSeekersLandingPage() {
     { value: "کرج", label: "کرج" },
   ];
 
+  const sortOptions = [
+    { value: "recent", label: "جدیدترین" },
+    { value: "popular", label: "محبوب‌ترین" },
+    { value: "experience", label: "بیشترین تجربه" },
+    { value: "salary", label: "حقوق" },
+  ];
+
   const handleViewProfile = (id) => {
     window.open(`/karjoo/${id}`, "_blank");
   };
@@ -476,10 +733,33 @@ export default function JobSeekersLandingPage() {
     return matchesSearch && matchesProvince && matchesLocation;
   });
 
+  // محاسبه pagination
+  const totalPages = Math.ceil(filteredJobSeekers.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentJobSeekers = filteredJobSeekers.slice(startIndex, endIndex);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    // اسکرول به بالای صفحه
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // ریست کردن صفحه وقتی فیلترها تغییر می‌کند
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [
+    searchQuery,
+    selectedCategory,
+    selectedProvince,
+    selectedLocation,
+    sortBy,
+  ]);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
+    <div className="min-h-screen bg-black/90">
       {/* Header */}
-      <div className="bg-black/80 backdrop-blur-md border-b border-gray-800">
+      <div className=" backdrop-blur-md border-b border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
             <h1 className="text-4xl font-bold text-white mb-4">
@@ -521,7 +801,7 @@ export default function JobSeekersLandingPage() {
 
       {/* فیلترها و جستجو */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 mb-8">
+        <div className="bg-black/30 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             {/* جستجو */}
             <div className="md:col-span-2">
@@ -532,57 +812,62 @@ export default function JobSeekersLandingPage() {
                   placeholder="جستجو در نام، تخصص، مهارت..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pr-12 pl-4 py-3 bg-gray-900/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                  className="w-full pr-12 pl-4 py-3  border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                 />
               </div>
             </div>
 
             {/* دسته‌بندی */}
             <div>
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full px-4 py-3 bg-gray-900/50 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
-              >
-                {categories.map((category) => (
-                  <option key={category.value} value={category.value}>
-                    {category.label}
-                  </option>
-                ))}
-              </select>
+              <CustomSelect
+                options={categories.map((cat) => cat.label)}
+                value={
+                  categories.find((cat) => cat.value === selectedCategory)
+                    ?.label || "همه دسته‌ها"
+                }
+                onChange={(label) => {
+                  const category = categories.find(
+                    (cat) => cat.label === label
+                  );
+                  setSelectedCategory(category ? category.value : "all");
+                }}
+                placeholder="همه دسته‌ها"
+              />
             </div>
 
             {/* استان */}
             <div>
-              <select
-                value={selectedProvince}
-                onChange={(e) => {
-                  setSelectedProvince(e.target.value);
+              <CustomSelect
+                options={provinces.map((prov) => prov.label)}
+                value={
+                  provinces.find((prov) => prov.value === selectedProvince)
+                    ?.label || "همه استان‌ها"
+                }
+                onChange={(label) => {
+                  const province = provinces.find(
+                    (prov) => prov.label === label
+                  );
+                  setSelectedProvince(province ? province.value : "all");
                   setSelectedLocation("all"); // ریست کردن شهر وقتی استان تغییر می‌کند
                 }}
-                className="w-full px-4 py-3 bg-gray-900/50 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
-              >
-                {provinces.map((province) => (
-                  <option key={province.value} value={province.value}>
-                    {province.label}
-                  </option>
-                ))}
-              </select>
+                placeholder="همه استان‌ها"
+              />
             </div>
 
             {/* شهر */}
             <div>
-              <select
-                value={selectedLocation}
-                onChange={(e) => setSelectedLocation(e.target.value)}
-                className="w-full px-4 py-3 bg-gray-900/50 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
-              >
-                {locations.map((location) => (
-                  <option key={location.value} value={location.value}>
-                    {location.label}
-                  </option>
-                ))}
-              </select>
+              <CustomSelect
+                options={locations.map((loc) => loc.label)}
+                value={
+                  locations.find((loc) => loc.value === selectedLocation)
+                    ?.label || "همه شهرها"
+                }
+                onChange={(label) => {
+                  const location = locations.find((loc) => loc.label === label);
+                  setSelectedLocation(location ? location.value : "all");
+                }}
+                placeholder="همه شهرها"
+              />
             </div>
           </div>
 
@@ -597,23 +882,29 @@ export default function JobSeekersLandingPage() {
 
             <div className="flex items-center gap-2">
               <span className="text-gray-400 text-sm">مرتب‌سازی:</span>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="px-3 py-2 bg-gray-900/50 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
-              >
-                <option value="recent">جدیدترین</option>
-                <option value="popular">محبوب‌ترین</option>
-                <option value="experience">بیشترین تجربه</option>
-                <option value="salary">حقوق</option>
-              </select>
+              <div className="w-40">
+                <CustomSelect
+                  options={sortOptions.map((opt) => opt.label)}
+                  value={
+                    sortOptions.find((opt) => opt.value === sortBy)?.label ||
+                    "جدیدترین"
+                  }
+                  onChange={(label) => {
+                    const option = sortOptions.find(
+                      (opt) => opt.label === label
+                    );
+                    setSortBy(option ? option.value : "recent");
+                  }}
+                  placeholder="جدیدترین"
+                />
+              </div>
             </div>
           </div>
         </div>
 
         {/* لیست کارجوها */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {filteredJobSeekers.map((jobSeeker) => (
+          {currentJobSeekers.map((jobSeeker) => (
             <JobSeekerCard
               key={jobSeeker.id}
               jobSeeker={jobSeeker}
@@ -637,25 +928,12 @@ export default function JobSeekersLandingPage() {
 
         {/* Pagination */}
         {filteredJobSeekers.length > 0 && (
-          <div className="flex justify-center mt-12">
-            <div className="flex items-center gap-2">
-              <button className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-colors">
-                قبلی
-              </button>
-              <button className="px-4 py-2 bg-yellow-500 text-black rounded-lg font-medium">
-                ۱
-              </button>
-              <button className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-colors">
-                ۲
-              </button>
-              <button className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-colors">
-                ۳
-              </button>
-              <button className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-colors">
-                بعدی
-              </button>
-            </div>
-          </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+            className="mt-12"
+          />
         )}
       </div>
     </div>
