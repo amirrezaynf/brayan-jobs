@@ -25,41 +25,27 @@ import {
 
 function KarjoohaHeader() {
   return (
-    <div className=' backdrop-blur-md border-b border-gray-800'>
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
-        <div className='text-center'>
-          <h1 className='text-4xl font-bold text-white mb-4'>
-            استعدادهای برتر ایران
-          </h1>
-          <p className='text-xl text-gray-300 mb-8'>
-            بهترین کارجوها و متخصصان را پیدا کنید
-          </p>
+    <div className="relative">
+      {/* Banner Image */}
+      <div className="w-full h-64 md:h-80 lg:h-96 overflow-hidden">
+        <img
+          src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80"
+          alt="استعدادهای برتر ایران"
+          className="w-full h-full object-cover"
+        />
 
-          {/* آمار کلی */}
-          <div className='grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8'>
-            <div className='bg-gradient-to-r from-yellow-500/10 to-yellow-600/10 rounded-xl p-4 border border-yellow-400/20'>
-              <div className='flex items-center justify-center gap-2 mb-2'>
-                <Users className='w-6 h-6 text-yellow-400' />
-                <span className='text-2xl font-bold text-white'>۱,۲۳۴</span>
-              </div>
-              <p className='text-gray-400'>کارجوی فعال</p>
-            </div>
+        {/* Overlay for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/10"></div>
 
-            <div className='bg-gradient-to-r from-blue-500/10 to-blue-600/10 rounded-xl p-4 border border-blue-400/20'>
-              <div className='flex items-center justify-center gap-2 mb-2'>
-                <Briefcase className='w-6 h-6 text-blue-400' />
-                <span className='text-2xl font-bold text-white'>۸۹</span>
-              </div>
-              <p className='text-gray-400'>تخصص مختلف</p>
-            </div>
-
-            <div className='bg-gradient-to-r from-green-500/10 to-green-600/10 rounded-xl p-4 border border-green-400/20'>
-              <div className='flex items-center justify-center gap-2 mb-2'>
-                <TrendingUp className='w-6 h-6 text-green-400' />
-                <span className='text-2xl font-bold text-white'>۹۲%</span>
-              </div>
-              <p className='text-gray-400'>نرخ موفقیت</p>
-            </div>
+        {/* Optional text overlay */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center text-white">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 drop-shadow-lg">
+              استعدادهای برتر ایران
+            </h1>
+            <p className="text-xl md:text-2xl drop-shadow-md">
+              بهترین کارجوها و متخصصان را پیدا کنید
+            </p>
           </div>
         </div>
       </div>
