@@ -27,6 +27,8 @@ import {
 } from "lucide-react";
 import CustomSelect from "@/components/ui/select/CustomSelect";
 import Pagination from "@/components/ui/pagination/Pagination";
+import Header from "@/components/layout/header/Header";
+import Footer from "@/components/layout/footer/Footer";
 
 // کامپوننت نمایش سطح مهارت
 const SkillLevel = ({ level }) => {
@@ -758,6 +760,7 @@ export default function JobSeekersLandingPage() {
 
   return (
     <div className="min-h-screen bg-black/90">
+      <Header />
       {/* Header */}
       <div className=" backdrop-blur-md border-b border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -936,6 +939,7 @@ export default function JobSeekersLandingPage() {
           />
         )}
       </div>
+      <Footer />
     </div>
   );
 }
