@@ -18,6 +18,8 @@ import {
   Briefcase,
   Smile,
   CheckCircle,
+  Edit2,
+  RefreshCw,
 } from "lucide-react";
 import FormInput from "@/components/ui/input/FormInput";
 
@@ -27,11 +29,15 @@ export default function AuthPage() {
   const [userRole, setUserRole] = useState("specialist"); // 'specialist' or 'employer'
   const [activeTab, setActiveTab] = useState("login");
 
+  // Resend code timer states
+  const [resendTimer, setResendTimer] = useState(0);
+  const [canResend, setCanResend] = useState(false);
+
   // --- Specialist States ---
   const [currentStep, setCurrentStep] = useState(1);
-  const [loginData, setLoginData] = useState({ phone: "", password: "" });
+  const [loginData, setLoginData] = useState({ contact: "", password: "" });
   const [registerData, setRegisterData] = useState({
-    phone: "",
+    contact: "", // Combined field for phone or email
     verificationCode: "",
     firstName: "",
     lastName: "",
@@ -44,11 +50,11 @@ export default function AuthPage() {
   // --- Employer States ---
   const [employerCurrentStep, setEmployerCurrentStep] = useState(1);
   const [employerLoginData, setEmployerLoginData] = useState({
-    phone: "",
+    contact: "",
     password: "",
   });
   const [employerRegisterData, setEmployerRegisterData] = useState({
-    phone: "",
+    contact: "", // Combined field for phone or email
     verificationCode: "",
     firstName: "",
     lastName: "",
@@ -58,6 +64,56 @@ export default function AuthPage() {
   const [employerErrors, setEmployerErrors] = useState({});
   const [isEmployerSubmitted, setIsEmployerSubmitted] = useState(false);
 
+  // Helper function to detect if input is phone or email
+  const detectContactType = (value) => {
+    const phonePattern = /^(09)\d{9}$/;
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (phonePattern.test(value)) return "phone";
+    if (emailPattern.test(value)) return "email";
+    return null;
+  };
+
+  // Enhanced password validation function
+  const validatePassword = (password) => {
+    const errors = [];
+
+    if (!password || password.length < 8) {
+      errors.push("رمز عبور باید حداقل ۸ کاراکتر باشد");
+    }
+
+    if (!/[A-Z]/.test(password)) {
+      errors.push("رمز عبور باید حداقل یک حرف بزرگ انگلیسی داشته باشد");
+    }
+
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+      errors.push(
+        "رمز عبور باید حداقل یک کاراکتر ویژه (@، #، !، و...) داشته باشد"
+      );
+    }
+
+    return errors;
+  };
+
+  // Timer effect for resend code
+  useEffect(() => {
+    let interval = null;
+    if (resendTimer > 0) {
+      interval = setInterval(() => {
+        setResendTimer((timer) => {
+          if (timer <= 1) {
+            setCanResend(true);
+            return 0;
+          }
+          return timer - 1;
+        });
+      }, 1000);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [resendTimer]);
+
   // Effect to reset forms when switching roles or tabs
   useEffect(() => {
     setCurrentStep(1);
@@ -66,6 +122,8 @@ export default function AuthPage() {
     setEmployerCurrentStep(1);
     setEmployerErrors({});
     setIsEmployerSubmitted(false);
+    setResendTimer(0);
+    setCanResend(false);
   }, [userRole, activeTab]);
 
   const progressPercentage = { 1: 33, 2: 66, 3: 100 };
@@ -95,18 +153,51 @@ export default function AuthPage() {
 
   // --- Specialist Logic ---
   const handleNextStep = () => {
-    if (validateStep()) setCurrentStep((p) => p + 1);
+    if (validateStep()) {
+      setCurrentStep((p) => p + 1);
+      // Start timer when moving to verification step
+      if (currentStep === 1) {
+        setResendTimer(60);
+        setCanResend(false);
+      }
+    }
   };
+
   const handleBackStep = () => {
     setCurrentStep((p) => p - 1);
     setErrors({});
+    // Reset timer when going back
+    if (currentStep === 2) {
+      setResendTimer(0);
+      setCanResend(false);
+    }
   };
+
+  const handleEditContact = () => {
+    setCurrentStep(1);
+    setErrors({});
+    setResendTimer(0);
+    setCanResend(false);
+  };
+
+  const handleResendCode = () => {
+    if (canResend) {
+      // Simulate sending code
+      console.log("Resending verification code to:", registerData.contact);
+      setResendTimer(60);
+      setCanResend(false);
+      // You can add actual API call here
+    }
+  };
+
   const validateStep = () => {
     let newErrors = {};
     if (currentStep === 1) {
-      if (!registerData.phone) newErrors.phone = "شماره تلفن الزامی است.";
-      else if (!/^(09)\d{9}$/.test(registerData.phone))
-        newErrors.phone = "فرمت شماره تلفن نامعتبر است.";
+      const contactType = detectContactType(registerData.contact);
+      if (!registerData.contact)
+        newErrors.contact = "شماره تلفن یا ایمیل الزامی است.";
+      else if (!contactType)
+        newErrors.contact = "فرمت شماره تلفن یا ایمیل نامعتبر است.";
     }
     if (currentStep === 2) {
       if (
@@ -119,14 +210,17 @@ export default function AuthPage() {
       if (!registerData.firstName) newErrors.firstName = "نام الزامی است.";
       if (!registerData.lastName)
         newErrors.lastName = "نام خانوادگی الزامی است.";
-      if (!registerData.password || registerData.password.length < 8)
-        newErrors.password = "رمز عبور باید حداقل ۸ کاراکتر باشد.";
+      const passwordErrors = validatePassword(registerData.password);
+      if (passwordErrors.length > 0) {
+        newErrors.password = passwordErrors.join(", ");
+      }
       if (registerData.password !== registerData.confirmPassword)
         newErrors.confirmPassword = "رمزهای عبور مطابقت ندارند.";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+
   const handleRegisterSubmit = (e) => {
     e.preventDefault();
     if (validateStep()) {
@@ -134,6 +228,7 @@ export default function AuthPage() {
       setIsSubmitted(true);
     }
   };
+
   const handleLoginSubmit = (e) => {
     e.preventDefault();
     console.log("Logging in specialist:", loginData);
@@ -142,19 +237,54 @@ export default function AuthPage() {
 
   // --- Employer Logic ---
   const handleEmployerNextStep = () => {
-    if (validateEmployerStep()) setEmployerCurrentStep((p) => p + 1);
+    if (validateEmployerStep()) {
+      setEmployerCurrentStep((p) => p + 1);
+      // Start timer when moving to verification step
+      if (employerCurrentStep === 1) {
+        setResendTimer(60);
+        setCanResend(false);
+      }
+    }
   };
+
   const handleEmployerBackStep = () => {
     setEmployerCurrentStep((p) => p - 1);
     setEmployerErrors({});
+    // Reset timer when going back
+    if (employerCurrentStep === 2) {
+      setResendTimer(0);
+      setCanResend(false);
+    }
   };
+
+  const handleEmployerEditContact = () => {
+    setEmployerCurrentStep(1);
+    setEmployerErrors({});
+    setResendTimer(0);
+    setCanResend(false);
+  };
+
+  const handleEmployerResendCode = () => {
+    if (canResend) {
+      // Simulate sending code
+      console.log(
+        "Resending verification code to:",
+        employerRegisterData.contact
+      );
+      setResendTimer(60);
+      setCanResend(false);
+      // You can add actual API call here
+    }
+  };
+
   const validateEmployerStep = () => {
     let newErrors = {};
     if (employerCurrentStep === 1) {
-      if (!employerRegisterData.phone)
-        newErrors.phone = "شماره تلفن الزامی است.";
-      else if (!/^(09)\d{9}$/.test(employerRegisterData.phone))
-        newErrors.phone = "فرمت شماره تلفن نامعتبر است.";
+      const contactType = detectContactType(employerRegisterData.contact);
+      if (!employerRegisterData.contact)
+        newErrors.contact = "شماره تلفن یا ایمیل الزامی است.";
+      else if (!contactType)
+        newErrors.contact = "فرمت شماره تلفن یا ایمیل نامعتبر است.";
     }
     if (employerCurrentStep === 2) {
       if (
@@ -168,11 +298,10 @@ export default function AuthPage() {
         newErrors.firstName = "نام کارفرما الزامی است.";
       if (!employerRegisterData.lastName)
         newErrors.lastName = "نام خانوادگی کارفرما الزامی است.";
-      if (
-        !employerRegisterData.password ||
-        employerRegisterData.password.length < 8
-      )
-        newErrors.password = "رمز عبور باید حداقل ۸ کاراکتر باشد.";
+      const passwordErrors = validatePassword(employerRegisterData.password);
+      if (passwordErrors.length > 0) {
+        newErrors.password = passwordErrors.join(", ");
+      }
       if (
         employerRegisterData.password !== employerRegisterData.confirmPassword
       )
@@ -181,6 +310,7 @@ export default function AuthPage() {
     setEmployerErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+
   const handleEmployerRegisterSubmit = (e) => {
     e.preventDefault();
     if (validateEmployerStep()) {
@@ -188,37 +318,21 @@ export default function AuthPage() {
       setIsEmployerSubmitted(true);
     }
   };
+
   const handleEmployerLoginSubmit = (e) => {
     e.preventDefault();
     console.log("Logging in employer:", employerLoginData);
     alert("ورود کارفرما با موفقیت انجام شد!");
   };
 
-
-  
-
-
   return (
-    <div
-      className="min-h-screen  text-gray-200 grid grid-cols-1 lg:grid-cols-2"
-      
-    >
+    <div className="min-h-screen  text-gray-200 grid grid-cols-1 lg:grid-cols-2">
       {/* Right Side - Form */}
       <div className="bg-gray-900 relative flex items-center justify-center p-6 sm:p-12 lg:h-screen">
         <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-900 to-yellow-900/30 animate-gradient-xy"></div>
-        
+
         <div className="w-full max-w-md z-10">
           <div className="text-center mb-8">
-            <div className="flex items-center justify-between mb-4">
-              <a
-                href="/"
-                className="flex items-center gap-2 px-3 py-2 bg-yellow-500 text-black rounded-lg  transition-colors text-sm"
-              >
-                <ArrowRight size={16} />
-                بازگشت
-              </a>
-              <div className="flex-1"></div>
-            </div>
             <h1 className="text-4xl font-bold text-yellow-400 tracking-wider">
               دکتر برایان اعتماد
             </h1>
@@ -274,20 +388,19 @@ export default function AuthPage() {
               </button>
             </div>
             <div className="p-8">
-
               {/* --- SPECIALIST FORM --- */}
               {userRole === "specialist" &&
                 (activeTab === "login" ? (
                   <form onSubmit={handleLoginSubmit} className="animate-fadeIn">
                     <FormInput
-                      name="phone"
-                      type="tel"
-                      placeholder="شماره تلفن"
-                      icon={<Phone size={18} />}
-                      value={loginData.phone}
+                      name="contact"
+                      type="text"
+                      placeholder="شماره تلفن یا ایمیل"
+                      icon={<User size={18} />}
+                      value={loginData.contact}
                       onChange={(e) => handleInputChange(setLoginData, e)}
                       onKeyDown={(e) => handleKeyDown(e, 1, handleNextStep)}
-                      error={errors.phone}
+                      error={errors.contact}
                     />
                     <FormInput
                       name="password"
@@ -331,22 +444,20 @@ export default function AuthPage() {
                               currentStep === 1 ? "active" : ""
                             }`}
                           >
-                            <h3 className="text-xl font-semibold mb-4 text-center">
-                              ثبت‌نام متخصص
-                            </h3>
+                            
                             <FormInput
-                              name="phone"
-                              type="tel"
-                              placeholder="شماره تلفن"
-                              icon={<Phone size={18} />}
-                              value={registerData.phone}
+                              name="contact"
+                              type="text"
+                              placeholder="شماره تلفن یا ایمیل"
+                              icon={<User size={18} />}
+                              value={registerData.contact}
                               onChange={(e) =>
                                 handleInputChange(setRegisterData, e)
                               }
                               onKeyDown={(e) =>
                                 handleKeyDown(e, currentStep, handleNextStep)
                               }
-                              error={errors.phone}
+                              error={errors.contact}
                             />
                             <button
                               type="button"
@@ -361,9 +472,7 @@ export default function AuthPage() {
                               currentStep === 2 ? "active" : ""
                             }`}
                           >
-                            <h3 className="text-xl font-semibold mb-4 text-center">
-                              کد تایید
-                            </h3>
+                           
                             <FormInput
                               name="verificationCode"
                               type="text"
@@ -378,22 +487,54 @@ export default function AuthPage() {
                               }
                               error={errors.verificationCode}
                             />
-                            <button
-                              type="button"
-                              onClick={handleNextStep}
-                              className="w-full text-gray-900 bg-yellow-400 hover:bg-yellow-500 font-medium rounded-lg text-sm px-5 py-3 text-center"
-                            >
-                              ادامه
-                            </button>
+                            <div className="flex gap-4 mt-4">
+                              <button
+                                type="button"
+                                onClick={handleBackStep}
+                                className="w-1/2 text-white bg-gray-600 hover:bg-gray-700 font-medium rounded-lg text-sm px-5 py-3 text-center"
+                              >
+                                بازگشت
+                              </button>
+                              <button
+                                type="button"
+                                onClick={handleNextStep}
+                                className="w-1/2 text-gray-900 bg-yellow-400 hover:bg-yellow-500 font-medium rounded-lg text-sm px-5 py-3 text-center"
+                              >
+                                ادامه
+                              </button>
+                            </div>
+                            <div className="flex justify-between mt-4">
+                              <button
+                                type="button"
+                                onClick={handleEditContact}
+                                className="text-gray-400 text-sm"
+                              >
+                                ویرایش شماره تلفن یا ایمیل
+                              </button>
+                              <button
+                                type="button"
+                                onClick={handleResendCode}
+                                className={`text-gray-400 text-sm ${
+                                  canResend ? "" : "opacity-50"
+                                }`}
+                              >
+                                {canResend ? (
+                                  <span>ارسال مجدد کد</span>
+                                ) : (
+                                  <span>
+                                    ارسال مجدد کد ({resendTimer}
+                                    ثانیه)
+                                  </span>
+                                )}
+                              </button>
+                            </div>
                           </div>
                           <div
                             className={`form-step ${
                               currentStep === 3 ? "active" : ""
                             }`}
                           >
-                            <h3 className="text-xl font-semibold mb-4 text-center">
-                              اطلاعات فردی
-                            </h3>
+                           
                             <div className="grid grid-cols-2 gap-4">
                               <FormInput
                                 name="firstName"
@@ -504,22 +645,19 @@ export default function AuthPage() {
                     onSubmit={handleEmployerLoginSubmit}
                     className="animate-fadeIn"
                   >
-                    <h3 className="text-xl font-semibold mb-4 text-center">
-                      ورود کارفرما
-                    </h3>
                     <FormInput
-                      name="phone"
-                      type="tel"
-                      placeholder="شماره تلفن"
-                      icon={<Phone size={18} />}
-                      value={employerLoginData.phone}
+                      name="contact"
+                      type="text"
+                      placeholder="شماره تلفن یا ایمیل"
+                      icon={<User size={18} />}
+                      value={employerLoginData.contact}
                       onChange={(e) =>
                         handleInputChange(setEmployerLoginData, e)
                       }
                       onKeyDown={(e) =>
                         handleKeyDown(e, 1, handleEmployerNextStep)
                       }
-                      error={employerErrors.phone}
+                      error={employerErrors.contact}
                     />
                     <FormInput
                       name="password"
@@ -567,15 +705,13 @@ export default function AuthPage() {
                               employerCurrentStep === 1 ? "active" : ""
                             }`}
                           >
-                            <h3 className="text-xl font-semibold mb-4 text-center">
-                              ثبت‌نام کارفرما
-                            </h3>
+                            
                             <FormInput
-                              name="phone"
-                              type="tel"
-                              placeholder="شماره تلفن"
-                              icon={<Phone size={18} />}
-                              value={employerRegisterData.phone}
+                              name="contact"
+                              type="text"
+                              placeholder="شماره تلفن یا ایمیل"
+                              icon={<User size={18} />}
+                              value={employerRegisterData.contact}
                               onChange={(e) =>
                                 handleInputChange(setEmployerRegisterData, e)
                               }
@@ -586,7 +722,7 @@ export default function AuthPage() {
                                   handleEmployerNextStep
                                 )
                               }
-                              error={employerErrors.phone}
+                              error={employerErrors.contact}
                             />
                             <button
                               type="button"
@@ -601,9 +737,7 @@ export default function AuthPage() {
                               employerCurrentStep === 2 ? "active" : ""
                             }`}
                           >
-                            <h3 className="text-xl font-semibold mb-4 text-center">
-                              کد تایید
-                            </h3>
+                           
                             <FormInput
                               name="verificationCode"
                               type="text"
@@ -622,22 +756,54 @@ export default function AuthPage() {
                               }
                               error={employerErrors.verificationCode}
                             />
-                            <button
-                              type="button"
-                              onClick={handleEmployerNextStep}
-                              className="w-full text-gray-900 bg-yellow-400 hover:bg-yellow-500 font-medium rounded-lg text-sm px-5 py-3 text-center"
-                            >
-                              ادامه
-                            </button>
+                            <div className="flex gap-4 mt-4">
+                              <button
+                                type="button"
+                                onClick={handleEmployerBackStep}
+                                className="w-1/2 text-white bg-gray-600 hover:bg-gray-700 font-medium rounded-lg text-sm px-5 py-3 text-center"
+                              >
+                                بازگشت
+                              </button>
+                              <button
+                                type="button"
+                                onClick={handleEmployerNextStep}
+                                className="w-1/2 text-gray-900 bg-yellow-400 hover:bg-yellow-500 font-medium rounded-lg text-sm px-5 py-3 text-center"
+                              >
+                                ادامه
+                              </button>
+                            </div>
+                            <div className="flex justify-between mt-4">
+                              <button
+                                type="button"
+                                onClick={handleEmployerEditContact}
+                                className="text-gray-400 text-sm"
+                              >
+                                ویرایش شماره تلفن یا ایمیل
+                              </button>
+                              <button
+                                type="button"
+                                onClick={handleEmployerResendCode}
+                                className={`text-gray-400 text-sm ${
+                                  canResend ? "" : "opacity-50"
+                                }`}
+                              >
+                                {canResend ? (
+                                  <span>ارسال مجدد کد</span>
+                                ) : (
+                                  <span>
+                                    ارسال مجدد کد ({resendTimer}
+                                    ثانیه)
+                                  </span>
+                                )}
+                              </button>
+                            </div>
                           </div>
                           <div
                             className={`form-step ${
                               employerCurrentStep === 3 ? "active" : ""
                             }`}
                           >
-                            <h3 className="text-xl font-semibold mb-4 text-center">
-                              اطلاعات فردی
-                            </h3>
+                            
                             <div className="grid grid-cols-2 gap-4">
                               <FormInput
                                 name="firstName"

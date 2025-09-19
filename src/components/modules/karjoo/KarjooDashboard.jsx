@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import MobileMenu from "@/components/layout/header/KarjooMobileMenu";
+import { LucideUser } from "lucide-react";
 
 export default function KarjooDashboard() {
   const [activeTab, setActiveTab] = useState("home");
@@ -70,7 +71,16 @@ export default function KarjooDashboard() {
       ),
       link:"/karjoo/reveived-resumes",
     },
+    {
+      id: "profile",
+      label: "پروفایل من",
+      icon: (
+        <LucideUser/>
+      ),
+    },
   ];
+
+
 
   return (
     <MobileMenu 
