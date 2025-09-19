@@ -204,7 +204,7 @@ export default function AuthPage() {
       
     >
       {/* Right Side - Form */}
-      <div className="relative flex items-center justify-center p-6 sm:p-12 lg:h-screen">
+      <div className="bg-gray-900 relative flex items-center justify-center p-6 sm:p-12 lg:h-screen">
         <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-900 to-yellow-900/30 animate-gradient-xy"></div>
         
         <div className="w-full max-w-md z-10">
