@@ -22,7 +22,7 @@ const LogoIcon = () => (
 const MenuIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    className="h-6 w-6 text-gray-300"
+    className="h-6 w-6  text-gray-300"
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
@@ -63,7 +63,7 @@ export default function Header() {
             <Link href="/">
               <LogoIcon />
             </Link>
-            <div className="flex flex-col   items-center ">
+            <div className="flex flex-col mr-4  items-center ">
               <h1 className="text-lg font-bold text-white">
                 پلتفرم استخدامی{" "}
                 <span className="gold-text">دکتر برایان اعتماد</span>
@@ -75,7 +75,6 @@ export default function Header() {
           </div>
 
           <nav className="hidden lg:flex items-center space-x-8 space-x-reverse font-medium">
-            
             <a href="#" className="header-link text-gray-300">
               بهترین آگهی‌ها
             </a>
@@ -84,11 +83,11 @@ export default function Header() {
             </a>
           </nav>
 
-          <div className="hidden lg:flex items-center space-x-4 space-x-reverse">
-            <div className="flex items-center space-x-4 space-x-reverse">
+          <div className="hidden lg:flex items-center space-x-4 ">
+            <div className="flex items-center space-x-4 ">
               <a
                 href="/employer"
-                className="text-gray-300 hover:gold-text transition"
+                className="text-gray-300 hover:gold-text  transition"
               >
                 بخش کارفرمایان
               </a>
