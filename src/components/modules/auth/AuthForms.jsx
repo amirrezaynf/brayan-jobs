@@ -122,7 +122,7 @@ export default function AuthForms() {
                   onSubmit={handleLoginSubmit}
                 />
               ) : (
-                <RegisterSteps flow={specialistFlow} role='متخصص' />
+                <RegisterSteps flow={specialistFlow} role='specialist' />
               ))}
 
             {/* Employer */}
@@ -135,7 +135,7 @@ export default function AuthForms() {
                   onSubmit={handleEmployerLoginSubmit}
                 />
               ) : (
-                <RegisterSteps flow={employerFlow} role='کارفرما' />
+                <RegisterSteps flow={employerFlow} role='employer' />
               ))}
           </div>
         </div>
