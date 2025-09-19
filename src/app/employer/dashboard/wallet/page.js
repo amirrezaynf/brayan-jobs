@@ -156,7 +156,7 @@ export default function WalletPage() {
               <p className="text-sm text-gray-400">موجودی قابل استفاده</p>
             </div>
 
-            <div className="bg-gray-900 rounded-xl p-8 border border-gray-800">
+            <div className="bg-[#1e1e1e] rounded-xl p-8 border border-gray-800">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-white">
                   هزینه‌های ماه جاری
@@ -184,7 +184,7 @@ export default function WalletPage() {
               <p className="text-sm text-gray-400">+۱۵% نسبت به ماه گذشته</p>
             </div>
 
-            <div className="bg-gray-900 rounded-xl p-8 border border-gray-800">
+            <div className="bg-[#1e1e1e] rounded-xl p-8 border border-gray-800">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-white">
                   میانگین هزینه روزانه
@@ -215,7 +215,7 @@ export default function WalletPage() {
 
           {/* Quick Actions */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
+            <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800">
               <h3 className="text-lg font-semibold text-white mb-4">
                 افزایش موجودی
               </h3>
@@ -241,7 +241,7 @@ export default function WalletPage() {
               </div>
             </div>
 
-            <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
+            <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800">
               <h3 className="text-lg font-semibold text-white mb-4">
                 روش‌های پرداخت
               </h3>
@@ -285,7 +285,7 @@ export default function WalletPage() {
             {packages.map((pkg, index) => (
               <div
                 key={index}
-                className={`bg-gray-900 rounded-xl p-8 border transition-all duration-200 ${
+                className={`bg-[#1e1e1e] rounded-xl p-8 border transition-all duration-200 ${
                   pkg.popular
                     ? "border-yellow-400 shadow-lg shadow-yellow-400/10"
                     : "border-gray-800"
@@ -353,7 +353,7 @@ export default function WalletPage() {
             </div>
           </div>
 
-          <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
+          <div className="bg-[#1e1e1e] rounded-xl border border-gray-800 overflow-hidden">
             <table className="w-full text-right">
               <thead className="bg-gray-800">
                 <tr className="text-gray-400 text-sm">
@@ -409,21 +409,21 @@ export default function WalletPage() {
 
           {/* Transaction Summary */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="bg-gray-900 rounded-xl p-6 border border-gray-800 text-center">
+            <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800 text-center">
               <p className="text-2xl font-bold text-green-400 mb-2">
                 ۱,۲۰۰,۰۰۰
               </p>
               <p className="text-sm text-gray-400">کل واریزی‌ها</p>
             </div>
-            <div className="bg-gray-900 rounded-xl p-6 border border-gray-800 text-center">
+            <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800 text-center">
               <p className="text-2xl font-bold text-red-400 mb-2">۵۲۰,۰۰۰</p>
               <p className="text-sm text-gray-400">کل برداشت‌ها</p>
             </div>
-            <div className="bg-gray-900 rounded-xl p-6 border border-gray-800 text-center">
+            <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800 text-center">
               <p className="text-2xl font-bold text-blue-400 mb-2">۲۵,۰۰۰</p>
               <p className="text-sm text-gray-400">بازگشت وجه</p>
             </div>
-            <div className="bg-gray-900 rounded-xl p-6 border border-gray-800 text-center">
+            <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800 text-center">
               <p className="text-2xl font-bold text-yellow-400 mb-2">
                 ۲,۵۰۰,۰۰۰
               </p>

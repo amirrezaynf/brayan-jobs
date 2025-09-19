@@ -2,7 +2,7 @@ import React from "react";
 
 export default function KarjooHeader() {
   return (
-    <header className="bg-black/90 backdrop-blur-sm shadow-md shadow-black/50 sticky top-0 z-30">
+    <header className=" backdrop-blur-sm shadow-md shadow-black/50 sticky top-0 z-30">
       <div className="container mx-auto px-4 lg:px-6 py-4 flex justify-between items-center">
         <div className="flex items-center space-x-4">
           <svg
@@ -19,7 +19,7 @@ export default function KarjooHeader() {
               d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
             />
           </svg>
-          <div className="text-right hidden sm:block">
+          <div className="text-right block">
             <h1 className="text-lg lg:text-xl font-bold text-white">
               داشبورد <span className="text-yellow-400">کارجو</span>
             </h1>

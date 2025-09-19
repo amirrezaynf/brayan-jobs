@@ -251,7 +251,7 @@ const initialApplicationsData = [
 // کامپوننت کارت رزومه
 const ResumeCard = ({ application, onStatusChange, onViewResume }) => (
   <div
-    className={`bg-gray-900 rounded-xl p-6 border hover:border-yellow-400/50 transition-all duration-300 relative ${
+    className={`bg-[#1e1e1e] rounded-xl p-6 border hover:border-yellow-400/50 transition-all duration-300 relative ${
       application.isPro
         ? "border-purple-500/50 bg-gradient-to-br from-purple-500/5 to-pink-500/5"
         : "border-gray-800"
@@ -394,7 +394,7 @@ const Filters = ({
   setSearchTerm,
   applications,
 }) => (
-  <div className="bg-gray-900 rounded-xl p-6 border border-gray-800 mb-6">
+  <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800 mb-6">
     <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
       <div className="flex space-x-2 space-x-reverse">
         <button
@@ -493,19 +493,19 @@ const Filters = ({
 // کامپوننت آمار سریع (به‌روزرسانی آمار پس از کاهش تعداد رزومه‌ها)
 const QuickStats = () => (
   <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-    <div className="bg-gray-900 rounded-xl p-6 border border-gray-800 text-center">
+    <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800 text-center">
       <div className="text-3xl font-bold text-blue-400 mb-2">۲۰</div>
       <div className="text-gray-300 text-sm">کل رزومه‌ها</div>
     </div>
-    <div className="bg-gray-900 rounded-xl p-6 border border-gray-800 text-center">
+    <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800 text-center">
       <div className="text-3xl font-bold text-green-400 mb-2">۶</div>
       <div className="text-gray-300 text-sm">رزومه جدید</div>
     </div>
-    <div className="bg-gray-900 rounded-xl p-6 border border-gray-800 text-center">
+    <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800 text-center">
       <div className="text-3xl font-bold text-yellow-400 mb-2">۵</div>
       <div className="text-gray-300 text-sm">انتخاب شده</div>
     </div>
-    <div className="bg-gray-900 rounded-xl p-6 border border-gray-800 text-center">
+    <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800 text-center">
       <div className="text-3xl font-bold text-purple-400 mb-2">۷</div>
       <div className="text-gray-300 text-sm">بررسی شده</div>
     </div>
@@ -675,7 +675,7 @@ function ApplicationsPageContent() {
             />
           ))
         ) : (
-          <div className="bg-gray-900 rounded-xl p-12 text-center border border-gray-800">
+          <div className="bg-[#1e1e1e] rounded-xl p-12 text-center border border-gray-800">
             <svg
               className="w-16 h-16 text-gray-600 mx-auto mb-4"
               fill="none"

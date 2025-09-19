@@ -173,7 +173,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="fixed right-0 top-0 h-full w-64 bg-gray-900 border-l border-gray-800 shadow-lg p-6 flex flex-col items-center z-50">
+    <aside className="fixed right-0 top-0 h-full w-64 bg-[#1e1e1e] border-l border-gray-800 shadow-lg p-6 flex flex-col items-center z-50">
       <div className="mb-10 text-center">
         <Link href="/" className="flex items-center justify-center">
           <svg
@@ -247,7 +247,7 @@ const Topbar = () => {
     : COMPANY_DATA.companyName;
 
   return (
-    <header className="flex items-center justify-between p-6 bg-gray-900 border-b border-gray-800 sticky top-0 z-40">
+    <header className="flex items-center justify-between p-6 bg-[#1e1e1e] border-b border-gray-800 sticky top-0 z-40">
       <div className="flex items-center space-x-4">
         <Link
           href="/employer/dashboard/vacancies"
