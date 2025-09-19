@@ -30,6 +30,9 @@ export default function KarjooDashboard() {
       id: "profile",
       label: "پروفایل من",
       icon: <UserIcon />,
+
+     
+      link:"/karjoo/1",
     },
   ];
 
