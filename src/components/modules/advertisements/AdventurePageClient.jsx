@@ -1177,7 +1177,7 @@ export default function AdvertisementPageClient() {
                         setShowNoLimit(false);
                         setShowRangeFilter(false);
                       }}
-                      className=" w-full bg-gradient-to-r from-yellow-500 to-red-500 hover:from-yellow-600 hover:to-red-600 text-white px-8  rounded-md  text-sm font-medium transition-all duration-200 border border-yellow-400/30 hover:border-yellow-400/50 hover:scale-95"
+                      className=" w-full bg-yellow-500 hover:bg-yellow-500/90 text-white px-8  rounded-md  text-sm font-medium transition-all duration-200 border border-yellow-400/30 hover:border-yellow-400/50 hover:scale-95"
                     >
                       پاک کردن
                     </button>
