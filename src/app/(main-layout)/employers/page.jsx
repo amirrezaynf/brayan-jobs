@@ -279,7 +279,7 @@ export default function EmployersPage() {
   };
 
   return (
-    <div className='bg-[#0f0f0f] min-h-screen text-white font-sans' dir='rtl'>
+    <>
       {/* Header */}
 
       {/* Hero Section */}
@@ -409,7 +409,7 @@ export default function EmployersPage() {
               {filteredEmployers.map((employer) => (
                 <div
                   key={employer.id}
-                  className='bg-[#2a2a2a] border border-gray-600 rounded-xl p-6 hover:border-yellow-500 transition-all duration-300 hover:shadow-lg hover:shadow-yellow-500/10 group cursor-pointer'>
+                  className='group cursor-pointer bg-gradient-to-br from-black/50 to-black/10 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/hover:border-yellow-400/30 transition-all duration-300 hover:shadow-xl hover:shadow-yellow-400/10'>
                   {/* Header */}
                   <div className='flex items-start justify-between mb-4'>
                     <div className='flex items-center gap-4'>
@@ -524,6 +524,6 @@ export default function EmployersPage() {
           </div>
         </div>
       </section>
-    </div>
+    </>
   );
 }

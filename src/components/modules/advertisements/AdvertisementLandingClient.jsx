@@ -170,7 +170,7 @@ const sampleAdvertisements = [
   },
 ];
 
-export default function AdvertisementPageClient() {
+export default function AdvertisementLandingClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [ads, setAds] = useState([]);
@@ -485,10 +485,9 @@ export default function AdvertisementPageClient() {
     if (currentPage > 1) {
       buttons.push(
         <button
-          key="prev"
+          key='prev'
           onClick={() => handlePageChange(currentPage - 1)}
-          className="px-3 py-2 bg-[#2a2a2a] text-white rounded-lg hover:bg-yellow-500/20 hover:text-yellow-400 transition-colors duration-200 border border-gray-700"
-        >
+          className='px-3 py-2 bg-[#2a2a2a] text-white rounded-lg hover:bg-yellow-500/20 hover:text-yellow-400 transition-colors duration-200 border border-gray-700'>
           قبلی
         </button>
       );
@@ -499,14 +498,13 @@ export default function AdvertisementPageClient() {
         <button
           key={1}
           onClick={() => handlePageChange(1)}
-          className="px-3 py-2 bg-[#2a2a2a] text-white rounded-lg hover:bg-yellow-500/20 hover:text-yellow-400 transition-colors duration-200 border border-gray-700"
-        >
+          className='px-3 py-2 bg-[#2a2a2a] text-white rounded-lg hover:bg-yellow-500/20 hover:text-yellow-400 transition-colors duration-200 border border-gray-700'>
           ۱
         </button>
       );
       if (startPage > 2) {
         buttons.push(
-          <span key="ellipsis-start" className="px-2 py-2 text-gray-500">
+          <span key='ellipsis-start' className='px-2 py-2 text-gray-500'>
             ...
           </span>
         );
@@ -522,8 +520,7 @@ export default function AdvertisementPageClient() {
             currentPage === page
               ? "bg-yellow-500 text-black border-yellow-500"
               : "bg-[#2a2a2a] text-white hover:bg-yellow-500/20 hover:text-yellow-400 border-gray-700"
-          }`}
-        >
+          }`}>
           {page}
         </button>
       );
@@ -532,7 +529,7 @@ export default function AdvertisementPageClient() {
     if (endPage < totalPages) {
       if (endPage < totalPages - 1) {
         buttons.push(
-          <span key="ellipsis-end" className="px-2 py-2 text-gray-500">
+          <span key='ellipsis-end' className='px-2 py-2 text-gray-500'>
             ...
           </span>
         );
@@ -541,8 +538,7 @@ export default function AdvertisementPageClient() {
         <button
           key={totalPages}
           onClick={() => handlePageChange(totalPages)}
-          className="px-3 py-2 bg-[#2a2a2a] text-white rounded-lg hover:bg-yellow-500/20 hover:text-yellow-400 transition-colors duration-200 border border-gray-700"
-        >
+          className='px-3 py-2 bg-[#2a2a2a] text-white rounded-lg hover:bg-yellow-500/20 hover:text-yellow-400 transition-colors duration-200 border border-gray-700'>
           {totalPages}
         </button>
       );
@@ -551,10 +547,9 @@ export default function AdvertisementPageClient() {
     if (currentPage < totalPages) {
       buttons.push(
         <button
-          key="next"
+          key='next'
           onClick={() => handlePageChange(currentPage + 1)}
-          className="px-3 py-2 bg-[#2a2a2a] text-white rounded-lg hover:bg-yellow-500/20 hover:text-yellow-400 transition-colors duration-200 border border-gray-700"
-        >
+          className='px-3 py-2 bg-[#2a2a2a] text-white rounded-lg hover:bg-yellow-500/20 hover:text-yellow-400 transition-colors duration-200 border border-gray-700'>
           بعدی
         </button>
       );
@@ -564,32 +559,32 @@ export default function AdvertisementPageClient() {
   };
 
   return (
-    <div className="min-h-screen" dir="rtl">
-      <div className="flex gap-10 max-w-10xl mx-auto px-6 py-8">
+    <>
+      <div className='flex gap-10 max-w-10xl mx-auto px-6 py-8'>
         {/* Left Sidebar - Fixed Filters */}
-        <div className="hidden  lg:block w-80 flex-shrink-0">
-          <div className="bg-[#2a2a2a] rounded-xl p-6 border border-gray-700 sticky top-8">
-            <h3 className="text-xl font-bold mb-6 border-b-2 border-gray-700 pb-3 text-white">
+        <div className='hidden  lg:block w-80 flex-shrink-0'>
+          <div className='bg-gradient-to-br from-black/50 to-black/10 backdrop-blur-sm rounded-xl p-6 border border-gray-700 sticky top-8'>
+            <h3 className='text-xl font-bold mb-6 border-b-2 border-gray-700 pb-3 text-white'>
               جستجو و فیلترها
             </h3>
 
             {/* Search Input */}
-            <div className="mb-4">
-              <label className="block mb-2 text-sm font-medium text-gray-300">
+            <div className='mb-4'>
+              <label className='block mb-2 text-sm font-medium text-gray-300'>
                 جستجو در آگهی‌ها
               </label>
               <input
-                type="text"
-                placeholder="جستجو در عنوان، شرکت یا توضیحات..."
+                type='text'
+                placeholder='جستجو در عنوان، شرکت یا توضیحات...'
                 value={searchFilter}
                 onChange={(e) => setSearchFilter(e.target.value)}
-                className="w-full bg-[#2a2a2a] border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
+                className='w-full bg-[#2a2a2a] border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500'
               />
             </div>
 
             {/* Sort Select */}
-            <div className="mb-4">
-              <label className="block mb-2 text-sm font-medium text-gray-300">
+            <div className='mb-4'>
+              <label className='block mb-2 text-sm font-medium text-gray-300'>
                 ترتیب نمایش
               </label>
               <CustomSelect
@@ -614,13 +609,13 @@ export default function AdvertisementPageClient() {
                     key: "sort-most-applied",
                   },
                 ]}
-                placeholder="انتخاب ترتیب"
+                placeholder='انتخاب ترتیب'
               />
             </div>
 
             {/* Category Filter */}
-            <div className="mb-4">
-              <label className="block mb-2 text-sm font-medium text-gray-300">
+            <div className='mb-4'>
+              <label className='block mb-2 text-sm font-medium text-gray-300'>
                 دسته‌بندی شغلی
               </label>
               <CustomSelect
@@ -636,13 +631,13 @@ export default function AdvertisementPageClient() {
                     key: `category-${index}`,
                   })),
                 ]}
-                placeholder="انتخاب دسته‌بندی"
+                placeholder='انتخاب دسته‌بندی'
               />
             </div>
 
             {/* Province Filter */}
-            <div className="mb-4">
-              <label className="block mb-2 text-sm font-medium text-gray-300">
+            <div className='mb-4'>
+              <label className='block mb-2 text-sm font-medium text-gray-300'>
                 استان
               </label>
               <CustomSelect
@@ -658,13 +653,13 @@ export default function AdvertisementPageClient() {
                     key: `province-${index}`,
                   })),
                 ]}
-                placeholder="انتخاب استان"
+                placeholder='انتخاب استان'
               />
             </div>
 
             {/* City Filter */}
-            <div className="mb-4">
-              <label className="block mb-2 text-sm font-medium text-gray-300">
+            <div className='mb-4'>
+              <label className='block mb-2 text-sm font-medium text-gray-300'>
                 شهر
               </label>
               <CustomSelect
@@ -683,13 +678,13 @@ export default function AdvertisementPageClient() {
                     key: `city-${index}`,
                   })),
                 ]}
-                placeholder="انتخاب شهر"
+                placeholder='انتخاب شهر'
               />
             </div>
 
             {/* Employment Type Filter */}
-            <div className="mb-4">
-              <label className="block mb-2 text-sm font-medium text-gray-300">
+            <div className='mb-4'>
+              <label className='block mb-2 text-sm font-medium text-gray-300'>
                 نوع همکاری
               </label>
               <CustomSelect
@@ -705,12 +700,12 @@ export default function AdvertisementPageClient() {
                     key: `employment-${index}`,
                   })),
                 ]}
-                placeholder="انتخاب نوع همکاری"
+                placeholder='انتخاب نوع همکاری'
               />
             </div>
 
             {/* Salary Range Filter */}
-            <div className="mb-6">
+            <div className='mb-6'>
               <SalaryRangeSlider
                 value={salaryRange}
                 onChange={setSalaryRange}
@@ -739,105 +734,100 @@ export default function AdvertisementPageClient() {
                 setShowNoLimit(false);
                 setShowRangeFilter(false);
               }}
-              className="w-full bg-yellow-500/20 hover:bg-yellow-500/30 text-yellow-400 px-4 py-2 rounded-lg font-medium border border-yellow-500/30 hover:border-yellow-500/50 transition-all duration-200 mb-6"
-            >
+              className='w-full bg-yellow-500/20 hover:bg-yellow-500/30 text-yellow-400 px-4 py-2 rounded-lg font-medium border border-yellow-500/30 hover:border-yellow-500/50 transition-all duration-200 mb-6'>
               پاک کردن همه فیلترها
             </button>
           </div>
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 py-0">
-          <div className="container mx-auto px-6 lg:px-0">
-            <div className="mb-4">
-              <h1 className="text-2xl font-bold text-white mb-2">
+        <div className='flex-1 py-0 '>
+          <div className='container mx-auto px-6 lg:px-0'>
+            <div className='mb-4'>
+              <h1 className='text-2xl font-bold text-white mb-2'>
                 نتایج جستجو آگهی‌ها
               </h1>
-              <p className="text-gray-400">
+              <p className='text-gray-400'>
                 {ads.length} آگهی پیدا شد
                 {jobCategory && ` در دسته ${jobCategory}`}
               </p>
             </div>
 
             {/* Results */}
-            <div className="w-full">
+            <div className='w-full '>
               {totalItems > 0 ? (
                 <div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6">
+                  <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6'>
                     {currentAds.map((ad) => (
                       <div
                         key={ad.id}
-                        className="bg-[#2a2a2a] rounded-xl p-4 border border-gray-700 hover:border-yellow-500/50 transition-all duration-300 relative overflow-hidden shadow-lg min-h-[240px] flex flex-col"
-                      >
+                        className='bg-gradient-to-br from-black/50 to-black/10 backdrop-blur-sm rounded-xl p-4 border border-gray-700 hover:border-yellow-500/50 transition-all duration-300 relative overflow-hidden shadow-lg min-h-[240px] flex flex-col'>
                         {ad.urgent && (
-                          <span className="absolute top-2 left-2 bg-yellow-500/20 text-yellow-400 text-xs px-2 py-1 rounded-full whitespace-nowrap z-10">
+                          <span className='absolute top-2 left-2 bg-yellow-500/20 text-yellow-400 text-xs px-2 py-1 rounded-full whitespace-nowrap z-10'>
                             فوری
                           </span>
                         )}
-                        <div className="flex items-start justify-between mb-4">
-                          <div className="flex items-start gap-3 flex-1 min-w-0">
-                            <div className="w-10 h-10 bg-yellow-500/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <div className='flex items-start justify-between mb-4'>
+                          <div className='flex items-start gap-3 flex-1 min-w-0'>
+                            <div className='w-10 h-10 bg-yellow-500/10 rounded-lg flex items-center justify-center flex-shrink-0'>
                               <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="20"
-                                height="20"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
+                                xmlns='http://www.w3.org/2000/svg'
+                                width='20'
+                                height='20'
+                                viewBox='0 0 24 24'
+                                fill='none'
+                                stroke='currentColor'
                                 strokeWidth={2}
-                                className="text-yellow-500"
-                              >
+                                className='text-yellow-500'>
                                 <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+                                  strokeLinecap='round'
+                                  strokeLinejoin='round'
+                                  d='M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01'
                                 />
                               </svg>
                             </div>
-                            <div className="min-w-0 flex-1">
-                              <h3 className="text-lg font-bold text-white truncate mb-1">
+                            <div className='min-w-0 flex-1'>
+                              <h3 className='text-lg font-bold text-white truncate mb-1'>
                                 {ad.title}
                               </h3>
-                              <div className="flex items-center gap-3 text-sm text-gray-400 mb-2">
-                                <span className="flex items-center gap-1">
+                              <div className='flex items-center gap-3 text-sm text-gray-400 mb-2'>
+                                <span className='flex items-center gap-1'>
                                   <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="14"
-                                    height="14"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                  >
-                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                    <circle cx="12" cy="10" r="3"></circle>
+                                    xmlns='http://www.w3.org/2000/svg'
+                                    width='14'
+                                    height='14'
+                                    viewBox='0 0 24 24'
+                                    fill='none'
+                                    stroke='currentColor'
+                                    strokeWidth='2'>
+                                    <path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'></path>
+                                    <circle cx='12' cy='10' r='3'></circle>
                                   </svg>
                                   {ad.location}
                                 </span>
-                                <span className="flex items-center gap-1">
+                                <span className='flex items-center gap-1'>
                                   <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="14"
-                                    height="14"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                  >
-                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                    <circle cx="12" cy="7" r="4"></circle>
+                                    xmlns='http://www.w3.org/2000/svg'
+                                    width='14'
+                                    height='14'
+                                    viewBox='0 0 24 24'
+                                    fill='none'
+                                    stroke='currentColor'
+                                    strokeWidth='2'>
+                                    <path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'></path>
+                                    <circle cx='12' cy='7' r='4'></circle>
                                   </svg>
                                   {ad.applicants}
                                 </span>
                               </div>
-                              <p className="text-xs md:text-sm text-gray-300 line-clamp-2 mb-3">
+                              <p className='text-xs md:text-sm text-gray-300 line-clamp-2 mb-3'>
                                 {ad.description}
                               </p>
-                              <div className="flex items-center justify-between">
-                                <span className="text-sm text-gray-400">
+                              <div className='flex items-center justify-between'>
+                                <span className='text-sm text-gray-400'>
                                   {ad.company}
                                 </span>
-                                <span className="text-sm text-gray-500">
+                                <span className='text-sm text-gray-500'>
                                   {toJalali(ad.date)}
                                 </span>
                               </div>
@@ -845,23 +835,22 @@ export default function AdvertisementPageClient() {
                           </div>
                         </div>
 
-                        <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-700">
-                          <div className="flex items-center gap-2">
-                            <span className="bg-yellow-500/20 text-yellow-400 text-xs px-2 py-1 rounded-full font-medium">
+                        <div className='flex items-center justify-between mt-4 pt-4 border-t border-gray-700'>
+                          <div className='flex items-center gap-2'>
+                            <span className='bg-yellow-500/20 text-yellow-400 text-xs px-2 py-1 rounded-full font-medium'>
                               {ad.category}
                             </span>
-                            <span className="text-sm text-gray-400">
+                            <span className='text-sm text-gray-400'>
                               {ad.type}
                             </span>
                           </div>
-                          <div className="flex items-center gap-2">
-                            <span className="text-yellow-400 font-bold">
+                          <div className='flex items-center gap-2'>
+                            <span className='text-yellow-400 font-bold'>
                               {ad.salary}
                             </span>
                             <button
                               onClick={() => handleViewAd(ad.id)}
-                              className="bg-yellow-500 hover:bg-yellow-500 text-black px-4 py-2 rounded-lg font-medium transition-colors duration-200 text-sm"
-                            >
+                              className='bg-yellow-500 hover:bg-yellow-500 text-black px-4 py-2 rounded-lg font-medium transition-colors duration-200 text-sm'>
                               مشاهده
                             </button>
                           </div>
@@ -871,28 +860,28 @@ export default function AdvertisementPageClient() {
                   </div>
 
                   {/* Pagination */}
-                  <div className="mt-12 flex flex-col items-center gap-4">
-                    <div className="text-sm text-gray-400 mb-2">
+                  <div className='mt-12 flex flex-col items-center gap-4'>
+                    <div className='text-sm text-gray-400 mb-2'>
                       صفحه {currentPage} از {totalPages}
                     </div>
 
-                    <div className="flex items-center justify-center gap-1">
+                    <div className='flex items-center justify-center gap-1'>
                       {renderPaginationButtons()}
                     </div>
 
                     {totalPages > 5 && (
-                      <div className="flex items-center gap-2 mt-2">
-                        <span className="text-sm text-gray-500">
+                      <div className='flex items-center gap-2 mt-2'>
+                        <span className='text-sm text-gray-500'>
                           رفتن به صفحه:
                         </span>
                         <input
-                          type="number"
+                          type='number'
                           min={1}
                           max={totalPages}
                           onChange={(e) =>
                             handlePageChange(Number(e.target.value))
                           }
-                          className="w-20 px-2 py-1 bg-[#2a2a2a] border border-gray-600 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                          className='w-20 px-2 py-1 bg-[#2a2a2a] border border-gray-600 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500'
                           placeholder={String(currentPage)}
                         />
                       </div>
@@ -900,31 +889,29 @@ export default function AdvertisementPageClient() {
                   </div>
                 </div>
               ) : (
-                <div className="text-center py-16">
+                <div className='text-center py-16'>
                   <svg
-                    className="w-16 h-16 text-gray-600 mx-auto mb-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                    className='w-16 h-16 text-gray-600 mx-auto mb-4'
+                    fill='none'
+                    stroke='currentColor'
+                    viewBox='0 0 24 24'>
                     <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth='2'
+                      d='M9.172 16.172a4 4 0 015.656 0M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
                     />
                   </svg>
-                  <h3 className="text-xl font-semibold text-gray-300 mb-2">
+                  <h3 className='text-xl font-semibold text-gray-300 mb-2'>
                     هیچ آگهی‌ای یافت نشد
                   </h3>
-                  <p className="text-gray-500 mb-6">
+                  <p className='text-gray-500 mb-6'>
                     هیچ آگهی‌ای با معیارهای جستجوی شما مطابقت ندارد. فیلترها را
                     تغییر دهید.
                   </p>
                   <button
                     onClick={() => router.push("/")}
-                    className="bg-yellow-500 hover:bg-yellow-500 text-black px-6 py-3 rounded-lg font-medium transition-colors duration-200"
-                  >
+                    className='bg-yellow-500 hover:bg-yellow-500 text-black px-6 py-3 rounded-lg font-medium transition-colors duration-200'>
                     بازگشت به صفحه اصلی
                   </button>
                 </div>
@@ -933,6 +920,6 @@ export default function AdvertisementPageClient() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
