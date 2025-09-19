@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { loadCompanyData } from "@/constants/companyData";
 
 export default function VacanciesPage() {
   const [filter, setFilter] = useState("active");
@@ -24,7 +25,6 @@ export default function VacanciesPage() {
     benefits: [],
     responsibilities: "",
     skills: "",
-    companyDescription: "",
     workHours: "",
     probationPeriod: "",
     insurance: "",
@@ -37,6 +37,60 @@ export default function VacanciesPage() {
   useEffect(() => {
     loadJobs();
   }, []);
+
+  // Load company profile data when creating new job
+  useEffect(() => {
+    if (showCreateForm && !editingJob) {
+      const companyData = loadCompanyData();
+      setNewJob((prev) => ({
+        ...prev,
+        company: companyData.companyName || prev.company,
+        location: companyData.city
+          ? `${companyData.city}, ${companyData.province}`
+          : prev.location,
+        province: companyData.province || prev.province,
+        // Pre-populate based on industry type if possible
+        ...(companyData.industryType === "technology" && {
+          category: "فناوری اطلاعات",
+        }),
+        // Enhanced company data pre-fill
+        description: companyData.description
+          ? `امکان همکاری با ${companyData.companyName}. ${companyData.description}`
+          : prev.description,
+        responsibilities: companyData.mission
+          ? `مأموریت شرکت: ${companyData.mission}`
+          : prev.responsibilities,
+        // Pre-populate contact info in skills section for reference
+        skills: `تماس با شرکت: ${companyData.email ? companyData.email : ""}${
+          companyData.phone ? ` - ${companyData.phone}` : ""
+        }`,
+        // Pre-populate work environment details
+        workHours: "۹ صبح تا ۶ عصر", // Default work hours
+        insurance: "full", // Default insurance
+        probationPeriod: "۳ ماه", // Default probation
+        workEnvironment: companyData.workEnvironment
+          ? companyData.workEnvironment
+          : prev.workEnvironment,
+        // Include company benefits
+        ...(companyData.benefits &&
+          companyData.benefits.length > 0 && {
+            benefits: [
+              ...companyData.benefits,
+              // Add company services as additional benefits
+              ...(companyData.services && companyData.services.length > 0
+                ? companyData.services
+                : []),
+            ],
+          }),
+        // Pre-fill website if available
+        website: companyData.website || prev.website,
+        // Set default remote work based on company preference
+        remoteWork:
+          companyData.workEnvironment?.toLowerCase().includes("دورکاران") ||
+          false,
+      }));
+    }
+  }, [showCreateForm, editingJob]);
 
   // Function to load jobs from localStorage
   const loadJobs = () => {
@@ -91,13 +145,14 @@ export default function VacanciesPage() {
       benefits: Array.isArray(job.benefits) ? job.benefits : [],
       responsibilities: job.responsibilities || "",
       skills: job.skills || "",
-      companyDescription: job.companyDescription || "",
       workHours: job.workHours || "",
       probationPeriod: job.probationPeriod || "",
       insurance: job.insurance || "",
       remoteWork: job.remoteWork || false,
       travelRequired: job.travelRequired || false,
       urgent: job.urgent || false,
+      province: job.province || "",
+      specialization: job.specialization || "",
     });
     setShowCreateForm(true);
   };
@@ -205,36 +260,64 @@ export default function VacanciesPage() {
         );
         const updatedAllJobs = [jobToSave, ...existingJobs];
         localStorage.setItem("allJobs", JSON.stringify(updatedAllJobs));
+
+        // Debug: Log saved job
+        console.log("آگهی ذخیره شده:", jobToSave);
+        console.log("تمام آگهی‌های ذخیره شده:", updatedAllJobs);
       }
 
       showSuccessMessage("آگهی با موفقیت منتشر شد!");
     }
 
-    // Reset form and hide it
+    // Reset form and hide it with enhanced company data pre-fill
+    const companyData = loadCompanyData();
     setNewJob({
       title: "",
-      company: "",
-      description: "",
+      company: companyData.companyName || "",
+      description: companyData.description
+        ? `امکان همکاری با ${companyData.companyName}. ${companyData.description}`
+        : "",
       requirements: "",
       salary: "",
-      location: "",
+      location: companyData.city
+        ? `${companyData.city}, ${companyData.province}`
+        : "",
       type: "full-time",
-      category: "",
+      category:
+        companyData.industryType === "technology" ? "فناوری اطلاعات" : "",
       specialization: "",
       gender: "both",
       education: "",
       experience: "",
       militaryService: "",
-      benefits: [],
-      responsibilities: "",
-      skills: "",
-      companyDescription: "",
-      workHours: "",
-      probationPeriod: "",
-      insurance: "",
-      remoteWork: false,
+      benefits: [
+        ...(companyData.benefits && companyData.benefits.length > 0
+          ? companyData.benefits
+          : []),
+        // Add company services as additional benefits
+        ...(companyData.services && companyData.services.length > 0
+          ? companyData.services
+          : []),
+      ],
+      responsibilities: companyData.mission
+        ? `مأموریت شرکت: ${companyData.mission}`
+        : "",
+      skills: `تماس با شرکت: ${companyData.email ? companyData.email : ""}${
+        companyData.phone ? ` - ${companyData.phone}` : ""
+      }`,
+      workHours: "۹ صبح تا ۶ عصر",
+      probationPeriod: "۳ ماه",
+      insurance: "full",
+      remoteWork:
+        companyData.workEnvironment?.toLowerCase().includes("دورکاری") ||
+        companyData.workEnvironment?.toLowerCase().includes("از راه دور"),
       travelRequired: false,
       urgent: false,
+      province: companyData.province || "",
+      workEnvironment: companyData.workEnvironment
+        ? companyData.workEnvironment
+        : "",
+      website: companyData.website || "",
     });
     setShowCreateForm(false);
   };
@@ -368,12 +451,13 @@ export default function VacanciesPage() {
                 required
               >
                 <option value="">انتخاب دسته‌بندی</option>
-                <option value="programming">برنامه‌نویسی</option>
-                <option value="design">طراحی</option>
-                <option value="marketing">بازاریابی</option>
-                <option value="management">مدیریت</option>
-                <option value="sales">فروش</option>
-                <option value="other">سایر</option>
+                <option value="فناوری اطلاعات">فناوری اطلاعات</option>
+                <option value="طراحی و گرافیک">طراحی و گرافیک</option>
+                <option value="مدیریت پروژه">مدیریت پروژه</option>
+                <option value="بازاریابی و فروش">بازاریابی و فروش</option>
+                <option value="منابع انسانی">منابع انسانی</option>
+                <option value="مالی و حسابداری">مالی و حسابداری</option>
+                <option value="سایر">سایر</option>
               </select>
             </div>
 

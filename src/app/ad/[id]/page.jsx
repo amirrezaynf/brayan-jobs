@@ -548,6 +548,80 @@ export default function AdvertisementDetailsPage() {
                       : "سایر"}
                   </span>
                 </div>
+                {ad.militaryService && (
+                  <div className="flex justify-between items-center p-3 bg-gray-700/50 rounded-lg">
+                    <span className="text-gray-400 text-sm">وضعیت سربازی:</span>
+                    <span className="text-white font-semibold">
+                      {ad.militaryService === "completed"
+                        ? "پایان خدمت"
+                        : ad.militaryService === "exempt"
+                        ? "معاف"
+                        : ad.militaryService === "not-required"
+                        ? "نیازی نیست"
+                        : ad.militaryService}
+                    </span>
+                  </div>
+                )}
+                {ad.workHours && (
+                  <div className="flex justify-between items-center p-3 bg-gray-700/50 rounded-lg">
+                    <span className="text-gray-400 text-sm">ساعت کاری:</span>
+                    <span className="text-white font-semibold">
+                      {ad.workHours}
+                    </span>
+                  </div>
+                )}
+                {ad.insurance && (
+                  <div className="flex justify-between items-center p-3 bg-gray-700/50 rounded-lg">
+                    <span className="text-gray-400 text-sm">بیمه:</span>
+                    <span className="text-white font-semibold">
+                      {ad.insurance === "full"
+                        ? "بیمه کامل"
+                        : ad.insurance === "basic"
+                        ? "بیمه پایه"
+                        : ad.insurance === "none"
+                        ? "بدون بیمه"
+                        : ad.insurance}
+                    </span>
+                  </div>
+                )}
+                {ad.probationPeriod && (
+                  <div className="flex justify-between items-center p-3 bg-gray-700/50 rounded-lg">
+                    <span className="text-gray-400 text-sm">دوره آزمایشی:</span>
+                    <span className="text-white font-semibold">
+                      {ad.probationPeriod}
+                    </span>
+                  </div>
+                )}
+                {ad.remoteWork && (
+                  <div className="flex justify-between items-center p-3 bg-green-700/50 rounded-lg">
+                    <span className="text-gray-400 text-sm">دورکاری:</span>
+                    <span className="text-green-400 font-semibold">
+                      امکان‌پذیر
+                    </span>
+                  </div>
+                )}
+                {ad.travelRequired && (
+                  <div className="flex justify-between items-center p-3 bg-blue-700/50 rounded-lg">
+                    <span className="text-gray-400 text-sm">
+                      سفر مورد نیاز:
+                    </span>
+                    <span className="text-blue-400 font-semibold">بله</span>
+                  </div>
+                )}
+                {ad.urgent && (
+                  <div className="flex justify-between items-center p-3 bg-red-700/50 rounded-lg">
+                    <span className="text-gray-400 text-sm">وضعیت:</span>
+                    <span className="text-red-400 font-semibold">فوری</span>
+                  </div>
+                )}
+                {ad.province && (
+                  <div className="flex justify-between items-center p-3 bg-gray-700/50 rounded-lg">
+                    <span className="text-gray-400 text-sm">استان:</span>
+                    <span className="text-white font-semibold">
+                      {ad.province}
+                    </span>
+                  </div>
+                )}
               </div>
 
               {/* Benefits Section in Sidebar */}

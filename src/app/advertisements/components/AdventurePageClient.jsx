@@ -314,8 +314,8 @@ const sampleAdvertisements = [
 export default function AdvertisementPageClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [ads, setAds] = useState(sampleAdvertisements);
-  const [filteredAds, setFilteredAds] = useState([...sampleAdvertisements]);
+  const [ads, setAds] = useState([]);
+  const [filteredAds, setFilteredAds] = useState([]);
   const [searchFilter, setSearchFilter] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [sortBy, setSortBy] = useState("newest");
@@ -335,11 +335,52 @@ export default function AdvertisementPageClient() {
   const city = searchParams.get("city");
 
   useEffect(() => {
-    // In a real app, this would be an API call with the search parameters
-    // For now, we'll use the sample data
-    let filtered = [...sampleAdvertisements];
+    // Load both sample advertisements and user-created jobs from localStorage
+    let allAds = [...sampleAdvertisements];
+
+    // Debug: Log the current state of localStorage
+    console.log("بارگذاری آگهی‌ها در صفحه advertisements");
+    console.log("بررسی localStorage موجود:");
+
+    // Load posted jobs from localStorage
+    if (typeof window !== "undefined") {
+      const savedJobs = localStorage.getItem("allJobs");
+      if (savedJobs) {
+        const parsedJobs = JSON.parse(savedJobs);
+        console.log(
+          "آگهی‌های ذخیره شده در localStorage 'allJobs':",
+          parsedJobs
+        );
+        // Filter out jobs that are already in sampleAdvertisements (avoid duplicates)
+        const newJobs = parsedJobs.filter(
+          (job) =>
+            !sampleAdvertisements.some(
+              (sample) =>
+                sample.title === job.title && sample.company === job.company
+            )
+        );
+        allAds = [...allAds, ...newJobs];
+      }
+
+      // Also load from postedJobs localStorage
+      const postedJobs = localStorage.getItem("postedJobs");
+      if (postedJobs) {
+        const parsedPostedJobs = JSON.parse(postedJobs);
+        console.log(
+          "آگهی‌های ذخیره شده در localStorage 'postedJobs':",
+          parsedPostedJobs
+        );
+        const newPostedJobs = parsedPostedJobs.filter(
+          (job) => !allAds.some((ad) => ad.id === job.id) // Avoid duplicates
+        );
+        allAds = [...allAds, ...newPostedJobs];
+      }
+    }
+
+    console.log("کل آگهی‌های بارگذاری شده برای نمایش:", allAds);
 
     // Filter by category if specified
+    let filtered = [...allAds];
     if (jobCategory) {
       filtered = filtered.filter((ad) => ad.category === jobCategory);
     }
@@ -350,7 +391,6 @@ export default function AdvertisementPageClient() {
     }
 
     setFilteredAds(filtered);
-    // Also set ads initially to filtered data
     setAds(filtered);
   }, [jobCategory, specialization]);
 
@@ -485,6 +525,16 @@ export default function AdvertisementPageClient() {
     showRangeFilter,
     jobCategory || "",
   ]);
+
+  // Function to convert Gregorian to Jalali (Persian) date
+  const toJalali = (gregorianDate) => {
+    const gDate = new Date(gregorianDate);
+    return gDate.toLocaleDateString("fa-IR", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
 
   const handleViewAd = (adId) => {
     router.push(`/ad/${adId}`);
@@ -719,7 +769,7 @@ export default function AdvertisementPageClient() {
                             {ad.company}
                           </span>
                           <span className="text-sm text-gray-500">
-                            {ad.date}
+                            {toJalali(ad.date)}
                           </span>
                         </div>
                       </div>
