@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 
-export default function SingleAdClient({ adId }) {
+export default function AdvertisementSingleClient({ adId }) {
   const router = useRouter();
   const [ad, setAd] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -397,40 +397,38 @@ export default function SingleAdClient({ adId }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen dark-bg py-8 flex items-center justify-center">
-        <div className="text-white">در حال بارگذاری آگهی...</div>
+      <div className='min-h-screen dark-bg py-8 flex items-center justify-center'>
+        <div className='text-white'>در حال بارگذاری آگهی...</div>
       </div>
     );
   }
 
   if (!ad) {
     return (
-      <div className="min-h-screen dark-bg py-8" dir="rtl">
-        <div className="container mx-auto px-6">
-          <div className="text-center py-16">
+      <div className='min-h-screen dark-bg py-8' dir='rtl'>
+        <div className='container mx-auto px-6'>
+          <div className='text-center py-16'>
             <svg
-              className="w-16 h-16 text-gray-600 mx-auto mb-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+              className='w-16 h-16 text-gray-600 mx-auto mb-4'
+              fill='none'
+              stroke='currentColor'
+              viewBox='0 0 24 24'>
               <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                strokeWidth='2'
+                d='M9.172 16.172a4 4 0 015.656 0M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
               />
             </svg>
-            <h3 className="text-2xl font-bold text-gray-300 mb-2">
+            <h3 className='text-2xl font-bold text-gray-300 mb-2'>
               آگهی یافت نشد
             </h3>
-            <p className="text-gray-500 mb-6">
+            <p className='text-gray-500 mb-6'>
               آگهی مورد نظر وجود ندارد یا غیرقابل دسترس است.
             </p>
             <button
               onClick={() => router.push("/advertisements")}
-              className="bg-yellow-500 hover:bg-yellow-500 text-black px-6 py-3 rounded-lg font-medium transition-colors duration-200"
-            >
+              className='bg-yellow-500 hover:bg-yellow-500 text-black px-6 py-3 rounded-lg font-medium transition-colors duration-200'>
               بازگشت به آگهی‌ها
             </button>
           </div>
@@ -550,168 +548,158 @@ export default function SingleAdClient({ adId }) {
 
   return (
     <div
-      className="min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden"
-      dir="rtl"
-    >
+      className='min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden'
+      dir='rtl'>
       {/* Background Elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/5 via-transparent to-blue-500/5"></div>
-      <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-yellow-400/10 to-transparent rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-blue-400/10 to-transparent rounded-full blur-3xl"></div>
+      <div className='absolute inset-0 bg-gradient-to-br from-yellow-500/5 via-transparent to-blue-500/5'></div>
+      <div className='absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-yellow-400/10 to-transparent rounded-full blur-3xl'></div>
+      <div className='absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-blue-400/10 to-transparent rounded-full blur-3xl'></div>
 
-      <div className="relative z-10 py-8">
-        <div className="container mx-auto px-6">
+      <div className='relative z-10 py-8'>
+        <div className='container mx-auto px-6'>
           {/* Hero Section */}
-          <div className="relative bg-gradient-to-br from-[#2a2a2a]/80 to-[#1a1a1a]/80 backdrop-blur-xl rounded-3xl p-8 mb-12 border border-gray-700/50 shadow-2xl overflow-hidden">
+          <div className='relative bg-gradient-to-br from-[#2a2a2a]/80 to-[#1a1a1a]/80 backdrop-blur-xl rounded-3xl p-8 mb-12 border border-gray-700/50 shadow-2xl overflow-hidden'>
             {/* Decorative elements */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-yellow-400/20 to-transparent rounded-full blur-2xl"></div>
-            <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-blue-400/20 to-transparent rounded-full blur-2xl"></div>
+            <div className='absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-yellow-400/20 to-transparent rounded-full blur-2xl'></div>
+            <div className='absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-blue-400/20 to-transparent rounded-full blur-2xl'></div>
 
-            <div className="relative z-10">
+            <div className='relative z-10'>
               {ad.urgent && (
-                <div className="inline-flex items-center bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-400 px-4 py-2 rounded-full text-sm font-medium mb-6 border border-yellow-500/30 backdrop-blur-sm">
+                <div className='inline-flex items-center bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-400 px-4 py-2 rounded-full text-sm font-medium mb-6 border border-yellow-500/30 backdrop-blur-sm'>
                   <svg
-                    className="w-4 h-4 ml-2 animate-pulse"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                    className='w-4 h-4 ml-2 animate-pulse'
+                    fill='currentColor'
+                    viewBox='0 0 20 20'>
                     <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
+                      fillRule='evenodd'
+                      d='M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z'
+                      clipRule='evenodd'
                     />
                   </svg>
                   آگهی فوری
                 </div>
               )}
 
-              <div className="flex items-start justify-between mb-8">
-                <div className="flex-1">
-                  <h1 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent mb-4 leading-tight">
+              <div className='flex items-start justify-between mb-8'>
+                <div className='flex-1'>
+                  <h1 className='text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent mb-4 leading-tight'>
                     {ad.title}
                   </h1>
-                  <div className="flex flex-wrap items-center gap-6 text-gray-400 mb-6">
-                    <div className="flex items-center gap-2 bg-gray-800/50 px-3 py-2 rounded-lg backdrop-blur-sm">
+                  <div className='flex flex-wrap items-center gap-6 text-gray-400 mb-6'>
+                    <div className='flex items-center gap-2 bg-gray-800/50 px-3 py-2 rounded-lg backdrop-blur-sm'>
                       <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="18"
-                        height="18"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        className="text-yellow-400"
-                      >
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                        <circle cx="12" cy="10" r="3"></circle>
+                        xmlns='http://www.w3.org/2000/svg'
+                        width='18'
+                        height='18'
+                        viewBox='0 0 24 24'
+                        fill='none'
+                        stroke='currentColor'
+                        strokeWidth='2'
+                        className='text-yellow-400'>
+                        <path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'></path>
+                        <circle cx='12' cy='10' r='3'></circle>
                       </svg>
-                      <span className="font-medium">
+                      <span className='font-medium'>
                         {ad.location} {ad.province && `- ${ad.province}`}
                       </span>
                     </div>
-                    <div className="flex items-center gap-2 bg-gray-800/50 px-3 py-2 rounded-lg backdrop-blur-sm">
+                    <div className='flex items-center gap-2 bg-gray-800/50 px-3 py-2 rounded-lg backdrop-blur-sm'>
                       <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="18"
-                        height="18"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        className="text-blue-400"
-                      >
+                        xmlns='http://www.w3.org/2000/svg'
+                        width='18'
+                        height='18'
+                        viewBox='0 0 24 24'
+                        fill='none'
+                        stroke='currentColor'
+                        strokeWidth='2'
+                        className='text-blue-400'>
                         <rect
-                          x="3"
-                          y="4"
-                          width="18"
-                          height="18"
-                          rx="2"
-                          ry="2"
-                        ></rect>
-                        <line x1="16" y1="2" x2="16" y2="6"></line>
-                        <line x1="8" y1="2" x2="8" y2="6"></line>
-                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                          x='3'
+                          y='4'
+                          width='18'
+                          height='18'
+                          rx='2'
+                          ry='2'></rect>
+                        <line x1='16' y1='2' x2='16' y2='6'></line>
+                        <line x1='8' y1='2' x2='8' y2='6'></line>
+                        <line x1='3' y1='10' x2='21' y2='10'></line>
                       </svg>
-                      <span className="font-medium">{ad.date}</span>
+                      <span className='font-medium'>{ad.date}</span>
                     </div>
                   </div>
-                  <div className="flex flex-wrap gap-3">
-                    <span className="inline-block bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 text-yellow-400 px-4 py-2 rounded-full text-sm font-medium border border-yellow-500/30">
+                  <div className='flex flex-wrap gap-3'>
+                    <span className='inline-block bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 text-yellow-400 px-4 py-2 rounded-full text-sm font-medium border border-yellow-500/30'>
                       {ad.category}
                     </span>
                     {ad.specialization && (
-                      <span className="inline-block bg-gradient-to-r from-blue-500/20 to-blue-600/20 text-blue-400 px-4 py-2 rounded-full text-sm font-medium border border-blue-500/30">
+                      <span className='inline-block bg-gradient-to-r from-blue-500/20 to-blue-600/20 text-blue-400 px-4 py-2 rounded-full text-sm font-medium border border-blue-500/30'>
                         {ad.specialization}
                       </span>
                     )}
-                    <span className="inline-block bg-gradient-to-r from-green-500/20 to-green-600/20 text-green-400 px-4 py-2 rounded-full text-sm font-medium border border-green-500/30">
+                    <span className='inline-block bg-gradient-to-r from-green-500/20 to-green-600/20 text-green-400 px-4 py-2 rounded-full text-sm font-medium border border-green-500/30'>
                       {getTypeText(ad.type)}
                     </span>
                   </div>
                 </div>
-                <div className="text-left bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50">
-                  <div className="text-3xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-500 bg-clip-text text-transparent mb-3">
+                <div className='text-left bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50'>
+                  <div className='text-3xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-500 bg-clip-text text-transparent mb-3'>
                     {ad.salary}
                   </div>
-                  <div className="text-sm text-gray-400 flex items-center gap-2">
+                  <div className='text-sm text-gray-400 flex items-center gap-2'>
                     <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      className="text-green-400"
-                    >
-                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                      <circle cx="12" cy="7" r="4"></circle>
+                      xmlns='http://www.w3.org/2000/svg'
+                      width='16'
+                      height='16'
+                      viewBox='0 0 24 24'
+                      fill='none'
+                      stroke='currentColor'
+                      strokeWidth='2'
+                      className='text-green-400'>
+                      <path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'></path>
+                      <circle cx='12' cy='7' r='4'></circle>
                     </svg>
-                    <span className="font-medium">
+                    <span className='font-medium'>
                       {ad.applicants || 0} نفر متقاضی
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
+              <div className='flex items-center justify-between'>
+                <div className='flex items-center gap-4'>
                   <button
                     onClick={() => router.push("/advertisements")}
-                    className="flex items-center gap-2 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white px-6 py-3 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
-                  >
+                    className='flex items-center gap-2 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white px-6 py-3 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg'>
                     <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="18"
-                      height="18"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path d="M15 18l-6-6 6-6" />
+                      xmlns='http://www.w3.org/2000/svg'
+                      width='18'
+                      height='18'
+                      viewBox='0 0 24 24'
+                      fill='none'
+                      stroke='currentColor'
+                      strokeWidth='2'>
+                      <path d='M15 18l-6-6 6-6' />
                     </svg>
                     بازگشت به آگهی‌ها
                   </button>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className='flex items-center gap-4'>
                   <button
                     onClick={() => router.push("/karjoo/resume")}
-                    className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 text-black px-8 py-3 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-yellow-500/25 flex items-center gap-3"
-                  >
+                    className='bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 text-black px-8 py-3 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-yellow-500/25 flex items-center gap-3'>
                     <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="18"
-                      height="18"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                      <polyline points="14,2 14,8 20,8" />
-                      <line x1="16" y1="13" x2="8" y2="13" />
-                      <line x1="16" y1="17" x2="8" y2="17" />
-                      <polyline points="10,9 9,9 8,9" />
+                      xmlns='http://www.w3.org/2000/svg'
+                      width='18'
+                      height='18'
+                      viewBox='0 0 24 24'
+                      fill='none'
+                      stroke='currentColor'
+                      strokeWidth='2'>
+                      <path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z' />
+                      <polyline points='14,2 14,8 20,8' />
+                      <line x1='16' y1='13' x2='8' y2='13' />
+                      <line x1='16' y1='17' x2='8' y2='17' />
+                      <polyline points='10,9 9,9 8,9' />
                     </svg>
                     ارسال رزومه
                   </button>
@@ -721,44 +709,41 @@ export default function SingleAdClient({ adId }) {
           </div>
 
           {/* Company Information */}
-          <div className="bg-gradient-to-br from-[#2a2a2a]/80 to-[#1a1a1a]/80 backdrop-blur-xl rounded-2xl p-8 mb-12 border border-gray-700/50 shadow-xl">
-            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl flex items-center justify-center border border-blue-500/30">
+          <div className='bg-gradient-to-br from-[#2a2a2a]/80 to-[#1a1a1a]/80 backdrop-blur-xl rounded-2xl p-8 mb-12 border border-gray-700/50 shadow-xl'>
+            <h2 className='text-2xl font-bold text-white mb-6 flex items-center gap-3'>
+              <div className='w-10 h-10 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl flex items-center justify-center border border-blue-500/30'>
                 <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  className="text-blue-400"
-                >
-                  <path d="M9 5H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2" />
+                  xmlns='http://www.w3.org/2000/svg'
+                  width='20'
+                  height='20'
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  stroke='currentColor'
+                  strokeWidth='2'
+                  className='text-blue-400'>
+                  <path d='M9 5H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2' />
                 </svg>
               </div>
               اطلاعات شرکت
             </h2>
-            <div className="bg-gradient-to-r from-gray-800/30 to-gray-900/30 rounded-xl p-6 border border-gray-700/30">
-              <p className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+            <div className='bg-gradient-to-r from-gray-800/30 to-gray-900/30 rounded-xl p-6 border border-gray-700/30'>
+              <p className='text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent'>
                 {ad.company}
               </p>
             </div>
-            <div className="mt-6 text-center">
+            <div className='mt-6 text-center'>
               <button
                 onClick={() => router.push(`/employers/${adId}`)}
-                className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white px-8 py-3 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/25 flex items-center gap-3 mx-auto"
-              >
+                className='bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-400 hover:to-blue-500 text-white px-8 py-3 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/25 flex items-center gap-3 mx-auto'>
                 <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path d="M9 5H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2" />
+                  xmlns='http://www.w3.org/2000/svg'
+                  width='18'
+                  height='18'
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  stroke='currentColor'
+                  strokeWidth='2'>
+                  <path d='M9 5H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2' />
                 </svg>
                 مشاهده اطلاعات شرکت
               </button>
@@ -766,108 +751,105 @@ export default function SingleAdClient({ adId }) {
           </div>
 
           {/* Job Details Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12'>
             {/* Left Column */}
-            <div className="space-y-8">
+            <div className='space-y-8'>
               {/* شرح شغلی */}
-              <div className="bg-gradient-to-br from-[#2a2a2a]/80 to-[#1a1a1a]/80 backdrop-blur-xl rounded-2xl p-8 border border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 group">
-                <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl flex items-center justify-center border border-purple-500/30 group-hover:scale-110 transition-transform duration-300">
+              <div className='bg-gradient-to-br from-[#2a2a2a]/80 to-[#1a1a1a]/80 backdrop-blur-xl rounded-2xl p-8 border border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 group'>
+                <h3 className='text-xl font-bold text-white mb-6 flex items-center gap-3'>
+                  <div className='w-10 h-10 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl flex items-center justify-center border border-purple-500/30 group-hover:scale-110 transition-transform duration-300'>
                     <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      className="text-purple-400"
-                    >
-                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                      <polyline points="14,2 14,8 20,8" />
-                      <line x1="16" y1="13" x2="8" y2="13" />
-                      <line x1="16" y1="17" x2="8" y2="17" />
-                      <polyline points="10,9 9,9 8,9" />
+                      xmlns='http://www.w3.org/2000/svg'
+                      width='20'
+                      height='20'
+                      viewBox='0 0 24 24'
+                      fill='none'
+                      stroke='currentColor'
+                      strokeWidth='2'
+                      className='text-purple-400'>
+                      <path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z' />
+                      <polyline points='14,2 14,8 20,8' />
+                      <line x1='16' y1='13' x2='8' y2='13' />
+                      <line x1='16' y1='17' x2='8' y2='17' />
+                      <polyline points='10,9 9,9 8,9' />
                     </svg>
                   </div>
                   شرح شغلی
                 </h3>
-                <div className="text-gray-300 whitespace-pre-line leading-relaxed bg-gradient-to-r from-gray-800/20 to-gray-900/20 rounded-xl p-6 border border-gray-700/30">
+                <div className='text-gray-300 whitespace-pre-line leading-relaxed bg-gradient-to-r from-gray-800/20 to-gray-900/20 rounded-xl p-6 border border-gray-700/30'>
                   {ad.description}
                 </div>
               </div>
 
               {/* شرایط و الزامات */}
-              <div className="bg-gradient-to-br from-[#2a2a2a]/80 to-[#1a1a1a]/80 backdrop-blur-xl rounded-2xl p-8 border border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 group">
-                <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-red-500/20 to-orange-500/20 rounded-xl flex items-center justify-center border border-red-500/30 group-hover:scale-110 transition-transform duration-300">
+              <div className='bg-gradient-to-br from-[#2a2a2a]/80 to-[#1a1a1a]/80 backdrop-blur-xl rounded-2xl p-8 border border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 group'>
+                <h3 className='text-xl font-bold text-white mb-6 flex items-center gap-3'>
+                  <div className='w-10 h-10 bg-gradient-to-br from-red-500/20 to-orange-500/20 rounded-xl flex items-center justify-center border border-red-500/30 group-hover:scale-110 transition-transform duration-300'>
                     <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      className="text-red-400"
-                    >
-                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4m0 0v4H9a3 3 0 0 1 0-6h3.98a3 3 0 0 1 2.62 1.5L15 6a3 3 0 0 1 .5 1.5V12a2 2 0 0 1-2 2H10l-2.5-2L7 9l2.5-2L9 7.5V3z" />
-                      <path d="M17 7V6a3 3 0 0 1 3-3" />
+                      xmlns='http://www.w3.org/2000/svg'
+                      width='20'
+                      height='20'
+                      viewBox='0 0 24 24'
+                      fill='none'
+                      stroke='currentColor'
+                      strokeWidth='2'
+                      className='text-red-400'>
+                      <path d='M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4m0 0v4H9a3 3 0 0 1 0-6h3.98a3 3 0 0 1 2.62 1.5L15 6a3 3 0 0 1 .5 1.5V12a2 2 0 0 1-2 2H10l-2.5-2L7 9l2.5-2L9 7.5V3z' />
+                      <path d='M17 7V6a3 3 0 0 1 3-3' />
                     </svg>
                   </div>
                   شرایط و الزامات
                 </h3>
-                <div className="text-gray-300 whitespace-pre-line leading-relaxed bg-gradient-to-r from-gray-800/20 to-gray-900/20 rounded-xl p-6 border border-gray-700/30">
+                <div className='text-gray-300 whitespace-pre-line leading-relaxed bg-gradient-to-r from-gray-800/20 to-gray-900/20 rounded-xl p-6 border border-gray-700/30'>
                   {ad.requirements}
                 </div>
               </div>
 
               {/* اطلاعات شخصی */}
-              <div className="bg-gradient-to-br from-[#2a2a2a]/80 to-[#1a1a1a]/80 backdrop-blur-xl rounded-2xl p-8 border border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 group">
-                <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-green-500/20 to-teal-500/20 rounded-xl flex items-center justify-center border border-green-500/30 group-hover:scale-110 transition-transform duration-300">
+              <div className='bg-gradient-to-br from-[#2a2a2a]/80 to-[#1a1a1a]/80 backdrop-blur-xl rounded-2xl p-8 border border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 group'>
+                <h3 className='text-xl font-bold text-white mb-6 flex items-center gap-3'>
+                  <div className='w-10 h-10 bg-gradient-to-br from-green-500/20 to-teal-500/20 rounded-xl flex items-center justify-center border border-green-500/30 group-hover:scale-110 transition-transform duration-300'>
                     <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      className="text-green-400"
-                    >
-                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                      <circle cx="12" cy="7" r="4" />
+                      xmlns='http://www.w3.org/2000/svg'
+                      width='20'
+                      height='20'
+                      viewBox='0 0 24 24'
+                      fill='none'
+                      stroke='currentColor'
+                      strokeWidth='2'
+                      className='text-green-400'>
+                      <path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2' />
+                      <circle cx='12' cy='7' r='4' />
                     </svg>
                   </div>
                   شرایط شخصی
                 </h3>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center p-4 bg-gradient-to-r from-gray-800/30 to-gray-900/30 rounded-xl border border-gray-700/30">
-                    <span className="text-gray-400 font-medium">جنسیت:</span>
-                    <span className="text-white font-semibold">
+                <div className='space-y-4'>
+                  <div className='flex justify-between items-center p-4 bg-gradient-to-r from-gray-800/30 to-gray-900/30 rounded-xl border border-gray-700/30'>
+                    <span className='text-gray-400 font-medium'>جنسیت:</span>
+                    <span className='text-white font-semibold'>
                       {getGenderText(ad.gender)}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center p-4 bg-gradient-to-r from-gray-800/30 to-gray-900/30 rounded-xl border border-gray-700/30">
-                    <span className="text-gray-400 font-medium">تحصیلات:</span>
-                    <span className="text-white font-semibold">
+                  <div className='flex justify-between items-center p-4 bg-gradient-to-r from-gray-800/30 to-gray-900/30 rounded-xl border border-gray-700/30'>
+                    <span className='text-gray-400 font-medium'>تحصیلات:</span>
+                    <span className='text-white font-semibold'>
                       {getEducationText(ad.education)}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center p-4 bg-gradient-to-r from-gray-800/30 to-gray-900/30 rounded-xl border border-gray-700/30">
-                    <span className="text-gray-400 font-medium">
+                  <div className='flex justify-between items-center p-4 bg-gradient-to-r from-gray-800/30 to-gray-900/30 rounded-xl border border-gray-700/30'>
+                    <span className='text-gray-400 font-medium'>
                       سابقه کاری:
                     </span>
-                    <span className="text-white font-semibold">
+                    <span className='text-white font-semibold'>
                       {getExperienceText(ad.experience)}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center p-4 bg-gradient-to-r from-gray-800/30 to-gray-900/30 rounded-xl border border-gray-700/30">
-                    <span className="text-gray-400 font-medium">
+                  <div className='flex justify-between items-center p-4 bg-gradient-to-r from-gray-800/30 to-gray-900/30 rounded-xl border border-gray-700/30'>
+                    <span className='text-gray-400 font-medium'>
                       وضعیت سربازی:
                     </span>
-                    <span className="text-white font-semibold">
+                    <span className='text-white font-semibold'>
                       {getMilitaryText(ad.militaryService)}
                     </span>
                   </div>
@@ -876,74 +858,73 @@ export default function SingleAdClient({ adId }) {
             </div>
 
             {/* Right Column */}
-            <div className="space-y-8">
+            <div className='space-y-8'>
               {/* شرایط استخدامی */}
-              <div className="bg-gradient-to-br from-[#2a2a2a]/80 to-[#1a1a1a]/80 backdrop-blur-xl rounded-2xl p-8 border border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 group">
-                <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-xl flex items-center justify-center border border-cyan-500/30 group-hover:scale-110 transition-transform duration-300">
+              <div className='bg-gradient-to-br from-[#2a2a2a]/80 to-[#1a1a1a]/80 backdrop-blur-xl rounded-2xl p-8 border border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 group'>
+                <h3 className='text-xl font-bold text-white mb-6 flex items-center gap-3'>
+                  <div className='w-10 h-10 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-xl flex items-center justify-center border border-cyan-500/30 group-hover:scale-110 transition-transform duration-300'>
                     <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      className="text-cyan-400"
-                    >
-                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                      <line x1="16" y1="2" x2="16" y2="6" />
-                      <line x1="8" y1="2" x2="8" y2="6" />
-                      <line x1="3" y1="10" x2="21" y2="10" />
+                      xmlns='http://www.w3.org/2000/svg'
+                      width='20'
+                      height='20'
+                      viewBox='0 0 24 24'
+                      fill='none'
+                      stroke='currentColor'
+                      strokeWidth='2'
+                      className='text-cyan-400'>
+                      <rect x='3' y='4' width='18' height='18' rx='2' ry='2' />
+                      <line x1='16' y1='2' x2='16' y2='6' />
+                      <line x1='8' y1='2' x2='8' y2='6' />
+                      <line x1='3' y1='10' x2='21' y2='10' />
                     </svg>
                   </div>
                   شرایط استخدامی
                 </h3>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center p-4 bg-gradient-to-r from-gray-800/30 to-gray-900/30 rounded-xl border border-gray-700/30">
-                    <span className="text-gray-400 font-medium">
+                <div className='space-y-4'>
+                  <div className='flex justify-between items-center p-4 bg-gradient-to-r from-gray-800/30 to-gray-900/30 rounded-xl border border-gray-700/30'>
+                    <span className='text-gray-400 font-medium'>
                       نوع همکاری:
                     </span>
-                    <span className="text-white font-semibold">
+                    <span className='text-white font-semibold'>
                       {getTypeText(ad.type)}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center p-4 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 rounded-xl border border-yellow-500/30">
-                    <span className="text-gray-400 font-medium">حقوق:</span>
-                    <span className="text-yellow-400 font-bold text-lg">
+                  <div className='flex justify-between items-center p-4 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 rounded-xl border border-yellow-500/30'>
+                    <span className='text-gray-400 font-medium'>حقوق:</span>
+                    <span className='text-yellow-400 font-bold text-lg'>
                       {ad.salary}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center p-4 bg-gradient-to-r from-gray-800/30 to-gray-900/30 rounded-xl border border-gray-700/30">
-                    <span className="text-gray-400 font-medium">محل کار:</span>
-                    <span className="text-white font-semibold">
+                  <div className='flex justify-between items-center p-4 bg-gradient-to-r from-gray-800/30 to-gray-900/30 rounded-xl border border-gray-700/30'>
+                    <span className='text-gray-400 font-medium'>محل کار:</span>
+                    <span className='text-white font-semibold'>
                       {ad.location}
                     </span>
                   </div>
                   {ad.workHours && (
-                    <div className="flex justify-between items-center p-4 bg-gradient-to-r from-gray-800/30 to-gray-900/30 rounded-xl border border-gray-700/30">
-                      <span className="text-gray-400 font-medium">
+                    <div className='flex justify-between items-center p-4 bg-gradient-to-r from-gray-800/30 to-gray-900/30 rounded-xl border border-gray-700/30'>
+                      <span className='text-gray-400 font-medium'>
                         ساعت کاری:
                       </span>
-                      <span className="text-white font-semibold">
+                      <span className='text-white font-semibold'>
                         {ad.workHours}
                       </span>
                     </div>
                   )}
                   {ad.insurance && (
-                    <div className="flex justify-between items-center p-4 bg-gradient-to-r from-gray-800/30 to-gray-900/30 rounded-xl border border-gray-700/30">
-                      <span className="text-gray-400 font-medium">بیمه:</span>
-                      <span className="text-white font-semibold">
+                    <div className='flex justify-between items-center p-4 bg-gradient-to-r from-gray-800/30 to-gray-900/30 rounded-xl border border-gray-700/30'>
+                      <span className='text-gray-400 font-medium'>بیمه:</span>
+                      <span className='text-white font-semibold'>
                         {getInsuranceText(ad.insurance)}
                       </span>
                     </div>
                   )}
                   {ad.probationPeriod && (
-                    <div className="flex justify-between items-center p-4 bg-gradient-to-r from-gray-800/30 to-gray-900/30 rounded-xl border border-gray-700/30">
-                      <span className="text-gray-400 font-medium">
+                    <div className='flex justify-between items-center p-4 bg-gradient-to-r from-gray-800/30 to-gray-900/30 rounded-xl border border-gray-700/30'>
+                      <span className='text-gray-400 font-medium'>
                         دوره آزمایشی:
                       </span>
-                      <span className="text-white font-semibold">
+                      <span className='text-white font-semibold'>
                         {ad.probationPeriod}
                       </span>
                     </div>
@@ -953,26 +934,25 @@ export default function SingleAdClient({ adId }) {
 
               {/* مزایا و تسهیلات */}
               {formatBenefits(ad.benefits) && (
-                <div className="bg-gradient-to-br from-[#2a2a2a]/80 to-[#1a1a1a]/80 backdrop-blur-xl rounded-2xl p-8 border border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 group">
-                  <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-emerald-500/20 to-green-500/20 rounded-xl flex items-center justify-center border border-emerald-500/30 group-hover:scale-110 transition-transform duration-300">
+                <div className='bg-gradient-to-br from-[#2a2a2a]/80 to-[#1a1a1a]/80 backdrop-blur-xl rounded-2xl p-8 border border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 group'>
+                  <h3 className='text-xl font-bold text-white mb-6 flex items-center gap-3'>
+                    <div className='w-10 h-10 bg-gradient-to-br from-emerald-500/20 to-green-500/20 rounded-xl flex items-center justify-center border border-emerald-500/30 group-hover:scale-110 transition-transform duration-300'>
                       <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        className="text-emerald-400"
-                      >
-                        <polyline points="9 11 12 14 22 4" />
-                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                        xmlns='http://www.w3.org/2000/svg'
+                        width='20'
+                        height='20'
+                        viewBox='0 0 24 24'
+                        fill='none'
+                        stroke='currentColor'
+                        strokeWidth='2'
+                        className='text-emerald-400'>
+                        <polyline points='9 11 12 14 22 4' />
+                        <path d='M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11' />
                       </svg>
                     </div>
                     مزایا و تسهیلات
                   </h3>
-                  <div className="flex flex-wrap gap-3">
+                  <div className='flex flex-wrap gap-3'>
                     {formatBenefits(ad.benefits)
                       .split(" • ")
                       .map(
@@ -980,8 +960,7 @@ export default function SingleAdClient({ adId }) {
                           benefit.trim() && (
                             <span
                               key={index}
-                              className="inline-block bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-400 px-4 py-2 rounded-full text-sm font-medium border border-green-500/30 hover:scale-105 transition-transform duration-200"
-                            >
+                              className='inline-block bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-400 px-4 py-2 rounded-full text-sm font-medium border border-green-500/30 hover:scale-105 transition-transform duration-200'>
                               {benefit.trim()}
                             </span>
                           )
@@ -992,25 +971,24 @@ export default function SingleAdClient({ adId }) {
 
               {/* مسئولیت‌ها */}
               {ad.responsibilities && (
-                <div className="bg-gradient-to-br from-[#2a2a2a]/80 to-[#1a1a1a]/80 backdrop-blur-xl rounded-2xl p-8 border border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 group">
-                  <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 rounded-xl flex items-center justify-center border border-indigo-500/30 group-hover:scale-110 transition-transform duration-300">
+                <div className='bg-gradient-to-br from-[#2a2a2a]/80 to-[#1a1a1a]/80 backdrop-blur-xl rounded-2xl p-8 border border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 group'>
+                  <h3 className='text-xl font-bold text-white mb-6 flex items-center gap-3'>
+                    <div className='w-10 h-10 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 rounded-xl flex items-center justify-center border border-indigo-500/30 group-hover:scale-110 transition-transform duration-300'>
                       <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        className="text-indigo-400"
-                      >
-                        <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                        xmlns='http://www.w3.org/2000/svg'
+                        width='20'
+                        height='20'
+                        viewBox='0 0 24 24'
+                        fill='none'
+                        stroke='currentColor'
+                        strokeWidth='2'
+                        className='text-indigo-400'>
+                        <path d='M22 12h-4l-3 9L9 3l-3 9H2' />
                       </svg>
                     </div>
                     مسئولیت‌ها
                   </h3>
-                  <div className="text-gray-300 whitespace-pre-line leading-relaxed bg-gradient-to-r from-gray-800/20 to-gray-900/20 rounded-xl p-6 border border-gray-700/30">
+                  <div className='text-gray-300 whitespace-pre-line leading-relaxed bg-gradient-to-r from-gray-800/20 to-gray-900/20 rounded-xl p-6 border border-gray-700/30'>
                     {ad.responsibilities}
                   </div>
                 </div>
@@ -1018,37 +996,35 @@ export default function SingleAdClient({ adId }) {
 
               {/* مهارت‌های مورد نیاز */}
               {ad.skills && (
-                <div className="bg-gradient-to-br from-[#2a2a2a]/80 to-[#1a1a1a]/80 backdrop-blur-xl rounded-2xl p-8 border border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 group">
-                  <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-pink-500/20 to-rose-500/20 rounded-xl flex items-center justify-center border border-pink-500/30 group-hover:scale-110 transition-transform duration-300">
+                <div className='bg-gradient-to-br from-[#2a2a2a]/80 to-[#1a1a1a]/80 backdrop-blur-xl rounded-2xl p-8 border border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 group'>
+                  <h3 className='text-xl font-bold text-white mb-6 flex items-center gap-3'>
+                    <div className='w-10 h-10 bg-gradient-to-br from-pink-500/20 to-rose-500/20 rounded-xl flex items-center justify-center border border-pink-500/30 group-hover:scale-110 transition-transform duration-300'>
                       <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        className="text-pink-400"
-                      >
-                        <path d="M14.7 6.3a1 1 0 0 0-1.4 0L9 10.6L6.3 7.9a1 1 0 0 0-1.4 1.4l3.5 3.5a1 1 0 0 0 1.4 0l6-6a1 1 0 0 0 0-1.4z" />
-                        <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                        xmlns='http://www.w3.org/2000/svg'
+                        width='20'
+                        height='20'
+                        viewBox='0 0 24 24'
+                        fill='none'
+                        stroke='currentColor'
+                        strokeWidth='2'
+                        className='text-pink-400'>
+                        <path d='M14.7 6.3a1 1 0 0 0-1.4 0L9 10.6L6.3 7.9a1 1 0 0 0-1.4 1.4l3.5 3.5a1 1 0 0 0 1.4 0l6-6a1 1 0 0 0 0-1.4z' />
+                        <path d='M22 12h-4l-3 9L9 3l-3 9H2' />
                       </svg>
                     </div>
                     مهارت‌های مورد نیاز
                   </h3>
-                  <div className="text-gray-300 whitespace-pre-line leading-relaxed bg-gradient-to-r from-gray-800/20 to-gray-900/20 rounded-xl p-6 border border-gray-700/30 mb-6">
+                  <div className='text-gray-300 whitespace-pre-line leading-relaxed bg-gradient-to-r from-gray-800/20 to-gray-900/20 rounded-xl p-6 border border-gray-700/30 mb-6'>
                     {ad.skills}
                   </div>
-                  <div className="flex flex-wrap gap-3">
+                  <div className='flex flex-wrap gap-3'>
                     {ad.skills.split(/[,،]/).map((skill, index) => {
                       const trimmedSkill = skill.trim();
                       if (trimmedSkill) {
                         return (
                           <span
                             key={index}
-                            className="inline-block bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-400 px-4 py-2 rounded-full text-sm font-medium border border-blue-500/30 hover:scale-105 transition-transform duration-200"
-                          >
+                            className='inline-block bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-400 px-4 py-2 rounded-full text-sm font-medium border border-blue-500/30 hover:scale-105 transition-transform duration-200'>
                             {trimmedSkill}
                           </span>
                         );
@@ -1060,76 +1036,72 @@ export default function SingleAdClient({ adId }) {
               )}
 
               {/* گزینه‌های ویژه */}
-              <div className="bg-gradient-to-br from-[#2a2a2a]/80 to-[#1a1a1a]/80 backdrop-blur-xl rounded-2xl p-8 border border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 group">
-                <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-violet-500/20 to-purple-500/20 rounded-xl flex items-center justify-center border border-violet-500/30 group-hover:scale-110 transition-transform duration-300">
+              <div className='bg-gradient-to-br from-[#2a2a2a]/80 to-[#1a1a1a]/80 backdrop-blur-xl rounded-2xl p-8 border border-gray-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 group'>
+                <h3 className='text-xl font-bold text-white mb-6 flex items-center gap-3'>
+                  <div className='w-10 h-10 bg-gradient-to-br from-violet-500/20 to-purple-500/20 rounded-xl flex items-center justify-center border border-violet-500/30 group-hover:scale-110 transition-transform duration-300'>
                     <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      className="text-violet-400"
-                    >
-                      <circle cx="12" cy="12" r="10" />
-                      <path d="M9 12l2 2 4-4" />
+                      xmlns='http://www.w3.org/2000/svg'
+                      width='20'
+                      height='20'
+                      viewBox='0 0 24 24'
+                      fill='none'
+                      stroke='currentColor'
+                      strokeWidth='2'
+                      className='text-violet-400'>
+                      <circle cx='12' cy='12' r='10' />
+                      <path d='M9 12l2 2 4-4' />
                     </svg>
                   </div>
                   گزینه‌های ویژه
                 </h3>
-                <div className="space-y-4">
+                <div className='space-y-4'>
                   {ad.remoteWork && (
-                    <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-green-500/10 to-emerald-500/10 rounded-xl border border-green-500/30">
+                    <div className='flex items-center gap-3 p-4 bg-gradient-to-r from-green-500/10 to-emerald-500/10 rounded-xl border border-green-500/30'>
                       <svg
-                        className="w-5 h-5 text-green-400"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
+                        className='w-5 h-5 text-green-400'
+                        fill='currentColor'
+                        viewBox='0 0 20 20'>
                         <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
+                          fillRule='evenodd'
+                          d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z'
+                          clipRule='evenodd'
                         />
                       </svg>
-                      <span className="text-white font-medium">
+                      <span className='text-white font-medium'>
                         امکان دورکاری
                       </span>
                     </div>
                   )}
                   {ad.travelRequired && (
-                    <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-xl border border-blue-500/30">
+                    <div className='flex items-center gap-3 p-4 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-xl border border-blue-500/30'>
                       <svg
-                        className="w-5 h-5 text-blue-400"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
+                        className='w-5 h-5 text-blue-400'
+                        fill='currentColor'
+                        viewBox='0 0 20 20'>
                         <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
+                          fillRule='evenodd'
+                          d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z'
+                          clipRule='evenodd'
                         />
                       </svg>
-                      <span className="text-white font-medium">
+                      <span className='text-white font-medium'>
                         نیاز به سفر
                       </span>
                     </div>
                   )}
                   {ad.urgent && (
-                    <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 rounded-xl border border-yellow-500/30">
+                    <div className='flex items-center gap-3 p-4 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 rounded-xl border border-yellow-500/30'>
                       <svg
-                        className="w-5 h-5 text-yellow-400"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
+                        className='w-5 h-5 text-yellow-400'
+                        fill='currentColor'
+                        viewBox='0 0 20 20'>
                         <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
+                          fillRule='evenodd'
+                          d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z'
+                          clipRule='evenodd'
                         />
                       </svg>
-                      <span className="text-white font-medium">آگهی فوری</span>
+                      <span className='text-white font-medium'>آگهی فوری</span>
                     </div>
                   )}
                 </div>

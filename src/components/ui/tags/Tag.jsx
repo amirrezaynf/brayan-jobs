@@ -1,6 +1,5 @@
 "use client";
 
-// کامپوننت نمایش تگ
 const Tag = ({ children, color = "yellow", size = "sm" }) => {
   const colorClasses = {
     yellow: "bg-yellow-400/10 text-yellow-400 border-yellow-400/20",
@@ -14,11 +13,13 @@ const Tag = ({ children, color = "yellow", size = "sm" }) => {
     xs: "px-1.5 py-0.5 text-xs",
     sm: "px-2 py-0.5 text-xs",
     md: "px-2.5 py-1 text-sm",
+    lg: "px-3 py-1.5 text-sm", // اختیاری، سایز بزرگ‌تر
   };
 
   return (
     <span
-      className={`inline-flex items-center rounded-full font-medium border ${colorClasses[color]} ${sizeClasses[size]}`}>
+      className={`inline-flex items-center rounded-full font-medium border ${colorClasses[color]} ${sizeClasses[size]}`}
+    >
       {children}
     </span>
   );

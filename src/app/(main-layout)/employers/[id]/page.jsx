@@ -83,7 +83,17 @@ const mockEmployers = [
     foundedYear: 1385,
     rating: 4.8,
     reviews: 1250,
-    benefits: ["بیمه تکمیلی", "غذای رایگان"],
+    benefits: [
+      "بیمه تکمیلی",
+      "غذای رایگان",
+      "غذای رایگان",
+      "غذای رایگان",
+      "غذای رایگان",
+      "غذای رایگان",
+      "غذای رایگان",
+      "غذای رایگان",
+      "غذای رایگان",
+    ],
     isVerified: true,
   },
   getCompanyData(),
@@ -131,7 +141,7 @@ export default function EmployerSinglePage({ params }) {
   };
 
   return (
-    <div className='bg-[#0f0f0f] min-h-screen text-white font-sans' dir='rtl'>
+    <div className='bg-[#0f0f0f] min-h-screen text-white font-sans'>
       {/* Header */}
       {/* <header className='bg-[#1a1a1a] shadow-lg sticky top-0 z-40'>
         <div className='container mx-auto px-6 py-4'>
@@ -194,26 +204,38 @@ export default function EmployerSinglePage({ params }) {
               </div>
             </div>
 
-            <div className='grid grid-cols-1 md:grid-cols-4 gap-6 mb-8'>
-              <div className='bg-[#2a2a2a] p-4 rounded-xl text-center'>
+            <div className='grid grid-cols-1 md:grid-cols-6 gap-6 mb-8'>
+              <div className='bg-gradient-to-br from-black/50 to-black/10 backdrop-blur-sm border border-gray-600 rounded-xl p-6 hover:border-yellow-500 transition-all duration-300 hover:shadow-lg hover:shadow-yellow-500/10 p-4 rounded-xl text-center'>
                 <div className='text-2xl font-bold text-yellow-400'>
                   {employer.employeeCount}
                 </div>
                 <div className='text-gray-400 text-sm'>کارمندان</div>
               </div>
-              <div className='bg-[#2a2a2a] p-4 rounded-xl text-center'>
+              <div className='bg-gradient-to-br from-black/50 to-black/10 backdrop-blur-sm border border-gray-600 rounded-xl p-6 hover:border-yellow-500 transition-all duration-300 hover:shadow-lg hover:shadow-yellow-500/10 p-4 rounded-xl text-center'>
+                <div className='text-2xl font-bold text-yellow-400'>
+                  {employer.employeeCount}
+                </div>
+                <div className='text-gray-400 text-sm'>کارمندان</div>
+              </div>
+              <div className='bg-gradient-to-br from-black/50 to-black/10 backdrop-blur-sm border border-gray-600 rounded-xl p-6 hover:border-yellow-500 transition-all duration-300 hover:shadow-lg hover:shadow-yellow-500/10 p-4 rounded-xl text-center'>
+                <div className='text-2xl font-bold text-yellow-400'>
+                  {employer.employeeCount}
+                </div>
+                <div className='text-gray-400 text-sm'>کارمندان</div>
+              </div>
+              <div className='bg-gradient-to-br from-black/50 to-black/10 backdrop-blur-sm border border-gray-600 rounded-xl p-6 hover:border-yellow-500 transition-all duration-300 hover:shadow-lg hover:shadow-yellow-500/10 p-4 rounded-xl text-center'>
                 <div className='text-2xl font-bold text-yellow-400'>
                   {employer.openPositions}
                 </div>
                 <div className='text-gray-400 text-sm'>جایگاه‌های شغلی</div>
               </div>
-              <div className='bg-[#2a2a2a] p-4 rounded-xl text-center'>
+              <div className='bg-gradient-to-br from-black/50 to-black/10 backdrop-blur-sm border border-gray-600 rounded-xl p-6 hover:border-yellow-500 transition-all duration-300 hover:shadow-lg hover:shadow-yellow-500/10 p-4 rounded-xl text-center'>
                 <div className='text-2xl font-bold text-yellow-400'>
                   {new Date().getFullYear() - employer.foundedYear} سال
                 </div>
                 <div className='text-gray-400 text-sm'>سابقه فعالیت</div>
               </div>
-              <div className='bg-[#2a2a2a] p-4 rounded-xl text-center'>
+              <div className='bg-gradient-to-br from-black/50 to-black/10 backdrop-blur-sm border border-gray-600 rounded-xl p-6 hover:border-yellow-500 transition-all duration-300 hover:shadow-lg hover:shadow-yellow-500/10 p-4 rounded-xl text-center'>
                 <div className='text-2xl font-bold text-yellow-400'>
                   سطح بالا
                 </div>
@@ -254,11 +276,11 @@ export default function EmployerSinglePage({ params }) {
 
                 <div className='bg-[#1a1a1a] rounded-xl p-6'>
                   <h3 className='text-xl font-bold mb-4'>مزایای همکاری</h3>
-                  <div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
+                  <div className='grid grid-cols-2 md:grid-cols-6 gap-4'>
                     {employer.benefits.map((benefit, index) => (
                       <div
                         key={index}
-                        className='bg-[#2a2a2a] p-3 rounded-lg text-center'>
+                        className='bg-gradient-to-br from-black/50 to-black/10 backdrop-blur-sm  hover:border-yellow-500 transition-all duration-300 hover:shadow-lg hover:shadow-yellow-500/10 p-3  rounded-lg text-center'>
                         {benefit}
                       </div>
                     ))}

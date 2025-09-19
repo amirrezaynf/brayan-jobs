@@ -39,7 +39,7 @@ const JobSeekerCard = ({ jobSeeker, onViewProfile, onContact, onBookmark }) => {
   };
 
   return (
-    <div className='bg-black/30 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 hover:border-yellow-400/30 transition-all duration-300 hover:shadow-xl hover:shadow-yellow-400/10'>
+    <div className='bg-gradient-to-br from-black/50 to-black/10 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 hover:border-yellow-400/30 transition-all duration-300 hover:shadow-xl hover:shadow-yellow-400/10'>
       {/* Header کارت */}
       <div className='flex items-start justify-between mb-4'>
         <div className='flex items-center gap-4'>
