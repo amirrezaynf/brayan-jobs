@@ -16,6 +16,7 @@ const sampleAdvertisements = [
     title: "آگهی استخدام توسعه‌دهنده React",
     company: "شرکت فناوری اطلاعات پارامکس",
     location: "تهران",
+    province: "تهران",
     description: "جستجوی توسعه‌دهنده React باتجربه برای پروژه‌های بزرگ",
     category: "فناوری اطلاعات",
     specialization: "برنامه‌نویسی وب",
@@ -30,6 +31,7 @@ const sampleAdvertisements = [
     title: "طراح UI/UX برای اپلیکیشن موبایل",
     company: "استارتاپ تهیکس",
     location: "اصفهان",
+    province: "اصفهان",
     description: "طراحی رابط کاربری جذاب برای اپلیکیشن‌های موبایل",
     category: "طراحی و گرافیک",
     specialization: "طراحی UI/UX",
@@ -44,6 +46,7 @@ const sampleAdvertisements = [
     title: "مدیر محصول دیجیتال",
     company: "شرکت بازرگانی پارسه",
     location: "مشهد",
+    province: "خراسان رضوی",
     description: "مدیریت محصول برای پلتفرم‌های دیجیتال B2B",
     category: "مدیریت پروژه",
     specialization: "مدیریت محصول",
@@ -58,6 +61,7 @@ const sampleAdvertisements = [
     title: "کارشناس سئو و بازاریابی دیجیتال",
     company: "آژانس تبلیغات مدیا",
     location: "شیراز",
+    province: "فارس",
     description:
       "بهینه‌سازی وب‌سایت‌ها و پیاده‌سازی استراتژی‌های بازاریابی دیجیتال",
     category: "بازاریابی و فروش",
@@ -73,6 +77,7 @@ const sampleAdvertisements = [
     title: "توسعه‌دهنده Node.js - Backend",
     company: "شرکت نرم‌افزاری آپادانا",
     location: "کرج",
+    province: "البرز",
     description: "توسعه سرویس‌های سمت سرور با استفاده از Node.js",
     category: "فناوری اطلاعات",
     specialization: "پایگاه داده",
@@ -87,6 +92,7 @@ const sampleAdvertisements = [
     title: "کارشناس منابع انسانی",
     company: "شرکت صنعتی بهین",
     location: "تبریز",
+    province: "آذربایجان شرقی",
     description: "مدیریت فرآیندهای استخدامی و روابط کارکنان",
     category: "منابع انسانی",
     specialization: "استخدام و گزینش",
@@ -101,6 +107,7 @@ const sampleAdvertisements = [
     title: "برنامه‌نویس Full Stack",
     company: "استارتاپ فن‌دون",
     location: "اصفهان",
+    province: "اصفهان",
     description: "توسعه پروژه‌های بزرگ با تکنولوژی‌های مدرن",
     category: "فناوری اطلاعات",
     specialization: "برنامه‌نویسی وب",
@@ -115,6 +122,7 @@ const sampleAdvertisements = [
     title: "مدیر بازاریابی دیجیتال",
     company: "آژانس تبلیغاتی راهکار",
     location: "تهران",
+    province: "تهران",
     description: "مدیریت استراتژی بازاریابی دیجیتال و فروش آنلاین",
     category: "بازاریابی و فروش",
     specialization: "بازاریابی دیجیتال",
@@ -122,6 +130,36 @@ const sampleAdvertisements = [
     salary: "توافقی",
     applicants: 14,
     date: "2024-09-04",
+    urgent: false,
+  },
+  {
+    id: 9,
+    title: "کارشناس حسابداری",
+    company: "شرکت بازرگانی رازی",
+    location: "رشت",
+    province: "گیلان",
+    description: "مدیریت حسابداری و امور مالی شرکت",
+    category: "مالی و حسابداری",
+    specialization: "حسابداری",
+    type: "دورکاری",
+    salary: "۱۴,۰۰۰,۰۰۰ تومان",
+    applicants: 6,
+    date: "2024-09-03",
+    urgent: false,
+  },
+  {
+    id: 10,
+    title: "نماینده فروش",
+    company: "شرکت پتروشیمی دلتا",
+    location: "اهواز",
+    province: "خوزستان",
+    description: "فروش محصولات پتروشیمی و ارتباط با مشتریان",
+    category: "بازاریابی و فروش",
+    specialization: "فروش مستقیم",
+    type: "قراردادی",
+    salary: "۱۳,۰۰۰,۰۰۰ تومان",
+    applicants: 11,
+    date: "2024-09-02",
     urgent: false,
   },
 ];
@@ -138,6 +176,8 @@ export default function AdvertisementPageClient() {
   const [showNegotiable, setShowNegotiable] = useState(false); // Default: show all salaries (both negotiable and fixed)
   const [showNoLimit, setShowNoLimit] = useState(false); // Default: apply normal salary limits
   const [showRangeFilter, setShowRangeFilter] = useState(false); // Default: show range filter option
+  const [selectedProvince, setSelectedProvince] = useState(""); // New filter for province
+  const [selectedEmploymentType, setSelectedEmploymentType] = useState(""); // New filter for employment type
 
   // Get search parameters
   const userType = searchParams.get("userType");
@@ -189,6 +229,16 @@ export default function AdvertisementPageClient() {
         : null);
     if (activeCategory) {
       result = result.filter((ad) => ad.category === activeCategory);
+    }
+
+    // Province filter
+    if (selectedProvince && selectedProvince !== "همه") {
+      result = result.filter((ad) => ad.province === selectedProvince);
+    }
+
+    // Employment type filter
+    if (selectedEmploymentType && selectedEmploymentType !== "همه") {
+      result = result.filter((ad) => ad.type === selectedEmploymentType);
     }
 
     // Salary range and negotiable filter
@@ -279,6 +329,8 @@ export default function AdvertisementPageClient() {
     filteredAds,
     searchFilter,
     selectedCategory,
+    selectedProvince,
+    selectedEmploymentType,
     sortBy,
     salaryRange,
     showNegotiable,
@@ -298,6 +350,27 @@ export default function AdvertisementPageClient() {
     "بازاریابی و فروش",
     "مدیریت پروژه",
     "منابع انسانی",
+    "مالی و حسابداری",
+  ];
+
+  const provinces = [
+    "همه",
+    "تهران",
+    "خراسان رضوی",
+    "اصفهان",
+    "فارس",
+    "آذربایجان شرقی",
+    "خوزستان",
+    "گیلان",
+    "البرز",
+  ];
+
+  const employmentTypes = [
+    "همه",
+    "تمام وقت",
+    "پاره وقت",
+    "قراردادی",
+    "دورکاری",
   ];
 
   return (
@@ -318,8 +391,8 @@ export default function AdvertisementPageClient() {
         <div className="bg-[#2a2a2a] rounded-xl p-6 mb-8 border border-gray-700">
           <div>
             {/* Main Search Filters */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-              <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-4">
+              <div className="md:col-span-2">
                 <input
                   type="text"
                   placeholder="جستجو در عنوان، شرکت یا توضیحات..."
@@ -334,6 +407,7 @@ export default function AdvertisementPageClient() {
                   onChange={(e) => setSelectedCategory(e.target.value)}
                   className="w-full bg-[#2a2a2a] border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
                 >
+                  <option value="">انتخاب دسته شغلی</option>
                   {categories.map((category) => (
                     <option key={category} value={category}>
                       {category}
@@ -355,6 +429,8 @@ export default function AdvertisementPageClient() {
                   onClick={() => {
                     setSearchFilter("");
                     setSelectedCategory("");
+                    setSelectedProvince("");
+                    setSelectedEmploymentType("");
                     setSortBy("newest");
                     setSalaryRange([5000000, 50000000]);
                     setShowNegotiable(false);
@@ -365,6 +441,38 @@ export default function AdvertisementPageClient() {
                 >
                   پاک کردن
                 </button>
+              </div>
+            </div>
+
+            {/* Additional Filters */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <select
+                  value={selectedProvince}
+                  onChange={(e) => setSelectedProvince(e.target.value)}
+                  className="w-full bg-[#2a2a2a] border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                >
+                  <option value="">انتخاب استان</option>
+                  {provinces.map((province) => (
+                    <option key={province} value={province}>
+                      {province}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <select
+                  value={selectedEmploymentType}
+                  onChange={(e) => setSelectedEmploymentType(e.target.value)}
+                  className="w-full bg-[#2a2a2a] border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                >
+                  <option value="">انتخاب نوع همکاری</option>
+                  {employmentTypes.map((type) => (
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 
