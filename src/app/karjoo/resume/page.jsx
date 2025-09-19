@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { useRouter } from "next/navigation";
 import {
   UserCircle2,
   Briefcase,
@@ -14,7 +13,6 @@ import {
   Trash2,
   Link as LinkIcon,
   Send,
-  ArrowRight,
 } from "lucide-react";
 import CustomSelect from "@/components/ui/select/CustomSelect";
 import CustomInput from "@/components/ui/input/CustomInput";
@@ -25,6 +23,7 @@ import KarjooHeader from "@/components/layout/header/KarjooHeader";
 // ====================================================================
 // کامپوننت‌های اختصاصی (برای سادگی در همین فایل قرار داده شده‌اند)
 // ====================================================================
+
 
 // کامپوننت آپلود فایل
 const FileUploadZone = ({ label, files, setFiles, multiple = true }) => {
@@ -134,8 +133,6 @@ const FileUploadZone = ({ label, files, setFiles, multiple = true }) => {
 // ====================================================================
 
 export default function ResumePage() {
-  const router = useRouter();
-
   // اطلاعات پایه
   const [basicInfo, setBasicInfo] = useState({
     firstName: "",
@@ -274,21 +271,15 @@ export default function ResumePage() {
   };
 
   return (
-    <div className=" text-gray-200 font-['Vazirmatn'] min-h-screen" dir="rtl">
+    <div
+      className=" bg-black/90 text-gray-200 font-['Vazirmatn'] min-h-screen"
+      dir="rtl"
+    >
       <KarjooHeader />
-      <div className=" bg-black/90 container mx-auto px-4 py-8 md:py-12">
+      <KarjooDashboard />
+      <div className=" container mx-auto px-4 py-8 md:py-12">
         <div className="max-w-4xl mx-auto border border-gray-700  rounded-xl shadow-lg shadow-yellow-500/10 overflow-hidden">
           <div className="px-6 py-8 sm:px-10">
-            {/* Back Button */}
-            <div className="mb-6">
-              <button
-                onClick={() => router.back()}
-                className="flex items-center gap-2 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors duration-200"
-              >
-                <ArrowRight className="w-4 h-4" />
-                بازگشت
-              </button>
-            </div>
             {/* Header */}
             <div className="text-center mb-8">
               <h1 className="text-3xl font-bold text-white">

@@ -3,7 +3,7 @@ import React from "react";
 
 export default function KarjooHeader() {
   return (
-    <header className='bg-black/90 backdrop-blur-sm shadow-md shadow-black/50 sticky top-0 z-30'>
+    <header className='mb-10 backdrop-blur-sm shadow-md shadow-black/50 sticky top-0 z-30'>
       <div className='container mx-auto px-4 lg:px-6 py-4 flex justify-between items-center'>
         <div className='flex items-center space-x-4 gap-2'>
           <UserIcon className='text-yellow-400 h-8 w-8 lg:w-10 lg:h-10' />
@@ -15,7 +15,7 @@ export default function KarjooHeader() {
           </div>
         </div>
         <div className='flex items-center space-x-4 lg:space-x-6'>
-          <button className='relative text-gray-400 hover:text-white transition-colors duration-200 p-2 rounded-lg hover:border  focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-50 border border-yellow-400'>
+          <button className='relative text-gray-400 hover:text-white transition-colors duration-200 p-2 rounded-lg hover:border  focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-50 border-2 border-yellow-400'>
             <BellIcon className='h-5 w-5 lg:h-6 lg:w-6' />
             <span className='absolute -top-1 -right-1 block h-3 w-3 rounded-full bg-red-500 ring-2 ring-gray-900 animate-pulse'></span>
           </button>
