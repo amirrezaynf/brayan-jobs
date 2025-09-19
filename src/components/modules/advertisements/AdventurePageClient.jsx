@@ -712,7 +712,7 @@ export default function AdvertisementPageClient() {
   };
 
   const handleViewAd = (adId) => {
-    router.push(`/ad/${adId}`);
+    router.push(`/advertisements/${adId}`);
   };
 
   const categories = [
@@ -1423,7 +1423,6 @@ export default function AdvertisementPageClient() {
           )}
         </div>
       </div>
-      <Footer />
     </div>
   );
 }
