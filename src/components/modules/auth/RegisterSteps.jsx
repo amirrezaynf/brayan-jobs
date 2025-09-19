@@ -30,7 +30,7 @@ export default function RegisterSteps({ flow, role }) {
     setStep,
     setIsSubmitted,
   } = flow;
-
+  
   const progress = { 1: 25, 2: 50, 3: 75, 4: 100 };
 
   // Handle form submission
