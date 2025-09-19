@@ -74,7 +74,7 @@ export default function Header() {
             </div>
           </div>
 
-          <nav className="hidden lg:flex items-center space-x-8 space-x-reverse font-medium">
+          <nav className="hidden lg:flex items-center space-x-8  font-medium">
             <a href="#" className="header-link text-gray-300">
               بهترین آگهی‌ها
             </a>
