@@ -32,7 +32,7 @@ export default function KarjooDashboard() {
       icon: <UserIcon />,
 
      
-      link:"/karjoo/1",
+      link:"/karjoo/profile",
     },
   ];
 
