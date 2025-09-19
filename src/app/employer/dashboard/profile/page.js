@@ -2,6 +2,7 @@
 
 // components/employers/CompanyProfileTab.jsx
 import { useState, useEffect, useMemo } from "react";
+import Image from "next/image";
 import {
   Building2,
   MapPin,
@@ -63,9 +64,11 @@ const ImageUpload = ({ label, currentImage, onImageChange, inputId }) => {
       <div className="flex items-center gap-4">
         <div className="w-20 h-20  border border-gray-600 rounded-lg flex items-center justify-center overflow-hidden">
           {currentImage ? (
-            <img
+            <Image
               src={currentImage}
               alt="Company"
+              width={80}
+              height={80}
               className="w-full h-full object-cover"
             />
           ) : (

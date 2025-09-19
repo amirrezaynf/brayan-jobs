@@ -217,7 +217,7 @@ const jobCategories = Object.keys(jobCategoriesWithSpecializations);
 // User types
 const userTypes = [
   { value: "job_seeker", label: "کارجو" },
-  { value: "employer", label: "کارفرما" },
+  { value: "employer", label: "آگهی ها" },
 ];
 
 // Helper component for Icons
@@ -322,6 +322,26 @@ export default function JobSearch() {
   useEffect(() => {
     setSpecialization(""); // Reset specialization when job category changes
   }, [jobCategory]);
+
+  const handleSearch = () => {
+    // Create search params object
+    const searchParams = new URLSearchParams();
+
+    if (userType) searchParams.set("userType", userType);
+    if (jobCategory) searchParams.set("jobCategory", jobCategory);
+    if (specialization) searchParams.set("specialization", specialization);
+    if (selectedCountry) searchParams.set("country", selectedCountry);
+    if (selectedProvince) searchParams.set("province", selectedProvince);
+    if (selectedCity) searchParams.set("city", selectedCity);
+
+    // If user selected "employer" (advertisements), redirect to advertisements page
+    if (userType === "employer") {
+      window.location.href = `/advertisements?${searchParams.toString()}`;
+    } else {
+      // For job seekers, redirect to regular jobs page
+      window.location.href = `/jobs?${searchParams.toString()}`;
+    }
+  };
 
   return (
     <section className="dark-bg py-10 -mt-16 relative z-30">
@@ -456,7 +476,10 @@ export default function JobSearch() {
                 placeholder="همه شهرها"
               />
             </div>
-            <button className="btn-primary w-full p-3 rounded-lg font-bold text-lg hover:bg-yellow-600 transition-colors duration-300">
+            <button
+              onClick={handleSearch}
+              className="btn-primary w-full p-3 rounded-lg font-bold text-lg hover:bg-yellow-600 transition-colors duration-300"
+            >
               جستجو
             </button>
           </div>
