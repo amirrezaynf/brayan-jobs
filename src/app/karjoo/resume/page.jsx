@@ -272,7 +272,7 @@ export default function ResumePage() {
 
   return (
     <div
-      className="bg-black/90 text-gray-200 font-['Vazirmatn'] min-h-screen"
+      className=" text-gray-200 font-['Vazirmatn'] min-h-screen"
       dir="rtl"
     >
       <KarjooHeader />
