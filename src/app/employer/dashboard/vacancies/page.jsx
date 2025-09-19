@@ -253,12 +253,13 @@ export default function VacanciesPage() {
       setVacancies(updatedVacancies);
       saveJobs(updatedVacancies);
 
-      // Add to global jobs list since all jobs are now active
+      // Add to global jobs list since all jobs are now active (with employer userType)
       if (typeof window !== "undefined") {
+        const jobWithUserType = { ...jobToSave, userType: "employer" };
         const existingJobs = JSON.parse(
           localStorage.getItem("allJobs") || "[]"
         );
-        const updatedAllJobs = [jobToSave, ...existingJobs];
+        const updatedAllJobs = [jobWithUserType, ...existingJobs];
         localStorage.setItem("allJobs", JSON.stringify(updatedAllJobs));
 
         // Debug: Log saved job

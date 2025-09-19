@@ -335,45 +335,211 @@ export default function AdvertisementPageClient() {
   const city = searchParams.get("city");
 
   useEffect(() => {
-    // Load both sample advertisements and user-created jobs from localStorage
-    let allAds = [...sampleAdvertisements];
+    // Load advertisements based on userType
+    let allAds = [];
 
     // Debug: Log the current state of localStorage
     console.log("بارگذاری آگهی‌ها در صفحه advertisements");
     console.log("بررسی localStorage موجود:");
+    console.log("userType:", userType);
 
-    // Load posted jobs from localStorage
     if (typeof window !== "undefined") {
-      const savedJobs = localStorage.getItem("allJobs");
-      if (savedJobs) {
-        const parsedJobs = JSON.parse(savedJobs);
-        console.log(
-          "آگهی‌های ذخیره شده در localStorage 'allJobs':",
-          parsedJobs
+      // TEMPORARY: Add some test employer jobs if none exist
+      const existingJobs = JSON.parse(localStorage.getItem("allJobs") || "[]");
+      const testEmployerJobs = existingJobs.filter(
+        (job) => job.userType === "employer"
+      );
+
+      if (testEmployerJobs.length === 0) {
+        const sampleEmployerAds = [
+          {
+            id: Date.now().toString() + "_employer_test_1",
+            title: "آگهی کارفرما - توسعه‌دهنده React",
+            company: "شرکت فناوری پارادایس",
+            location: "تهران",
+            province: "تهران",
+            description:
+              "فرصت همکاری با تیم حرفه‌ای در شرکت فناوری. تجربه با React و TypeScript ضروری است.",
+            category: "فناوری اطلاعات",
+            specialization: "برنامه‌نویسی وب",
+            type: "تمام وقت",
+            salary: "۲۲,۰۰۰,۰۰۰ تومان",
+            applicants: 5,
+            date: new Date().toLocaleDateString("fa-IR"),
+            userType: "employer",
+            urgent: true,
+            gender: "both",
+            education: "bachelor",
+            experience: "2-5",
+            militaryService: "completed",
+            skills: "React.js, TypeScript, JavaScript, Node.js",
+            benefits: ["بیمه کامل", "غذای رایگان", "کمک هزینه موبایل"],
+            responsibilities: "توسعه و نگهداری رابط کاربری وب‌سایت‌های شرکت",
+          },
+          {
+            id: Date.now().toString() + "_employer_test_2",
+            title: "کارشناس بازاریابی دیجیتال",
+            company: "آژانس تبلیغاتی نوین",
+            location: "اصفهان",
+            province: "اصفهان",
+            description:
+              "جستجوی کارشناس ماهر بازاریابی دیجیتال برای تیم تبلیغات اصفهان",
+            category: "بازاریابی و فروش",
+            specialization: "بازاریابی دیجیتال",
+            type: "تمام وقت",
+            salary: "۱۸,۰۰۰,۰۰۰ تومان",
+            applicants: 8,
+            date: new Date().toLocaleDateString("fa-IR"),
+            userType: "employer",
+            urgent: false,
+            gender: "both",
+            education: "bachelor",
+            experience: "1-2",
+            militaryService: "completed",
+            skills: "SEO, SEM, Google Ads, Analytics",
+            benefits: ["کمیسیون فروش", "کار از خانه", "آموزش‌های مداوم"],
+          },
+          {
+            id: Date.now().toString() + "_employer_test_3",
+            title: "توسعه‌دهنده Backend - Node.js",
+            company: "استارتاپ فن‌آوران",
+            location: "کرج",
+            province: "البرز",
+            description:
+              "فرصت شغلی عالی برای توسعه‌دهندگان backend با تخصص Node.js",
+            category: "فناوری اطلاعات",
+            specialization: "پایگاه داده",
+            type: "تمام وقت",
+            salary: "۲۵,۰۰۰,۰۰۰ تومان",
+            applicants: 2,
+            date: new Date().toLocaleDateString("fa-IR"),
+            userType: "employer",
+            urgent: false,
+            gender: "male",
+            education: "bachelor",
+            experience: "2-5",
+            militaryService: "completed",
+            skills: "Node.js, Express, MongoDB, PostgreSQL",
+            benefits: [
+              "سهم شرکت از استارتاپ",
+              "محیط کاری انعطاف‌پذیر",
+              "آموزش‌های فنی",
+            ],
+          },
+          {
+            id: Date.now().toString() + "_employer_test_4",
+            title: "طراح UI/UX",
+            company: "استودیو طراحی دیجیتال",
+            location: "شیراز",
+            province: "فارس",
+            description:
+              "پست شغلی جذاب برای طراحان خلاق UI/UX در استودیو مطرح شیراز",
+            category: "طراحی و گرافیک",
+            specialization: "طراحی UI/UX",
+            type: "پاره وقت",
+            salary: "۱۵,۰۰۰,۰۰۰ تومان",
+            applicants: 12,
+            date: new Date().toLocaleDateString("fa-IR"),
+            userType: "employer",
+            urgent: false,
+            gender: "both",
+            education: "associate",
+            experience: "1-2",
+            militaryService: "completed",
+            skills: "Figma, Adobe XD, Photoshop, Ilustrator",
+            benefits: [
+              "پروژه‌های متنوع",
+              "همکاری با برندهای بزرگ",
+              "زمان انعطاف‌پذیر",
+            ],
+          },
+          {
+            id: Date.now().toString() + "_employer_test_5",
+            title: "کارشناس منابع انسانی",
+            company: "صنایع غذایی سپهر",
+            location: "مشهد",
+            province: "خراسان رضوی",
+            description:
+              "فرصت همکاری در واحد منابع انسانی صنایع غذایی مطرح مشهد",
+            category: "منابع انسانی",
+            specialization: "استخدام و گزینش",
+            type: "تمام وقت",
+            salary: "۲۰,۰۰۰,۰۰۰ تومان",
+            applicants: 6,
+            date: new Date().toLocaleDateString("fa-IR"),
+            userType: "employer",
+            urgent: false,
+            gender: "female",
+            education: "master",
+            experience: "3-5",
+            militaryService: "not-required",
+            skills: "HR Management, Recruitment, Employee Relations",
+            benefits: ["بیمه کامل", "پرداخت پاداش", "محیط کاری حرفه‌ای"],
+          },
+        ];
+
+        localStorage.setItem(
+          "allJobs",
+          JSON.stringify([...sampleEmployerAds, ...existingJobs])
         );
-        // Filter out jobs that are already in sampleAdvertisements (avoid duplicates)
-        const newJobs = parsedJobs.filter(
-          (job) =>
-            !sampleAdvertisements.some(
-              (sample) =>
-                sample.title === job.title && sample.company === job.company
-            )
-        );
-        allAds = [...allAds, ...newJobs];
+        console.log("آگهی‌های آزمایشی کارفرما اضافه شدند:", sampleEmployerAds);
       }
 
-      // Also load from postedJobs localStorage
-      const postedJobs = localStorage.getItem("postedJobs");
-      if (postedJobs) {
-        const parsedPostedJobs = JSON.parse(postedJobs);
-        console.log(
-          "آگهی‌های ذخیره شده در localStorage 'postedJobs':",
-          parsedPostedJobs
-        );
-        const newPostedJobs = parsedPostedJobs.filter(
-          (job) => !allAds.some((ad) => ad.id === job.id) // Avoid duplicates
-        );
-        allAds = [...allAds, ...newPostedJobs];
+      if (userType === "employer") {
+        // For employers, only show employer-created ads
+        const savedJobs = localStorage.getItem("allJobs");
+        if (savedJobs) {
+          const employerJobs = JSON.parse(savedJobs).filter(
+            (job) => job.userType === "employer"
+          );
+          console.log("آگهی‌های کارفرما برای نمایش:", employerJobs);
+          allAds = [...employerJobs];
+        }
+
+        // Also include all postedJobs (jobs created via employer dashboard)
+        const postedJobs = localStorage.getItem("postedJobs");
+        if (postedJobs) {
+          const parsedPostedJobs = JSON.parse(postedJobs);
+          const newPostedJobs = parsedPostedJobs.filter(
+            (job) => !allAds.some((ad) => ad.id === job.id)
+          );
+          allAds = [...allAds, ...newPostedJobs];
+        }
+      } else {
+        // For job seekers (default), load both sample and posted jobs
+        allAds = [...sampleAdvertisements];
+
+        const savedJobs = localStorage.getItem("allJobs");
+        if (savedJobs) {
+          const parsedJobs = JSON.parse(savedJobs);
+          console.log(
+            "آگهی‌های ذخیره شده در localStorage 'allJobs':",
+            parsedJobs
+          );
+          // Filter out jobs that are already in sampleAdvertisements (avoid duplicates)
+          const newJobs = parsedJobs.filter(
+            (job) =>
+              !sampleAdvertisements.some(
+                (sample) =>
+                  sample.title === job.title && sample.company === job.company
+              )
+          );
+          allAds = [...allAds, ...newJobs];
+        }
+
+        // Also load from postedJobs localStorage
+        const postedJobs = localStorage.getItem("postedJobs");
+        if (postedJobs) {
+          const parsedPostedJobs = JSON.parse(postedJobs);
+          console.log(
+            "آگهی‌های ذخیره شده در localStorage 'postedJobs':",
+            parsedPostedJobs
+          );
+          const newPostedJobs = parsedPostedJobs.filter(
+            (job) => !allAds.some((ad) => ad.id === job.id) // Avoid duplicates
+          );
+          allAds = [...allAds, ...newPostedJobs];
+        }
       }
     }
 
@@ -392,7 +558,7 @@ export default function AdvertisementPageClient() {
 
     setFilteredAds(filtered);
     setAds(filtered);
-  }, [jobCategory, specialization]);
+  }, [jobCategory, specialization, userType || ""]);
 
   // Apply basic filters
   useEffect(() => {
@@ -537,7 +703,7 @@ export default function AdvertisementPageClient() {
   };
 
   const handleViewAd = (adId) => {
-    router.push(`/ad/${adId}`);
+    router.push(`/jobsingle?id=${adId}`);
   };
 
   const categories = [
