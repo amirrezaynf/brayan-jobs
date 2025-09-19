@@ -763,7 +763,7 @@ export default function AdvertisementPageClient() {
             <div className="w-full">
               {totalItems > 0 ? (
                 <div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6">
                     {currentAds.map((ad) => (
                       <div
                         key={ad.id}
