@@ -435,3 +435,81 @@ export const sortOptions = [
   { value: "experience", label: "بیشترین تجربه" },
   { value: "salary", label: "حقوق" },
 ];
+// داده‌های نمونه رزومه (در واقعیت از API یا دیتابیس دریافت می‌شود)
+export const resumeData = {
+  basicInfo: {
+    firstName: "علی",
+    lastName: "احمدی",
+    mobile: "09123456789",
+    email: "ali.ahmadi@example.com",
+  },
+  profileImage:
+    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+  residence: {
+    province: "تهران",
+    city: "تهران",
+    address: "خیابان ولیعصر، پلاک ۱۲۳",
+  },
+  jobInfo: {
+    jobTitle: "توسعه‌دهنده فول‌استک",
+    showSalary: true,
+    salaryType: "amount",
+    salaryAmount: "15000000",
+  },
+  workExperiences: [
+    {
+      companyName: "شرکت فناوری پارس",
+      position: "توسعه‌دهنده ارشد React",
+      startDate: "1401/03/15",
+      endDate: "",
+      currentJob: true,
+      responsibilities:
+        "توسعه و نگهداری اپلیکیشن‌های وب با React و Node.js، همکاری با تیم طراحی UI/UX، بهینه‌سازی عملکرد اپلیکیشن‌ها",
+    },
+    {
+      companyName: "استودیو طراحی نوین",
+      position: "برنامه‌نویس فرانت‌اند",
+      startDate: "1399/06/10",
+      endDate: "1401/02/28",
+      currentJob: false,
+      responsibilities:
+        "پیاده‌سازی رابط کاربری وب‌سایت‌ها با HTML، CSS و JavaScript، همکاری با تیم بک‌اند برای یکپارچه‌سازی API",
+    },
+  ],
+  skills: [
+    { skillName: "React.js", proficiency: "حرفه‌ای" },
+    { skillName: "Node.js", proficiency: "پیشرفته" },
+    { skillName: "JavaScript", proficiency: "حرفه‌ای" },
+    { skillName: "TypeScript", proficiency: "پیشرفته" },
+    { skillName: "Python", proficiency: "متوسط" },
+    { skillName: "MongoDB", proficiency: "پیشرفته" },
+  ],
+  languages: [
+    { language: "انگلیسی", proficiency: "پیشرفته" },
+    { language: "عربی", proficiency: "متوسط" },
+  ],
+  certificates: [
+    {
+      title: "گواهینامه React Developer",
+      issuer: "Meta",
+      certificateNumber: "RD-2023-001",
+      link: "https://example.com/certificate",
+      issueDate: "1402/05/15",
+      expiryDate: "",
+      noExpiry: true,
+      description: "گواهینامه تخصصی توسعه اپلیکیشن با React",
+    },
+    {
+      title: "AWS Cloud Practitioner",
+      issuer: "Amazon Web Services",
+      certificateNumber: "AWS-CP-2023",
+      link: "https://example.com/aws-cert",
+      issueDate: "1402/08/20",
+      expiryDate: "1405/08/20",
+      noExpiry: false,
+      description: "گواهینامه مبانی خدمات ابری آمازون",
+    },
+  ],
+  portfolioLink: "https://ali-ahmadi-portfolio.com",
+  portfolioFiles: ["project1.pdf", "project2.pdf", "design-samples.zip"],
+};

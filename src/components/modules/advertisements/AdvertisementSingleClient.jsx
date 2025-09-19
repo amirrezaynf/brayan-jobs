@@ -158,7 +158,7 @@ const FileUpload = ({ id, label, multiple = false }) => {
   );
 };
 
-export default function SingleAdClient({ adId }) {
+export default function AdvertisementSingleClient({ adId }) {
   const router = useRouter();
   const [jobData, setJobData] = useState(null);
   const [loading, setLoading] = useState(true);
