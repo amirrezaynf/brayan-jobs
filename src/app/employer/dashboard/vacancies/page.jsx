@@ -161,7 +161,7 @@ export default function VacanciesPage() {
   const handleViewJob = (job) => {
     // Navigate to single job page with job ID
     if (typeof window !== "undefined") {
-      window.location.href = `/jobsingle?id=${job.id}`;
+      window.location.href = `/ad/${job.id}`;
     }
   };
 
