@@ -50,8 +50,12 @@ export default function ProfileDropdown() {
         <span className="text-white text-sm lg:text-base font-medium hidden sm:block">
           علی احمدی
         </span>
-        <div className="h-8 w-8 lg:h-10 lg:w-10 bg-yellow-400 rounded-full flex items-center justify-center text-gray-900 font-bold text-sm lg:text-lg">
-          ع
+        <div className="h-8 w-8 lg:h-10 lg:w-10 bg-gray-200 rounded-full overflow-hidden flex items-center justify-center">
+          <img
+            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            alt="علی احمدی"
+            className="w-full h-full object-cover"
+          />
         </div>
         <ChevronDown
           className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
@@ -66,8 +70,12 @@ export default function ProfileDropdown() {
           {/* User Info */}
           <div className="px-4 py-3 border-b border-gray-700/50">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 bg-yellow-400 rounded-full flex items-center justify-center text-gray-900 font-bold">
-                ع
+              <div className="h-10 w-10 bg-gray-200 rounded-full overflow-hidden flex items-center justify-center">
+                <img
+                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                  alt="علی احمدی"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div>
                 <p className="text-white font-medium text-sm">علی احمدی</p>
