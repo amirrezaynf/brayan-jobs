@@ -35,6 +35,7 @@ const FormInput = ({
   icon,
   value,
   onChange,
+  onKeyDown,
   error,
 }) => (
   <div className="mb-4">
@@ -44,6 +45,7 @@ const FormInput = ({
         name={name}
         value={value}
         onChange={onChange}
+        onKeyDown={onKeyDown}
         placeholder={placeholder}
         className={`bg-gray-700/50 border ${
           error ? "border-red-500" : "border-gray-600"
@@ -63,15 +65,12 @@ export default function AuthPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [loginData, setLoginData] = useState({ phone: "", password: "" });
   const [registerData, setRegisterData] = useState({
-    contact: "",
+    phone: "",
     verificationCode: "",
     firstName: "",
     lastName: "",
-    nationalId: "",
     password: "",
-    fieldOfWork: "فناوری اطلاعات",
-    age: "",
-    education: "کارشناسی",
+    confirmPassword: "",
   });
   const [errors, setErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -83,16 +82,12 @@ export default function AuthPage() {
     password: "",
   });
   const [employerRegisterData, setEmployerRegisterData] = useState({
-    contact: "",
+    phone: "",
     verificationCode: "",
     firstName: "",
     lastName: "",
     password: "",
     confirmPassword: "",
-    companyName: "",
-    companyField: "فناوری اطلاعات",
-    companyExperience: "",
-    companyAddress: "",
   });
   const [employerErrors, setEmployerErrors] = useState({});
   const [isEmployerSubmitted, setIsEmployerSubmitted] = useState(false);
@@ -107,8 +102,8 @@ export default function AuthPage() {
     setIsEmployerSubmitted(false);
   }, [userRole, activeTab]);
 
-  const progressPercentage = { 1: 10, 2: 40, 3: 70, 4: 100 };
-  const employerProgressPercentage = { 1: 10, 2: 33, 3: 66, 4: 100 };
+  const progressPercentage = { 1: 33, 2: 66, 3: 100 };
+  const employerProgressPercentage = { 1: 33, 2: 66, 3: 100 };
 
   // --- Input Handlers ---
   const handleInputChange = (setData, e) => {
@@ -123,6 +118,15 @@ export default function AuthPage() {
     }
   };
 
+  const handleKeyDown = (e, currentStepNum, nextStepHandler) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (currentStepNum < 3) {
+        nextStepHandler();
+      }
+    }
+  };
+
   // --- Specialist Logic ---
   const handleNextStep = () => {
     if (validateStep()) setCurrentStep((p) => p + 1);
@@ -134,13 +138,9 @@ export default function AuthPage() {
   const validateStep = () => {
     let newErrors = {};
     if (currentStep === 1) {
-      if (!registerData.contact)
-        newErrors.contact = "ایمیل یا شماره تلفن الزامی است.";
-      else if (
-        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registerData.contact) &&
-        !/^(09)\d{9}$/.test(registerData.contact)
-      )
-        newErrors.contact = "فرمت ایمیل یا شماره تلفن نامعتبر است.";
+      if (!registerData.phone) newErrors.phone = "شماره تلفن الزامی است.";
+      else if (!/^(09)\d{9}$/.test(registerData.phone))
+        newErrors.phone = "فرمت شماره تلفن نامعتبر است.";
     }
     if (currentStep === 2) {
       if (
@@ -153,14 +153,10 @@ export default function AuthPage() {
       if (!registerData.firstName) newErrors.firstName = "نام الزامی است.";
       if (!registerData.lastName)
         newErrors.lastName = "نام خانوادگی الزامی است.";
-      if (!registerData.nationalId || !/^\d{10}$/.test(registerData.nationalId))
-        newErrors.nationalId = "کد ملی باید ۱۰ رقم باشد.";
       if (!registerData.password || registerData.password.length < 8)
         newErrors.password = "رمز عبور باید حداقل ۸ کاراکتر باشد.";
-    }
-    if (currentStep === 4) {
-      if (!registerData.age || registerData.age < 18)
-        newErrors.age = "سن باید بالای ۱۸ سال باشد.";
+      if (registerData.password !== registerData.confirmPassword)
+        newErrors.confirmPassword = "رمزهای عبور مطابقت ندارند.";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -189,10 +185,10 @@ export default function AuthPage() {
   const validateEmployerStep = () => {
     let newErrors = {};
     if (employerCurrentStep === 1) {
-      if (!employerRegisterData.contact)
-        newErrors.contact = "شماره تلفن الزامی است.";
-      else if (!/^(09)\d{9}$/.test(employerRegisterData.contact))
-        newErrors.contact = "فرمت شماره تلفن نامعتبر است.";
+      if (!employerRegisterData.phone)
+        newErrors.phone = "شماره تلفن الزامی است.";
+      else if (!/^(09)\d{9}$/.test(employerRegisterData.phone))
+        newErrors.phone = "فرمت شماره تلفن نامعتبر است.";
     }
     if (employerCurrentStep === 2) {
       if (
@@ -216,14 +212,6 @@ export default function AuthPage() {
       )
         newErrors.confirmPassword = "رمزهای عبور مطابقت ندارند.";
     }
-    if (employerCurrentStep === 4) {
-      if (!employerRegisterData.companyName)
-        newErrors.companyName = "نام شرکت الزامی است.";
-      if (!employerRegisterData.companyExperience)
-        newErrors.companyExperience = "سابقه شرکت الزامی است.";
-      if (!employerRegisterData.companyAddress)
-        newErrors.companyAddress = "آدرس شرکت الزامی است.";
-    }
     setEmployerErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -242,7 +230,7 @@ export default function AuthPage() {
 
   return (
     <div
-      className="min-h-screen bg-[#1e1e1e] text-gray-200 grid grid-cols-1 lg:grid-cols-2"
+      className="min-h-screen  text-gray-200 grid grid-cols-1 lg:grid-cols-2"
       dir="rtl"
     >
       {/* Right Side - Form */}
@@ -354,10 +342,11 @@ export default function AuthPage() {
                     <FormInput
                       name="phone"
                       type="tel"
-                      placeholder="ایمیل یا شماره تلفن"
+                      placeholder="شماره تلفن"
                       icon={<Phone size={18} />}
                       value={loginData.phone}
                       onChange={(e) => handleInputChange(setLoginData, e)}
+                      onKeyDown={(e) => handleKeyDown(e, 1, handleNextStep)}
                       error={errors.phone}
                     />
                     <FormInput
@@ -367,6 +356,7 @@ export default function AuthPage() {
                       icon={<Lock size={18} />}
                       value={loginData.password}
                       onChange={(e) => handleInputChange(setLoginData, e)}
+                      onKeyDown={(e) => handleKeyDown(e, 1, handleNextStep)}
                       error={errors.password}
                     />
                     <button
@@ -375,20 +365,6 @@ export default function AuthPage() {
                     >
                       ورود به حساب کاربری
                     </button>
-                    <div className="mt-6 flex items-center justify-center text-xs text-gray-400 p-3 bg-[#1e1e1e]/50 rounded-lg border border-gray-700">
-                      {/* Lucide Gem Icon */}
-                      <Gem
-                        className="w-4 h-4 ml-2 flex-shrink-0 text-cyan-400"
-                        aria-hidden="true"
-                      />
-
-                      {/* Text */}
-                      <p>
-                        کاربرانی که در آکادمی اعتماد دارای حساب کاری می‌باشند
-                        میتوانند با نام کاربری و رمز عبور حساب کاربری خود در
-                        آکادمی اعتماد وارد شوند و از امکانات ویژه بهره مند شوند
-                      </p>
-                    </div>
                   </form>
                 ) : (
                   <div>
@@ -404,9 +380,9 @@ export default function AuthPage() {
                             ></div>
                           </div>
                           <div className="flex justify-between text-xs mt-2 text-gray-400 px-1">
-                            <span>هویت</span>
+                            <span>شماره تلفن</span>
+                            <span>کد تایید</span>
                             <span>اطلاعات فردی</span>
-                            <span>شغلی</span>
                           </div>
                         </div>
                         <form onSubmit={handleRegisterSubmit}>
@@ -416,18 +392,21 @@ export default function AuthPage() {
                             }`}
                           >
                             <h3 className="text-xl font-semibold mb-4 text-center">
-                              شروع ثبت‌نام متخصص
+                              ثبت‌نام متخصص
                             </h3>
                             <FormInput
-                              name="contact"
-                              type="text"
-                              placeholder="ایمیل یا شماره تلفن"
-                              icon={<Mail size={18} />}
-                              value={registerData.contact}
+                              name="phone"
+                              type="tel"
+                              placeholder="شماره تلفن"
+                              icon={<Phone size={18} />}
+                              value={registerData.phone}
                               onChange={(e) =>
                                 handleInputChange(setRegisterData, e)
                               }
-                              error={errors.contact}
+                              onKeyDown={(e) =>
+                                handleKeyDown(e, currentStep, handleNextStep)
+                              }
+                              error={errors.phone}
                             />
                             <button
                               type="button"
@@ -443,15 +422,8 @@ export default function AuthPage() {
                             }`}
                           >
                             <h3 className="text-xl font-semibold mb-4 text-center">
-                              اعتبارسنجی
+                              کد تایید
                             </h3>
-                            <p className="text-center text-sm text-gray-400 mb-4">
-                              کد ۶ رقمی ارسال شده به{" "}
-                              <span className="font-bold text-yellow-400">
-                                {registerData.contact}
-                              </span>{" "}
-                              را وارد کنید.
-                            </p>
                             <FormInput
                               name="verificationCode"
                               type="text"
@@ -461,24 +433,18 @@ export default function AuthPage() {
                               onChange={(e) =>
                                 handleInputChange(setRegisterData, e)
                               }
+                              onKeyDown={(e) =>
+                                handleKeyDown(e, currentStep, handleNextStep)
+                              }
                               error={errors.verificationCode}
                             />
-                            <div className="flex gap-4">
-                              <button
-                                type="button"
-                                onClick={handleBackStep}
-                                className="w-1/2 text-white bg-gray-600 hover:bg-gray-700 font-medium rounded-lg text-sm px-5 py-3 text-center"
-                              >
-                                بازگشت
-                              </button>
-                              <button
-                                type="button"
-                                onClick={handleNextStep}
-                                className="w-1/2 text-gray-900 bg-yellow-400 hover:bg-yellow-500 font-medium rounded-lg text-sm px-5 py-3 text-center"
-                              >
-                                تایید
-                              </button>
-                            </div>
+                            <button
+                              type="button"
+                              onClick={handleNextStep}
+                              className="w-full text-gray-900 bg-yellow-400 hover:bg-yellow-500 font-medium rounded-lg text-sm px-5 py-3 text-center"
+                            >
+                              ادامه
+                            </button>
                           </div>
                           <div
                             className={`form-step ${
@@ -498,6 +464,9 @@ export default function AuthPage() {
                                 onChange={(e) =>
                                   handleInputChange(setRegisterData, e)
                                 }
+                                onKeyDown={(e) =>
+                                  handleKeyDown(e, currentStep, handleNextStep)
+                                }
                                 error={errors.firstName}
                               />
                               <FormInput
@@ -509,121 +478,40 @@ export default function AuthPage() {
                                 onChange={(e) =>
                                   handleInputChange(setRegisterData, e)
                                 }
+                                onKeyDown={(e) =>
+                                  handleKeyDown(e, currentStep, handleNextStep)
+                                }
                                 error={errors.lastName}
                               />
                             </div>
                             <FormInput
-                              name="nationalId"
-                              type="text"
-                              placeholder="کد ملی"
-                              icon={<Hash size={18} />}
-                              value={registerData.nationalId}
-                              onChange={(e) =>
-                                handleInputChange(setRegisterData, e)
-                              }
-                              error={errors.nationalId}
-                            />
-                            <FormInput
                               name="password"
                               type="password"
-                              placeholder="رمز عبور (حداقل ۸ کاراکتر)"
+                              placeholder="رمز عبور"
                               icon={<Lock size={18} />}
                               value={registerData.password}
                               onChange={(e) =>
                                 handleInputChange(setRegisterData, e)
                               }
+                              onKeyDown={(e) =>
+                                handleKeyDown(e, currentStep, handleNextStep)
+                              }
                               error={errors.password}
                             />
-                            <div className="flex gap-4">
-                              <button
-                                type="button"
-                                onClick={handleBackStep}
-                                className="w-1/2 text-white bg-gray-600 hover:bg-gray-700 font-medium rounded-lg text-sm px-5 py-3 text-center"
-                              >
-                                بازگشت
-                              </button>
-                              <button
-                                type="button"
-                                onClick={handleNextStep}
-                                className="w-1/2 text-gray-900 bg-yellow-400 hover:bg-yellow-500 font-medium rounded-lg text-sm px-5 py-3 text-center"
-                              >
-                                ادامه
-                              </button>
-                            </div>
-                          </div>
-                          <div
-                            className={`form-step ${
-                              currentStep === 4 ? "active" : ""
-                            }`}
-                          >
-                            <h3 className="text-xl font-semibold mb-4 text-center">
-                              اطلاعات تکمیلی
-                            </h3>
-                            <div className="relative mb-4">
-                              <select
-                                name="fieldOfWork"
-                                value={registerData.fieldOfWork}
-                                onChange={(e) =>
-                                  handleInputChange(setRegisterData, e)
-                                }
-                                className="bg-gray-700/50 border border-gray-600 text-gray-200 text-sm rounded-lg block w-full p-2.5 pr-10 appearance-none"
-                              >
-                                <option className="bg-gray-800">
-                                  فناوری اطلاعات
-                                </option>
-                                <option className="bg-gray-800">
-                                  مالی و حسابداری
-                                </option>
-                                <option className="bg-gray-800">مهندسی</option>
-                                <option className="bg-gray-800">
-                                  پزشکی و سلامت
-                                </option>
-                                <option className="bg-gray-800">
-                                  هنر و طراحی
-                                </option>
-                              </select>
-                              <IconWrapper>
-                                <Briefcase size={18} />
-                              </IconWrapper>
-                            </div>
-                            <div className="grid grid-cols-2 gap-4">
-                              <FormInput
-                                name="age"
-                                type="number"
-                                placeholder="سن"
-                                icon={<Smile size={18} />}
-                                value={registerData.age}
-                                onChange={(e) =>
-                                  handleInputChange(setRegisterData, e)
-                                }
-                                error={errors.age}
-                              />
-                              <div className="relative">
-                                <select
-                                  name="education"
-                                  value={registerData.education}
-                                  onChange={(e) =>
-                                    handleInputChange(setRegisterData, e)
-                                  }
-                                  className="bg-gray-700/50 border border-gray-600 text-gray-200 text-sm rounded-lg block w-full p-2.5 pr-10 appearance-none"
-                                >
-                                  <option className="bg-gray-800">دیپلم</option>
-                                  <option className="bg-gray-800">
-                                    کارشناسی
-                                  </option>
-                                  <option className="bg-gray-800">
-                                    کارشناسی ارشد
-                                  </option>
-                                  <option className="bg-gray-800">دکتری</option>
-                                </select>
-                                <IconWrapper>
-                                  <GraduationCap
-                                    size={18}
-                                    className="top-3 absolute "
-                                  />
-                                </IconWrapper>
-                              </div>
-                            </div>
+                            <FormInput
+                              name="confirmPassword"
+                              type="password"
+                              placeholder="تکرار رمز عبور"
+                              icon={<Lock size={18} />}
+                              value={registerData.confirmPassword}
+                              onChange={(e) =>
+                                handleInputChange(setRegisterData, e)
+                              }
+                              onKeyDown={(e) =>
+                                handleKeyDown(e, currentStep, handleNextStep)
+                              }
+                              error={errors.confirmPassword}
+                            />
                             <div className="flex gap-4 mt-4">
                               <button
                                 type="button"
@@ -649,11 +537,10 @@ export default function AuthPage() {
                           size={64}
                         />
                         <h3 className="text-2xl font-bold mt-4">
-                          ثبت‌نام موفقیت‌آمیز بود!
+                          ثبت‌نام متخصص با موفقیت انجام شد!
                         </h3>
                         <p className="text-gray-400 mt-2">
-                          حساب کاربری شما با موفقیت ایجاد شد. اکنون می‌توانید
-                          وارد شوید.
+                          حساب کاربری شما با موفقیت ایجاد شد.
                         </p>
                         <button
                           onClick={() => {
@@ -683,11 +570,14 @@ export default function AuthPage() {
                     <FormInput
                       name="phone"
                       type="tel"
-                      placeholder="  ایمیل یا شماره تلفن"
+                      placeholder="شماره تلفن"
                       icon={<Phone size={18} />}
                       value={employerLoginData.phone}
                       onChange={(e) =>
                         handleInputChange(setEmployerLoginData, e)
+                      }
+                      onKeyDown={(e) =>
+                        handleKeyDown(e, 1, handleEmployerNextStep)
                       }
                       error={employerErrors.phone}
                     />
@@ -699,6 +589,9 @@ export default function AuthPage() {
                       value={employerLoginData.password}
                       onChange={(e) =>
                         handleInputChange(setEmployerLoginData, e)
+                      }
+                      onKeyDown={(e) =>
+                        handleKeyDown(e, 1, handleEmployerNextStep)
                       }
                       error={employerErrors.password}
                     />
@@ -723,9 +616,9 @@ export default function AuthPage() {
                             ></div>
                           </div>
                           <div className="flex justify-between text-xs mt-2 text-gray-400 px-1">
-                            <span>اعتبارسنجی</span>
+                            <span>شماره تلفن</span>
+                            <span>کد تایید</span>
                             <span>اطلاعات فردی</span>
-                            <span>اطلاعات شرکت</span>
                           </div>
                         </div>
                         <form onSubmit={handleEmployerRegisterSubmit}>
@@ -738,15 +631,22 @@ export default function AuthPage() {
                               ثبت‌نام کارفرما
                             </h3>
                             <FormInput
-                              name="contact"
+                              name="phone"
                               type="tel"
-                              placeholder=" ایمیل یا شماره تلفن"
+                              placeholder="شماره تلفن"
                               icon={<Phone size={18} />}
-                              value={employerRegisterData.contact}
+                              value={employerRegisterData.phone}
                               onChange={(e) =>
                                 handleInputChange(setEmployerRegisterData, e)
                               }
-                              error={employerErrors.contact}
+                              onKeyDown={(e) =>
+                                handleKeyDown(
+                                  e,
+                                  employerCurrentStep,
+                                  handleEmployerNextStep
+                                )
+                              }
+                              error={employerErrors.phone}
                             />
                             <button
                               type="button"
@@ -762,15 +662,8 @@ export default function AuthPage() {
                             }`}
                           >
                             <h3 className="text-xl font-semibold mb-4 text-center">
-                              اعتبارسنجی
+                              کد تایید
                             </h3>
-                            <p className="text-center text-sm text-gray-400 mb-4">
-                              کد ۶ رقمی ارسال شده به{" "}
-                              <span className="font-bold text-yellow-400">
-                                {employerRegisterData.contact}
-                              </span>{" "}
-                              را وارد کنید.
-                            </p>
                             <FormInput
                               name="verificationCode"
                               type="text"
@@ -780,24 +673,22 @@ export default function AuthPage() {
                               onChange={(e) =>
                                 handleInputChange(setEmployerRegisterData, e)
                               }
+                              onKeyDown={(e) =>
+                                handleKeyDown(
+                                  e,
+                                  employerCurrentStep,
+                                  handleEmployerNextStep
+                                )
+                              }
                               error={employerErrors.verificationCode}
                             />
-                            <div className="flex gap-4">
-                              <button
-                                type="button"
-                                onClick={handleEmployerBackStep}
-                                className="w-1/2 text-white bg-gray-600 hover:bg-gray-700 font-medium rounded-lg text-sm px-5 py-3 text-center"
-                              >
-                                بازگشت
-                              </button>
-                              <button
-                                type="button"
-                                onClick={handleEmployerNextStep}
-                                className="w-1/2 text-gray-900 bg-yellow-400 hover:bg-yellow-500 font-medium rounded-lg text-sm px-5 py-3 text-center"
-                              >
-                                تایید
-                              </button>
-                            </div>
+                            <button
+                              type="button"
+                              onClick={handleEmployerNextStep}
+                              className="w-full text-gray-900 bg-yellow-400 hover:bg-yellow-500 font-medium rounded-lg text-sm px-5 py-3 text-center"
+                            >
+                              ادامه
+                            </button>
                           </div>
                           <div
                             className={`form-step ${
@@ -805,7 +696,7 @@ export default function AuthPage() {
                             }`}
                           >
                             <h3 className="text-xl font-semibold mb-4 text-center">
-                              اطلاعات کارفرما
+                              اطلاعات فردی
                             </h3>
                             <div className="grid grid-cols-2 gap-4">
                               <FormInput
@@ -817,6 +708,13 @@ export default function AuthPage() {
                                 onChange={(e) =>
                                   handleInputChange(setEmployerRegisterData, e)
                                 }
+                                onKeyDown={(e) =>
+                                  handleKeyDown(
+                                    e,
+                                    employerCurrentStep,
+                                    handleEmployerNextStep
+                                  )
+                                }
                                 error={employerErrors.firstName}
                               />
                               <FormInput
@@ -827,6 +725,13 @@ export default function AuthPage() {
                                 value={employerRegisterData.lastName}
                                 onChange={(e) =>
                                   handleInputChange(setEmployerRegisterData, e)
+                                }
+                                onKeyDown={(e) =>
+                                  handleKeyDown(
+                                    e,
+                                    employerCurrentStep,
+                                    handleEmployerNextStep
+                                  )
                                 }
                                 error={employerErrors.lastName}
                               />
@@ -840,6 +745,13 @@ export default function AuthPage() {
                               onChange={(e) =>
                                 handleInputChange(setEmployerRegisterData, e)
                               }
+                              onKeyDown={(e) =>
+                                handleKeyDown(
+                                  e,
+                                  employerCurrentStep,
+                                  handleEmployerNextStep
+                                )
+                              }
                               error={employerErrors.password}
                             />
                             <FormInput
@@ -851,90 +763,14 @@ export default function AuthPage() {
                               onChange={(e) =>
                                 handleInputChange(setEmployerRegisterData, e)
                               }
+                              onKeyDown={(e) =>
+                                handleKeyDown(
+                                  e,
+                                  employerCurrentStep,
+                                  handleEmployerNextStep
+                                )
+                              }
                               error={employerErrors.confirmPassword}
-                            />
-                            <div className="flex gap-4">
-                              <button
-                                type="button"
-                                onClick={handleEmployerBackStep}
-                                className="w-1/2 text-white bg-gray-600 hover:bg-gray-700 font-medium rounded-lg text-sm px-5 py-3 text-center"
-                              >
-                                بازگشت
-                              </button>
-                              <button
-                                type="button"
-                                onClick={handleEmployerNextStep}
-                                className="w-1/2 text-gray-900 bg-yellow-400 hover:bg-yellow-500 font-medium rounded-lg text-sm px-5 py-3 text-center"
-                              >
-                                ادامه
-                              </button>
-                            </div>
-                          </div>
-                          <div
-                            className={`form-step ${
-                              employerCurrentStep === 4 ? "active" : ""
-                            }`}
-                          >
-                            <h3 className="text-xl font-semibold mb-4 text-center">
-                              اطلاعات شرکت
-                            </h3>
-                            <FormInput
-                              name="companyName"
-                              type="text"
-                              placeholder="نام شرکت"
-                              icon={<Building size={18} />}
-                              value={employerRegisterData.companyName}
-                              onChange={(e) =>
-                                handleInputChange(setEmployerRegisterData, e)
-                              }
-                              error={employerErrors.companyName}
-                            />
-                            <div className="grid grid-cols-2 gap-4">
-                              <div className="relative">
-                                <select
-                                  name="companyField"
-                                  value={employerRegisterData.companyField}
-                                  onChange={(e) =>
-                                    handleInputChange(
-                                      setEmployerRegisterData,
-                                      e
-                                    )
-                                  }
-                                  className="bg-gray-700/50 border border-gray-600 text-gray-200 text-sm rounded-lg block w-full p-2.5 pr-10 appearance-none"
-                                >
-                                  <option>فناوری اطلاعات</option>
-                                  <option>مالی</option>
-                                  <option>مهندسی</option>
-                                  <option>پزشکی</option>
-                                  <option>هنر</option>
-                                  <option>تولیدی</option>
-                                </select>
-                                <IconWrapper>
-                                  <Briefcase size={18} />
-                                </IconWrapper>
-                              </div>
-                              <FormInput
-                                name="companyExperience"
-                                type="number"
-                                placeholder="سابقه (سال)"
-                                icon={<Calendar size={18} />}
-                                value={employerRegisterData.companyExperience}
-                                onChange={(e) =>
-                                  handleInputChange(setEmployerRegisterData, e)
-                                }
-                                error={employerErrors.companyExperience}
-                              />
-                            </div>
-                            <FormInput
-                              name="companyAddress"
-                              type="text"
-                              placeholder="آدرس شرکت یا استارتاپ"
-                              icon={<MapPin size={18} />}
-                              value={employerRegisterData.companyAddress}
-                              onChange={(e) =>
-                                handleInputChange(setEmployerRegisterData, e)
-                              }
-                              error={employerErrors.companyAddress}
                             />
                             <div className="flex gap-4 mt-4">
                               <button
@@ -961,7 +797,7 @@ export default function AuthPage() {
                           size={64}
                         />
                         <h3 className="text-2xl font-bold mt-4">
-                          ثبت‌نام کارفرما موفق بود!
+                          ثبت‌نام کارفرما با موفقیت انجام شد!
                         </h3>
                         <p className="text-gray-400 mt-2">
                           حساب کاربری شما با موفقیت ایجاد شد.

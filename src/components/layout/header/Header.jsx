@@ -75,9 +75,7 @@ export default function Header() {
           </div>
 
           <nav className="hidden lg:flex items-center space-x-8 space-x-reverse font-medium">
-            <a href="/resume" className="header-link text-gray-300">
-              ثبت رزومه
-            </a>
+            
             <a href="#" className="header-link text-gray-300">
               بهترین آگهی‌ها
             </a>
