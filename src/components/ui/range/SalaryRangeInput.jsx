@@ -31,11 +31,11 @@ const SalaryRangeInput = ({
   };
 
   return (
-    <div className="salary-range-slider w-full">
+    <div className="salary-range-slider w-full max-w-md mx-auto">
       {/* Salary Range Slider - Always visible when range filter is active */}
       {(showRangeFilter || (!showNegotiable && !showNoLimit)) && (
         <>
-          <div className="flex justify-between text-sm text-gray-300 mb-4">
+          <div className="flex justify-between text-xs text-gray-300 mb-2">
             <span>{formatNumber(localRange[1])} تومان</span>
             <span>{formatNumber(localRange[0])} تومان</span>
           </div>
@@ -47,31 +47,31 @@ const SalaryRangeInput = ({
               step={500000}
               value={localRange}
               onChange={handleChange}
-              trackStyle={[{ backgroundColor: "#FBBF24", height: 4 }]}
+              trackStyle={[{ backgroundColor: "#FBBF24", height: 3 }]}
               handleStyle={[
                 {
                   borderColor: "#FBBF24",
                   backgroundColor: "#FBBF24",
-                  width: 18,
-                  height: 18,
-                  marginTop: -7,
+                  width: 14,
+                  height: 14,
+                  marginTop: -6,
                 },
                 {
                   borderColor: "#FBBF24",
                   backgroundColor: "#FBBF24",
-                  width: 18,
-                  height: 18,
-                  marginTop: -7,
+                  width: 14,
+                  height: 14,
+                  marginTop: -6,
                 },
               ]}
-              railStyle={{ backgroundColor: "#374151", height: 4 }}
+              railStyle={{ backgroundColor: "#374151", height: 3 }}
             />
           </div>
         </>
       )}
 
       {/* Range Filter Option */}
-      <div className="mt-3 flex items-center">
+      <div className="mt-2 flex items-center">
         <input
           id="range-filter"
           type="checkbox"
@@ -85,11 +85,11 @@ const SalaryRangeInput = ({
             }
             onRangeFilterChange && onRangeFilterChange(checked);
           }}
-          className={`w-4 h-4 ${
+          className={`w-3 h-3 ${
             showRangeFilter
               ? "bg-yellow-500 border-yellow-500"
               : "bg-white border-yellow-500"
-          } rounded-full appearance-none focus:ring-yellow-500 focus:ring-2`}
+          } rounded-full appearance-none focus:ring-yellow-500 focus:ring-1`}
           style={{
             borderRadius: "50%",
             borderWidth: "1px",
@@ -98,14 +98,14 @@ const SalaryRangeInput = ({
         />
         <label
           htmlFor="range-filter"
-          className="mr-2 text-sm text-gray-300 cursor-pointer select-none"
+          className="mr-2 text-xs text-gray-300 cursor-pointer select-none"
         >
           محدوده حقوق انتخابی
         </label>
       </div>
 
       {/* Negotiable Salary Checkbox */}
-      <div className="mt-3 flex items-center">
+      <div className="mt-2 flex items-center">
         <input
           id="negotiable-salaries"
           type="checkbox"
@@ -119,11 +119,11 @@ const SalaryRangeInput = ({
             }
             onNegotiableChange && onNegotiableChange(checked);
           }}
-          className={`w-4 h-4 ${
+          className={`w-3 h-3 ${
             showNegotiable
               ? "bg-yellow-500 border-yellow-500"
               : "bg-white border-yellow-500"
-          } rounded-full appearance-none focus:ring-yellow-500 focus:ring-2`}
+          } rounded-full appearance-none focus:ring-yellow-500 focus:ring-1`}
           style={{
             borderRadius: "50%",
             borderWidth: "1px",
@@ -132,14 +132,14 @@ const SalaryRangeInput = ({
         />
         <label
           htmlFor="negotiable-salaries"
-          className="mr-2 text-sm text-gray-300 cursor-pointer select-none"
+          className="mr-2 text-xs text-gray-300 cursor-pointer select-none"
         >
-          نمایش آگهی‌های حقوق توافقی
+          حقوق توافقی
         </label>
       </div>
 
       {/* No Price Limit Checkbox */}
-      <div className="mt-2 flex items-center">
+      <div className="mt-1 flex items-center">
         <input
           id="no-price-limit"
           type="checkbox"
@@ -153,11 +153,11 @@ const SalaryRangeInput = ({
             }
             onNoLimitChange && onNoLimitChange(checked);
           }}
-          className={`w-4 h-4 ${
+          className={`w-3 h-3 ${
             showNoLimit
               ? "bg-yellow-500 border-yellow-500"
               : "bg-white border-yellow-500"
-          } rounded-full appearance-none focus:ring-yellow-500 focus:ring-2`}
+          } rounded-full appearance-none focus:ring-yellow-500 focus:ring-1`}
           style={{
             borderRadius: "50%",
             borderWidth: "1px",
@@ -166,9 +166,9 @@ const SalaryRangeInput = ({
         />
         <label
           htmlFor="no-price-limit"
-          className="mr-2 text-sm text-gray-300 cursor-pointer select-none"
+          className="mr-2 text-xs text-gray-300 cursor-pointer select-none"
         >
-          بدون محدودیت قیمت
+          بدون محدودیت
         </label>
       </div>
 

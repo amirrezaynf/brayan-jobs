@@ -8,6 +8,7 @@ import CustomSelect from "@/components/ui/select/CustomSelect";
 
 // Import components as needed
 import SalaryRangeSlider from "@/components/ui/range/SalaryRangeInput";
+import Footer from "@/components/layout/Footer";
 
 // Sample advertisement data (normally would come from API)
 const sampleAdvertisements = [
@@ -324,7 +325,10 @@ export default function AdvertisementPageClient() {
   const [showNoLimit, setShowNoLimit] = useState(false); // Default: apply normal salary limits
   const [showRangeFilter, setShowRangeFilter] = useState(false); // Default: show range filter option
   const [selectedProvince, setSelectedProvince] = useState(""); // New filter for province
+  const [selectedCity, setSelectedCity] = useState(""); // New filter for city
   const [selectedEmploymentType, setSelectedEmploymentType] = useState(""); // New filter for employment type
+  const [currentPage, setCurrentPage] = useState(1); // Current page for pagination
+  const [itemsPerPage] = useState(12); // Items per page
 
   // Get search parameters
   const userType = searchParams.get("userType");
@@ -594,6 +598,11 @@ export default function AdvertisementPageClient() {
       result = result.filter((ad) => ad.type === selectedEmploymentType);
     }
 
+    // City filter
+    if (selectedCity && selectedCity !== "همه") {
+      result = result.filter((ad) => ad.location === selectedCity);
+    }
+
     // Salary range and negotiable filter
     result = result.filter((ad) => {
       // Check if the salary is negotiable
@@ -703,7 +712,7 @@ export default function AdvertisementPageClient() {
   };
 
   const handleViewAd = (adId) => {
-    router.push(`/jobsingle?id=${adId}`);
+    router.push(`/ad/${adId}`);
   };
 
   const categories = [
@@ -736,12 +745,466 @@ export default function AdvertisementPageClient() {
     "دورکاری",
   ];
 
+  // Cities organized by province - برای شهرهای ایرانی بر اساس استان
+  const citiesByProvince = {
+    تهران: [
+      "همه",
+      "تهران",
+      "شهریار",
+      "چهاردانگه",
+      "دشتستان",
+      "کرج",
+      "ورامین",
+      "شمیرانات",
+      "پاکدشت",
+      "فیروزکوه",
+      "اسلامشهر",
+      "قدس",
+      "ملارد",
+      "صباشهر",
+    ],
+    "خراسان رضوی": [
+      "همه",
+      "مشهد",
+      "نیشابور",
+      "سبزوار",
+      "تربت حیدریه",
+      "قوچان",
+      "تربت جام",
+      "کاشمر",
+      "درگز",
+      "کلات",
+    ],
+    اصفهان: [
+      "همه",
+      "اصفهان",
+      "کاشان",
+      "نجف آباد",
+      "اردستان",
+      "آران و بیدگل",
+      "شهرضا",
+      "فریدون‌شهر",
+      "فلاورجان",
+      "مobarakeh",
+    ],
+    فارس: [
+      "همه",
+      "شیراز",
+      "مرودشت",
+      "آباده",
+      "فیروزآباد",
+      "جهرم",
+      "داراب",
+      "استهبان",
+      "لار",
+      "لامرد",
+    ],
+    "آذربایجان شرقی": [
+      "همه",
+      "تبریز",
+      "مراغه",
+      "میانه",
+      "اهر",
+      "بناب",
+      "بستان‌آباد",
+      "ممقان",
+      "شبستر",
+      "هوراند",
+    ],
+    خوزستان: [
+      "همه",
+      "اهواز",
+      "آبادان",
+      "امیدیه",
+      "بهبهان",
+      " آغاجاری",
+      "ایذه",
+      "بنده",
+      "بستان",
+      "خرمشهر",
+    ],
+    گیلان: [
+      "همه",
+      "رشت",
+      "آستانه اشرفیه",
+      "بندر انزلی",
+      "لاهیجان",
+      "لنگرود",
+      "رودسر",
+      "صومعه سارا",
+      "طوالش",
+      "فومن",
+    ],
+    البرز: [
+      "همه",
+      "کرج",
+      "نظرآباد",
+      "ساوجبلاغ",
+      "طالقان",
+      "فردیس",
+      "کوهسار",
+      "گلسار",
+      "ماهدشت",
+    ],
+    همه: [
+      "همه",
+      "تهران",
+      "کرج",
+      "شهریار",
+      "اسلامشهر",
+      "مشهد",
+      "نیشابور",
+      "سبزوار",
+      "تربت حیدریه",
+      "اصفهان",
+      "کاشان",
+      "نجف آباد",
+      "شهرضا",
+      "شیراز",
+      "جهرم",
+      "مرودشت",
+      "فیروزآباد",
+      "تبریز",
+      "اهر",
+      "مراغه",
+      "میانه",
+      "اهواز",
+      "آبادان",
+      "خرمشهر",
+      "بهبهان",
+      "رشت",
+      "انزلی",
+      "لاهیجان",
+      "لنگرود",
+    ],
+  };
+
+  // Get cities based on selected province
+  const availableCities =
+    selectedProvince && citiesByProvince[selectedProvince]
+      ? citiesByProvince[selectedProvince]
+      : citiesByProvince["همه"];
+
+  // Reset city when province changes
+  useEffect(() => {
+    setSelectedCity("");
+  }, [selectedProvince]);
+
+  // Reset to first page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [
+    searchFilter,
+    selectedCategory,
+    selectedProvince,
+    selectedEmploymentType,
+    sortBy,
+    salaryRange,
+    showNegotiable,
+    showNoLimit,
+    showRangeFilter,
+  ]);
+
+  // Calculate pagination
+  const totalItems = ads.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentAds = ads.slice(startIndex, endIndex);
+
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+      // Scroll to top of results
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  const renderPaginationButtons = () => {
+    const buttons = [];
+    const maxButtons = 5; // Maximum number of page buttons to show
+
+    let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+    let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+
+    if (endPage - startPage + 1 < maxButtons) {
+      startPage = Math.max(1, endPage - maxButtons + 1);
+    }
+
+    // Previous button
+    if (currentPage > 1) {
+      buttons.push(
+        <button
+          key="prev"
+          onClick={() => handlePageChange(currentPage - 1)}
+          className="px-3 py-2 bg-[#2a2a2a] text-white rounded-lg hover:bg-yellow-500/20 hover:text-yellow-400 transition-colors duration-200 border border-gray-700"
+        >
+          قبلی
+        </button>
+      );
+    }
+
+    // First page + ellipsis if needed
+    if (startPage > 1) {
+      buttons.push(
+        <button
+          key={1}
+          onClick={() => handlePageChange(1)}
+          className="px-3 py-2 bg-[#2a2a2a] text-white rounded-lg hover:bg-yellow-500/20 hover:text-yellow-400 transition-colors duration-200 border border-gray-700"
+        >
+          ۱
+        </button>
+      );
+      if (startPage > 2) {
+        buttons.push(
+          <span key="ellipsis-start" className="px-2 py-2 text-gray-500">
+            ...
+          </span>
+        );
+      }
+    }
+
+    // Page buttons
+    for (let page = startPage; page <= endPage; page++) {
+      buttons.push(
+        <button
+          key={page}
+          onClick={() => handlePageChange(page)}
+          className={`px-3 py-2 rounded-lg border transition-colors duration-200 ${
+            currentPage === page
+              ? "bg-yellow-500 text-black border-yellow-500"
+              : "bg-[#2a2a2a] text-white hover:bg-yellow-500/20 hover:text-yellow-400 border-gray-700"
+          }`}
+        >
+          {page}
+        </button>
+      );
+    }
+
+    // Last page + ellipsis if needed
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        buttons.push(
+          <span key="ellipsis-end" className="px-2 py-2 text-gray-500">
+            ...
+          </span>
+        );
+      }
+      buttons.push(
+        <button
+          key={totalPages}
+          onClick={() => handlePageChange(totalPages)}
+          className="px-3 py-2 bg-[#2a2a2a] text-white rounded-lg hover:bg-yellow-500/20 hover:text-yellow-400 transition-colors duration-200 border border-gray-700"
+        >
+          {totalPages}
+        </button>
+      );
+    }
+
+    // Next button
+    if (currentPage < totalPages) {
+      buttons.push(
+        <button
+          key="next"
+          onClick={() => handlePageChange(currentPage + 1)}
+          className="px-3 py-2 bg-[#2a2a2a] text-white rounded-lg hover:bg-yellow-500/20 hover:text-yellow-400 transition-colors duration-200 border border-gray-700"
+        >
+          بعدی
+        </button>
+      );
+    }
+
+    return buttons;
+  };
+
   return (
-    <div className="min-h-screen dark-bg py-8" dir="rtl">
+    <div className="py-8" dir="rtl">
       <div className="container mx-auto px-6">
         {/* Header */}
+
+        {/* Search and Sort Bar */}
+        <div className="bg-[#2a2a2a] rounded-xl p-6 mb-12 border border-gray-700">
+          <div>
+            {/* Large Search Input */}
+            <div className="mb-6">
+              <input
+                type="text"
+                placeholder="جستجو در عنوان، شرکت یا توضیحات..."
+                value={searchFilter}
+                onChange={(e) => setSearchFilter(e.target.value)}
+                className="w-1/2 bg-[#2a2a2a] border border-gray-600 rounded-lg px-5 py-3 text-white placeholder-gray-400 text-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
+              />
+            </div>
+
+            {/* Compact Filters Layout */}
+            <div className="flex flex-col lg:flex-row gap-6">
+              {/* Selection Filters - Left Side */}
+              <div className="lg:w-2/3">
+                {/* First Row of Filters - 3 in a row */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                  <div>
+                    <CustomSelect
+                      value={selectedCategory}
+                      onChange={(value) => {
+                        setSelectedCategory(value === "" ? null : value);
+                      }}
+                      options={[
+                        {
+                          value: "",
+                          label: "دسته شغلی",
+                          key: "placeholder-category",
+                        },
+                        ...categories.slice(1).map((category, index) => ({
+                          value: category,
+                          label: category,
+                          key: `category-${category}-${index}`,
+                        })),
+                      ]}
+                      placeholder="دسته شغلی"
+                    />
+                  </div>
+                  <div>
+                    <CustomSelect
+                      value={selectedProvince}
+                      onChange={(value) => {
+                        setSelectedProvince(value === "" ? null : value);
+                      }}
+                      options={[
+                        {
+                          value: "",
+                          label: "استان",
+                          key: "placeholder-province",
+                        },
+                        ...provinces.slice(1).map((province, index) => ({
+                          value: province,
+                          label: province,
+                          key: `province-${province}-${index}`,
+                        })),
+                      ]}
+                      placeholder="استان"
+                    />
+                  </div>
+                  <div>
+                    <CustomSelect
+                      value={selectedCity}
+                      onChange={(value) => {
+                        setSelectedCity(value === "" ? null : value);
+                      }}
+                      options={[
+                        { value: "", label: "شهر", key: "placeholder-city" },
+                        ...(selectedProvince && selectedProvince !== "همه"
+                          ? availableCities.slice(1)
+                          : availableCities
+                        ).map((city, index) => ({
+                          value: city,
+                          label: city,
+                          key: `city-${city}-${index}-${
+                            selectedProvince || "all"
+                          }`,
+                        })),
+                      ]}
+                      placeholder="شهر"
+                    />
+                  </div>
+                </div>
+
+                {/* Second Row of Filters - 3 in a row */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                  <div>
+                    <CustomSelect
+                      value={selectedEmploymentType}
+                      onChange={(value) => {
+                        setSelectedEmploymentType(value === "" ? null : value);
+                      }}
+                      options={[
+                        {
+                          value: "",
+                          label: "نوع همکاری",
+                          key: "placeholder-employment",
+                        },
+                        ...employmentTypes.slice(1).map((type, index) => ({
+                          value: type,
+                          label: type,
+                          key: `employment-${type}-${index}`,
+                        })),
+                      ]}
+                      placeholder="نوع همکاری"
+                    />
+                  </div>
+                  <div>
+                    <CustomSelect
+                      value={sortBy}
+                      onChange={(value) => {
+                        // If empty or placeholder is selected, set to newest
+                        setSortBy(value === "" ? "newest" : value);
+                      }}
+                      options={[
+                        {
+                          value: "newest",
+                          label: "ترتیب",
+                          key: "sort-placeholder",
+                        },
+                        {
+                          value: "newest",
+                          label: "جدیدترین",
+                          key: "sort-newest",
+                        },
+                        {
+                          value: "oldest",
+                          label: "قدیمی‌ترین",
+                          key: "sort-oldest",
+                        },
+                        {
+                          value: "most-applied",
+                          label: "بیشترین متقاضی",
+                          key: "sort-most-applied",
+                        },
+                      ]}
+                      placeholder="ترتیب"
+                    />
+                  </div>
+                  <div className="flex justify-center">
+                    <button
+                      onClick={() => {
+                        setSearchFilter("");
+                        setSelectedCategory("");
+                        setSelectedProvince("");
+                        setSelectedCity("");
+                        setSelectedEmploymentType("");
+                        setSortBy("newest");
+                        setSalaryRange([5000000, 50000000]);
+                        setShowNegotiable(false);
+                        setShowNoLimit(false);
+                        setShowRangeFilter(false);
+                      }}
+                      className=" w-full bg-gradient-to-r from-yellow-500 to-red-500 hover:from-yellow-600 hover:to-red-600 text-white px-8  rounded-md  text-sm font-medium transition-all duration-200 border border-yellow-400/30 hover:border-yellow-400/50 hover:scale-95"
+                    >
+                      پاک کردن
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Salary Range Filter - Right Side */}
+              <div className="lg:w-1/3">
+                <SalaryRangeSlider
+                  value={salaryRange}
+                  onChange={setSalaryRange}
+                  showNegotiable={showNegotiable}
+                  onNegotiableChange={setShowNegotiable}
+                  showNoLimit={showNoLimit}
+                  onNoLimitChange={setShowNoLimit}
+                  showRangeFilter={showRangeFilter}
+                  onRangeFilterChange={setShowRangeFilter}
+                  min={1000000}
+                  max={100000000}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">
+          <h1 className="text-2xl font-bold text-white mb-2">
             نتایج جستجو آگهی‌ها
           </h1>
           <p className="text-gray-400">
@@ -750,219 +1213,183 @@ export default function AdvertisementPageClient() {
           </p>
         </div>
 
-        {/* Search and Sort Bar */}
-        <div className="bg-[#2a2a2a] rounded-xl p-6 mb-8 border border-gray-700">
-          <div>
-            {/* Main Search Filters */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-4">
-              <div className="md:col-span-2">
-                <input
-                  type="text"
-                  placeholder="جستجو در عنوان، شرکت یا توضیحات..."
-                  value={searchFilter}
-                  onChange={(e) => setSearchFilter(e.target.value)}
-                  className="w-full bg-[#2a2a2a] border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                />
-              </div>
-              <div>
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full bg-[#2a2a2a] border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                >
-                  <option value="">انتخاب دسته شغلی</option>
-                  {categories.map((category) => (
-                    <option key={category} value={category}>
-                      {category}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="flex gap-2">
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="flex-1 bg-[#2a2a2a] border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                >
-                  <option value="newest">جدیدترین</option>
-                  <option value="oldest">قدیمی‌ترین</option>
-                  <option value="most-applied">بیشترین متقاضی</option>
-                </select>
-                <button
-                  onClick={() => {
-                    setSearchFilter("");
-                    setSelectedCategory("");
-                    setSelectedProvince("");
-                    setSelectedEmploymentType("");
-                    setSortBy("newest");
-                    setSalaryRange([5000000, 50000000]);
-                    setShowNegotiable(false);
-                    setShowNoLimit(false);
-                    setShowRangeFilter(false);
-                  }}
-                  className="bg-[#2a2a2a] hover:bg-gray-500 text-white px-4 py-2 rounded-lg transition-colors duration-200 border border-gray-600"
-                >
-                  پاک کردن
-                </button>
-              </div>
-            </div>
-
-            {/* Additional Filters */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div>
-                <select
-                  value={selectedProvince}
-                  onChange={(e) => setSelectedProvince(e.target.value)}
-                  className="w-full bg-[#2a2a2a] border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                >
-                  <option value="">انتخاب استان</option>
-                  {provinces.map((province) => (
-                    <option key={province} value={province}>
-                      {province}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <select
-                  value={selectedEmploymentType}
-                  onChange={(e) => setSelectedEmploymentType(e.target.value)}
-                  className="w-full bg-[#2a2a2a] border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                >
-                  <option value="">انتخاب نوع همکاری</option>
-                  {employmentTypes.map((type) => (
-                    <option key={type} value={type}>
-                      {type}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {/* Salary Range Slider - Now Below */}
-            <div className="border-t border-gray-600 pt-4">
-              <SalaryRangeSlider
-                value={salaryRange}
-                onChange={setSalaryRange}
-                showNegotiable={showNegotiable}
-                onNegotiableChange={setShowNegotiable}
-                showNoLimit={showNoLimit}
-                onNoLimitChange={setShowNoLimit}
-                showRangeFilter={showRangeFilter}
-                onRangeFilterChange={setShowRangeFilter}
-                min={1000000}
-                max={100000000}
-              />
-            </div>
-          </div>
-        </div>
-
         {/* Main Content - Results */}
         <div className="w-full">
-          {ads.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {ads.map((ad) => (
-                <div
-                  key={ad.id}
-                  className="bg-[#2a2a2a] rounded-xl p-4 border border-gray-700 hover:border-yellow-500/50 transition-all duration-300 relative overflow-hidden shadow-lg min-h-[240px] flex flex-col"
-                >
-                  {ad.urgent && (
-                    <span className="absolute top-2 left-2 bg-yellow-500/20 text-yellow-400 text-xs px-2 py-1 rounded-full whitespace-nowrap z-10">
-                      فوری
-                    </span>
-                  )}
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-start gap-3 flex-1 min-w-0">
-                      <div className="w-10 h-10 bg-yellow-500/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="20"
-                          height="20"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth={2}
-                          className="text-yellow-500"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
-                          />
-                        </svg>
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <h3 className="text-lg font-bold text-white truncate mb-1">
-                          {ad.title}
-                        </h3>
-                        <div className="flex items-center gap-3 text-sm text-gray-400 mb-2">
-                          <span className="flex items-center gap-1">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="14"
-                              height="14"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                            >
-                              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                              <circle cx="12" cy="10" r="3"></circle>
-                            </svg>
-                            {ad.location}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="14"
-                              height="14"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                            >
-                              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                              <circle cx="12" cy="7" r="4"></circle>
-                            </svg>
-                            {ad.applicants}
-                          </span>
-                        </div>
-                        <p className="text-xs md:text-sm text-gray-300 line-clamp-2 mb-3">
-                          {ad.description}
-                        </p>
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm text-gray-400">
-                            {ad.company}
-                          </span>
-                          <span className="text-sm text-gray-500">
-                            {toJalali(ad.date)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+          {totalItems > 0 ? (
+            <div>
+              {/* Results info */}
 
-                  <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-700">
-                    <div className="flex items-center gap-2">
-                      <span className="bg-yellow-500/20 text-yellow-400 text-xs px-2 py-1 rounded-full font-medium">
-                        {ad.category}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                {currentAds.map((ad) => (
+                  <div
+                    key={ad.id}
+                    className="bg-[#2a2a2a] rounded-xl p-4 border border-gray-700 hover:border-yellow-500/50 transition-all duration-300 relative overflow-hidden shadow-lg min-h-[240px] flex flex-col"
+                  >
+                    {ad.urgent && (
+                      <span className="absolute top-2 left-2 bg-yellow-500/20 text-yellow-400 text-xs px-2 py-1 rounded-full whitespace-nowrap z-10">
+                        فوری
                       </span>
-                      <span className="text-sm text-gray-400">{ad.type}</span>
+                    )}
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-start gap-3 flex-1 min-w-0">
+                        <div className="w-10 h-10 bg-yellow-500/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            className="text-yellow-500"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+                            />
+                          </svg>
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <h3 className="text-lg font-bold text-white truncate mb-1">
+                            {ad.title}
+                          </h3>
+                          <div className="flex items-center gap-3 text-sm text-gray-400 mb-2">
+                            <span className="flex items-center gap-1">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="14"
+                                height="14"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                              >
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                              </svg>
+                              {ad.location}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="14"
+                                height="14"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                              >
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                              </svg>
+                              {ad.applicants}
+                            </span>
+                          </div>
+                          <p className="text-xs md:text-sm text-gray-300 line-clamp-2 mb-3">
+                            {ad.description}
+                          </p>
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-gray-400">
+                              {ad.company}
+                            </span>
+                            <span className="text-sm text-gray-500">
+                              {toJalali(ad.date)}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-yellow-400 font-bold">
-                        {ad.salary}
-                      </span>
-                      <button
-                        onClick={() => handleViewAd(ad.id)}
-                        className="bg-yellow-500 hover:bg-yellow-500 text-black px-4 py-2 rounded-lg font-medium transition-colors duration-200 text-sm"
-                      >
-                        مشاهده
-                      </button>
+
+                    <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-700">
+                      <div className="flex items-center gap-2">
+                        <span className="bg-yellow-500/20 text-yellow-400 text-xs px-2 py-1 rounded-full font-medium">
+                          {ad.category}
+                        </span>
+                        <span className="text-sm text-gray-400">{ad.type}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-yellow-400 font-bold">
+                          {ad.salary}
+                        </span>
+                        <button
+                          onClick={() => handleViewAd(ad.id)}
+                          className="bg-yellow-500 hover:bg-yellow-500 text-black px-4 py-2 rounded-lg font-medium transition-colors duration-200 text-sm"
+                        >
+                          مشاهده
+                        </button>
+                      </div>
                     </div>
                   </div>
+                ))}
+              </div>
+
+              {/* Pagination */}
+              <div className="mt-12 flex flex-col items-center gap-4">
+                {/* Results Info */}
+
+                {/* Page Info */}
+                <div className="text-sm text-gray-400 mb-2">
+                  صفحه {currentPage} از {totalPages}
                 </div>
-              ))}
+
+                {/* Pagination Controls */}
+                <div className="flex items-center justify-center gap-1">
+                  {/* Previous Button */}
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="px-4 py-2 bg-[#2a2a2a] text-white rounded-lg border border-gray-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-yellow-500/20 hover:text-yellow-400 transition-colors duration-200 min-w-[80px]"
+                  >
+                    قبلی
+                  </button>
+
+                  {/* Page numbers */}
+                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    const pageNum =
+                      Math.max(1, currentPage - Math.floor(2)) + i;
+                    if (pageNum > totalPages) return null;
+                    return (
+                      <button
+                        key={pageNum}
+                        onClick={() => handlePageChange(pageNum)}
+                        className={`px-4 py-2 rounded-lg border transition-colors duration-200 min-w-[50px] ${
+                          currentPage === pageNum
+                            ? "bg-yellow-500 text-black border-yellow-500"
+                            : "bg-[#2a2a2a] text-white hover:bg-yellow-500/20 hover:text-yellow-400 border-gray-700"
+                        }`}
+                      >
+                        {pageNum}
+                      </button>
+                    );
+                  })}
+
+                  {/* Next Button */}
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="px-4 py-2 bg-[#2a2a2a] text-white rounded-lg border border-gray-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-yellow-500/20 hover:text-yellow-400 transition-colors duration-200 min-w-[80px]"
+                  >
+                    بعدی
+                  </button>
+                </div>
+
+                {/* Jump to page controls */}
+                {totalPages > 5 && (
+                  <div className="flex items-center gap-2 mt-2">
+                    <span className="text-sm text-gray-500">رفتن به صفحه:</span>
+                    <input
+                      type="number"
+                      min={1}
+                      max={totalPages}
+                      value={""}
+                      onChange={(e) => handlePageChange(Number(e.target.value))}
+                      className="w-20 px-2 py-1 bg-[#2a2a2a] border border-gray-600 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                      placeholder={String(currentPage)}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           ) : (
             <div className="text-center py-16">
@@ -996,6 +1423,7 @@ export default function AdvertisementPageClient() {
           )}
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
