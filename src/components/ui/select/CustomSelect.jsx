@@ -15,22 +15,8 @@ const ChevronDownIcon = () => (
     <polyline points="6 9 12 15 18 9"></polyline>
   </svg>
 );
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <polyline points="6 9 12 15 18 9"></polyline>
-  </svg>
-);
+
 // Custom Select Component
-const CustomSelect = ({ options, value, onChange, placeholder }) => {
 const CustomSelect = ({ options, value, onChange, placeholder }) => {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef(null);
@@ -43,7 +29,7 @@ const CustomSelect = ({ options, value, onChange, placeholder }) => {
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [ref]);
+  }, []);
 
   const handleSelect = (optionValue) => {
     onChange(optionValue);
@@ -76,40 +62,31 @@ const CustomSelect = ({ options, value, onChange, placeholder }) => {
         <ChevronDownIcon />
       </div>
       {isOpen && (
-        <ul className="custom-select-options mt-2 rounded-lg">
+        <ul className="custom-select-options absolute top-full left-0 right-0 mt-2 bg-gray-900 border border-gray-700 rounded-lg shadow-xl z-50 max-h-60 overflow-y-auto">
+          <li
+            className="custom-select-option p-3 cursor-pointer hover:bg-gray-800 text-gray-300 border-b border-gray-700"
+            onClick={() => handleSelect("")}
+          >
+            {placeholder}
+          </li>
           {options.map((opt, index) => {
-            // Handle both object and string options for backward compatibility
             const isObject = typeof opt === "object";
-            const key = isObject ? opt.key || opt.value || index : opt;
             const optionValue = isObject ? opt.value : opt;
             const optionLabel = isObject ? opt.label : opt;
+            const key = isObject
+              ? opt.key || optionValue
+              : optionValue || index;
 
             return (
               <li
                 key={key}
-                className="custom-select-option p-3 cursor-pointer"
+                className="custom-select-option p-3 cursor-pointer hover:bg-gray-800 text-gray-300 border-b border-gray-700 last:border-b-0"
                 onClick={() => handleSelect(optionValue)}
               >
                 {optionLabel}
               </li>
             );
           })}
-        <ul className="custom-select-options absolute top-full left-0 right-0 mt-2 bg-gray-900 border border-gray-700 rounded-lg shadow-xl z-50 max-h-60 overflow-y-auto">
-          <li
-            className="custom-select-option p-3 cursor-pointer hover:bg-gray-800 text-gray-300 border-b border-gray-700 last:border-b-0"
-            onClick={() => handleSelect("")}
-          >
-            {placeholder}
-          </li>
-          {options.map((opt) => (
-            <li
-              key={opt}
-              className="custom-select-option p-3 cursor-pointer hover:bg-gray-800 text-gray-300 border-b border-gray-700 last:border-b-0"
-              onClick={() => handleSelect(opt)}
-            >
-              {opt}
-            </li>
-          ))}
         </ul>
       )}
     </div>

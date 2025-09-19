@@ -8,7 +8,7 @@ import CustomSelect from "@/components/ui/select/CustomSelect";
 
 // Import components as needed
 import SalaryRangeSlider from "@/components/ui/range/SalaryRangeInput";
-import Footer from "@/components/layout/Footer";
+import Footer from "@/components/layout/footer/Footer";
 
 // Sample advertisement data (normally would come from API)
 const sampleAdvertisements = [
