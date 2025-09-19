@@ -21,6 +21,11 @@ const sampleAdvertisements = [
     education: "bachelor",
     experience: "2-5",
     militaryService: "completed",
+    workHours: "۹ صبح تا ۶ عصر",
+    insurance: "full",
+    probationPeriod: "۳ ماه",
+    remoteWork: false,
+    travelRequired: false,
     responsibilities:
       "توسعه و پیادهسازی کامپوننت‌های React، بهینه‌سازی عملکرد، همکاری با تیم طراحی UX/UI، نوشتن تست‌های واحد و یکپارچه، استقرار و نگهداری برنامه‌ها",
     requirements:
@@ -240,6 +245,55 @@ const sampleAdvertisements = [
       "بیمه کامل",
     ],
   },
+  {
+    id: 9,
+    title: "کارشناس حسابداری",
+    company: "شرکت بازرگانی رازی",
+    location: "رشت",
+    province: "گیلان",
+    description: "مدیریت حسابداری و امور مالی شرکت",
+    category: "مالی و حسابداری",
+    specialization: "حسابداری",
+    type: "دورکاری",
+    salary: "۱۴,۰۰۰,۰۰۰ تومان",
+    applicants: 6,
+    date: "2024-09-03",
+    urgent: false,
+    gender: "both",
+    education: "bachelor",
+    experience: "2-5",
+    militaryService: "both",
+    responsibilities:
+      "مدیریت حسابداری، تهیه گزارش‌های مالی، کنترل بودجه، رسیدگی به امور مالیاتی",
+    requirements:
+      "تجربه در حسابداری حداقل ۲ سال، آشنا با قوانین مالیاتی، مهارت کار با نرم‌افزارهای حسابداری",
+    skills: "حسابداری، مالیات، نرم‌افزارهای حسابداری",
+    benefits: ["دورکاری", "پایه ثابت", "بیمه کامل"],
+  },
+  {
+    id: 10,
+    title: "نماینده فروش",
+    company: "شرکت پتروشیمی دلتا",
+    location: "اهواز",
+    province: "خوزستان",
+    description: "فروش محصولات پتروشیمی و ارتباط با مشتریان",
+    category: "بازاریابی و فروش",
+    specialization: "فروش مستقیم",
+    type: "قراردادی",
+    salary: "۱۳,۰۰۰,۰۰۰ تومان",
+    applicants: 11,
+    date: "2024-09-02",
+    urgent: false,
+    gender: "male",
+    education: "associate",
+    experience: "1-2",
+    militaryService: "completed",
+    responsibilities:
+      "فروش محصولات شرکت، ارتباط با مشتریان، پیگیری سفارشات، گزارش‌گیری فروش",
+    requirements: "تجربه فروش، توانمند در ارتباطات، آشنا با حوزه پتروشیمی",
+    skills: "فروش، ارتباطات، مشتری‌مداری",
+    benefits: ["پورسانت فروش", "بیمه درمانی", "وسیله نقلیه شرکت"],
+  },
 ];
 
 export default function AdvertisementDetailsPage() {
@@ -294,123 +348,157 @@ export default function AdvertisementDetailsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#121212] text-white font-sans" dir="rtl">
+    <div className="bg-[#121212] min-h-screen text-white font-sans" dir="rtl">
       <div className="container mx-auto px-4 py-12 md:py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Job Details */}
-          <div className="space-y-6">
-            <div className="bg-[#1a1a1a] rounded-xl border border-gray-700 overflow-hidden">
-              <div className="bg-gradient-to-r from-gray-800 to-gray-900 px-6 py-4 border-b border-gray-600">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3 space-x-reverse">
-                    <div className="w-10 h-10 bg-yellow-400/20 rounded-lg flex items-center justify-center">
-                      <svg
-                        className="w-5 h-5 text-yellow-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m8 0V6a4 4 0 01-4 4H8a4 4 0 01-4-4V6"
-                        ></path>
-                      </svg>
-                    </div>
-                    <div>
-                      <h2 className="text-lg font-bold text-white">
-                        {ad.title}
-                      </h2>
-                      <div className="flex items-center space-x-4 space-x-reverse text-xs text-gray-400 mt-1">
-                        <span>{ad.location}</span>
-                        <span>{ad.applicants} متقاضی</span>
-                        <span>{ad.date}</span>
-                      </div>
-                    </div>
-                  </div>
-                  {ad.urgent && (
-                    <div className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-medium">
-                      فوری
-                    </div>
-                  )}
+        {/* --- Header Section --- */}
+        <header className="text-center mb-12 md:mb-16">
+          <h1 className="text-4xl md:text-5xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 to-yellow-500">
+            {`استخدام ${ad.title}`}
+          </h1>
+          <div className="flex items-center justify-center gap-x-6 text-gray-400 text-lg">
+            <div className="flex items-center gap-x-2">
+              <span>{ad.company}</span>
+            </div>
+            <div className="flex items-center gap-x-2">
+              <span>{ad.location}</span>
+            </div>
+          </div>
+          {ad.urgent && (
+            <div className="mt-4 inline-flex items-center gap-2 px-6 py-2 bg-red-500 text-white rounded-full text-sm font-bold">
+              در حال استخدام فوری
+            </div>
+          )}
+        </header>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main Content - Left Column */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Job Description Section */}
+            <div className="bg-gradient-to-br from-[#2a2a2a] to-[#1a1a1a] rounded-xl border border-yellow-500/30 p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center">
+                  <svg
+                    className="w-5 h-5 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    ></path>
+                  </svg>
                 </div>
+                <h3 className="text-xl font-bold text-white">
+                  شرح موقعیت شغلی
+                </h3>
               </div>
-
-              <div className="p-6">
-                <div className="bg-gray-800/30 rounded-lg p-4 mb-4">
-                  <h4 className="text-sm font-semibold text-yellow-300 mb-3">
-                    شرح شغلی
-                  </h4>
-                  <p className="text-white text-sm leading-relaxed">
-                    {ad.description}
-                  </p>
-                </div>
-
-                <div className="bg-gray-800/30 rounded-lg p-4 mb-4">
-                  <h4 className="text-sm font-semibold text-yellow-300 mb-3">
-                    الزامات
-                  </h4>
-                  <p className="text-white text-sm leading-relaxed">
-                    {ad.requirements}
-                  </p>
-                </div>
-
-                <div className="bg-gray-800/30 rounded-lg p-4 mb-4">
-                  <h4 className="text-sm font-semibold text-yellow-300 mb-3">
-                    مهارت‌های مورد نیاز
-                  </h4>
-                  <p className="text-white text-sm">{ad.skills}</p>
-                </div>
-
-                <div className="bg-gray-800/30 rounded-lg p-4 mb-4">
-                  <h4 className="text-sm font-semibold text-yellow-300 mb-3">
-                    مزایا و تسهیلات
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {ad.benefits.length > 0 ? (
-                      ad.benefits.map((benefit, index) => (
-                        <span
-                          key={index}
-                          className="bg-yellow-400/15 text-yellow-300 text-xs px-2 py-1 rounded border border-yellow-400/30"
-                        >
-                          {benefit}
-                        </span>
-                      ))
-                    ) : (
-                      <span className="text-white text-sm">
-                        مزایای خاصی ذکر نشده است
-                      </span>
-                    )}
-                  </div>
-                </div>
+              <p className="text-gray-300 text-sm leading-relaxed mb-4">
+                {ad.description}
+              </p>
+              <div className="text-sm text-gray-400">
+                دسته‌بندی: {ad.category} • تخصص: {ad.specialization}
               </div>
+            </div>
+
+            {/* Requirements Section */}
+            <div className="bg-gradient-to-br from-[#2a2a2a] to-[#1a1a1a] rounded-xl border border-yellow-500/30 p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center">
+                  <svg
+                    className="w-5 h-5 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-white">
+                  الزامات و شرایط
+                </h3>
+              </div>
+              <p className="text-gray-300 text-sm leading-relaxed mb-4">
+                {ad.requirements}
+              </p>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {(ad.skills || "").split(", ").map((skill, index) => (
+                  <span
+                    key={index}
+                    className="bg-gradient-to-r from-yellow-500/20 to-amber-500/20 text-yellow-300 text-xs px-3 py-1 rounded-full border border-yellow-500/30"
+                  >
+                    {skill.trim()}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Responsibilities Section */}
+            <div className="bg-gradient-to-br from-[#2a2a2a] to-[#1a1a1a] rounded-xl border border-yellow-500/30 p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center">
+                  <svg
+                    className="w-5 h-5 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m8 0V6a4 4 0 01-4 4H8a4 4 0 01-4-4V6"
+                    ></path>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-white">
+                  مسئولیت‌ها و وظایف
+                </h3>
+              </div>
+              <p className="text-gray-300 text-sm leading-relaxed">
+                {ad.responsibilities}
+              </p>
             </div>
           </div>
 
-          {/* Company Info */}
+          {/* Sidebar - Right Column */}
           <div className="space-y-6">
-            <div className="bg-[#1a1a1a] rounded-2xl p-6 border border-gray-700">
-              <h3 className="text-xl font-bold mb-4">اطلاعات شرکت</h3>
-              <div className="text-center mb-4">
-                <h4 className="font-semibold text-lg">{ad.company}</h4>
+            {/* Company Info */}
+            <div className="bg-gradient-to-br from-[#2a2a2a] to-[#1a1a1a] rounded-xl border border-yellow-500/30 p-6 sticky top-6">
+              <h3 className="text-xl font-bold mb-6 text-center text-white">
+                اطلاعات شرکت
+              </h3>
+              <div className="text-center mb-6">
+                <div className="w-20 h-20 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg">
+                  <svg
+                    className="w-10 h-10 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                    ></path>
+                  </svg>
+                </div>
+                <h4 className="font-bold text-lg text-white">{ad.company}</h4>
                 <p className="text-gray-400 text-sm">{ad.location}</p>
               </div>
 
-              <div className="grid grid-cols-1 gap-3">
-                <div className="flex justify-between items-center p-2 bg-[#2a2a2a] rounded-lg">
-                  <span className="text-gray-400">حقوق:</span>
-                  <span className="text-yellow-300 font-semibold">
-                    {ad.salary}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center p-2 bg-[#2a2a2a] rounded-lg">
-                  <span className="text-gray-400">نوع همکاری:</span>
-                  <span>{ad.type}</span>
-                </div>
-                <div className="flex justify-between items-center p-2 bg-[#2a2a2a] rounded-lg">
-                  <span className="text-gray-400">جنسیت:</span>
-                  <span>
+              <div className="space-y-3 mb-6">
+                <div className="flex justify-between items-center p-3 bg-gray-700/50 rounded-lg">
+                  <span className="text-gray-400 text-sm">جنسیت:</span>
+                  <span className="text-white font-semibold">
                     {ad.gender === "male"
                       ? "آقا"
                       : ad.gender === "female"
@@ -418,36 +506,106 @@ export default function AdvertisementDetailsPage() {
                       : "آقا و خانم"}
                   </span>
                 </div>
-                <div className="flex justify-between items-center p-2 bg-[#2a2a2a] rounded-lg">
-                  <span className="text-gray-400">تحصیلات:</span>
-                  <span>
+                <div className="flex justify-between items-center p-3 bg-gray-700/50 rounded-lg">
+                  <span className="text-gray-400 text-sm">سابقه کاری:</span>
+                  <span className="text-white font-semibold">
+                    {ad.experience === "0-1"
+                      ? "کمتر از یک سال"
+                      : ad.experience === "1-2"
+                      ? "1 تا 2 سال"
+                      : ad.experience === "2-5"
+                      ? "2 تا 5 سال"
+                      : ad.experience === "5+"
+                      ? "بیشتر از 5 سال"
+                      : ad.experience}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-gray-700/50 rounded-lg">
+                  <span className="text-gray-400 text-sm">حقوق:</span>
+                  <span
+                    className={`font-semibold ${
+                      ad.salary.toLowerCase().includes("توافقی")
+                        ? "text-green-400"
+                        : "text-yellow-300"
+                    }`}
+                  >
+                    {ad.salary}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-gray-700/50 rounded-lg">
+                  <span className="text-gray-400 text-sm">نوع همکاری:</span>
+                  <span className="text-white font-semibold">{ad.type}</span>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-gray-700/50 rounded-lg">
+                  <span className="text-gray-400 text-sm">تحصیلات:</span>
+                  <span className="text-white font-semibold">
                     {ad.education === "bachelor"
                       ? "کارشناسی"
                       : ad.education === "master"
                       ? "کارشناسی ارشد"
+                      : ad.education === "associate"
+                      ? "کاردانی"
                       : "سایر"}
                   </span>
                 </div>
               </div>
-            </div>
 
-            <div className="bg-[#1a1a1a] rounded-2xl p-6 border border-gray-700">
-              <h3 className="text-xl font-bold mb-4 text-center">
-                درخواست همکاری
-              </h3>
-              <p className="text-gray-400 text-center text-sm mb-4">
-                برای درخواست این موقعیت لطفا وارد حساب کاربری خود شوید
-              </p>
-              <button className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-3 px-6 rounded-lg transition-colors duration-200">
-                🔐 ورود و درخواست همکاری
-              </button>
-              <div className="text-center mt-4">
-                <p className="text-xs text-gray-500 mb-2">
-                  حساب کاربری ندارید؟
+              {/* Benefits Section in Sidebar */}
+              {ad.benefits && ad.benefits.length > 0 && (
+                <div className="bg-gradient-to-r from-yellow-900/20 to-orange-900/20 rounded-lg p-4 border border-yellow-600 mb-6">
+                  <h4 className="text-sm font-semibold text-yellow-300 mb-3 flex items-center gap-2">
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      ></path>
+                    </svg>
+                    مزایای کلیدی
+                  </h4>
+                  <div className="space-y-2">
+                    {ad.benefits.slice(0, 4).map((benefit, index) => (
+                      <div key={index} className="flex items-center gap-2">
+                        <svg
+                          className="w-3 h-3 text-yellow-400"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M5 13l4 4L19 7"
+                          ></path>
+                        </svg>
+                        <span className="text-gray-300 text-sm">{benefit}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Application CTA */}
+              <div className="mt-6 pt-6 border-t border-gray-600">
+                <button
+                  onClick={() => router.push("/karjoo/resume")}
+                  className="w-full py-3 px-4 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-black font-bold rounded-lg transition-all duration-300 transform hover:scale-105 mb-3"
+                >
+                  ارسال رزومه
+                </button>
+                <p className="text-center text-xs text-gray-400">
+                  برای درخواست این موقعیت لطفا وارد حساب کاربری خود شوید
                 </p>
                 <button
                   onClick={() => router.push("/auth?mode=register")}
-                  className="text-sm text-yellow-400 hover:text-yellow-300 underline"
+                  className="w-full mt-2 py-2 px-4 border border-yellow-500 text-yellow-400 hover:bg-yellow-500 hover:text-black font-semibold rounded-lg transition-all duration-300"
                 >
                   ثبت نام کنید
                 </button>

@@ -25,6 +25,26 @@ const sampleAdvertisements = [
     applicants: 12,
     date: "2024-09-11",
     urgent: true,
+    gender: "male",
+    education: "bachelor",
+    experience: "2-5",
+    militaryService: "completed",
+    workHours: "۹ صبح تا ۶ عصر",
+    insurance: "full",
+    probationPeriod: "۳ ماه",
+    remoteWork: false,
+    travelRequired: false,
+    responsibilities:
+      "توسعه و پیادهسازی کامپوننت‌های React، بهینه‌سازی عملکرد، همکاری با تیم طراحی UX/UI، نوشتن تست‌های واحد و یکپارچه، استقرار و نگهداری برنامه‌ها",
+    requirements:
+      "آشنایی کامل با React و Hooks، تجربه با TypeScript، دانش HTML/CSS پیشرفته، تجربه کار با Git، آشنایی با RESTful APIs",
+    skills: "React.js, TypeScript, HTML/CSS, Git, REST APIs",
+    benefits: [
+      "بیمه درمانی کامل",
+      "تسهیلات ورزشی",
+      "دوره‌های آموزشی",
+      "کیفیت کار برتر",
+    ],
   },
   {
     id: 2,
@@ -40,6 +60,20 @@ const sampleAdvertisements = [
     applicants: 8,
     date: "2024-09-10",
     urgent: false,
+    gender: "both",
+    education: "associate",
+    experience: "2-5",
+    militaryService: "not-required",
+    responsibilities:
+      "طراحی رابط کاربری برای اپلیکیشن‌های موبایل، ایجاد پروتوتیپ‌های تعاملی، همکاری با تیم توسعه برای پیاده‌سازی طراحی، انجام تست‌های کاربری، و بهبود تجربه کاربری بر اساس بازخوردها",
+    requirements:
+      "مهارت بالا در Figma، دانش اصول UX design، تجربه طراحی هم‌رسان (Responsive)، درک رابط کاربری موبایل، توانایی هماهنگی با توسعه‌دهندگان",
+    skills: "Figma, Adobe XD, Sketch, Prototyping, Mobile Design",
+    benefits: [
+      "دسترسی به ابزارهای پیشرفته",
+      "تجربه کاری در استارتاپ",
+      "کیفیت کار پویا",
+    ],
   },
   {
     id: 3,
@@ -55,6 +89,22 @@ const sampleAdvertisements = [
     applicants: 5,
     date: "2024-09-09",
     urgent: true,
+    gender: "both",
+    education: "master",
+    experience: "5+",
+    militaryService: "completed",
+    responsibilities:
+      "تحقیق و تحلیل市场需求، تعریف استراتژی محصول، مدیریت محصول پیشرفته، همکاری با تیم‌های فنی، نظارت بر توسعه محصول، تحلیل عملکرد محصول از طریق داده‌ها",
+    requirements:
+      "تجربه مدیریت محصول بالا، دانش تحلیل داده، مهارت ارتباطی عالی، تجربه رهبری تیم، درک فناوری دیجیتال",
+    skills:
+      "Product Management, Data Analysis, Agile/Scrum, SQL, Analytics Tools",
+    benefits: [
+      "چالش‌های منحصر به فرد",
+      "توسعه حرفه‌ای سریع",
+      "تمام مزایای قانونی",
+      "کیفیت همکاری عالی",
+    ],
   },
   {
     id: 4,
@@ -71,6 +121,21 @@ const sampleAdvertisements = [
     applicants: 15,
     date: "2024-09-08",
     urgent: false,
+    gender: "both",
+    education: "bachelor",
+    experience: "2-5",
+    militaryService: "exempted",
+    responsibilities:
+      "اجرای استراتژی‌های SEO، اجرای تبلیغات گوگل، مدیریت کمپین‌های دیجیتال، تحلیل عملکرد محتوا، تولید گزارش‌های تحلیلی، بهینه‌سازی نرخ تبدیل",
+    requirements:
+      "مهارت‌های SEO پیشرفته، تجربه تبلیغات گوگل، توانمند در گوگل آنالیتیکس، درک دیجیتال مارکهای، مهارت تولید محتوا",
+    skills: "SEO, Google Ads, Google Analytics, Content Marketing, SEM",
+    benefits: [
+      "آموزش‌های مستمر",
+      "کیفیت پروژه‌های متنوع",
+      "کیفیت همکاری مناسب",
+      "زمان انعطاف‌پذیر",
+    ],
   },
   {
     id: 5,
@@ -86,6 +151,21 @@ const sampleAdvertisements = [
     applicants: 9,
     date: "2024-09-07",
     urgent: false,
+    gender: "male",
+    education: "bachelor",
+    experience: "2-5",
+    militaryService: "completed",
+    responsibilities:
+      "طراحی و توسعه میکروسرویس‌ها، پیادهسازی APIهای RESTful، ادغام با انواع پایگاه داده‌ها، بهینه‌سازی عملکرد سرور، تست و عیب‌یابی سیستم‌ها",
+    requirements:
+      "تسلط کامل به Node.js، تجربه ادغام فرهنگستان حداقل ۲ سال، مهارت پایگاه داده‌های SQL/NoSQL، دانش اصول RESTful API",
+    skills: "Node.js, Express.js, MongoDB, PostgreSQL, Docker, REST API",
+    benefits: [
+      "محیط کاری پویا",
+      "کیفیت پروژه‌های پیشرفته",
+      "دسترسی به تکنولوژی‌های نوین",
+      "کیفیت همکاری خوب",
+    ],
   },
   {
     id: 6,
@@ -101,6 +181,22 @@ const sampleAdvertisements = [
     applicants: 22,
     date: "2024-09-06",
     urgent: true,
+    gender: "female",
+    education: "bachelor",
+    experience: "2-5",
+    militaryService: "not-required",
+    responsibilities:
+      "جذب و گزینش کارکنان، برگزاری مصاحبه‌ها، مدیریت ارتباطات کاری، اجرای برنامه‌های انگیزشی، پیگیری امور اداری کارکنان",
+    requirements:
+      "تجربه حداقل ۲ سال منابع انسانی، مهارت مصاحبه و ارزیابی، توانمند در MS Office، مهارت ارتباطی بالا، درک روانشناسی سازمانی",
+    skills:
+      "HR Management, Recruitment, Employee Relations, MS Office, Communication",
+    benefits: [
+      "کیفیت همکاری مناسب",
+      "زمان انعطاف‌پذیر",
+      "تمام مزایای قانونی",
+      "محیط کاری آرام",
+    ],
   },
   {
     id: 7,
@@ -116,6 +212,21 @@ const sampleAdvertisements = [
     applicants: 7,
     date: "2024-09-05",
     urgent: false,
+    gender: "both",
+    education: "bachelor",
+    experience: "2-5",
+    militaryService: "completed",
+    responsibilities:
+      "توسعه کامل برنامه‌های وب، کار با فریمورک‌های مدرن، پیاده‌سازی فوی Frontend و Backend، بهینه‌سازی عملکرد، همکاری تیمی",
+    requirements:
+      "تجربه در React/Node.js، آشنایی با MongoDB، تجربه Docker، مهارت Git، درک معماری MVC",
+    skills: "React.js, Node.js, MongoDB, Docker, Git, Full Stack Development",
+    benefits: [
+      "محیط پویا و نوآورانه",
+      "یادگیری تکنولوژی‌های جدید",
+      "کیفیت کار متناسب با سن",
+      "تسهیلات مناسب",
+    ],
   },
   {
     id: 8,
@@ -131,6 +242,23 @@ const sampleAdvertisements = [
     applicants: 14,
     date: "2024-09-04",
     urgent: false,
+    gender: "both",
+    education: "master",
+    experience: "5+",
+    militaryService: "completed",
+    responsibilities:
+      "مدیریت استراتژی بازاریابی دیجیتال، اجرای کمپین‌های تبلیغاتی، تحلیل رده‌ها و داده‌های فروش، توسعه استراتژی‌های جدید، رهبری تیم بازاریابی، گزارش‌دهی به مدیریت ارشد",
+    requirements:
+      "۵+ سال تجربه بازاریابی دیجیتال، مهارت پیشرفته گوگل آنالیتیکس، تجربه مدیریت تیم، درک SEO و SEM پیشرفته، مهارت ارتباطات عالی",
+    skills:
+      "Digital Marketing, Google Analytics, SEO/SEM, Team Leadership, Strategy Planning",
+    benefits: [
+      "درآمد جذاب",
+      "کیفیت کار در آژانس برتر",
+      "زمان کاری انعطاف‌پذیر",
+      "آموزش و توسعه مداوم",
+      "بیمه کامل",
+    ],
   },
   {
     id: 9,
@@ -146,6 +274,16 @@ const sampleAdvertisements = [
     applicants: 6,
     date: "2024-09-03",
     urgent: false,
+    gender: "both",
+    education: "bachelor",
+    experience: "2-5",
+    militaryService: "both",
+    responsibilities:
+      "مدیریت حسابداری، تهیه گزارش‌های مالی، کنترل بودجه، رسیدگی به امور مالیاتی",
+    requirements:
+      "تجربه در حسابداری حداقل ۲ سال، آشنا با قوانین مالیاتی، مهارت کار با نرم‌افزارهای حسابداری",
+    skills: "حسابداری، مالیات، نرم‌افزارهای حسابداری",
+    benefits: ["دورکاری", "پایه ثابت", "بیمه کامل"],
   },
   {
     id: 10,
@@ -161,6 +299,15 @@ const sampleAdvertisements = [
     applicants: 11,
     date: "2024-09-02",
     urgent: false,
+    gender: "male",
+    education: "associate",
+    experience: "1-2",
+    militaryService: "completed",
+    responsibilities:
+      "فروش محصولات شرکت، ارتباط با مشتریان، پیگیری سفارشات، گزارش‌گیری فروش",
+    requirements: "تجربه فروش، توانمند در ارتباطات، آشنا با حوزه پتروشیمی",
+    skills: "فروش، ارتباطات، مشتری‌مداری",
+    benefits: ["پورسانت فروش", "بیمه درمانی", "وسیله نقلیه شرکت"],
   },
 ];
 
