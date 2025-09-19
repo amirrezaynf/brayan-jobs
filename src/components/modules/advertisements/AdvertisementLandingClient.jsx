@@ -563,7 +563,7 @@ export default function AdvertisementLandingClient() {
       <div className='flex gap-10 max-w-10xl mx-auto px-6 py-8'>
         {/* Left Sidebar - Fixed Filters */}
         <div className='hidden  lg:block w-80 flex-shrink-0'>
-          <div className='bg-[#2a2a2a] rounded-xl p-6 border border-gray-700 sticky top-8'>
+          <div className='bg-gradient-to-br from-black/50 to-black/10 backdrop-blur-sm rounded-xl p-6 border border-gray-700 sticky top-8'>
             <h3 className='text-xl font-bold mb-6 border-b-2 border-gray-700 pb-3 text-white'>
               جستجو و فیلترها
             </h3>
@@ -761,7 +761,7 @@ export default function AdvertisementLandingClient() {
                     {currentAds.map((ad) => (
                       <div
                         key={ad.id}
-                        className='bg-[#2a2a2a] rounded-xl p-4 border border-gray-700 hover:border-yellow-500/50 transition-all duration-300 relative overflow-hidden shadow-lg min-h-[240px] flex flex-col'>
+                        className='bg-gradient-to-br from-black/50 to-black/10 backdrop-blur-sm rounded-xl p-4 border border-gray-700 hover:border-yellow-500/50 transition-all duration-300 relative overflow-hidden shadow-lg min-h-[240px] flex flex-col'>
                         {ad.urgent && (
                           <span className='absolute top-2 left-2 bg-yellow-500/20 text-yellow-400 text-xs px-2 py-1 rounded-full whitespace-nowrap z-10'>
                             فوری
