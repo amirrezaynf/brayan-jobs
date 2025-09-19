@@ -1,4 +1,4 @@
-import Footer from "@/components/layout/Footer";
+import Footer from "@/components/layout/footer/Footer";
 import AdsAndFilters from "@/components/modules/home/TodayAd";
 import JobSearch from "@/components/modules/home/JobSearch";
 import BenefitsSection from "@/components/modules/home/BenefitsSection";
