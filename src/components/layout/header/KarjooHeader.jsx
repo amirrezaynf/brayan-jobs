@@ -17,7 +17,7 @@ export default function KarjooHeader() {
 
   return (
     <>
-      <header className="bg-black/90 backdrop-blur-sm shadow-md shadow-black/50 sticky top-0 z-30">
+      <header className=" backdrop-blur-sm shadow-md shadow-black/50 sticky top-0 z-30">
         <div className="container mx-auto px-4 lg:px-6 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-4">
             <svg

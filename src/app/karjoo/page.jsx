@@ -5,16 +5,16 @@ import KarjooDashboard from "@/components/modules/karjoo/KarjooDashboard";
 // Server-side rendered page
 export default function KarjooPage() {
   return (
-    <div className="flex min-h-screen bg-black/10 text-gray-200">
+    <div className="flex min-h-screen bg-black/90 text-gray-200">
       <KarjooDashboard />
 
       {/* Main Content Area */}
-      <div className=" flex-1 lg:mr-64">
+      <div className="  flex-1 lg:mr-64">
         {/* Header */}
         <KarjooHeader />
 
         {/* Main Content */}
-        <main className="bg-black/90 p-4 lg:p-6">
+        <main className="p-4 lg:p-6">
           <div className="space-y-6 lg:space-y-8">
             {/* Welcome Section */}
             <div className="bg-gradient-to-r from-yellow-600 to-yellow-500 rounded-xl p-4 lg:p-6 text-gray-900">

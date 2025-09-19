@@ -30,10 +30,6 @@ export default function Footer() {
               پلتفرم پیشرفته استخدامی که با استفاده از هوش مصنوعی، بهترین
               فرصت‌های شغلی را برای شما پیدا می‌کند.
             </p>
-            <div className="flex items-center space-x-2 space-x-reverse">
-              <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-green-400 text-sm">آنلاین و فعال</span>
-            </div>
           </div>
 
           {/* Quick Links */}
@@ -193,7 +189,6 @@ export default function Footer() {
                 &copy; {new Date().getFullYear()} پلتفرم استخدامی دکتر برایان
                 اعتماد. تمام حقوق محفوظ است.
               </p>
-              
             </div>
           </div>
         </div>

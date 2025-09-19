@@ -44,7 +44,7 @@ export default function KarjooMobileMenu({
 
       {/* Sidebar */}
       <aside
-        className={`fixed right-0 top-0 h-full w-64 !bg-black/90 backdrop-blur-sm border-l border-gray-800 shadow-2xl p-6 flex flex-col items-center z-50 transform transition-transform duration-300 ease-in-out lg:transform-none lg:bg-transparent lg:backdrop-blur-none ${
+        className={`fixed right-0 top-0 h-full w-64 bg-black/20 backdrop-blur-sm border-l border-gray-800 shadow-2xl p-6 flex flex-col items-center z-50 transform transition-transform duration-300 ease-in-out lg:transform-none lg:bg-transparent lg:backdrop-blur-none ${
           isMobileMenuOpen
             ? "translate-x-0"
             : "translate-x-full lg:translate-x-0"

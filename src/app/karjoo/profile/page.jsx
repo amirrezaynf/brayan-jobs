@@ -19,9 +19,8 @@ import {
   Home,
 } from "lucide-react";
 import KarjooHeader from "@/components/layout/header/KarjooHeader";
-import CustomInput from "@/components/ui/input/CustomInput";
 
-export default function KarjooProfilePage() {
+export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -143,12 +142,17 @@ export default function KarjooProfilePage() {
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     نام
                   </label>
-                  <CustomInput
+                  <input
                     type="text"
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleInputChange}
                     disabled={!isEditing}
+                    className={`w-full px-4 py-3 bg-gray-800/50 border rounded-lg text-white placeholder-gray-400 transition-colors ${
+                      isEditing
+                        ? "border-gray-600 focus:border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
+                        : "border-gray-700/50 cursor-not-allowed"
+                    }`}
                     placeholder="نام خود را وارد کنید"
                   />
                 </div>
@@ -158,12 +162,17 @@ export default function KarjooProfilePage() {
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     نام خانوادگی
                   </label>
-                  <CustomInput
+                  <input
                     type="text"
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleInputChange}
                     disabled={!isEditing}
+                    className={`w-full px-4 py-3 bg-gray-800/50 border rounded-lg text-white placeholder-gray-400 transition-colors ${
+                      isEditing
+                        ? "border-gray-600 focus:border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
+                        : "border-gray-700/50 cursor-not-allowed"
+                    }`}
                     placeholder="نام خانوادگی خود را وارد کنید"
                   />
                 </div>
@@ -173,14 +182,22 @@ export default function KarjooProfilePage() {
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     ایمیل
                   </label>
-                  <CustomInput
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    disabled={!isEditing}
-                    placeholder="ایمیل خود را وارد کنید"
-                  />
+                  <div className="relative">
+                    <Mail className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      disabled={!isEditing}
+                      className={`w-full pr-12 pl-4 py-3 bg-gray-800/50 border rounded-lg text-white placeholder-gray-400 transition-colors ${
+                        isEditing
+                          ? "border-gray-600 focus:border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
+                          : "border-gray-700/50 cursor-not-allowed"
+                      }`}
+                      placeholder="ایمیل خود را وارد کنید"
+                    />
+                  </div>
                 </div>
 
                 {/* Phone */}
@@ -188,14 +205,22 @@ export default function KarjooProfilePage() {
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     شماره تلفن
                   </label>
-                  <CustomInput
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    disabled={!isEditing}
-                    placeholder="شماره تلفن خود را وارد کنید"
-                  />
+                  <div className="relative">
+                    <Phone className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      disabled={!isEditing}
+                      className={`w-full pr-12 pl-4 py-3 bg-gray-800/50 border rounded-lg text-white placeholder-gray-400 transition-colors ${
+                        isEditing
+                          ? "border-gray-600 focus:border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
+                          : "border-gray-700/50 cursor-not-allowed"
+                      }`}
+                      placeholder="شماره تلفن خود را وارد کنید"
+                    />
+                  </div>
                 </div>
 
                 {/* Location */}
@@ -203,14 +228,22 @@ export default function KarjooProfilePage() {
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     محل سکونت
                   </label>
-                  <CustomInput
-                    type="text"
-                    name="location"
-                    value={formData.location}
-                    onChange={handleInputChange}
-                    disabled={!isEditing}
-                    placeholder="شهر و کشور خود را وارد کنید"
-                  />
+                  <div className="relative">
+                    <Home className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                    <input
+                      type="text"
+                      name="location"
+                      value={formData.location}
+                      onChange={handleInputChange}
+                      disabled={!isEditing}
+                      className={`w-full pr-12 pl-4 py-3 bg-gray-800/50 border rounded-lg text-white placeholder-gray-400 transition-colors ${
+                        isEditing
+                          ? "border-gray-600 focus:border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
+                          : "border-gray-700/50 cursor-not-allowed"
+                      }`}
+                      placeholder="شهر و کشور خود را وارد کنید"
+                    />
+                  </div>
                 </div>
 
                 {/* Bio */}
@@ -218,14 +251,22 @@ export default function KarjooProfilePage() {
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     بیوگرافی
                   </label>
-                  <CustomInput
-                    type="textarea"
-                    name="bio"
-                    value={formData.bio}
-                    onChange={handleInputChange}
-                    disabled={!isEditing}
-                    placeholder="درباره خود بنویسید..."
-                  />
+                  <div className="relative">
+                    <FileText className="absolute right-3 top-3 text-gray-400 w-5 h-5" />
+                    <textarea
+                      name="bio"
+                      value={formData.bio}
+                      onChange={handleInputChange}
+                      disabled={!isEditing}
+                      rows={4}
+                      className={`w-full pr-12 pl-4 py-3 bg-gray-800/50 border rounded-lg text-white placeholder-gray-400 transition-colors resize-none ${
+                        isEditing
+                          ? "border-gray-600 focus:border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
+                          : "border-gray-700/50 cursor-not-allowed"
+                      }`}
+                      placeholder="درباره خود بنویسید..."
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -245,19 +286,19 @@ export default function KarjooProfilePage() {
                       رمز عبور فعلی
                     </label>
                     <div className="relative">
-                      <Lock className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
-                      <CustomInput
+                      <Lock className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                      <input
                         type={showPassword ? "text" : "password"}
                         name="currentPassword"
                         value={formData.currentPassword}
                         onChange={handleInputChange}
+                        className="w-full pr-12 pl-12 py-3 bg-gray-800/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/20 transition-colors"
                         placeholder="رمز عبور فعلی خود را وارد کنید"
-                        className="pr-12 pl-12"
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors z-10"
+                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
                       >
                         {showPassword ? (
                           <EyeOff className="w-5 h-5" />
@@ -274,19 +315,19 @@ export default function KarjooProfilePage() {
                       رمز عبور جدید
                     </label>
                     <div className="relative">
-                      <Lock className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
-                      <CustomInput
+                      <Lock className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                      <input
                         type={showNewPassword ? "text" : "password"}
                         name="newPassword"
                         value={formData.newPassword}
                         onChange={handleInputChange}
+                        className="w-full pr-12 pl-12 py-3 bg-gray-800/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/20 transition-colors"
                         placeholder="رمز عبور جدید خود را وارد کنید"
-                        className="pr-12 pl-12"
                       />
                       <button
                         type="button"
                         onClick={() => setShowNewPassword(!showNewPassword)}
-                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors z-10"
+                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
                       >
                         {showNewPassword ? (
                           <EyeOff className="w-5 h-5" />
@@ -303,14 +344,14 @@ export default function KarjooProfilePage() {
                       تکرار رمز عبور جدید
                     </label>
                     <div className="relative">
-                      <Lock className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
-                      <CustomInput
+                      <Lock className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                      <input
                         type="password"
                         name="confirmPassword"
                         value={formData.confirmPassword}
                         onChange={handleInputChange}
+                        className="w-full pr-12 pl-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/20 transition-colors"
                         placeholder="رمز عبور جدید را مجدداً وارد کنید"
-                        className="pr-12"
                       />
                     </div>
                   </div>

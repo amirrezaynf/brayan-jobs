@@ -787,7 +787,7 @@ function ReceivedResumesPageContent() {
 
   return (
     <div className="min-h-screen bg-black/90 text-white pb-6 ">
-      {/* <KarjooHeader /> */}
+      <KarjooHeader />
       
 
       <div className="max-w-7xl mx-auto space-y-6 ">
