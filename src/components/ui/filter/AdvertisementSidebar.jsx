@@ -2,7 +2,7 @@
 
 import React from "react";
 import CustomSelect from "@/components/ui/select/CustomSelect";
-import SalaryRangeSlider from "@/components/ui/range/SalaryRangeSlider";
+import SalaryRangeSlider from "@/components/ui/range/SalaryRangeInput";
 
 const AdvertisementSidebar = ({
   // Search and Sort
