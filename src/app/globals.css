@@ -19,7 +19,6 @@
 body,
 html {
   font-family: "Yekan Bakh", "Tahoma", sans-serif;
-  background-color: #000000dd !important;
   color: #d1d5db !important;
   direction: rtl;
   overflow-x: hidden;
@@ -365,5 +364,38 @@ input[type="range"]::-webkit-slider-runnable-track {
   body {
     /* background-color: #000000 !important; */
     color: #d1d5db !important;
+  }
+}
+
+/* Auth Styles */
+
+@keyframes gradient-xy {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+.animate-gradient-xy {
+  background-size: 200% 200%;
+  animation: gradient-xy 15s ease infinite;
+}
+.form-step {
+  display: none;
+}
+.form-step.active {
+  display: block;
+  animation: fadeIn 0.5s ease-in-out;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

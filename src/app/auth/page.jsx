@@ -19,43 +19,9 @@ import {
   Smile,
   CheckCircle,
 } from "lucide-react";
+import FormInput from "@/components/ui/input/FormInput";
 
 // You might need to install lucide-react: npm install lucide-react
-
-const IconWrapper = ({ children }) => (
-  <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
-    {children}
-  </div>
-);
-
-const FormInput = ({
-  name,
-  type,
-  placeholder,
-  icon,
-  value,
-  onChange,
-  onKeyDown,
-  error,
-}) => (
-  <div className="mb-4">
-    <div className="relative">
-      <input
-        type={type}
-        name={name}
-        value={value}
-        onChange={onChange}
-        onKeyDown={onKeyDown}
-        placeholder={placeholder}
-        className={`bg-gray-700/50 border ${
-          error ? "border-red-500" : "border-gray-600"
-        } text-gray-200 text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5 pr-10`}
-      />
-      <IconWrapper>{icon}</IconWrapper>
-    </div>
-    {error && <p className="text-red-500 text-xs mt-1 mr-1">{error}</p>}
-  </div>
-);
 
 export default function AuthPage() {
   const [userRole, setUserRole] = useState("specialist"); // 'specialist' or 'employer'
@@ -228,46 +194,19 @@ export default function AuthPage() {
     alert("ورود کارفرما با موفقیت انجام شد!");
   };
 
+
+  
+
+
   return (
     <div
       className="min-h-screen  text-gray-200 grid grid-cols-1 lg:grid-cols-2"
-      dir="rtl"
+      
     >
       {/* Right Side - Form */}
       <div className="relative flex items-center justify-center p-6 sm:p-12 lg:h-screen">
         <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-900 to-yellow-900/30 animate-gradient-xy"></div>
-        <style jsx>{`
-          @keyframes gradient-xy {
-            0%,
-            100% {
-              background-position: 0% 50%;
-            }
-            50% {
-              background-position: 100% 50%;
-            }
-          }
-          .animate-gradient-xy {
-            background-size: 200% 200%;
-            animation: gradient-xy 15s ease infinite;
-          }
-          .form-step {
-            display: none;
-          }
-          .form-step.active {
-            display: block;
-            animation: fadeIn 0.5s ease-in-out;
-          }
-          @keyframes fadeIn {
-            from {
-              opacity: 0;
-              transform: translateY(10px);
-            }
-            to {
-              opacity: 1;
-              transform: translateY(0);
-            }
-          }
-        `}</style>
+        
         <div className="w-full max-w-md z-10">
           <div className="text-center mb-8">
             <div className="flex items-center justify-between mb-4">
@@ -335,6 +274,7 @@ export default function AuthPage() {
               </button>
             </div>
             <div className="p-8">
+
               {/* --- SPECIALIST FORM --- */}
               {userRole === "specialist" &&
                 (activeTab === "login" ? (

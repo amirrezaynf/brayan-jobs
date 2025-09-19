@@ -272,11 +272,11 @@ export default function ResumePage() {
 
   return (
     <div
-      className="bg-black/90 text-gray-200 font-['Vazirmatn'] min-h-screen"
+      className=" text-gray-200 font-['Vazirmatn'] min-h-screen"
       dir="rtl"
     >
       <KarjooHeader />
-      <div className="container mx-auto px-4 py-8 md:py-12">
+      <div className=" bg-black/90 container mx-auto px-4 py-8 md:py-12">
         <div className="max-w-4xl mx-auto border border-gray-700  rounded-xl shadow-lg shadow-yellow-500/10 overflow-hidden">
           <div className="px-6 py-8 sm:px-10">
             {/* Header */}
