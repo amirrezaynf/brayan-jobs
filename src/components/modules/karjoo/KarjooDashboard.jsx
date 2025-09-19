@@ -77,6 +77,7 @@ export default function KarjooDashboard() {
       icon: (
         <LucideUser/>
       ),
+      link:"/karjoo/1",
     },
   ];
 
