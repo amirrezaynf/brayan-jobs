@@ -93,14 +93,13 @@ const StarIcon = ({ filled = false }) => (
   <svg
     className={`w-4 h-4 ${filled ? "text-yellow-400" : "text-gray-600"}`}
     fill={filled ? "currentColor" : "none"}
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-  >
+    stroke='currentColor'
+    viewBox='0 0 24 24'>
     <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      strokeLinecap='round'
+      strokeLinejoin='round'
       strokeWidth={2}
-      d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+      d='M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z'
     />
   </svg>
 );
@@ -112,10 +111,10 @@ export default function EmployerSinglePage({ params }) {
 
   if (!employer) {
     return (
-      <div className="min-h-screen bg-[#0f0f0f] text-white flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">شرکت یافت نشد</h1>
-          <Link href="/employers" className="text-yellow-400 hover:underline">
+      <div className='min-h-screen bg-[#0f0f0f] text-white flex items-center justify-center'>
+        <div className='text-center'>
+          <h1 className='text-2xl font-bold mb-4'>شرکت یافت نشد</h1>
+          <Link href='/employers' className='text-yellow-400 hover:underline'>
             بازگشت به لیست شرکت‌ها
           </Link>
         </div>
@@ -132,138 +131,134 @@ export default function EmployerSinglePage({ params }) {
   };
 
   return (
-    <div className="bg-[#0f0f0f] min-h-screen text-white font-sans" dir="rtl">
+    <div className='bg-[#0f0f0f] min-h-screen text-white font-sans' dir='rtl'>
       {/* Header */}
-      <header className="bg-[#1a1a1a] shadow-lg sticky top-0 z-40">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex justify-between items-center">
-            <Link href="/" className="flex items-center text-yellow-400">
+      {/* <header className='bg-[#1a1a1a] shadow-lg sticky top-0 z-40'>
+        <div className='container mx-auto px-6 py-4'>
+          <div className='flex justify-between items-center'>
+            <Link href='/' className='flex items-center text-yellow-400'>
               <svg
-                className="w-8 h-8 ml-2"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
+                className='w-8 h-8 ml-2'
+                xmlns='http://www.w3.org/2000/svg'
+                fill='none'
+                viewBox='0 0 24 24'
                 strokeWidth={1.5}
-                stroke="currentColor"
-              >
+                stroke='currentColor'>
                 <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z"
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  d='M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z'
                 />
               </svg>
               دکتر برایان اعتماد
             </Link>
             <Link
-              href="/employers"
-              className="text-white hover:text-yellow-400"
-            >
+              href='/employers'
+              className='text-white hover:text-yellow-400'>
               بازگشت به لیست
             </Link>
           </div>
         </div>
-      </header>
+      </header> */}
 
       <main>
         {/* Hero Section */}
-        <section className="py-12 bg-[#1a1a1a]">
-          <div className="container mx-auto px-6">
-            <div className="text-center mb-8">
-              <div className="w-24 h-24 bg-gradient-to-br from-yellow-400/20 to-yellow-600/30 rounded-2xl flex items-center justify-center text-yellow-400 font-bold text-3xl mx-auto mb-6 border border-yellow-400/30">
+        <section className='py-12 bg-[#1a1a1a]'>
+          <div className='container mx-auto px-6'>
+            <div className='text-center mb-8'>
+              <div className='w-24 h-24 bg-gradient-to-br from-yellow-400/20 to-yellow-600/30 rounded-2xl flex items-center justify-center text-yellow-400 font-bold text-3xl mx-auto mb-6 border border-yellow-400/30'>
                 {employer.logo}
               </div>
-              <div className="flex items-center justify-center gap-3 mb-4">
-                <h1 className="text-3xl font-bold">{employer.name}</h1>
+              <div className='flex items-center justify-center gap-3 mb-4'>
+                <h1 className='text-3xl font-bold'>{employer.name}</h1>
                 {employer.isVerified && (
                   <svg
-                    className="w-6 h-6 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    className='w-6 h-6 text-blue-400'
+                    fill='currentColor'
+                    viewBox='0 0 24 24'>
+                    <path d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z' />
                   </svg>
                 )}
               </div>
-              <p className="text-gray-400 text-lg mb-2">
+              <p className='text-gray-400 text-lg mb-2'>
                 {employer.industry} • {employer.location}
               </p>
-              <div className="flex items-center justify-center gap-2 mb-6">
-                <div className="flex items-center gap-1">
+              <div className='flex items-center justify-center gap-2 mb-6'>
+                <div className='flex items-center gap-1'>
                   {renderStars(employer.rating)}
                 </div>
-                <span className="text-yellow-400 font-semibold">
+                <span className='text-yellow-400 font-semibold'>
                   {employer.rating}
                 </span>
-                <span className="text-gray-400">({employer.reviews} نظر)</span>
+                <span className='text-gray-400'>({employer.reviews} نظر)</span>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-              <div className="bg-[#2a2a2a] p-4 rounded-xl text-center">
-                <div className="text-2xl font-bold text-yellow-400">
+            <div className='grid grid-cols-1 md:grid-cols-4 gap-6 mb-8'>
+              <div className='bg-[#2a2a2a] p-4 rounded-xl text-center'>
+                <div className='text-2xl font-bold text-yellow-400'>
                   {employer.employeeCount}
                 </div>
-                <div className="text-gray-400 text-sm">کارمندان</div>
+                <div className='text-gray-400 text-sm'>کارمندان</div>
               </div>
-              <div className="bg-[#2a2a2a] p-4 rounded-xl text-center">
-                <div className="text-2xl font-bold text-yellow-400">
+              <div className='bg-[#2a2a2a] p-4 rounded-xl text-center'>
+                <div className='text-2xl font-bold text-yellow-400'>
                   {employer.openPositions}
                 </div>
-                <div className="text-gray-400 text-sm">جایگاه‌های شغلی</div>
+                <div className='text-gray-400 text-sm'>جایگاه‌های شغلی</div>
               </div>
-              <div className="bg-[#2a2a2a] p-4 rounded-xl text-center">
-                <div className="text-2xl font-bold text-yellow-400">
+              <div className='bg-[#2a2a2a] p-4 rounded-xl text-center'>
+                <div className='text-2xl font-bold text-yellow-400'>
                   {new Date().getFullYear() - employer.foundedYear} سال
                 </div>
-                <div className="text-gray-400 text-sm">سابقه فعالیت</div>
+                <div className='text-gray-400 text-sm'>سابقه فعالیت</div>
               </div>
-              <div className="bg-[#2a2a2a] p-4 rounded-xl text-center">
-                <div className="text-2xl font-bold text-yellow-400">
+              <div className='bg-[#2a2a2a] p-4 rounded-xl text-center'>
+                <div className='text-2xl font-bold text-yellow-400'>
                   سطح بالا
                 </div>
-                <div className="text-gray-400 text-sm">کیفیت شرکت</div>
+                <div className='text-gray-400 text-sm'>کیفیت شرکت</div>
               </div>
             </div>
           </div>
         </section>
 
         {/* Content Tabs */}
-        <section className="py-12">
-          <div className="container mx-auto px-6">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <section className='py-12'>
+          <div className='container mx-auto px-6'>
+            <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
               {/* About Company */}
-              <div className="lg:col-span-2">
-                <div className="bg-[#1a1a1a] rounded-xl p-6 mb-6">
-                  <h3 className="text-xl font-bold mb-4">درباره شرکت</h3>
-                  <p className="text-gray-300 leading-relaxed">
+              <div className='lg:col-span-2'>
+                <div className='bg-[#1a1a1a] rounded-xl p-6 mb-6'>
+                  <h3 className='text-xl font-bold mb-4'>درباره شرکت</h3>
+                  <p className='text-gray-300 leading-relaxed'>
                     {employer.description}
                   </p>
                   {employer.vision && (
-                    <div className="mt-6">
-                      <h4 className="text-lg font-semibold mb-2 text-yellow-400">
+                    <div className='mt-6'>
+                      <h4 className='text-lg font-semibold mb-2 text-yellow-400'>
                         چشم‌انداز
                       </h4>
-                      <p className="text-gray-300">{employer.vision}</p>
+                      <p className='text-gray-300'>{employer.vision}</p>
                     </div>
                   )}
                   {employer.mission && (
-                    <div className="mt-6">
-                      <h4 className="text-lg font-semibold mb-2 text-yellow-400">
+                    <div className='mt-6'>
+                      <h4 className='text-lg font-semibold mb-2 text-yellow-400'>
                         مأموریت
                       </h4>
-                      <p className="text-gray-300">{employer.mission}</p>
+                      <p className='text-gray-300'>{employer.mission}</p>
                     </div>
                   )}
                 </div>
 
-                <div className="bg-[#1a1a1a] rounded-xl p-6">
-                  <h3 className="text-xl font-bold mb-4">مزایای همکاری</h3>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div className='bg-[#1a1a1a] rounded-xl p-6'>
+                  <h3 className='text-xl font-bold mb-4'>مزایای همکاری</h3>
+                  <div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
                     {employer.benefits.map((benefit, index) => (
                       <div
                         key={index}
-                        className="bg-[#2a2a2a] p-3 rounded-lg text-center"
-                      >
+                        className='bg-[#2a2a2a] p-3 rounded-lg text-center'>
                         {benefit}
                       </div>
                     ))}
@@ -275,9 +270,9 @@ export default function EmployerSinglePage({ params }) {
               <div>
                 {/* Contact Info */}
                 {employer.address && (
-                  <div className="bg-[#1a1a1a] rounded-xl p-6 mb-6">
-                    <h4 className="text-lg font-bold mb-4">اطلاعات تماس</h4>
-                    <div className="space-y-3">
+                  <div className='bg-[#1a1a1a] rounded-xl p-6 mb-6'>
+                    <h4 className='text-lg font-bold mb-4'>اطلاعات تماس</h4>
+                    <div className='space-y-3'>
                       {employer.address && (
                         <p>
                           <strong>آدرس:</strong> {employer.address}
@@ -298,8 +293,7 @@ export default function EmployerSinglePage({ params }) {
                           <strong>وب‌سایت:</strong>{" "}
                           <a
                             href={`http://${employer.website}`}
-                            className="text-yellow-400 hover:underline"
-                          >
+                            className='text-yellow-400 hover:underline'>
                             {employer.website}
                           </a>
                         </p>
@@ -310,26 +304,24 @@ export default function EmployerSinglePage({ params }) {
 
                 {/* Social Links */}
                 {(employer.linkedin || employer.instagram) && (
-                  <div className="bg-[#1a1a1a] rounded-xl p-6 mb-6">
-                    <h4 className="text-lg font-bold mb-4">شبکه‌های اجتماعی</h4>
-                    <div className="flex gap-4">
+                  <div className='bg-[#1a1a1a] rounded-xl p-6 mb-6'>
+                    <h4 className='text-lg font-bold mb-4'>شبکه‌های اجتماعی</h4>
+                    <div className='flex gap-4'>
                       {employer.linkedin && (
                         <a
                           href={employer.linkedin}
-                          target="_blank"
-                          rel="noopener"
-                          className="text-blue-400 hover:text-blue-300"
-                        >
+                          target='_blank'
+                          rel='noopener'
+                          className='text-blue-400 hover:text-blue-300'>
                           LinkedIn
                         </a>
                       )}
                       {employer.instagram && (
                         <a
                           href={employer.instagram}
-                          target="_blank"
-                          rel="noopener"
-                          className="text-pink-400 hover:text-pink-300"
-                        >
+                          target='_blank'
+                          rel='noopener'
+                          className='text-pink-400 hover:text-pink-300'>
                           Instagram
                         </a>
                       )}
@@ -338,18 +330,16 @@ export default function EmployerSinglePage({ params }) {
                 )}
 
                 {/* Actions */}
-                <div className="bg-[#1a1a1a] rounded-xl p-6">
-                  <div className="space-y-4">
+                <div className='bg-[#1a1a1a] rounded-xl p-6'>
+                  <div className='space-y-4'>
                     <Link
                       href={`/jobs?company=${employer.id}`}
-                      className="w-full bg-yellow-400 text-black py-3 px-6 rounded-lg font-semibold hover:bg-yellow-300 transition block text-center"
-                    >
+                      className='w-full bg-yellow-400 text-black py-3 px-6 rounded-lg font-semibold hover:bg-yellow-300 transition block text-center'>
                       مشاهده موقعیت‌های شغلی ({employer.openPositions})
                     </Link>
                     <Link
-                      href="/resume"
-                      className="w-full bg-gray-700 text-white py-3 px-6 rounded-lg hover:bg-gray-600 transition block text-center"
-                    >
+                      href='/resume'
+                      className='w-full bg-gray-700 text-white py-3 px-6 rounded-lg hover:bg-gray-600 transition block text-center'>
                       ارسال رزومه
                     </Link>
                   </div>
@@ -359,16 +349,6 @@ export default function EmployerSinglePage({ params }) {
           </div>
         </section>
       </main>
-
-      {/* Footer */}
-      <footer className="bg-[#1a1a1a] border-t border-gray-800 mt-16">
-        <div className="container mx-auto px-6 py-8 text-center text-gray-400">
-          <p>
-            &copy; {new Date().getFullYear()} پلتفرم استخدامی دکتر برایان
-            اعتماد. تمام حقوق محفوظ است.
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }
