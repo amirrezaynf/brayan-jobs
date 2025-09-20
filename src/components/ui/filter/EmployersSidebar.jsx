@@ -26,15 +26,6 @@ const EmployersSidebar = ({
   setSelectedCity,
   availableCities,
   
-  // Company Size
-  selectedCompanySize,
-  setSelectedCompanySize,
-  companySizes,
-  
-  // Company Type
-  selectedCompanyType,
-  setSelectedCompanyType,
-  companyTypes,
   
   // Clear Filters Function
   onClearFilters,
@@ -45,8 +36,6 @@ const EmployersSidebar = ({
     setSelectedCountry("");
     setSelectedProvince("");
     setSelectedCity("");
-    setSelectedCompanySize("");
-    setSelectedCompanyType("");
     setSortBy("newest");
     
     // Call additional clear function if provided
@@ -208,49 +197,6 @@ const EmployersSidebar = ({
           />
         </div>
 
-        {/* Company Size Filter */}
-        <div className="mb-4">
-          <label className="block mb-2 text-sm font-medium text-gray-300">
-            اندازه شرکت
-          </label>
-          <CustomSelect
-            value={selectedCompanySize}
-            onChange={(value) =>
-              setSelectedCompanySize(value === "همه اندازه‌ها" ? "" : value)
-            }
-            options={[
-              { value: "", label: "همه اندازه‌ها", key: "all-sizes" },
-              ...companySizes.slice(1).map((size, index) => ({
-                value: size,
-                label: size,
-                key: `size-${index}`,
-              })),
-            ]}
-            placeholder="انتخاب اندازه شرکت"
-          />
-        </div>
-
-        {/* Company Type Filter */}
-        <div className="mb-6">
-          <label className="block mb-2 text-sm font-medium text-gray-300">
-            نوع شرکت
-          </label>
-          <CustomSelect
-            value={selectedCompanyType}
-            onChange={(value) =>
-              setSelectedCompanyType(value === "همه انواع" ? "" : value)
-            }
-            options={[
-              { value: "", label: "همه انواع", key: "all-types" },
-              ...companyTypes.slice(1).map((type, index) => ({
-                value: type,
-                label: type,
-                key: `type-${index}`,
-              })),
-            ]}
-            placeholder="انتخاب نوع شرکت"
-          />
-        </div>
 
         {/* Clear Filters Button */}
         <button

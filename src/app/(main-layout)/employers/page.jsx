@@ -379,23 +379,6 @@ const cities = [
   "کرج",
 ];
 
-const companySizes = [
-  "همه اندازه‌ها",
-  "1-10 نفر",
-  "11-50 نفر",
-  "51-100 نفر",
-  "101-500 نفر",
-  "بیش از 500 نفر",
-];
-
-const companyTypes = [
-  "همه انواع",
-  "خصوصی",
-  "دولتی",
-  "نیمه دولتی",
-  "استارتاپ",
-  "شرکت بین‌المللی",
-];
 
 // Helper components
 const StarIcon = ({ filled = false }) => (
@@ -537,8 +520,6 @@ export default function EmployersPage() {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedProvince, setSelectedProvince] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
-  const [selectedCompanySize, setSelectedCompanySize] = useState("");
-  const [selectedCompanyType, setSelectedCompanyType] = useState("");
   
   // Available cities based on selected province
   const availableCities = selectedProvince && selectedProvince !== "" 
@@ -555,12 +536,12 @@ export default function EmployersPage() {
 
   useEffect(() => {
     filterEmployers();
-  }, [searchFilter, selectedIndustry, selectedCountry, selectedProvince, selectedCity, selectedCompanySize, selectedCompanyType, sortBy]);
+  }, [searchFilter, selectedIndustry, selectedCountry, selectedProvince, selectedCity, sortBy]);
 
   // Reset to first page when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchFilter, selectedIndustry, selectedCountry, selectedProvince, selectedCity, selectedCompanySize, selectedCompanyType, sortBy]);
+  }, [searchFilter, selectedIndustry, selectedCountry, selectedProvince, selectedCity, sortBy]);
 
   const filterEmployers = () => {
     let filtered = [...currentEmployers];
@@ -601,17 +582,6 @@ export default function EmployersPage() {
       );
     }
 
-    // Company size filter
-    if (selectedCompanySize && selectedCompanySize !== "") {
-      filtered = filtered.filter((employer) =>
-        employer.employeeCount === selectedCompanySize
-      );
-    }
-
-    // Company type filter (add this field to employer data if needed)
-    if (selectedCompanyType && selectedCompanyType !== "") {
-      // Add company type filtering logic here
-    }
 
     // Sort employers
     filtered.sort((a, b) => {
@@ -730,12 +700,6 @@ export default function EmployersPage() {
               selectedCity={selectedCity}
               setSelectedCity={setSelectedCity}
               availableCities={availableCities}
-              selectedCompanySize={selectedCompanySize}
-              setSelectedCompanySize={setSelectedCompanySize}
-              companySizes={companySizes}
-              selectedCompanyType={selectedCompanyType}
-              setSelectedCompanyType={setSelectedCompanyType}
-              companyTypes={companyTypes}
             />
 
             {/* Main Content */}
