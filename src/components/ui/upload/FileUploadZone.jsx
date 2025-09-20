@@ -40,6 +40,10 @@ export default function FileUploadZone({
   const handleFileChange = (e) => {
     const newFiles = Array.from(e.target.files);
     updateFiles(newFiles);
+    // Reset input value to allow selecting the same file again
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
   };
 
   const updateFiles = (newFiles) => {
@@ -83,6 +87,7 @@ export default function FileUploadZone({
           multiple={multiple}
           className="absolute w-full h-full opacity-0 cursor-pointer"
           onChange={handleFileChange}
+          onClick={(e) => e.stopPropagation()}
         />
         <div className="text-center text-gray-500">
           <UploadCloud className="w-10 h-10 mx-auto" />
@@ -93,7 +98,7 @@ export default function FileUploadZone({
         {files.map((file, index) => (
           <div
             key={index}
-            className="flex items-center justify-between p-2 bg-gray-800 rounded-md"
+            className="flex items-center justify-between p-2 border border-gray-800 rounded-md"
           >
             <span className="text-sm text-gray-300 truncate">{file.name}</span>
             <button

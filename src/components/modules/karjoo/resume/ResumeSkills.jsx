@@ -1,6 +1,5 @@
 import React from "react";
 import { Award, Plus, Trash2 } from "lucide-react";
-import CustomInput from "@/components/ui/input/CustomInput";
 import CustomSelect from "@/components/ui/select/CustomSelect";
 
 export default function ResumeSkills({
@@ -11,6 +10,86 @@ export default function ResumeSkills({
   setSkills,
 }) {
   const proficiencyLevels = ["مبتدی", "متوسط", "پیشرفته", "حرفه‌ای"];
+
+  const skillOptions = [
+    // مهارت‌های برنامه‌نویسی
+    "JavaScript",
+    "Python",
+    "Java",
+    "C#",
+    "PHP",
+    "React",
+    "Vue.js",
+    "Angular",
+    "Node.js",
+    "Laravel",
+    "Django",
+    "Spring Boot",
+    "ASP.NET",
+
+    // مهارت‌های طراحی
+    "Photoshop",
+    "Illustrator",
+    "Figma",
+    "Adobe XD",
+    "Sketch",
+    "InDesign",
+    "After Effects",
+    "Premiere Pro",
+
+    // مهارت‌های بازاریابی
+    "SEO",
+    "Google Ads",
+    "Facebook Ads",
+    "Content Marketing",
+    "Social Media Marketing",
+    "Email Marketing",
+    "Google Analytics",
+
+    // مهارت‌های مدیریتی
+    "Project Management",
+    "Scrum",
+    "Agile",
+    "Leadership",
+    "Team Management",
+
+    // مهارت‌های فنی دیگر
+    "MySQL",
+    "PostgreSQL",
+    "MongoDB",
+    "Docker",
+    "Kubernetes",
+    "AWS",
+    "Git",
+    "Linux",
+    "Windows Server",
+
+    // مهارت‌های نرم‌افزاری
+    "Microsoft Office",
+    "Excel",
+    "PowerPoint",
+    "Word",
+    "AutoCAD",
+    "SolidWorks",
+
+    // مهارت‌های زبان
+    "ترجمه",
+    "تدریس",
+    "مکالمه",
+
+    // مهارت‌های حسابداری و مالی
+    "حسابداری",
+    "مالیات",
+    "حسابرسی",
+    "بودجه‌بندی",
+
+    // سایر مهارت‌ها
+    "فروش",
+    "مذاکره",
+    "ارتباط با مشتری",
+    "تحلیل داده",
+    "آموزش",
+  ];
 
   return (
     <section className="border-b border-gray-800 pb-6">
@@ -52,12 +131,13 @@ export default function ResumeSkills({
               <label className="block text-sm font-medium text-gray-400 mb-2">
                 نام مهارت
               </label>
-              <CustomInput
-                placeholder="مثال: JavaScript، React، Photoshop"
+              <CustomSelect
+                options={skillOptions}
                 value={skill.skillName}
-                onChange={(e) =>
-                  updateItem(setSkills, index, "skillName", e.target.value)
+                onChange={(value) =>
+                  updateItem(setSkills, index, "skillName", value)
                 }
+                placeholder="انتخاب مهارت"
               />
             </div>
             <div>

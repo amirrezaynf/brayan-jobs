@@ -8,6 +8,8 @@ import ResumeJobInfo from "./ResumeJobInfo";
 import ResumeWorkExperience from "./ResumeWorkExperience";
 import ResumeSkills from "./ResumeSkills";
 import ResumeLanguages from "./ResumeLanguages";
+import ResumeAdditionalInfo from "./ResumeAdditionalInfo";
+import ResumeDocuments from "./ResumeDocuments";
 import { Send } from "lucide-react";
 
 export default function ResumeContainer() {
@@ -73,6 +75,12 @@ export default function ResumeContainer() {
   const [portfolioFiles, setPortfolioFiles] = useState([]);
   const [portfolioLink, setPortfolioLink] = useState("");
 
+  // توضیحات تکمیلی
+  const [additionalInfo, setAdditionalInfo] = useState("");
+
+  // مدارک و گواهینامه‌ها (فایل‌ها)
+  const [documents, setDocuments] = useState([]);
+
   // هندلرها
   const handleBasicInfoChange = (field, value) => {
     setBasicInfo((prev) => ({ ...prev, [field]: value }));
@@ -87,6 +95,10 @@ export default function ResumeContainer() {
 
   const handleJobInfoChange = (field, value) => {
     setJobInfo((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleAdditionalInfoChange = (value) => {
+    setAdditionalInfo(value);
   };
 
   // توابع عمومی برای مدیریت آرایه‌ها
@@ -117,6 +129,8 @@ export default function ResumeContainer() {
       certificates,
       portfolioFiles,
       portfolioLink,
+      additionalInfo,
+      documents,
     };
     console.log("Resume Data:", resumeData);
     alert("رزومه شما با موفقیت ارسال شد! (اطلاعات در کنسول نمایش داده شده)");
@@ -176,6 +190,18 @@ export default function ResumeContainer() {
                 removeItem={removeItem}
                 updateItem={updateItem}
                 setLanguages={setLanguages}
+              />
+
+              {/* توضیحات تکمیلی */}
+              <ResumeAdditionalInfo
+                additionalInfo={additionalInfo}
+                handleAdditionalInfoChange={handleAdditionalInfoChange}
+              />
+
+              {/* مدارک و گواهینامه‌ها */}
+              <ResumeDocuments
+                documents={documents}
+                setDocuments={setDocuments}
               />
 
               {/* دکمه ارسال */}
