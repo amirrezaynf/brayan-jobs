@@ -72,8 +72,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-black/90 text-white">
-      <KarjooHeader />
+    <div className="min-h-screen  text-white">
 
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Header Section */}

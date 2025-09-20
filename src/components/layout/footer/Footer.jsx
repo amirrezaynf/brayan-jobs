@@ -128,7 +128,7 @@ export default function Footer() {
 
             {/* Copyright */}
             <div className="text-center md:text-right">
-            <div class="flex items-center gap-2 text-neutral-500 md:justify-center text-xs font-normal p-2 border-surface-05 md:mt-2 mt-4">کلیه حقوق مادی و معنوی این سایت متعلق به پلتفرم استخدامی دکتر برایان اعتماد می باشد</div>
+            <div className="flex items-center gap-2 text-neutral-500 md:justify-center text-xs font-normal p-2 border-surface-05 md:mt-2 mt-4">کلیه حقوق مادی و معنوی این سایت متعلق به پلتفرم استخدامی دکتر برایان اعتماد می باشد</div>
             </div>
           </div>
         </div>
