@@ -118,22 +118,22 @@ export default function ResumeContainer() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const resumeData = {
       basicInfo,
-      profileImage,
       residence,
       jobInfo,
       workExperiences,
       skills,
       languages,
       certificates,
-      portfolioFiles,
       portfolioLink,
+      portfolioFiles,
       additionalInfo,
       documents,
     };
-    console.log("Resume Data:", resumeData);
-    alert("رزومه شما با موفقیت ارسال شد! (اطلاعات در کنسول نمایش داده شده)");
+
+    alert("رزومه شما با موفقیت ارسال شد!");
   };
 
   return (

@@ -261,10 +261,6 @@ export default function VacanciesPage() {
         );
         const updatedAllJobs = [jobWithUserType, ...existingJobs];
         localStorage.setItem("allJobs", JSON.stringify(updatedAllJobs));
-
-        // Debug: Log saved job
-        console.log("آگهی ذخیره شده:", jobToSave);
-        console.log("تمام آگهی‌های ذخیره شده:", updatedAllJobs);
       }
 
       showSuccessMessage("آگهی با موفقیت منتشر شد!");

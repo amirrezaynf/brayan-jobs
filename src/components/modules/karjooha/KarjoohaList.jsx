@@ -11,11 +11,10 @@ function KarjoohaList({ list }) {
 
   const handleContact = (jobSeeker) => {
     // اینجا می‌توانید modal یا صفحه تماس را باز کنید
-    console.log("Contact:", jobSeeker);
   };
 
   const handleBookmark = (id, isBookmarked) => {
-    console.log(`Bookmark ${id}:`, isBookmarked);
+    // اینجا می‌توانید bookmark logic اضافه کنید
   };
 
   return (
