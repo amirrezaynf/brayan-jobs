@@ -194,7 +194,7 @@ export default function Footer() {
         </div>
 
         {/* Back to Top Button */}
-        <div className="fixed bottom-8 left-8 z-50">
+        <div className="fixed bottom-5 right-5 z-50">
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             className="w-12 h-12 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 group"
