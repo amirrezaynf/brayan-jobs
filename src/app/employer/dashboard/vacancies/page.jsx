@@ -1,9 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { loadCompanyData } from "@/constants/companyData";
 
 export default function VacanciesPage() {
+  const searchParams = useSearchParams();
   const [filter, setFilter] = useState("active");
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [vacancies, setVacancies] = useState([]);
@@ -37,6 +39,22 @@ export default function VacanciesPage() {
   useEffect(() => {
     loadJobs();
   }, []);
+
+  // Check URL parameter to open create form
+  useEffect(() => {
+    const createParam = searchParams.get('create');
+    if (createParam === 'true') {
+      setShowCreateForm(true);
+      setEditingJob(null);
+      
+      // Clean up URL parameter
+      if (typeof window !== "undefined") {
+        const url = new URL(window.location);
+        url.searchParams.delete('create');
+        window.history.replaceState({}, '', url);
+      }
+    }
+  }, [searchParams]);
 
   // Load company profile data when creating new job
   useEffect(() => {
