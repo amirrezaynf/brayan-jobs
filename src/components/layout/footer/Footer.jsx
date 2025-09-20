@@ -17,7 +17,7 @@ export default function Footer() {
     <footer className="bg-gradient-to-br from-transparent  to-black/50 border-t border-gray-800 mt-16">
       <div className="container mx-auto px-6 py-12">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
           {/* Company Info Section */}
           <div className="space-y-4">
             <div>
@@ -33,7 +33,7 @@ export default function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div className="space-y-4">
+          <div className="space-y-4 flex flex-col items-center">
             <h4 className="text-lg font-semibold text-white">دسترسی سریع</h4>
             <ul className="space-y-2">
               {[
@@ -58,7 +58,7 @@ export default function Footer() {
           </div>
 
           {/* Services */}
-          <div className="space-y-4">
+          <div className="space-y-4 flex flex-col items-center">
             <h4 className="text-lg font-semibold text-white">خدمات ما</h4>
             <ul className="space-y-2">
               {[
@@ -80,63 +80,6 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
-
-          {/* Contact & Newsletter */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-white">ارتباط با ما</h4>
-
-            {/* Contact Info */}
-            <div className="space-y-3">
-              <div className="flex items-center text-gray-300 text-sm">
-                <svg
-                  className="w-4 h-4 ml-2 text-yellow-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                </svg>
-                info@brianjobs.com
-              </div>
-              <div className="flex items-center text-gray-300 text-sm">
-                <svg
-                  className="w-4 h-4 ml-2 text-yellow-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                تهران، ایران
-              </div>
-            </div>
-
-            {/* Newsletter Subscription */}
-            <div className="mt-6">
-              <h5 className="text-sm font-medium text-white mb-3">خبرنامه</h5>
-              <form onSubmit={handleNewsletterSubmit} className="space-y-2">
-                <div className="relative">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="ایمیل شما"
-                    className="w-full px-3 py-2  border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-yellow-400 transition-colors duration-300"
-                    required
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-black font-medium py-2 px-4 rounded-lg transition-all duration-300 text-sm"
-                >
-                  {isSubscribed ? "✓ عضو شدید" : "عضویت"}
-                </button>
-              </form>
-            </div>
           </div>
         </div>
 
@@ -185,10 +128,7 @@ export default function Footer() {
 
             {/* Copyright */}
             <div className="text-center md:text-right">
-              <p className="text-gray-400 text-sm">
-                &copy; {new Date().getFullYear()} پلتفرم استخدامی دکتر برایان
-                اعتماد. تمام حقوق محفوظ است.
-              </p>
+            <div class="flex items-center gap-2 text-neutral-500 md:justify-center text-xs font-normal p-2 border-surface-05 md:mt-2 mt-4"><svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.3335 8.00016C1.3335 4.04212 4.54212 0.833496 8.50016 0.833496C12.4582 0.833496 15.6668 4.04212 15.6668 8.00016C15.6668 11.9582 12.4582 15.1668 8.50016 15.1668C4.54212 15.1668 1.3335 11.9582 1.3335 8.00016ZM8.50016 1.8335C5.09441 1.8335 2.3335 4.59441 2.3335 8.00016C2.3335 11.4059 5.09441 14.1668 8.50016 14.1668C11.9059 14.1668 14.6668 11.4059 14.6668 8.00016C14.6668 4.59441 11.9059 1.8335 8.50016 1.8335Z" fill="#667085"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M8.69064 5.8335C7.35577 5.8335 6.3335 6.83548 6.3335 8.00016C6.3335 9.16485 7.35577 10.1668 8.69064 10.1668C9.03173 10.1668 9.35418 10.1004 9.6447 9.98196C9.90039 9.87768 10.1922 10.0004 10.2965 10.2561C10.4008 10.5118 10.278 10.8037 10.0223 10.9079C9.61286 11.0749 9.16224 11.1668 8.69064 11.1668C6.86959 11.1668 5.3335 9.781 5.3335 8.00016C5.3335 6.21933 6.86959 4.8335 8.69064 4.8335C9.16224 4.8335 9.61286 4.92544 10.0223 5.0924C10.278 5.19667 10.4008 5.48849 10.2965 5.74419C10.1922 5.99989 9.90039 6.12264 9.6447 6.01837C9.35418 5.8999 9.03173 5.8335 8.69064 5.8335Z" fill="#667085"></path></svg>کلیه حقوق مادی و معنوی این سایت متعلق به پلتفرم استخدامی دکتر برایان اعتماد می باشد</div>
             </div>
           </div>
         </div>
