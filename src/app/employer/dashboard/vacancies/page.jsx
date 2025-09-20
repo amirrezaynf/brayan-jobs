@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { loadCompanyData } from "@/constants/companyData";
 
-export default function VacanciesPage() {
+function VacanciesContent() {
   const searchParams = useSearchParams();
   const [filter, setFilter] = useState("active");
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -966,5 +966,20 @@ export default function VacanciesPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function VacanciesPage() {
+  return (
+    <Suspense fallback={<div className="bg-[#1e1e1e] rounded-xl p-6 shadow-lg border border-black">
+      <div className="flex justify-center items-center py-12">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-400 mx-auto mb-4"></div>
+          <p className="text-gray-400">در حال بارگذاری...</p>
+        </div>
+      </div>
+    </div>}>
+      <VacanciesContent />
+    </Suspense>
   );
 }
