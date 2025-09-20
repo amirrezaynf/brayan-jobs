@@ -14,7 +14,7 @@ const SalaryRangeInput = ({
   showRangeFilter,
   onRangeFilterChange,
   min = 1000000,
-  max = 50000000,
+  max = 100000000,
 }) => {
   const [localRange, setLocalRange] = useState(value || [min, max]);
 
@@ -32,6 +32,9 @@ const SalaryRangeInput = ({
 
   return (
     <div className="salary-range-slider w-full max-w-md mx-auto">
+        <div className="text-center text-xs text-gray-400 my-7">
+        محدوده حقوق مدنظر را انتخاب کنید
+      </div>
       {/* Salary Range Slider - Always visible when range filter is active */}
       {(showRangeFilter || (!showNegotiable && !showNoLimit)) && (
         <>
@@ -72,6 +75,7 @@ const SalaryRangeInput = ({
 
       {/* Range Filter Option */}
       <div className="mt-2 flex items-center">
+    
         <input
           id="range-filter"
           type="checkbox"
@@ -172,9 +176,7 @@ const SalaryRangeInput = ({
         </label>
       </div>
 
-      <div className="text-center text-xs text-gray-400 mt-1">
-        محدوده حقوق مدنظر را انتخاب کنید
-      </div>
+      
     </div>
   );
 };

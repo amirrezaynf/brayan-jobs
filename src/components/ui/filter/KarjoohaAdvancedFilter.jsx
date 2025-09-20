@@ -9,6 +9,7 @@ import {
   locations,
   sortOptions,
 } from "@/constants/karjoohaData";
+import SalaryRangeInput from "../range/SalaryRangeInput";
 
 export default function KarjoohaAdvancedFilter({
   searchQuery,
@@ -126,6 +127,10 @@ export default function KarjoohaAdvancedFilter({
 
         <div className="border-t border-gray-700 my-6"></div>
 
+            <div className=" my-5 border-b pb-5">
+            <SalaryRangeInput />
+
+            </div>
         {/* نتایج */}
         <div className="text-center">
           <p className="text-gray-400">
