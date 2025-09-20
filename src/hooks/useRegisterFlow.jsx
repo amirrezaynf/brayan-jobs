@@ -1,39 +1,30 @@
 "use client";
 import { useState, useEffect } from "react";
-
-// Helper functions (you can also move these to a utils file)
-const detectContactType = (value) => {
-  const phonePattern = /^(09)\d{9}$/;
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-  if (phonePattern.test(value)) return "phone";
-  if (emailPattern.test(value)) return "email";
-  return null;
-};
+import {
+  registerStep1,
+  registerStep2,
+  registerStep3,
+  registerStep4,
+  resendVerificationCode,
+} from "@/app/_action/auth";
+import {
+  validateContact,
+  validatePassword as serverValidatePassword,
+  getRoleNumber,
+  detectContactType,
+} from "@/utils/auth";
 
 const validatePassword = (password) => {
-  const errors = [];
-
-  if (!password || password.length < 8) {
-    errors.push("رمز عبور باید حداقل ۸ کاراکتر باشد");
-  }
-  if (!/[A-Z]/.test(password)) {
-    errors.push("رمز عبور باید حداقل یک حرف بزرگ انگلیسی داشته باشد");
-  }
-  if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
-    errors.push(
-      "رمز عبور باید حداقل یک کاراکتر ویژه (@، #، !، و...) داشته باشد"
-    );
-  }
-
-  return errors;
+  return serverValidatePassword(password);
 };
 
-export default function useRegisterFlow(initialData) {
+export default function useRegisterFlow(initialData, role = "specialist") {
   const [step, setStep] = useState(1);
   const [data, setData] = useState(initialData);
   const [errors, setErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [authToken, setAuthToken] = useState(null);
 
   const [resendTimer, setResendTimer] = useState(0);
   const [canResend, setCanResend] = useState(false);
@@ -64,9 +55,9 @@ export default function useRegisterFlow(initialData) {
   const validate = () => {
     const newErrors = {};
     if (step === 1) {
-      const type = detectContactType(data.contact);
+      const contactValidation = validateContact(data.contact);
       if (!data.contact) newErrors.contact = "شماره تلفن یا ایمیل الزامی است.";
-      else if (!type)
+      else if (!contactValidation.isValid)
         newErrors.contact = "فرمت شماره تلفن یا ایمیل نامعتبر است.";
     }
     if (step === 2) {
@@ -104,13 +95,62 @@ export default function useRegisterFlow(initialData) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const next = () => {
-    if (validate()) {
+  const next = async () => {
+    if (!validate()) return;
+
+    setIsLoading(true);
+    setErrors({});
+
+    try {
       if (step === 1) {
-        setResendTimer(60);
-        setCanResend(false);
+        // Call API for step 1
+        const result = await registerStep1(data.contact);
+
+        if (result.success) {
+          setResendTimer(60);
+          setCanResend(false);
+          setStep((s) => s + 1);
+        } else {
+          setErrors({ contact: result.error });
+        }
+      } else if (step === 2) {
+        // Call API for step 2
+        const result = await registerStep2(data.contact, data.verificationCode);
+
+        if (result.success) {
+          setStep((s) => s + 1);
+        } else {
+          setErrors({ verificationCode: result.error });
+        }
+      } else if (step === 3) {
+        // Call API for step 3
+        const formData = {
+          contact: data.contact,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          password: data.password,
+          confirmPassword: data.confirmPassword,
+          role: getRoleNumber(role),
+        };
+
+        const result = await registerStep3(formData);
+
+        if (result.success) {
+          setAuthToken(result.token);
+          // Store token in localStorage for persistence
+          localStorage.setItem("authToken", result.token);
+          localStorage.setItem("user", JSON.stringify(result.user));
+          setStep((s) => s + 1);
+        } else {
+          setErrors({ general: result.error });
+        }
+      } else {
+        setStep((s) => s + 1);
       }
-      setStep((s) => s + 1);
+    } catch (error) {
+      setErrors({ general: "خطا در ارتباط با سرور" });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -123,19 +163,112 @@ export default function useRegisterFlow(initialData) {
     }
   };
 
-  const resend = () => {
-    if (canResend) {
-      console.log("Resending code to:", data.contact);
-      setResendTimer(60);
-      setCanResend(false);
+  const resend = async () => {
+    if (!canResend) return;
+
+    setIsLoading(true);
+
+    try {
+      const result = await resendVerificationCode(data.contact);
+
+      if (result.success) {
+        setResendTimer(60);
+        setCanResend(false);
+      } else {
+        setErrors({ verificationCode: result.error });
+      }
+    } catch (error) {
+      setErrors({ verificationCode: "خطا در ارسال مجدد کد" });
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
-    if (validate()) {
-      console.log("Register data:", data);
-      setIsSubmitted(true);
+    if (!validate()) return;
+
+    setIsLoading(true);
+    setErrors({});
+
+    try {
+      const storedUser = localStorage.getItem("user");
+      let userData = null;
+
+      if (storedUser) {
+        try {
+          userData = JSON.parse(storedUser);
+        } catch (parseError) {
+          localStorage.removeItem("user"); // پاک کردن داده خراب
+          setErrors({
+            general: "خطا در اطلاعات ذخیره شده. لطفاً مجدداً وارد شوید.",
+          });
+          return;
+        }
+      }
+
+      // Prepare step 4 data based on role
+      let step4Data = {};
+
+      if (role === "specialist") {
+        step4Data = {
+          field_of_activity: data.fieldOfActivity,
+          age: parseInt(data.age),
+          education: data.education,
+        };
+      } else if (role === "employer") {
+        step4Data = {
+          company_name: data.companyName,
+          company_field: data.companyField,
+          company_experience: parseInt(data.companyExperience),
+          company_size: data.companySize,
+        };
+      }
+
+      const result = await registerStep4(step4Data, authToken);
+
+      if (result.success) {
+        setIsSubmitted(true);
+        // Redirect to appropriate dashboard
+        const redirectUrl = role === "employer" ? "/dashboard" : "/karjoo";
+        setTimeout(() => {
+          window.location.href = redirectUrl;
+        }, 2000); // Give user time to see success message
+      } else {
+        // Convert technical error messages to user-friendly Persian
+        let userFriendlyError = "خطا در تکمیل ثبت نام";
+
+        if (result.error && typeof result.error === "string") {
+          if (
+            result.error.includes("fillable") ||
+            result.error.includes("mass assignment")
+          ) {
+            userFriendlyError = "خطا در ذخیره اطلاعات. لطفاً دوباره تلاش کنید.";
+          } else if (result.error.includes("validation")) {
+            userFriendlyError = "اطلاعات وارد شده صحیح نیست. لطفاً بررسی کنید.";
+          } else if (
+            result.error.includes("unauthorized") ||
+            result.error.includes("token")
+          ) {
+            userFriendlyError =
+              "جلسه شما منقضی شده است. لطفاً مجدداً ثبت نام کنید.";
+          } else if (
+            result.error.includes("server") ||
+            result.error.includes("500")
+          ) {
+            userFriendlyError = "خطا در سرور. لطفاً چند دقیقه دیگر تلاش کنید.";
+          }
+        }
+
+        setErrors({ general: userFriendlyError });
+      }
+    } catch (error) {
+      setErrors({
+        general:
+          "خطا در ارتباط با سرور. لطفاً اتصال اینترنت خود را بررسی کنید.",
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -144,6 +277,7 @@ export default function useRegisterFlow(initialData) {
     data,
     errors,
     isSubmitted,
+    isLoading,
     resendTimer,
     canResend,
     handleChange,

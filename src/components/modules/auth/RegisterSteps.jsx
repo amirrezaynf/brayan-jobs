@@ -10,6 +10,7 @@ import {
   MapPin,
   Calendar,
   Users,
+  Loader2,
 } from "lucide-react";
 
 import FormInput from "@/components/ui/input/FormInput";
@@ -21,6 +22,7 @@ export default function RegisterSteps({ flow, role }) {
     data,
     errors,
     isSubmitted,
+    isLoading,
     resendTimer,
     canResend,
     handleChange,
@@ -96,6 +98,13 @@ export default function RegisterSteps({ flow, role }) {
         </div>
       </div>
 
+      {/* General Error Message */}
+      {errors.general && (
+        <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
+          <p className="text-red-400 text-sm text-center">{errors.general}</p>
+        </div>
+      )}
+
       {/* Steps */}
       <form onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
         {step === 1 && (
@@ -108,13 +117,22 @@ export default function RegisterSteps({ flow, role }) {
               value={data.contact}
               onChange={handleChange}
               error={errors.contact}
+              disabled={isLoading}
             />
             <button
               type="button"
               onClick={next}
-              className="w-full text-gray-900 bg-yellow-400 hover:bg-yellow-500 font-medium rounded-lg text-sm px-5 py-3 text-center"
+              disabled={isLoading}
+              className="w-full text-gray-900 bg-yellow-400 hover:bg-yellow-500 disabled:bg-gray-600 disabled:cursor-not-allowed font-medium rounded-lg text-sm px-5 py-3 text-center flex items-center justify-center gap-2"
             >
-              ادامه
+              {isLoading ? (
+                <>
+                  <Loader2 size={18} className="animate-spin" />
+                  در حال ارسال...
+                </>
+              ) : (
+                "ادامه"
+              )}
             </button>
           </>
         )}
@@ -129,34 +147,50 @@ export default function RegisterSteps({ flow, role }) {
               value={data.verificationCode}
               onChange={handleChange}
               error={errors.verificationCode}
+              disabled={isLoading}
             />
             <div className="flex gap-4 mt-4">
               <button
                 type="button"
                 onClick={back}
-                className="w-1/2 text-white bg-gray-600 hover:bg-gray-700 font-medium rounded-lg text-sm px-5 py-3"
+                disabled={isLoading}
+                className="w-1/2 text-white bg-gray-600 hover:bg-gray-700 disabled:bg-gray-800 disabled:cursor-not-allowed font-medium rounded-lg text-sm px-5 py-3"
               >
                 بازگشت
               </button>
               <button
                 type="button"
                 onClick={next}
-                className="w-1/2 text-gray-900 bg-yellow-400 hover:bg-yellow-500 font-medium rounded-lg text-sm px-5 py-3"
+                disabled={isLoading}
+                className="w-1/2 text-gray-900 bg-yellow-400 hover:bg-yellow-500 disabled:bg-gray-600 disabled:cursor-not-allowed font-medium rounded-lg text-sm px-5 py-3 flex items-center justify-center gap-2"
               >
-                ادامه
+                {isLoading ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin" />
+                    تایید...
+                  </>
+                ) : (
+                  "ادامه"
+                )}
               </button>
             </div>
             <div className="flex justify-between mt-4 text-sm text-gray-400">
-              <button type="button" onClick={() => setStep(1)}>
+              <button
+                type="button"
+                onClick={() => setStep(1)}
+                disabled={isLoading}
+              >
                 ویرایش شماره تلفن یا ایمیل
               </button>
               <button
                 type="button"
                 onClick={resend}
-                disabled={!canResend}
-                className={!canResend ? "opacity-50" : ""}
+                disabled={!canResend || isLoading}
+                className={!canResend || isLoading ? "opacity-50" : ""}
               >
-                {canResend
+                {isLoading
+                  ? "در حال ارسال..."
+                  : canResend
                   ? "ارسال مجدد کد"
                   : `ارسال مجدد کد (${resendTimer} ثانیه)`}
               </button>
@@ -175,6 +209,7 @@ export default function RegisterSteps({ flow, role }) {
                 value={data.firstName}
                 onChange={handleChange}
                 error={errors.firstName}
+                disabled={isLoading}
               />
               <FormInput
                 name="lastName"
@@ -184,6 +219,7 @@ export default function RegisterSteps({ flow, role }) {
                 value={data.lastName}
                 onChange={handleChange}
                 error={errors.lastName}
+                disabled={isLoading}
               />
             </div>
             <FormInput
@@ -194,6 +230,7 @@ export default function RegisterSteps({ flow, role }) {
               value={data.password}
               onChange={handleChange}
               error={errors.password}
+              disabled={isLoading}
             />
             <FormInput
               name="confirmPassword"
@@ -203,21 +240,31 @@ export default function RegisterSteps({ flow, role }) {
               value={data.confirmPassword}
               onChange={handleChange}
               error={errors.confirmPassword}
+              disabled={isLoading}
             />
             <div className="flex gap-4 mt-4">
               <button
                 type="button"
                 onClick={back}
-                className="w-1/2 text-white bg-gray-600 hover:bg-gray-700 font-medium rounded-lg text-sm px-5 py-3"
+                disabled={isLoading}
+                className="w-1/2 text-white bg-gray-600 hover:bg-gray-700 disabled:bg-gray-800 disabled:cursor-not-allowed font-medium rounded-lg text-sm px-5 py-3"
               >
                 بازگشت
               </button>
               <button
                 type="button"
                 onClick={next}
-                className="w-1/2 text-gray-900 bg-yellow-400 hover:bg-yellow-500 font-medium rounded-lg text-sm px-5 py-3"
+                disabled={isLoading}
+                className="w-1/2 text-gray-900 bg-yellow-400 hover:bg-yellow-500 disabled:bg-gray-600 disabled:cursor-not-allowed font-medium rounded-lg text-sm px-5 py-3 flex items-center justify-center gap-2"
               >
-                ادامه
+                {isLoading ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin" />
+                    ثبت نام...
+                  </>
+                ) : (
+                  "ادامه"
+                )}
               </button>
             </div>
           </>
@@ -243,6 +290,7 @@ export default function RegisterSteps({ flow, role }) {
                     "محیط زیست",
                     "سایر",
                   ]}
+                  disabled={isLoading}
                 />
 
                 {/* سن و مدرک تحصیلی - ردیف دوم */}
@@ -259,6 +307,7 @@ export default function RegisterSteps({ flow, role }) {
                       { length: 50 },
                       (_, i) => `${18 + i} سال`
                     )}
+                    disabled={isLoading}
                   />
                   <FormInput
                     name="education"
@@ -276,6 +325,7 @@ export default function RegisterSteps({ flow, role }) {
                       "دکتری",
                       "فوق دکتری",
                     ]}
+                    disabled={isLoading}
                   />
                 </div>
               </>
@@ -292,6 +342,7 @@ export default function RegisterSteps({ flow, role }) {
                   value={data.companyName}
                   onChange={handleChange}
                   error={errors.companyName}
+                  disabled={isLoading}
                 />
 
                 {/* حوزه فعالیت و سابقه - ردیف دوم */}
@@ -313,6 +364,7 @@ export default function RegisterSteps({ flow, role }) {
                       "محیط زیست",
                       "سایر",
                     ]}
+                    disabled={isLoading}
                   />
                   <FormInput
                     name="companyExperience"
@@ -322,6 +374,7 @@ export default function RegisterSteps({ flow, role }) {
                     value={data.companyExperience}
                     onChange={handleChange}
                     error={errors.companyExperience}
+                    disabled={isLoading}
                   />
                 </div>
 
@@ -341,6 +394,7 @@ export default function RegisterSteps({ flow, role }) {
                     "101 تا 500 نفر",
                     "بیش از 500 نفر",
                   ]}
+                  disabled={isLoading}
                 />
               </>
             )}
@@ -349,15 +403,24 @@ export default function RegisterSteps({ flow, role }) {
               <button
                 type="button"
                 onClick={back}
-                className="w-1/2 text-white bg-gray-600 hover:bg-gray-700 font-medium rounded-lg text-sm px-5 py-3"
+                disabled={isLoading}
+                className="w-1/2 text-white bg-gray-600 hover:bg-gray-700 disabled:bg-gray-800 disabled:cursor-not-allowed font-medium rounded-lg text-sm px-5 py-3"
               >
                 بازگشت
               </button>
               <button
                 type="submit"
-                className="w-1/2 text-gray-900 bg-yellow-400 hover:bg-yellow-500 font-medium rounded-lg text-sm px-5 py-3"
+                disabled={isLoading}
+                className="w-1/2 text-gray-900 bg-yellow-400 hover:bg-yellow-500 disabled:bg-gray-600 disabled:cursor-not-allowed font-medium rounded-lg text-sm px-5 py-3 flex items-center justify-center gap-2"
               >
-                تکمیل ثبت‌نام
+                {isLoading ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin" />
+                    ثبت نام...
+                  </>
+                ) : (
+                  "تکمیل ثبت‌نام"
+                )}
               </button>
             </div>
           </>

@@ -31,7 +31,6 @@ export default function ProfileDropdown() {
   const handleLogout = () => {
     setIsOpen(false);
     // اینجا می‌توانید logout logic اضافه کنید
-    console.log("Logging out...");
     // مثال: router.push("/auth");
   };
 
