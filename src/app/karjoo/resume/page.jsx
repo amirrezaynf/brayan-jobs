@@ -24,7 +24,6 @@ import KarjooHeader from "@/components/layout/header/KarjooHeader";
 // کامپوننت‌های اختصاصی (برای سادگی در همین فایل قرار داده شده‌اند)
 // ====================================================================
 
-
 // کامپوننت آپلود فایل
 const FileUploadZone = ({ label, files, setFiles, multiple = true }) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -271,11 +270,7 @@ export default function ResumePage() {
   };
 
   return (
-    <div
-      className="  text-gray-200 font-['Vazirmatn'] min-h-screen"
-      dir="rtl"
-    >
-      
+    <div className="  text-gray-200 font-['Vazirmatn'] min-h-screen" dir="rtl">
       <div className=" container mx-auto px-4 py-8 md:py-12">
         <div className="max-w-4xl mx-auto border border-gray-700  rounded-xl shadow-lg shadow-yellow-500/10 overflow-hidden">
           <div className="px-6 py-8 sm:px-10">
@@ -638,6 +633,149 @@ export default function ResumePage() {
                         placeholder="شرح وظایف و مسئولیت‌ها..."
                         rows="3"
                       />
+                    </div>
+                  </div>
+                ))}
+              </section>
+
+              {/* مهارت‌ها */}
+              <section className="border-b border-gray-800 pb-6">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-xl font-semibold text-gray-100 flex items-center">
+                    <Award className="w-6 h-6 ml-2 text-yellow-500" />
+                    مهارت‌ها
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      addItem(setSkills, {
+                        skillName: "",
+                        proficiency: "",
+                      })
+                    }
+                    className="flex items-center px-3 py-2 bg-yellow-500/80 text-gray-900 rounded-lg hover:bg-yellow-500 transition text-sm font-bold"
+                  >
+                    <Plus className="w-4 h-4 ml-1" />
+                    افزودن مهارت
+                  </button>
+                </div>
+                {skills.map((skill, index) => (
+                  <div
+                    key={index}
+                    className="mb-4 p-4 border border-gray-700 rounded-lg relative"
+                  >
+                    {skills.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeItem(setSkills, index)}
+                        className="absolute top-2 left-2 text-red-500 hover:bg-red-500/20 p-1 rounded-full"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-400 mb-2">
+                          نام مهارت
+                        </label>
+                        <CustomInput
+                          placeholder="مثال: JavaScript، React، Photoshop"
+                          value={skill.skillName}
+                          onChange={(e) =>
+                            updateItem(
+                              setSkills,
+                              index,
+                              "skillName",
+                              e.target.value
+                            )
+                          }
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-400 mb-2">
+                          سطح مهارت
+                        </label>
+                        <CustomSelect
+                          options={proficiencyLevels}
+                          value={skill.proficiency}
+                          onChange={(value) =>
+                            updateItem(setSkills, index, "proficiency", value)
+                          }
+                          placeholder="انتخاب سطح مهارت"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </section>
+
+              {/* زبان‌های خارجی */}
+              <section className="border-b border-gray-800 pb-6">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-xl font-semibold text-gray-100 flex items-center">
+                    <Languages className="w-6 h-6 ml-2 text-yellow-500" />
+                    زبان‌های خارجی
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      addItem(setLanguages, {
+                        language: "",
+                        proficiency: "",
+                      })
+                    }
+                    className="flex items-center px-3 py-2 bg-yellow-500/80 text-gray-900 rounded-lg hover:bg-yellow-500 transition text-sm font-bold"
+                  >
+                    <Plus className="w-4 h-4 ml-1" />
+                    افزودن زبان
+                  </button>
+                </div>
+                {languages.map((lang, index) => (
+                  <div
+                    key={index}
+                    className="mb-4 p-4 border border-gray-700 rounded-lg relative"
+                  >
+                    {languages.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeItem(setLanguages, index)}
+                        className="absolute top-2 left-2 text-red-500 hover:bg-red-500/20 p-1 rounded-full"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-400 mb-2">
+                          زبان
+                        </label>
+                        <CustomSelect
+                          options={foreignLanguages}
+                          value={lang.language}
+                          onChange={(value) =>
+                            updateItem(setLanguages, index, "language", value)
+                          }
+                          placeholder="انتخاب زبان"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-400 mb-2">
+                          سطح تسلط
+                        </label>
+                        <CustomSelect
+                          options={proficiencyLevels}
+                          value={lang.proficiency}
+                          onChange={(value) =>
+                            updateItem(
+                              setLanguages,
+                              index,
+                              "proficiency",
+                              value
+                            )
+                          }
+                          placeholder="انتخاب سطح تسلط"
+                        />
+                      </div>
                     </div>
                   </div>
                 ))}
