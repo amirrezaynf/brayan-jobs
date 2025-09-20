@@ -2,58 +2,53 @@
 
 import React from "react";
 import CustomSelect from "@/components/ui/select/CustomSelect";
-import SalaryRangeSlider from "@/components/ui/range/SalaryRangeInput";
 
-const AdvertisementSidebar = ({
+const EmployersSidebar = ({
   // Search and Sort
   searchFilter,
   setSearchFilter,
   sortBy,
   setSortBy,
-
-  // Cateory Filter
-  selectedCategory,
-  setSelectedCategory,
-  categories,
-
+  
+  // Industry Filter
+  selectedIndustry,
+  setSelectedIndustry,
+  industries,
+  
   // Location Filters
+  selectedCountry,
+  setSelectedCountry,
+  countries,
   selectedProvince,
   setSelectedProvince,
   provinces,
   selectedCity,
   setSelectedCity,
   availableCities,
-
-  // Employment Type
-  selectedEmploymentType,
-  setSelectedEmploymentType,
-  employmentTypes,
-
-  // Salary Range
-  salaryRange,
-  setSalaryRange,
-  showNegotiable,
-  setShowNegotiable,
-  showNoLimit,
-  setShowNoLimit,
-  showRangeFilter,
-  setShowRangeFilter,
-
+  
+  // Company Size
+  selectedCompanySize,
+  setSelectedCompanySize,
+  companySizes,
+  
+  // Company Type
+  selectedCompanyType,
+  setSelectedCompanyType,
+  companyTypes,
+  
   // Clear Filters Function
   onClearFilters,
 }) => {
   const handleClearFilters = () => {
     setSearchFilter("");
-    setSelectedCategory("");
+    setSelectedIndustry("");
+    setSelectedCountry("");
     setSelectedProvince("");
     setSelectedCity("");
-    setSelectedEmploymentType("");
+    setSelectedCompanySize("");
+    setSelectedCompanyType("");
     setSortBy("newest");
-    setSalaryRange([5000000, 50000000]);
-    setShowNegotiable(false);
-    setShowNoLimit(false);
-    setShowRangeFilter(false);
-
+    
     // Call additional clear function if provided
     if (onClearFilters) {
       onClearFilters();
@@ -70,11 +65,11 @@ const AdvertisementSidebar = ({
         {/* Search Input */}
         <div className="mb-4">
           <label className="block mb-2 text-sm font-medium text-gray-300">
-            جستجو در آگهی‌ها
+            جستجو در کارفرمایان
           </label>
           <input
             type="text"
-            placeholder="جستجو در عنوان، شرکت یا توضیحات..."
+            placeholder="جستجو در نام شرکت، حوزه فعالیت یا توضیحات..."
             value={searchFilter}
             onChange={(e) => setSearchFilter(e.target.value)}
             className="w-full bg-[#2a2a2a] border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
@@ -103,34 +98,66 @@ const AdvertisementSidebar = ({
                 key: "sort-oldest",
               },
               {
-                value: "most-applied",
-                label: "بیشترین متقاضی",
-                key: "sort-most-applied",
+                value: "most-positions",
+                label: "بیشترین موقعیت شغلی",
+                key: "sort-most-positions",
+              },
+              {
+                value: "highest-rating",
+                label: "بالاترین امتیاز",
+                key: "sort-highest-rating",
+              },
+              {
+                value: "most-employees",
+                label: "بیشترین کارمند",
+                key: "sort-most-employees",
               },
             ]}
             placeholder="انتخاب ترتیب"
           />
         </div>
 
-        {/* Category Filter */}
+        {/* Industry Filter */}
         <div className="mb-4">
           <label className="block mb-2 text-sm font-medium text-gray-300">
-            دسته‌بندی شغلی
+            حوزه فعالیت
           </label>
           <CustomSelect
-            value={selectedCategory}
+            value={selectedIndustry}
             onChange={(value) =>
-              setSelectedCategory(value === "همه" ? "" : value)
+              setSelectedIndustry(value === "همه حوزه‌ها" ? "" : value)
             }
             options={[
-              { value: "", label: "همه دسته‌ها", key: "all-categories" },
-              ...categories.slice(1).map((category, index) => ({
-                value: category,
-                label: category,
-                key: `category-${index}`,
+              { value: "", label: "همه حوزه‌ها", key: "all-industries" },
+              ...industries.slice(1).map((industry, index) => ({
+                value: industry,
+                label: industry,
+                key: `industry-${index}`,
               })),
             ]}
-            placeholder="انتخاب دسته‌بندی"
+            placeholder="انتخاب حوزه فعالیت"
+          />
+        </div>
+
+        {/* Country Filter */}
+        <div className="mb-4">
+          <label className="block mb-2 text-sm font-medium text-gray-300">
+            کشور
+          </label>
+          <CustomSelect
+            value={selectedCountry}
+            onChange={(value) =>
+              setSelectedCountry(value === "همه کشورها" ? "" : value)
+            }
+            options={[
+              { value: "", label: "همه کشورها", key: "all-countries" },
+              ...countries.slice(1).map((country, index) => ({
+                value: country,
+                label: country,
+                key: `country-${index}`,
+              })),
+            ]}
+            placeholder="انتخاب کشور"
           />
         </div>
 
@@ -142,7 +169,7 @@ const AdvertisementSidebar = ({
           <CustomSelect
             value={selectedProvince}
             onChange={(value) =>
-              setSelectedProvince(value === "همه" ? "" : value)
+              setSelectedProvince(value === "همه استان‌ها" ? "" : value)
             }
             options={[
               { value: "", label: "همه استان‌ها", key: "all-provinces" },
@@ -163,10 +190,12 @@ const AdvertisementSidebar = ({
           </label>
           <CustomSelect
             value={selectedCity}
-            onChange={(value) => setSelectedCity(value === "همه" ? "" : value)}
+            onChange={(value) =>
+              setSelectedCity(value === "همه شهرها" ? "" : value)
+            }
             options={[
               { value: "", label: "همه شهرها", key: "all-cities" },
-              ...(selectedProvince && selectedProvince !== "همه"
+              ...(selectedProvince && selectedProvince !== "همه استان‌ها"
                 ? availableCities.slice(1)
                 : availableCities
               ).map((city, index) => ({
@@ -179,41 +208,47 @@ const AdvertisementSidebar = ({
           />
         </div>
 
-        {/* Employment Type Filter */}
+        {/* Company Size Filter */}
         <div className="mb-4">
           <label className="block mb-2 text-sm font-medium text-gray-300">
-            نوع همکاری
+            اندازه شرکت
           </label>
           <CustomSelect
-            value={selectedEmploymentType}
+            value={selectedCompanySize}
             onChange={(value) =>
-              setSelectedEmploymentType(value === "همه" ? "" : value)
+              setSelectedCompanySize(value === "همه اندازه‌ها" ? "" : value)
             }
             options={[
-              { value: "", label: "همه انواع", key: "all-types" },
-              ...employmentTypes.slice(1).map((type, index) => ({
-                value: type,
-                label: type,
-                key: `employment-${index}`,
+              { value: "", label: "همه اندازه‌ها", key: "all-sizes" },
+              ...companySizes.slice(1).map((size, index) => ({
+                value: size,
+                label: size,
+                key: `size-${index}`,
               })),
             ]}
-            placeholder="انتخاب نوع همکاری"
+            placeholder="انتخاب اندازه شرکت"
           />
         </div>
 
-        {/* Salary Range Filter */}
+        {/* Company Type Filter */}
         <div className="mb-6">
-          <SalaryRangeSlider
-            value={salaryRange}
-            onChange={setSalaryRange}
-            showNegotiable={showNegotiable}
-            onNegotiableChange={setShowNegotiable}
-            showNoLimit={showNoLimit}
-            onNoLimitChange={setShowNoLimit}
-            showRangeFilter={showRangeFilter}
-            onRangeFilterChange={setShowRangeFilter}
-            min={1000000}
-            max={100000000}
+          <label className="block mb-2 text-sm font-medium text-gray-300">
+            نوع شرکت
+          </label>
+          <CustomSelect
+            value={selectedCompanyType}
+            onChange={(value) =>
+              setSelectedCompanyType(value === "همه انواع" ? "" : value)
+            }
+            options={[
+              { value: "", label: "همه انواع", key: "all-types" },
+              ...companyTypes.slice(1).map((type, index) => ({
+                value: type,
+                label: type,
+                key: `type-${index}`,
+              })),
+            ]}
+            placeholder="انتخاب نوع شرکت"
           />
         </div>
 
@@ -229,4 +264,4 @@ const AdvertisementSidebar = ({
   );
 };
 
-export default AdvertisementSidebar;
+export default EmployersSidebar;

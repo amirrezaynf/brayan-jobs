@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { COMPANY_DATA } from "@/constants/companyData";
+import EmployersSidebar from "@/components/ui/filter/EmployersSidebar";
 
 // Function to get all company data from constants
 const getCompanyData = () => {
@@ -28,7 +29,7 @@ const getCompanyData = () => {
   };
 
   return {
-    id: 9, // Company ID for employer listing
+    id: 13, // Company ID for employer listing
     ...data,
     name: data.companyName,
     companyName: data.companyName,
@@ -238,6 +239,98 @@ const mockEmployers = [
     email: "hr@mci.ir",
     linkedin: "https://linkedin.com/company/mci-iran",
     instagram: "@hamrah_e_avval"
+  },
+  {
+    id: 9,
+    name: "ایرانسل",
+    companyName: "ایرانسل",
+    logo: "IS",
+    industry: "ارتباطات",
+    location: "تهران",
+    description: "دومین اپراتور بزرگ تلفن همراه ایران با ارائه خدمات نوین ارتباطی و اینترنت پرسرعت به میلیون‌ها کاربر.",
+    employeeCount: "101-500 نفر",
+    openPositions: 16,
+    website: "https://irancell.ir",
+    foundedYear: 1384,
+    rating: 4.1,
+    reviews: 650,
+    benefits: ["بیمه درمانی", "بونس عملکرد", "آموزش مداوم", "امکانات رفاهی"],
+    isVerified: true,
+    address: "تهران، خیابان ولیعصر",
+    phone: "021-90000000",
+    mobile: "09190000000",
+    email: "careers@irancell.ir",
+    linkedin: "https://linkedin.com/company/irancell",
+    instagram: "@irancell_official"
+  },
+  {
+    id: 10,
+    name: "پارس آنلاین",
+    companyName: "پارس آنلاین",
+    logo: "PO",
+    industry: "فناوری اطلاعات",
+    location: "تهران",
+    description: "شرکت پیشرو در زمینه خدمات اینترنت و هاستینگ با بیش از 15 سال تجربه در ارائه خدمات زیرساخت IT.",
+    employeeCount: "51-100 نفر",
+    openPositions: 8,
+    website: "https://parsonline.com",
+    foundedYear: 1384,
+    rating: 4.4,
+    reviews: 320,
+    benefits: ["محیط کاری دوستانه", "پروژه‌های چالش‌برانگیز", "رشد حرفه‌ای", "ساعت کاری منعطف"],
+    isVerified: true,
+    address: "تهران، خیابان کریمخان",
+    phone: "021-88880000",
+    mobile: "09128888888",
+    email: "jobs@parsonline.com",
+    linkedin: "https://linkedin.com/company/parsonline",
+    instagram: "@parsonline_ir"
+  },
+  {
+    id: 11,
+    name: "فولاد مبارکه",
+    companyName: "فولاد مبارکه",
+    logo: "FM",
+    industry: "تولیدی",
+    location: "اصفهان",
+    description: "بزرگترین تولیدکننده فولاد خاورمیانه با ظرفیت تولید بالا و استانداردهای بین‌المللی کیفیت.",
+    employeeCount: "بیش از 500 نفر",
+    openPositions: 12,
+    website: "https://msc.ir",
+    foundedYear: 1350,
+    rating: 4.2,
+    reviews: 580,
+    benefits: ["حقوق رقابتی", "بیمه کامل", "مسکن کارکنان", "امکانات ورزشی"],
+    isVerified: true,
+    address: "اصفهان، شهرک صنعتی",
+    phone: "031-52000000",
+    mobile: "09139999999",
+    email: "hr@msc.ir",
+    linkedin: "https://linkedin.com/company/msc",
+    instagram: "@mobarakeh_steel"
+  },
+  {
+    id: 12,
+    name: "گروه صنعتی ایران خودرو",
+    companyName: "گروه صنعتی ایران خودرو",
+    logo: "GI",
+    industry: "تولیدی",
+    location: "تهران",
+    description: "هلدینگ بزرگ خودروسازی ایران شامل شرکت‌های تابعه متعدد در زمینه تولید، قطعه‌سازی و خدمات پس از فروش.",
+    employeeCount: "بیش از 500 نفر",
+    openPositions: 20,
+    website: "https://ikco.ir",
+    foundedYear: 1341,
+    rating: 4.0,
+    reviews: 750,
+    benefits: ["بیمه اجتماعی", "سرویس ایاب و ذهاب", "وعده غذایی", "تسهیلات خرید خودرو"],
+    isVerified: true,
+    address: "تهران، اتوبان کرج",
+    phone: "021-44500000",
+    mobile: "09121010101",
+    email: "recruitment@ikco.ir",
+    linkedin: "https://linkedin.com/company/ikco-group",
+    instagram: "@ikco_group"
   }
 ];
 
@@ -247,18 +340,36 @@ const employers = [getCompanyData(), ...mockEmployers];
 const industries = [
   "همه حوزه‌ها",
   "فناوری اطلاعات",
-  "فروشگاهی",
   "مالی و بانکی",
-  "آموزشی",
-  "بهداشتی",
-  "ساختمانی",
   "تولیدی",
-  "خدمات",
   "انرژی",
   "ارتباطات",
+  "بهداشت و درمان",
+  "آموزشی",
+  "خرده فروشی",
+  "ساخت و ساز",
+  "خدماتی",
 ];
 
-const locations = [
+const countries = [
+  "همه کشورها",
+  "ایران",
+  "آلمان",
+  "کانادا",
+  "استرالیا",
+];
+
+const provinces = [
+  "همه استان‌ها",
+  "تهران",
+  "اصفهان",
+  "خراسان رضوی",
+  "فارس",
+  "آذربایجان شرقی",
+  "البرز",
+];
+
+const cities = [
   "همه شهرها",
   "تهران",
   "اصفهان",
@@ -266,6 +377,24 @@ const locations = [
   "شیراز",
   "تبریز",
   "کرج",
+];
+
+const companySizes = [
+  "همه اندازه‌ها",
+  "1-10 نفر",
+  "11-50 نفر",
+  "51-100 نفر",
+  "101-500 نفر",
+  "بیش از 500 نفر",
+];
+
+const companyTypes = [
+  "همه انواع",
+  "خصوصی",
+  "دولتی",
+  "نیمه دولتی",
+  "استارتاپ",
+  "شرکت بین‌المللی",
 ];
 
 // Helper components
@@ -400,55 +529,108 @@ const FilterIcon = () => (
 export default function EmployersPage() {
   const [currentEmployers, setCurrentEmployers] = useState(employers);
   const [filteredEmployers, setFilteredEmployers] = useState(employers);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedIndustry, setSelectedIndustry] = useState("همه حوزه‌ها");
-  const [selectedLocation, setSelectedLocation] = useState("همه شهرها");
-  const [showFilters, setShowFilters] = useState(false);
+  
+  // Filter States
+  const [searchFilter, setSearchFilter] = useState("");
+  const [sortBy, setSortBy] = useState("newest");
+  const [selectedIndustry, setSelectedIndustry] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [selectedProvince, setSelectedProvince] = useState("");
+  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedCompanySize, setSelectedCompanySize] = useState("");
+  const [selectedCompanyType, setSelectedCompanyType] = useState("");
+  
+  // Available cities based on selected province
+  const availableCities = selectedProvince && selectedProvince !== "" 
+    ? cities.filter(city => city === "همه شهرها" || city !== "همه شهرها")
+    : cities;
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
+  const totalPages = Math.ceil(filteredEmployers.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentEmployersPage = filteredEmployers.slice(startIndex, endIndex);
 
   useEffect(() => {
     filterEmployers();
-  }, [searchQuery, selectedIndustry, selectedLocation]);
+  }, [searchFilter, selectedIndustry, selectedCountry, selectedProvince, selectedCity, selectedCompanySize, selectedCompanyType, sortBy]);
+
+  // Reset to first page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchFilter, selectedIndustry, selectedCountry, selectedProvince, selectedCity, selectedCompanySize, selectedCompanyType, sortBy]);
 
   const filterEmployers = () => {
-    let filtered = currentEmployers;
+    let filtered = [...currentEmployers];
 
     // Search filter
-    if (searchQuery.trim()) {
+    if (searchFilter.trim()) {
       filtered = filtered.filter(
         (employer) =>
-          employer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          employer.industry.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          employer.description.toLowerCase().includes(searchQuery.toLowerCase())
+          employer.name.toLowerCase().includes(searchFilter.toLowerCase()) ||
+          employer.industry.toLowerCase().includes(searchFilter.toLowerCase()) ||
+          employer.description.toLowerCase().includes(searchFilter.toLowerCase())
       );
     }
 
     // Industry filter
-    if (selectedIndustry !== "همه حوزه‌ها") {
+    if (selectedIndustry && selectedIndustry !== "") {
       filtered = filtered.filter((employer) =>
-        employer.industry.includes(selectedIndustry.replace("همه حوزه‌ها", ""))
+        employer.industry.includes(selectedIndustry)
       );
     }
 
-    // Location filter
-    if (selectedLocation !== "همه شهرها") {
-      filtered = filtered.filter(
-        (employer) => employer.location === selectedLocation
+    // Country filter (assuming all are in Iran for now)
+    if (selectedCountry && selectedCountry !== "") {
+      // Add country filtering logic here if needed
+    }
+
+    // Province filter (using location field)
+    if (selectedProvince && selectedProvince !== "") {
+      filtered = filtered.filter((employer) =>
+        employer.location.includes(selectedProvince)
       );
     }
+
+    // City filter
+    if (selectedCity && selectedCity !== "") {
+      filtered = filtered.filter((employer) =>
+        employer.location === selectedCity
+      );
+    }
+
+    // Company size filter
+    if (selectedCompanySize && selectedCompanySize !== "") {
+      filtered = filtered.filter((employer) =>
+        employer.employeeCount === selectedCompanySize
+      );
+    }
+
+    // Company type filter (add this field to employer data if needed)
+    if (selectedCompanyType && selectedCompanyType !== "") {
+      // Add company type filtering logic here
+    }
+
+    // Sort employers
+    filtered.sort((a, b) => {
+      switch (sortBy) {
+        case "oldest":
+          return a.foundedYear - b.foundedYear;
+        case "most-positions":
+          return b.openPositions - a.openPositions;
+        case "highest-rating":
+          return b.rating - a.rating;
+        case "most-employees":
+          return b.employeeCount.localeCompare(a.employeeCount);
+        case "newest":
+        default:
+          return b.foundedYear - a.foundedYear;
+      }
+    });
 
     setFilteredEmployers(filtered);
-  };
-
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
-  };
-
-  const handleIndustryChange = (e) => {
-    setSelectedIndustry(e.target.value);
-  };
-
-  const handleLocationChange = (e) => {
-    setSelectedLocation(e.target.value);
   };
 
   const renderStars = (rating) => {
@@ -473,130 +655,106 @@ export default function EmployersPage() {
       {/* Header */}
 
       {/* Hero Section */}
-      <section className='relative h-[50vh] flex items-center justify-center text-center overflow-hidden'>
-        <div className='absolute inset-0 bg-gradient-to-r from-purple-900/40 to-blue-900/40'></div>
-        <div className='absolute inset-0 bg-black opacity-60'></div>
+      <section className='relative h-[60vh] flex items-center justify-center text-center overflow-hidden'>
+        {/* Background Image */}
+        <div 
+          className='absolute inset-0 bg-cover bg-center bg-no-repeat'
+          style={{
+            backgroundImage: 'url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80")'
+          }}
+        ></div>
+        <div className='absolute inset-0 bg-black/30'></div>
+        
         <div className='relative z-20 container mx-auto px-6'>
-          <h1 className='text-4xl md:text-6xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 to-yellow-500'>
-            برترین کارفرمایان ایران
+          <h1 className='text-4xl md:text-6xl font-extrabold mb-6 text-white' style={{textShadow: '4px 4px 8px rgba(0,0,0,0.8), 2px 2px 4px rgba(0,0,0,0.9)'}}>
+            کارفرمایان برتر ایران
           </h1>
-          <p className='max-w-2xl mx-auto text-xl text-gray-300 leading-relaxed'>
-            کشف کنید بهترین شرکت‌ها و سازمان‌های ایرانی را که به دنبال
-            استعدادهای برتر هستند. با هزاران موقعیت شغلی در انتظار شما!
+          <p className='max-w-3xl mx-auto text-xl text-gray-200 leading-relaxed' style={{textShadow: '3px 3px 6px rgba(0,0,0,0.8), 1px 1px 3px rgba(0,0,0,0.9)'}}>
+            با بزرگترین شرکت‌ها و سازمان‌های پیشرو کشور آشنا شوید و در محیطی حرفه‌ای و پویا کار کنید
           </p>
-          <div className='mt-8 flex justify-center items-center gap-4 text-gray-400'>
-            <div className='flex items-center gap-2'>
-              <BuildingIcon />
-              <span>{currentEmployers.length}+ شرکت ثبت شده</span>
+          
+          {/* آمار سریع */}
+          <div className='mt-10 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto'>
+            <div className='bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20'>
+              <div className='flex items-center justify-center mb-3'>
+                <BuildingIcon className='w-8 h-8 text-yellow-400' />
+              </div>
+              <div className='text-3xl font-bold text-white mb-1'>
+                {currentEmployers.length}+
+              </div>
+              <div className='text-gray-200 text-sm'>برند معتبر</div>
             </div>
-            <div className='flex items-center gap-2'>
-              <BriefcaseIcon />
-              <span>
-                {currentEmployers.reduce(
-                  (acc, emp) => acc + emp.openPositions,
-                  0
-                )}
-                + موقعیت شغلی
-              </span>
+            
+            <div className='bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20'>
+              <div className='flex items-center justify-center mb-3'>
+                <BriefcaseIcon className='w-8 h-8 text-yellow-400' />
+              </div>
+              <div className='text-3xl font-bold text-white mb-1'>
+                {currentEmployers.reduce((acc, emp) => acc + emp.openPositions, 0)}+
+              </div>
+              <div className='text-gray-200 text-sm'>موقعیت باز</div>
+            </div>
+            
+            <div className='bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20'>
+              <div className='flex items-center justify-center mb-3'>
+                <UserIcon className='w-8 h-8 text-yellow-400' />
+              </div>
+              <div className='text-3xl font-bold text-white mb-1'>
+                {Math.round(currentEmployers.reduce((acc, emp) => acc + emp.rating, 0) / currentEmployers.length * 10) / 10}
+              </div>
+              <div className='text-gray-200 text-sm'>امتیاز کیفیت</div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Search and Filters */}
-      <section className='py-12 bg-[#1a1a1a]'>
+      {/* Main Content with Sidebar */}
+      <section className='py-12 bg-[#1a1a1a] min-h-screen'>
         <div className='container mx-auto px-6'>
-          <div className='max-w-6xl mx-auto'>
-            {/* Main Search */}
-            <div className='flex flex-col md:flex-row gap-4 mb-6'>
-              <div className='flex-1 relative'>
-                <input
-                  type='text'
-                  placeholder='جستجوی نام شرکت، حوزه فعالیت یا...'
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                  className='w-full p-4 pr-12 bg-[#2a2a2a] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-yellow-500 focus:ring-yellow-500 transition'
-                />
-                <SearchIcon className='absolute right-4 top-4 text-gray-400' />
+          <div className='flex gap-8'>
+            {/* Sidebar */}
+            <EmployersSidebar
+              searchFilter={searchFilter}
+              setSearchFilter={setSearchFilter}
+              sortBy={sortBy}
+              setSortBy={setSortBy}
+              selectedIndustry={selectedIndustry}
+              setSelectedIndustry={setSelectedIndustry}
+              industries={industries}
+              selectedCountry={selectedCountry}
+              setSelectedCountry={setSelectedCountry}
+              countries={countries}
+              selectedProvince={selectedProvince}
+              setSelectedProvince={setSelectedProvince}
+              provinces={provinces}
+              selectedCity={selectedCity}
+              setSelectedCity={setSelectedCity}
+              availableCities={availableCities}
+              selectedCompanySize={selectedCompanySize}
+              setSelectedCompanySize={setSelectedCompanySize}
+              companySizes={companySizes}
+              selectedCompanyType={selectedCompanyType}
+              setSelectedCompanyType={setSelectedCompanyType}
+              companyTypes={companyTypes}
+            />
+
+            {/* Main Content */}
+            <div className='flex-1'>
+              {/* Results Count */}
+              <div className='flex items-center justify-between mb-6'>
+                <p className='text-gray-400'>
+                  نمایش {startIndex + 1}-{Math.min(endIndex, filteredEmployers.length)} از {filteredEmployers.length} شرکت
+                  {totalPages > 1 && (
+                    <span className='text-gray-500 text-sm mr-2'>
+                      (صفحه {currentPage} از {totalPages})
+                    </span>
+                  )}
+                </p>
               </div>
 
-              <button
-                onClick={() => setShowFilters(!showFilters)}
-                className='px-6 py-4 bg-[#2a2a2a] border border-gray-600 rounded-lg text-white hover:border-yellow-500 transition flex items-center gap-2'>
-                <FilterIcon />
-                فیلترها
-              </button>
-            </div>
-
-            {/* Advanced Filters */}
-            {showFilters && (
-              <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 p-6 bg-[#2a2a2a] rounded-lg border border-gray-600'>
-                <div>
-                  <label className='block text-sm font-medium text-gray-300 mb-2'>
-                    حوزه فعالیت
-                  </label>
-                  <select
-                    value={selectedIndustry}
-                    onChange={handleIndustryChange}
-                    className='w-full p-3 bg-[#1a1a1a] border border-gray-600 rounded-lg text-white focus:border-yellow-500 focus:ring-yellow-500'>
-                    {industries.map((industry) => (
-                      <option key={industry} value={industry}>
-                        {industry}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className='block text-sm font-medium text-gray-300 mb-2'>
-                    شهر
-                  </label>
-                  <select
-                    value={selectedLocation}
-                    onChange={handleLocationChange}
-                    className='w-full p-3 bg-[#1a1a1a] border border-gray-600 rounded-lg text-white focus:border-yellow-500 focus:ring-yellow-500'>
-                    {locations.map((location) => (
-                      <option key={location} value={location}>
-                        {location}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className='flex items-end'>
-                  <button
-                    onClick={() => {
-                      setSearchQuery("");
-                      setSelectedIndustry("همه حوزه‌ها");
-                      setSelectedLocation("همه شهرها");
-                    }}
-                    className='w-full px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition'>
-                    پاک کردن فیلترها
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Results Count */}
-            <div className='flex items-center justify-between mb-6'>
-              <p className='text-gray-400'>
-                نمایش {filteredEmployers.length} از {currentEmployers.length}{" "}
-                شرکت
-              </p>
-              <div className='flex items-center gap-2 text-sm text-gray-400'>
-                <span>مرتب‌سازی:</span>
-                <select className='bg-[#2a2a2a] border border-gray-600 rounded px-3 py-1 text-white'>
-                  <option>جدیدترین</option>
-                  <option>بیشترین موقعیت شغلی</option>
-                  <option>بالاترین امتیاز</option>
-                  <option>حروف الفبا</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Employers Grid */}
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
-              {filteredEmployers.map((employer) => (
+              {/* Employers Grid */}
+              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+              {currentEmployersPage.map((employer) => (
                 <div
                   key={employer.id}
                   className='group cursor-pointer bg-gradient-to-br from-black/50 to-black/10 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/hover:border-yellow-400/30 transition-all duration-300 hover:shadow-xl hover:shadow-yellow-400/10'>
@@ -703,14 +861,52 @@ export default function EmployersPage() {
               </div>
             )}
 
-            {/* Load More */}
-            {filteredEmployers.length >= 12 && (
-              <div className='text-center mt-12'>
-                <button className='bg-gray-700 text-white px-8 py-3 rounded-lg hover:bg-gray-600 transition-colors'>
-                  مشاهده شرکت‌های بیشتر
-                </button>
-              </div>
-            )}
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className='flex justify-center items-center mt-12 gap-2'>
+                  {/* Previous Button */}
+                  <button
+                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                      currentPage === 1
+                        ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                        : 'bg-gray-700 text-white hover:bg-gray-600'
+                    }`}
+                  >
+                    قبلی
+                  </button>
+
+                  {/* Page Numbers */}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                        currentPage === page
+                          ? 'bg-yellow-500 text-black'
+                          : 'bg-gray-700 text-white hover:bg-gray-600'
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ))}
+
+                  {/* Next Button */}
+                  <button
+                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                      currentPage === totalPages
+                        ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                        : 'bg-gray-700 text-white hover:bg-gray-600'
+                    }`}
+                  >
+                    بعدی
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </section>
