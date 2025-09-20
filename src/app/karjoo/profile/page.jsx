@@ -19,6 +19,7 @@ import {
   Home,
 } from "lucide-react";
 import KarjooHeader from "@/components/layout/header/KarjooHeader";
+import CustomInput from "@/components/ui/input/CustomInput";
 
 export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
@@ -142,17 +143,15 @@ export default function ProfilePage() {
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     نام
                   </label>
-                  <input
+                  <CustomInput
                     type="text"
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleInputChange}
                     disabled={!isEditing}
-                    className={`w-full px-4 py-3 bg-gray-800/50 border rounded-lg text-white placeholder-gray-400 transition-colors ${
-                      isEditing
-                        ? "border-gray-600 focus:border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
-                        : "border-gray-700/50 cursor-not-allowed"
-                    }`}
+                    className={
+                      !isEditing ? "cursor-not-allowed opacity-60" : ""
+                    }
                     placeholder="نام خود را وارد کنید"
                   />
                 </div>
@@ -162,17 +161,15 @@ export default function ProfilePage() {
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     نام خانوادگی
                   </label>
-                  <input
+                  <CustomInput
                     type="text"
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleInputChange}
                     disabled={!isEditing}
-                    className={`w-full px-4 py-3 bg-gray-800/50 border rounded-lg text-white placeholder-gray-400 transition-colors ${
-                      isEditing
-                        ? "border-gray-600 focus:border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
-                        : "border-gray-700/50 cursor-not-allowed"
-                    }`}
+                    className={
+                      !isEditing ? "cursor-not-allowed opacity-60" : ""
+                    }
                     placeholder="نام خانوادگی خود را وارد کنید"
                   />
                 </div>
@@ -183,17 +180,15 @@ export default function ProfilePage() {
                     ایمیل
                   </label>
                   <div className="relative">
-                    <Mail className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                    <input
+                    <Mail className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
+                    <CustomInput
                       type="email"
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
                       disabled={!isEditing}
-                      className={`w-full pr-12 pl-4 py-3 bg-gray-800/50 border rounded-lg text-white placeholder-gray-400 transition-colors ${
-                        isEditing
-                          ? "border-gray-600 focus:border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
-                          : "border-gray-700/50 cursor-not-allowed"
+                      className={`pr-12 ${
+                        !isEditing ? "cursor-not-allowed opacity-60" : ""
                       }`}
                       placeholder="ایمیل خود را وارد کنید"
                     />
@@ -206,17 +201,15 @@ export default function ProfilePage() {
                     شماره تلفن
                   </label>
                   <div className="relative">
-                    <Phone className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                    <input
+                    <Phone className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
+                    <CustomInput
                       type="tel"
                       name="phone"
                       value={formData.phone}
                       onChange={handleInputChange}
                       disabled={!isEditing}
-                      className={`w-full pr-12 pl-4 py-3 bg-gray-800/50 border rounded-lg text-white placeholder-gray-400 transition-colors ${
-                        isEditing
-                          ? "border-gray-600 focus:border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
-                          : "border-gray-700/50 cursor-not-allowed"
+                      className={`pr-12 ${
+                        !isEditing ? "cursor-not-allowed opacity-60" : ""
                       }`}
                       placeholder="شماره تلفن خود را وارد کنید"
                     />
@@ -229,17 +222,15 @@ export default function ProfilePage() {
                     محل سکونت
                   </label>
                   <div className="relative">
-                    <Home className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                    <input
+                    <Home className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
+                    <CustomInput
                       type="text"
                       name="location"
                       value={formData.location}
                       onChange={handleInputChange}
                       disabled={!isEditing}
-                      className={`w-full pr-12 pl-4 py-3 bg-gray-800/50 border rounded-lg text-white placeholder-gray-400 transition-colors ${
-                        isEditing
-                          ? "border-gray-600 focus:border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
-                          : "border-gray-700/50 cursor-not-allowed"
+                      className={`pr-12 ${
+                        !isEditing ? "cursor-not-allowed opacity-60" : ""
                       }`}
                       placeholder="شهر و کشور خود را وارد کنید"
                     />
@@ -252,17 +243,15 @@ export default function ProfilePage() {
                     بیوگرافی
                   </label>
                   <div className="relative">
-                    <FileText className="absolute right-3 top-3 text-gray-400 w-5 h-5" />
-                    <textarea
+                    <FileText className="absolute right-3 top-3 text-gray-400 w-5 h-5 z-10" />
+                    <CustomInput
+                      type="text"
                       name="bio"
                       value={formData.bio}
                       onChange={handleInputChange}
                       disabled={!isEditing}
-                      rows={4}
-                      className={`w-full pr-12 pl-4 py-3 bg-gray-800/50 border rounded-lg text-white placeholder-gray-400 transition-colors resize-none ${
-                        isEditing
-                          ? "border-gray-600 focus:border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/20"
-                          : "border-gray-700/50 cursor-not-allowed"
+                      className={`pr-12 ${
+                        !isEditing ? "cursor-not-allowed opacity-60" : ""
                       }`}
                       placeholder="درباره خود بنویسید..."
                     />
@@ -286,19 +275,19 @@ export default function ProfilePage() {
                       رمز عبور فعلی
                     </label>
                     <div className="relative">
-                      <Lock className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                      <input
+                      <Lock className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
+                      <CustomInput
                         type={showPassword ? "text" : "password"}
                         name="currentPassword"
                         value={formData.currentPassword}
                         onChange={handleInputChange}
-                        className="w-full pr-12 pl-12 py-3 bg-gray-800/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/20 transition-colors"
+                        className="pr-12 pl-12"
                         placeholder="رمز عبور فعلی خود را وارد کنید"
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors z-10"
                       >
                         {showPassword ? (
                           <EyeOff className="w-5 h-5" />
@@ -315,19 +304,19 @@ export default function ProfilePage() {
                       رمز عبور جدید
                     </label>
                     <div className="relative">
-                      <Lock className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                      <input
+                      <Lock className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
+                      <CustomInput
                         type={showNewPassword ? "text" : "password"}
                         name="newPassword"
                         value={formData.newPassword}
                         onChange={handleInputChange}
-                        className="w-full pr-12 pl-12 py-3 bg-gray-800/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/20 transition-colors"
+                        className="pr-12 pl-12"
                         placeholder="رمز عبور جدید خود را وارد کنید"
                       />
                       <button
                         type="button"
                         onClick={() => setShowNewPassword(!showNewPassword)}
-                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors z-10"
                       >
                         {showNewPassword ? (
                           <EyeOff className="w-5 h-5" />
@@ -344,13 +333,13 @@ export default function ProfilePage() {
                       تکرار رمز عبور جدید
                     </label>
                     <div className="relative">
-                      <Lock className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                      <input
+                      <Lock className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 z-10" />
+                      <CustomInput
                         type="password"
                         name="confirmPassword"
                         value={formData.confirmPassword}
                         onChange={handleInputChange}
-                        className="w-full pr-12 pl-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-yellow-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/20 transition-colors"
+                        className="pr-12"
                         placeholder="رمز عبور جدید را مجدداً وارد کنید"
                       />
                     </div>
