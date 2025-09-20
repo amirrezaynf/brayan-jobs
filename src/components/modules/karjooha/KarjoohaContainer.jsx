@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import KarjoohaFilters from "./KarjoohaFilters";
 import KarjoohaContent from "./KarjoohaContent";
+import KarjoohaHeader from "@/components/layout/header/KarjoohaHeader";
 import { jobSeekers } from "@/constants/karjoohaData";
 
 export default function KarjoohaContainer() {
@@ -80,14 +81,20 @@ export default function KarjoohaContainer() {
   };
 
   return (
-    <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="flex flex-col lg:flex-row gap-8">
-        {/* فیلترهای پیشرفته - سمت راست */}
-        <KarjoohaFilters {...filterProps} />
+    <>
+      {/* Header/Banner */}
+      <KarjoohaHeader />
 
-        {/* محتوای اصلی - سمت چپ */}
-        <KarjoohaContent {...contentProps} />
+      {/* محتوای اصلی */}
+      <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* فیلترهای پیشرفته - سمت راست */}
+          <KarjoohaFilters {...filterProps} />
+
+          {/* محتوای اصلی - سمت چپ */}
+          <KarjoohaContent {...contentProps} />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
