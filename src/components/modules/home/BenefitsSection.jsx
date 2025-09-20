@@ -13,7 +13,7 @@ export default function BenefitsSection() {
         <div className="flex flex-col md:flex-row items-center gap-12">
           <div className="md:w-1/2">
             <img
-              src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?q=80&w=2070&auto=format&fit=crop"
+              src="/picture/bg-main-1.jpg"
               alt="رشد کسب‌وکار و مسیر شغلی"
               className="rounded-lg shadow-2xl w-full h-auto object-cover"
             />
@@ -23,7 +23,7 @@ export default function BenefitsSection() {
               <h3 className="text-2xl font-bold mb-4 text-yellow-500">
                 برای کارجویان: مسیر شغلی خود را هوشمندانه بسازید
               </h3>
-            
+
               <ul className="space-y-4 text-gray-300">
                 <li className="flex items-start">
                   <svg
@@ -46,7 +46,7 @@ export default function BenefitsSection() {
                     برترین شرکت‌ها دسترسی پیدا کنید.
                   </span>
                 </li>
-          
+
                 <li className="flex items-start">
                   <svg
                     className="w-6 h-6 text-yellow-500 ml-3 flex-shrink-0 mt-1"
@@ -75,7 +75,7 @@ export default function BenefitsSection() {
               <h3 className="text-2xl font-bold mb-4 text-yellow-500">
                 برای کارفرمایان: تیم خود را با بهترین‌ها کامل کنید
               </h3>
-            
+
               <ul className="space-y-4 text-gray-300">
                 <li className="flex items-start">
                   <svg

@@ -150,13 +150,13 @@ export default function EmployerMobileMenu({ isOpen, onClose, activeTab, setActi
       />
 
       {/* Mobile Menu */}
-      <div className="fixed right-0 top-0 h-full w-80 bg-[#1e1e1e] border-l border-gray-800 shadow-lg z-50 lg:hidden transform transition-transform duration-300 ease-in-out">
-        <div className="p-6">
+      <div className="fixed right-0 top-0 h-full w-72 sm:w-80 bg-[#1e1e1e] border-l border-gray-800 shadow-lg z-50 lg:hidden transform transition-transform duration-300 ease-in-out">
+        <div className="p-4 sm:p-6">
           {/* Header */}
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-6 sm:mb-8">
             <div className="flex items-center">
               <svg
-                className="w-8 h-8 text-yellow-400 ml-3"
+                className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-400 ml-2 sm:ml-3 flex-shrink-0"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -169,14 +169,14 @@ export default function EmployerMobileMenu({ isOpen, onClose, activeTab, setActi
                   d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z"
                 />
               </svg>
-              <h2 className="text-lg font-bold text-white">داشبورد کارفرما</h2>
+              <h2 className="text-base sm:text-lg font-bold text-white">داشبورد کارفرما</h2>
             </div>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-white transition-colors duration-200 p-2 rounded-lg hover:bg-gray-800"
+              className="text-gray-400 hover:text-white transition-colors duration-200 p-1.5 sm:p-2 rounded-lg hover:bg-gray-800 flex-shrink-0"
             >
               <svg
-                className="w-6 h-6"
+                className="w-5 h-5 sm:w-6 sm:h-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -192,32 +192,32 @@ export default function EmployerMobileMenu({ isOpen, onClose, activeTab, setActi
           </div>
 
           {/* Navigation */}
-          <nav className="space-y-2">
+          <nav className="space-y-1 sm:space-y-2">
             {navItems.map((item) => (
               <Link
                 key={item.id}
                 href={item.href}
                 onClick={onClose}
-                className={`flex items-center w-full px-4 py-3 rounded-lg text-right transition-colors duration-200 ${
+                className={`flex items-center w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-right transition-colors duration-200 ${
                   activeTab === item.id
                     ? "bg-yellow-400 text-gray-900 shadow-md"
                     : "text-gray-400 hover:bg-gray-800 hover:text-white"
                 }`}
                 style={{ direction: "rtl" }}
               >
-                {item.icon}
-                <span className="mr-3">{item.label}</span>
+                <div className="flex-shrink-0">{item.icon}</div>
+                <span className="mr-2 sm:mr-3 text-sm sm:text-base">{item.label}</span>
               </Link>
             ))}
           </nav>
 
           {/* Support Button */}
-          <div className="mt-8 pt-8 border-t border-gray-700">
-            <button className="flex items-center justify-center w-full px-4 py-3 rounded-lg bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white transition-colors duration-200">
-              <span className="ml-2">ارتباط با پشتیبانی</span>
+          <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-gray-700">
+            <button className="flex items-center justify-center w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+              <span className="ml-2 text-sm sm:text-base">ارتباط با پشتیبانی</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
+                className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
