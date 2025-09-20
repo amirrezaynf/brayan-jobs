@@ -72,7 +72,7 @@ export default function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div className="space-y-4 flex flex-col items-center">
+          <div className="space-y-4 flex flex-col items-start md:items-center">
             <h4 className="text-lg font-semibold text-white">دسترسی سریع</h4>
             <ul className="space-y-2">
               {[
@@ -97,7 +97,7 @@ export default function Footer() {
           </div>
 
           {/* Services */}
-          <div className="space-y-4 flex flex-col items-center">
+          <div className="space-y-4 flex flex-col items-start lg:items-center">
             <h4 className="text-lg font-semibold text-white">خدمات ما</h4>
             <ul className="space-y-2">
               {[
@@ -128,8 +128,10 @@ export default function Footer() {
            
 
             {/* Copyright */}
-            <div className=" md:text-right">
+            <div className=" md:text-right flex flex-col">
             <div className="flex text-center  items-center gap-2 text-neutral-500 md:justify-center text-xs font-normal p-2 border-surface-05 md:mt-2 mt-4">کلیه حقوق مادی و معنوی این سایت متعلق به پلتفرم استخدامی دکتر برایان اعتماد می باشد</div>
+          <hr />
+          <div className="flex text-center  items-center gap-2 text-neutral-500 justify-center text-md font-normal p-2 border-surface-05 md:mt-2 mt-4">Designed by IRACODE</div>
             </div>
           </div>
         </div>
