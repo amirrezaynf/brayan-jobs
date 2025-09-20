@@ -9,6 +9,7 @@ import {
   GraduationCap,
   MapPin,
   Calendar,
+  Users,
 } from "lucide-react";
 
 import FormInput from "@/components/ui/input/FormInput";
@@ -30,7 +31,7 @@ export default function RegisterSteps({ flow, role }) {
     setStep,
     setIsSubmitted,
   } = flow;
-  
+
   const progress = { 1: 25, 2: 50, 3: 75, 4: 100 };
 
   // Handle form submission
@@ -324,15 +325,22 @@ export default function RegisterSteps({ flow, role }) {
                   />
                 </div>
 
-                {/* آدرس شرکت - ردیف سوم */}
+                {/* تعداد پرسنل شرکت - ردیف سوم */}
                 <FormInput
-                  name="companyAddress"
-                  type="text"
-                  placeholder="آدرس کامل شرکت"
-                  icon={<MapPin size={18} />}
-                  value={data.companyAddress}
+                  name="companySize"
+                  type="select"
+                  placeholder="تعداد پرسنل شرکت"
+                  icon={<Users size={18} />}
+                  value={data.companySize}
                   onChange={handleChange}
-                  error={errors.companyAddress}
+                  error={errors.companySize}
+                  options={[
+                    "1 تا 10 نفر",
+                    "11 تا 50 نفر",
+                    "51 تا 100 نفر",
+                    "101 تا 500 نفر",
+                    "بیش از 500 نفر",
+                  ]}
                 />
               </>
             )}
