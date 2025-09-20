@@ -3270,7 +3270,7 @@ const getResumeData = (id) => {
 
 // کامپوننت بخش مهارت‌ها
 const SkillsSection = ({ skills }) => (
-  <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800">
+  <div className="bg-[#1e1e1e] rounded-xl p-6 border border-black">
     <h3 className="text-xl font-bold text-white mb-4 text-right">مهارت‌ها</h3>
     <div className="flex flex-wrap gap-2">
       {skills.map((skill, index) => (
@@ -3287,7 +3287,7 @@ const SkillsSection = ({ skills }) => (
 
 // کامپوننت بخش تجربه کاری
 const ExperienceSection = ({ experience }) => (
-  <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800">
+  <div className="bg-[#1e1e1e] rounded-xl p-6 border border-black">
     <h3 className="text-xl font-bold text-white mb-6 text-right">تجربه کاری</h3>
     <div className="space-y-6">
       {experience.map((exp) => (
@@ -3324,7 +3324,7 @@ const ExperienceSection = ({ experience }) => (
 
 // کامپوننت بخش تحصیلات
 const EducationSection = ({ education }) => (
-  <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800">
+  <div className="bg-[#1e1e1e] rounded-xl p-6 border border-black">
     <h3 className="text-xl font-bold text-white mb-6 text-right">تحصیلات</h3>
     <div className="space-y-4">
       {education.map((edu) => (
@@ -3345,7 +3345,7 @@ const EducationSection = ({ education }) => (
 
 // کامپوننت بخش گواهی‌نامه‌ها
 const CertificationsSection = ({ certifications }) => (
-  <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800">
+  <div className="bg-[#1e1e1e] rounded-xl p-6 border border-black">
     <h3 className="text-xl font-bold text-white mb-6 text-right">
       گواهی‌نامه‌ها
     </h3>
@@ -3353,7 +3353,7 @@ const CertificationsSection = ({ certifications }) => (
       {certifications.map((cert) => (
         <div
           key={cert.id}
-          className="text-right border-b border-gray-800 pb-4 last:border-b-0"
+          className="text-right border-b border-black pb-4 last:border-b-0"
         >
           <h4 className="text-lg font-semibold text-white">{cert.name}</h4>
           <p className="text-blue-400 font-medium">{cert.issuer}</p>
@@ -3367,7 +3367,7 @@ const CertificationsSection = ({ certifications }) => (
 
 // کامپوننت بخش زبان‌ها
 const LanguagesSection = ({ languages }) => (
-  <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800">
+  <div className="bg-[#1e1e1e] rounded-xl p-6 border border-black">
     <h3 className="text-xl font-bold text-white mb-4 text-right">زبان‌ها</h3>
     <div className="space-y-2">
       {languages.map((lang, index) => (
@@ -3486,7 +3486,7 @@ export default function ResumeViewPage() {
   return (
     <div className="min-h-screen bg-gray-950">
       {/* Header با ناوبری و اکشن‌ها */}
-      <div className="bg-[#1e1e1e] border-b border-gray-800 sticky top-0 z-10">
+      <div className="bg-[#1e1e1e] border-b border-black sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4 space-x-reverse">
@@ -3517,7 +3517,7 @@ export default function ResumeViewPage() {
             <div className="flex items-center space-x-3 space-x-reverse">
               <button
                 onClick={handleDownload}
-                className="flex items-center bg-gray-800 text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-700 transition duration-200 text-sm"
+                className="flex items-center bg-black text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-700 transition duration-200 text-sm"
               >
                 <svg
                   className="w-4 h-4 ml-2"
@@ -3606,7 +3606,7 @@ export default function ResumeViewPage() {
       {/* محتوای اصلی */}
       <div className="max-w-6xl mx-auto px-6 py-8">
         {/* هدر رزومه */}
-        <div className="bg-[#1e1e1e] rounded-xl p-8 border border-gray-800 mb-8">
+        <div className="bg-[#1e1e1e] rounded-xl p-8 border border-black mb-8">
           <div className="flex items-start space-x-6 space-x-reverse">
             {/* تصویر پروفایل */}
             <div
@@ -3760,7 +3760,7 @@ export default function ResumeViewPage() {
 
           {/* خلاصه حرفه‌ای */}
           {resume.summary && (
-            <div className="mt-6 pt-6 border-t border-gray-800">
+            <div className="mt-6 pt-6 border-t border-black">
               <h3 className="text-lg font-semibold text-white mb-3 text-right">
                 خلاصه حرفه‌ای
               </h3>
@@ -3791,7 +3791,7 @@ export default function ResumeViewPage() {
 
         {/* پورتفولیو */}
         {resume.portfolio && resume.portfolio.length > 0 && (
-          <div className="mt-8 bg-[#1e1e1e] rounded-xl p-6 border border-gray-800">
+          <div className="mt-8 bg-[#1e1e1e] rounded-xl p-6 border border-black">
             <h3 className="text-xl font-bold text-white mb-6 text-right">
               پورتفولیو
             </h3>
@@ -3802,7 +3802,7 @@ export default function ResumeViewPage() {
                   href={item.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center p-4 bg-gray-800 rounded-lg hover:bg-gray-700 transition duration-200"
+                  className="flex items-center p-4 bg-black rounded-lg hover:bg-gray-700 transition duration-200"
                 >
                   <svg
                     className="w-5 h-5 ml-3 text-blue-400"

@@ -13,7 +13,7 @@ export default function KarjooMobileMenu({
       {/* Mobile Menu Button */}
       <button
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className="fixed top-4 right-4 z-[60] lg:hidden hover:bg-yellow-400 hover:text-gray-900 bg-black/90 text-white p-3 rounded-lg border border-gray-700 transition-colors duration-200"
+        className="fixed top-4 right-4 z-[60] lg:hidden hover:bg-yellow-400 hover:text-gray-900 bg-[#2a2a2a] text-white p-3 rounded-lg border border-gray-700 transition-colors duration-200"
       >
         <svg
           className="w-6 h-6"

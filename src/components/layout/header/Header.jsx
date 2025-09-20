@@ -58,7 +58,7 @@ export default function Header() {
   return (
     <>
       <header className="dark-bg shadow-lg shadow-black/20 sticky top-0 z-40">
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+        <div className="container mx-auto px-6 py-4 flex flex-row-reverse justify-end lg:flex-row lg:justify-between  items-center">
           <div className="flex  items-center space-x-4 space-x-reverse">
             <Link href="/">
               <LogoIcon />
@@ -101,8 +101,8 @@ export default function Header() {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="lg:hidden">
-            <button onClick={() => setIsMenuOpen(true)}>
+          <div className="lg:hidden ">
+            <button  onClick={() => setIsMenuOpen(true)}>
               <MenuIcon />
             </button>
           </div>
@@ -127,9 +127,7 @@ export default function Header() {
               </button>
             </div>
             <nav className="flex flex-col space-y-6 text-lg items-start">
-              <a href="#" className="header-link text-gray-300 w-full pb-2">
-                ثبت رزومه
-              </a>
+            
               <a href="#" className="header-link text-gray-300 w-full pb-2">
                 بهترین آگهی‌ها
               </a>

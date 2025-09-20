@@ -81,6 +81,25 @@ export default function useRegisterFlow(initialData) {
       if (data.password !== data.confirmPassword)
         newErrors.confirmPassword = "رمزهای عبور مطابقت ندارند.";
     }
+    if (step === 4) {
+      // Validation for specialist fields
+      if (data.fieldOfActivity !== undefined) {
+        if (!data.fieldOfActivity)
+          newErrors.fieldOfActivity = "حوزه فعالیت الزامی است.";
+        if (!data.age) newErrors.age = "سن الزامی است.";
+        if (!data.education) newErrors.education = "مدرک تحصیلی الزامی است.";
+      }
+      // Validation for employer fields
+      if (data.companyName !== undefined) {
+        if (!data.companyName) newErrors.companyName = "نام شرکت الزامی است.";
+        if (!data.companyField)
+          newErrors.companyField = "حوزه فعالیت شرکت الزامی است.";
+        if (!data.companyExperience)
+          newErrors.companyExperience = "سابقه فعالیت شرکت الزامی است.";
+        if (!data.companySize)
+          newErrors.companySize = "تعداد پرسنل شرکت الزامی است.";
+      }
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };

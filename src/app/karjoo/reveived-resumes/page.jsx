@@ -164,7 +164,6 @@ const InterviewDetailsModal = ({
         onClick={onClose}
       />
 
-
       {/* Modal */}
       <div className="relative bg-[#1e1e1e] rounded-2xl border border-gray-700 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
@@ -435,7 +434,7 @@ const InterviewDetailsModal = ({
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth="2"
-                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+                    d="M12 9v2m0 4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
                 نکات مهم
@@ -472,38 +471,35 @@ const ApplicationCard = ({ application, onWithdraw, onViewJob }) => {
 
   return (
     <>
-    
-      <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800 hover:border-yellow-400/50 transition-all duration-300">
-        <div className="flex items-start justify-between mb-6">
-          <div className="flex items-center space-x-4 space-x-reverse">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400/20 to-blue-600/30 border-2 border-blue-400/50 flex items-center justify-center">
-              <span className="font-bold text-lg text-blue-400">
+      <div className="bg-gradient-to-br from-black/50 to-black/10 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-gray-800 hover:border-yellow-400/50 transition-all duration-300 w-full min-w-0">
+        <div className="flex items-start justify-between mb-4 md:mb-6">
+          <div className="flex items-center gap-2 space-x-reverse min-w-0 flex-1">
+            <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-blue-400/20 to-blue-600/30 border-2 border-blue-400/50 flex items-center justify-center flex-shrink-0">
+              <span className="font-bold text-sm md:text-lg text-blue-400">
                 {application.companyLogo}
               </span>
             </div>
-            <div className="text-right">
-              <h3 className="text-lg font-bold text-white">
+            <div className="text-right min-w-0 flex-1">
+              <h3 className="text-base md:text-lg font-bold text-white truncate">
                 {application.companyName}
               </h3>
-              <p className="text-gray-400 text-sm my-1">
+              <p className="text-gray-400 text-sm my-1 truncate">
                 {application.jobTitle}
               </p>
               <p className="text-gray-500 text-xs">{application.appliedDate}</p>
             </div>
           </div>
-          <div className="flex flex-col items-end space-y-2">
-            {/* Status Badge */}
-            <div
-              className={`px-3 py-1.5 rounded-full text-xs font-medium ${
+
+          <div className="flex flex-col items-end gap-2 flex-shrink-0">
+            <span
+              className={`px-2 md:px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
                 application.status === "pending"
-                  ? "bg-yellow-400/10 text-yellow-400 border border-yellow-400/20"
+                  ? "bg-yellow-400/10 text-yellow-400"
                   : application.status === "reviewed"
-                  ? "bg-blue-400/10 text-blue-400 border border-blue-400/20"
+                  ? "bg-blue-400/10 text-blue-400"
                   : application.status === "interview"
-                  ? "bg-green-400/10 text-green-400 border border-green-400/20"
-                  : application.status === "rejected"
-                  ? "bg-red-400/10 text-red-400 border border-red-400/20"
-                  : "border border-gray-700-400/10 text-gray-400 border border-gray-400/20"
+                  ? "bg-green-400/10 text-green-400"
+                  : "bg-red-400/10 text-red-400"
               }`}
             >
               {application.status === "pending"
@@ -513,53 +509,68 @@ const ApplicationCard = ({ application, onWithdraw, onViewJob }) => {
                 : application.status === "interview"
                 ? "دعوت به مصاحبه"
                 : "رد شده"}
-            </div>
-            {/* Match Score */}
-            <div className="text-yellow-400 text-sm font-medium">
-              تطبیق: {application.matchScore}%
+            </span>
+            <div className="flex items-center gap-1">
+              <span className="text-yellow-400 text-xs md:text-sm font-bold">
+                {application.matchScore}%
+              </span>
+              <span className="text-gray-400 text-xs">تطبیق</span>
             </div>
           </div>
         </div>
 
-        <div className="mb-4 space-y-2">
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-400">حقوق:</span>
-            <span className="text-gray-300">{application.salary} تومان</span>
+        <div className="space-y-3 md:space-y-4 mb-4 md:mb-6">
+          <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
+            <div className="text-right min-w-0">
+              <span className="text-gray-400 text-xs md:text-sm">حقوق:</span>
+              <span className="text-green-400 text-sm md:text-base font-medium mr-2 break-words">
+                {application.salary} تومان
+              </span>
+            </div>
+            <div className="text-right sm:text-left min-w-0">
+              <span className="text-gray-400 text-xs md:text-sm">موقعیت:</span>
+              <span className="text-gray-300 text-sm md:text-base mr-2 break-words">
+                {application.location}
+              </span>
+            </div>
           </div>
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-400">موقعیت:</span>
-            <span className="text-gray-300">{application.location}</span>
-          </div>
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-400">نوع همکاری:</span>
-            <span className="text-gray-300">{application.jobType}</span>
-          </div>
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-400">زمان پاسخ:</span>
-            <span className="text-gray-300">{application.responseTime}</span>
+
+          <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
+            <div className="text-right min-w-0">
+              <span className="text-gray-400 text-xs md:text-sm">
+                نوع همکاری:
+              </span>
+              <span className="text-blue-400 text-sm md:text-base mr-2 break-words">
+                {application.jobType}
+              </span>
+            </div>
+            <div className="text-right sm:text-left min-w-0">
+              <span className="text-gray-400 text-xs md:text-sm">
+                زمان پاسخ:
+              </span>
+              <span className="text-gray-300 text-sm md:text-base mr-2 break-words">
+                {application.responseTime}
+              </span>
+            </div>
           </div>
         </div>
 
         <div className="flex items-center justify-between">
-          <div className="flex space-x-2 space-x-reverse">
+          <div className="flex flex-wrap gap-2 min-w-0 flex-1">
             <button
               onClick={() => onViewJob(application.id)}
-              className="bg-blue-400/10 text-blue-400 px-4 py-2 rounded-lg hover:bg-blue-400/20 transition duration-200 text-sm"
+              className="bg-blue-400/10 text-blue-400 px-3 md:px-4 py-2 rounded-lg hover:bg-blue-400/20 transition duration-200 text-xs md:text-sm whitespace-nowrap"
             >
-              مشاهده آگهی
+              مشاهده شغل
             </button>
             {application.status === "pending" && (
               <button
                 onClick={() => {
-                  if (
-                    window.confirm(
-                      `آیا مطمئن هستید که درخواست خود را از ${application.companyName} پس بگیرید؟`
-                    )
-                  ) {
+                  if (confirm("آیا از پس گیری این درخواست اطمینان دارید؟")) {
                     onWithdraw(application.id);
                   }
                 }}
-                className="bg-red-400/10 text-red-400 px-4 py-2 rounded-lg hover:bg-red-400/20 transition duration-200 text-sm"
+                className="bg-red-400/10 text-red-400 px-3 md:px-4 py-2 rounded-lg hover:bg-red-400/20 transition duration-200 text-xs md:text-sm whitespace-nowrap"
               >
                 پس گیری
               </button>
@@ -567,7 +578,7 @@ const ApplicationCard = ({ application, onWithdraw, onViewJob }) => {
             {application.status === "interview" && (
               <button
                 onClick={() => setIsInterviewModalOpen(true)}
-                className="bg-green-400/10 text-green-400 px-4 py-2 rounded-lg hover:bg-green-400/20 transition duration-200 text-sm"
+                className="bg-green-400/10 text-green-400 px-3 md:px-4 py-2 rounded-lg hover:bg-green-400/20 transition duration-200 text-xs md:text-sm whitespace-nowrap"
               >
                 جزئیات مصاحبه
               </button>
@@ -577,7 +588,7 @@ const ApplicationCard = ({ application, onWithdraw, onViewJob }) => {
       </div>
 
       {/* Interview Details Modal */}
-      {isInterviewModalOpen && (
+      {application.interviewDetails && (
         <InterviewDetailsModal
           isOpen={isInterviewModalOpen}
           onClose={() => setIsInterviewModalOpen(false)}
@@ -598,68 +609,72 @@ const Filters = ({
   setSearchTerm,
   applications,
 }) => (
-  <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800 mb-6">
-    <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-      <div className="flex space-x-2 space-x-reverse">
-        <button
-          onClick={() => setActiveFilter("all")}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition duration-200 min-w-[100px] ${
-            activeFilter === "all"
-              ? "bg-yellow-400 text-gray-900"
-              : "border border-gray-700-800 text-gray-300 hover:border border-gray-700-700"
-          }`}
-        >
-          همه ({applications.length})
-        </button>
-        <button
-          onClick={() => setActiveFilter("pending")}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition duration-200 min-w-[120px] ${
-            activeFilter === "pending"
-              ? "bg-yellow-400 text-gray-900"
-              : "border border-gray-700-800 text-gray-300 hover:border border-gray-700-700"
-          }`}
-        >
-          در انتظار (
-          {applications.filter((app) => app.status === "pending").length})
-        </button>
-        <button
-          onClick={() => setActiveFilter("reviewed")}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition duration-200 min-w-[120px] ${
-            activeFilter === "reviewed"
-              ? "bg-yellow-400 text-gray-900"
-              : "border border-gray-700-800 text-gray-300 hover:border border-gray-700-700"
-          }`}
-        >
-          بررسی شده (
-          {applications.filter((app) => app.status === "reviewed").length})
-        </button>
-        <button
-          onClick={() => setActiveFilter("interview")}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition duration-200 min-w-[120px] ${
-            activeFilter === "interview"
-              ? "bg-yellow-400 text-gray-900"
-              : "border border-gray-700-800 text-gray-300 hover:border border-gray-700-700"
-          }`}
-        >
-          مصاحبه (
-          {applications.filter((app) => app.status === "interview").length})
-        </button>
-        <button
-          onClick={() => setActiveFilter("rejected")}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition duration-200 min-w-[100px] ${
-            activeFilter === "rejected"
-              ? "bg-yellow-400 text-gray-900"
-              : "border border-gray-700-800 text-gray-300 hover:border border-gray-700-700"
-          }`}
-        >
-          رد شده (
-          {applications.filter((app) => app.status === "rejected").length})
-        </button>
+  <div className="bg-[#1e1e1e] rounded-xl p-4 md:p-6 border border-gray-800 mb-6">
+    <div className="flex flex-col-reverse gap-4 items-stretch md:items-center md:justify-between md:flex-row">
+      {/* تب‌های فیلتر - اسکرولی در موبایل */}
+      <div className="overflow-x-auto  px-1 scrollbar-hide">
+        <div className="flex gap-2 min-w-max pb-2 md:pb-0">
+          <button
+            onClick={() => setActiveFilter("all")}
+            className={`px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-medium transition duration-200 min-w-[80px] md:min-w-[100px] whitespace-nowrap flex-shrink-0 ${
+              activeFilter === "all"
+                ? "bg-yellow-400 text-gray-900"
+                : "border border-gray-700 text-gray-300 hover:border-gray-600"
+            }`}
+          >
+            همه ({applications.length})
+          </button>
+          <button
+            onClick={() => setActiveFilter("pending")}
+            className={`px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-medium transition duration-200 min-w-[80px] md:min-w-[120px] whitespace-nowrap flex-shrink-0 ${
+              activeFilter === "pending"
+                ? "bg-yellow-400 text-gray-900"
+                : "border border-gray-700 text-gray-300 hover:border-gray-600"
+            }`}
+          >
+            در انتظار (
+            {applications.filter((app) => app.status === "pending").length})
+          </button>
+          <button
+            onClick={() => setActiveFilter("reviewed")}
+            className={`px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-medium transition duration-200 min-w-[80px] md:min-w-[120px] whitespace-nowrap flex-shrink-0 ${
+              activeFilter === "reviewed"
+                ? "bg-yellow-400 text-gray-900"
+                : "border border-gray-700 text-gray-300 hover:border-gray-600"
+            }`}
+          >
+            بررسی شده (
+            {applications.filter((app) => app.status === "reviewed").length})
+          </button>
+          <button
+            onClick={() => setActiveFilter("interview")}
+            className={`px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-medium transition duration-200 min-w-[80px] md:min-w-[120px] whitespace-nowrap flex-shrink-0 ${
+              activeFilter === "interview"
+                ? "bg-yellow-400 text-gray-900"
+                : "border border-gray-700 text-gray-300 hover:border-gray-600"
+            }`}
+          >
+            مصاحبه (
+            {applications.filter((app) => app.status === "interview").length})
+          </button>
+          <button
+            onClick={() => setActiveFilter("rejected")}
+            className={`px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-medium transition duration-200 min-w-[80px] md:min-w-[100px] whitespace-nowrap flex-shrink-0 ${
+              activeFilter === "rejected"
+                ? "bg-yellow-400 text-gray-900"
+                : "border border-gray-700 text-gray-300 hover:border-gray-600"
+            }`}
+          >
+            رد شده (
+            {applications.filter((app) => app.status === "rejected").length})
+          </button>
+        </div>
       </div>
 
-      <div className="flex items-center border border-gray-700-800 rounded-lg px-4 py-2 w-full md:w-80">
+      {/* جستجو */}
+      <div className="flex relative items-center rounded-lg px-4 py-2 w-full md:w-80">
         <svg
-          className="w-5 h-5 text-gray-400 ml-2"
+          className="w-5 h-5 text-gray-400 ml-2 absolute left-5 top-5"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -671,12 +686,11 @@ const Filters = ({
             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
           />
         </svg>
-        <input
-          type="text"
+        <CustomInput
           placeholder="جستجو در درخواست‌ها..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="bg-transparent text-white placeholder-gray-400 focus:outline-none w-full text-right"
+          className="bg-transparent focus:ring-0 text-right text-sm md:text-base"
         />
       </div>
     </div>
@@ -696,30 +710,30 @@ const QuickStats = ({ applications }) => {
   ).length;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-      <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800 text-center">
-        <div className="text-3xl font-bold text-blue-400 mb-2">
+    <div className=" grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
+      <div className="bg-gradient-to-br from-black/50 to-black/10 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-gray-800 text-center">
+        <div className="text-2xl md:text-3xl font-bold text-blue-400 mb-1 md:mb-2">
           {applications.length}
         </div>
-        <div className="text-gray-300 text-sm">کل درخواست‌ها</div>
+        <div className="text-gray-300 text-xs md:text-sm">کل درخواست‌ها</div>
       </div>
-      <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800 text-center">
-        <div className="text-3xl font-bold text-yellow-400 mb-2">
+      <div className="bg-gradient-to-br from-black/50 to-black/10 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-gray-800 text-center">
+        <div className="text-2xl md:text-3xl font-bold text-yellow-400 mb-1 md:mb-2">
           {pendingCount}
         </div>
-        <div className="text-gray-300 text-sm">در انتظار بررسی</div>
+        <div className="text-gray-300 text-xs md:text-sm">در انتظار</div>
       </div>
-      <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800 text-center">
-        <div className="text-3xl font-bold text-green-400 mb-2">
+      <div className="bg-gradient-to-br from-black/50 to-black/10 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-gray-800 text-center">
+        <div className="text-2xl md:text-3xl font-bold text-green-400 mb-1 md:mb-2">
           {interviewCount}
         </div>
-        <div className="text-gray-300 text-sm">دعوت به مصاحبه</div>
+        <div className="text-gray-300 text-xs md:text-sm">دعوت به مصاحبه</div>
       </div>
-      <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800 text-center">
-        <div className="text-3xl font-bold text-purple-400 mb-2">
+      <div className="bg-gradient-to-br from-black/50 to-black/10 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-gray-800 text-center">
+        <div className="text-2xl md:text-3xl font-bold text-purple-400 mb-1 md:mb-2">
           {reviewedCount}
         </div>
-        <div className="text-gray-300 text-sm">بررسی شده</div>
+        <div className="text-gray-300 text-xs md:text-sm">بررسی شده</div>
       </div>
     </div>
   );
@@ -786,14 +800,11 @@ function ReceivedResumesPageContent() {
   };
 
   return (
-    <div className="min-h-screen bg-black/90 text-white pb-6 ">
-      <KarjooHeader />
-      
-
+    <div className="min-h-screen max-w-screen text-white pb-6 p-5 ">
       <div className="max-w-7xl mx-auto space-y-6 ">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center  justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-white text-right">
+            <h1 className="text-3xl  font-bold text-white text-right">
               رزومه های ارسالی
             </h1>
             <p className="text-gray-400 mt-2 text-right">
@@ -862,15 +873,15 @@ function ReceivedResumesPageContent() {
         </div>
 
         {totalPages > 1 && (
-          <div className="flex items-center justify-center mt-8">
-            <div className="flex space-x-2 space-x-reverse">
+          <div className="flex items-center justify-center mt-6 md:mt-8">
+            <div className="flex flex-wrap gap-2 justify-center">
               <button
                 onClick={handlePrevPage}
                 disabled={currentPage === 1}
-                className={`px-4 py-2 rounded-lg transition duration-200 ${
+                className={`px-3 md:px-4 py-2 rounded-lg transition duration-200 text-sm md:text-base ${
                   currentPage === 1
-                    ? "border border-gray-700-700 text-gray-500 cursor-not-allowed"
-                    : "border border-gray-700-800 text-gray-300 hover:border border-gray-700-700"
+                    ? "border border-gray-700 text-gray-500 cursor-not-allowed"
+                    : "border border-gray-700 text-gray-300 hover:border-gray-600"
                 }`}
               >
                 قبلی
@@ -888,10 +899,10 @@ function ReceivedResumesPageContent() {
                   <button
                     key={pageNumber}
                     onClick={() => handlePageChange(pageNumber)}
-                    className={`px-4 py-2 rounded-lg font-medium transition duration-200 ${
+                    className={`px-3 md:px-4 py-2 rounded-lg font-medium transition duration-200 text-sm md:text-base min-w-[40px] md:min-w-[44px] ${
                       currentPage === pageNumber
                         ? "bg-yellow-400 text-gray-900"
-                        : "border border-gray-700-800 text-gray-300 hover:border border-gray-700-700"
+                        : "border border-gray-700 text-gray-300 hover:border-gray-600"
                     }`}
                   >
                     {pageNumber}
@@ -901,10 +912,10 @@ function ReceivedResumesPageContent() {
               <button
                 onClick={handleNextPage}
                 disabled={currentPage === totalPages}
-                className={`px-4 py-2 rounded-lg transition duration-200 ${
+                className={`px-3 md:px-4 py-2 rounded-lg transition duration-200 text-sm md:text-base ${
                   currentPage === totalPages
-                    ? "border border-gray-700-700 text-gray-500 cursor-not-allowed"
-                    : "border border-gray-700-800 text-gray-300 hover:border border-gray-700-700"
+                    ? "border border-gray-700 text-gray-500 cursor-not-allowed"
+                    : "border border-gray-700 text-gray-300 hover:border-gray-600"
                 }`}
               >
                 بعدی

@@ -1,3 +1,5 @@
+"use client";
+
 import JobSeekerCard from "@/components/ui/card/JobSeekerCard";
 import { useRouter } from "next/navigation";
 

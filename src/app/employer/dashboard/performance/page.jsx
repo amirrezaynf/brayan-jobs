@@ -17,7 +17,7 @@ export default function PerformancePage() {
         {performanceStats.map((stat) => (
           <div
             key={stat.label}
-            className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800"
+            className="bg-[#1e1e1e] rounded-xl p-6 border border-black"
           >
             <p className="text-sm text-gray-400 mb-2">{stat.label}</p>
             <p className="text-3xl font-bold text-white">{stat.value}</p>
@@ -33,17 +33,17 @@ export default function PerformancePage() {
       </div>
 
       {/* Chart Placeholder */}
-      <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800">
+      <div className="bg-[#1e1e1e] rounded-xl p-6 border border-black">
         <h2 className="text-xl font-bold text-white mb-4">
           نمودار بازدید آگهی‌ها (۳۰ روز گذشته)
         </h2>
-        <div className="h-64 flex items-center justify-center bg-gray-800/50 rounded-lg">
+        <div className="h-64 flex items-center justify-center bg-black/50 rounded-lg">
           <p className="text-gray-500">[محل قرارگیری نمودار]</p>
         </div>
       </div>
 
       {/* Top Performing Vacancies */}
-      <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800">
+      <div className="bg-[#1e1e1e] rounded-xl p-6 border border-black">
         <h2 className="text-xl font-bold text-white mb-4">
           آگهی‌ها با بیشترین بازخورد
         </h2>

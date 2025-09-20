@@ -17,7 +17,7 @@ export default function Footer() {
     <footer className="bg-gradient-to-br from-transparent  to-black/50 border-t border-gray-800 mt-16">
       <div className="container mx-auto px-6 py-12">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
           {/* Company Info Section */}
           <div className="space-y-4">
             <div>
@@ -30,121 +30,8 @@ export default function Footer() {
               پلتفرم پیشرفته استخدامی که با استفاده از هوش مصنوعی، بهترین
               فرصت‌های شغلی را برای شما پیدا می‌کند.
             </p>
-          </div>
-
-          {/* Quick Links */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-white">دسترسی سریع</h4>
-            <ul className="space-y-2">
-              {[
-                "جستجوی شغل",
-                "شرکت‌های برتر",
-                "راهنمای کاریابی",
-                "مشاوره شغلی",
-                "رزومه ساز",
-                "آموزش‌های تخصصی",
-              ].map((item, index) => (
-                <li key={index}>
-                  <a
-                    href="#"
-                    className="text-gray-400 hover:text-yellow-400 transition-colors duration-300 text-sm flex items-center group"
-                  >
-                    <span className="w-2 h-2 bg-gray-600 rounded-full ml-2 group-hover:bg-yellow-400 transition-colors duration-300"></span>
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Services */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-white">خدمات ما</h4>
-            <ul className="space-y-2">
-              {[
-                "استخدام هوشمند",
-                "تحلیل بازار کار",
-                "مشاوره حرفه‌ای",
-                "آموزش مهارت‌ها",
-                "ارزیابی شخصیت",
-                "پیگیری مصاحبه",
-              ].map((item, index) => (
-                <li key={index}>
-                  <a
-                    href="#"
-                    className="text-gray-400 hover:text-yellow-400 transition-colors duration-300 text-sm flex items-center group"
-                  >
-                    <span className="w-2 h-2 bg-gray-600 rounded-full ml-2 group-hover:bg-yellow-400 transition-colors duration-300"></span>
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact & Newsletter */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-white">ارتباط با ما</h4>
-
-            {/* Contact Info */}
-            <div className="space-y-3">
-              <div className="flex items-center text-gray-300 text-sm">
-                <svg
-                  className="w-4 h-4 ml-2 text-yellow-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                </svg>
-                info@brianjobs.com
-              </div>
-              <div className="flex items-center text-gray-300 text-sm">
-                <svg
-                  className="w-4 h-4 ml-2 text-yellow-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                تهران، ایران
-              </div>
-            </div>
-
-            {/* Newsletter Subscription */}
-            <div className="mt-6">
-              <h5 className="text-sm font-medium text-white mb-3">خبرنامه</h5>
-              <form onSubmit={handleNewsletterSubmit} className="space-y-2">
-                <div className="relative">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="ایمیل شما"
-                    className="w-full px-3 py-2  border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-yellow-400 transition-colors duration-300"
-                    required
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-black font-medium py-2 px-4 rounded-lg transition-all duration-300 text-sm"
-                >
-                  {isSubscribed ? "✓ عضو شدید" : "عضویت"}
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-
-        {/* Social Media & Bottom Section */}
-        <div className="border-t border-gray-800 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            {/* Social Media Links */}
-            <div className="flex items-center space-x-4 space-x-reverse">
+             {/* Social Media Links */}
+             <div className="flex mt-15 items-center space-x-4 space-x-reverse">
               <span className="text-gray-400 text-sm ml-4">
                 ما را دنبال کنید:
               </span>
@@ -182,13 +69,69 @@ export default function Footer() {
                 </a>
               ))}
             </div>
+          </div>
+
+          {/* Quick Links */}
+          <div className="space-y-4 flex flex-col items-start md:items-center">
+            <h4 className="text-lg font-semibold text-white">دسترسی سریع</h4>
+            <ul className="space-y-2">
+              {[
+                "جستجوی شغل",
+                "شرکت‌های برتر",
+                "راهنمای کاریابی",
+                "مشاوره شغلی",
+                "رزومه ساز",
+                "آموزش‌های تخصصی",
+              ].map((item, index) => (
+                <li key={index}>
+                  <a
+                    href="#"
+                    className="text-gray-400 hover:text-yellow-400 transition-colors duration-300 text-sm flex items-center group"
+                  >
+                    <span className="w-2 h-2 bg-gray-600 rounded-full ml-2 group-hover:bg-yellow-400 transition-colors duration-300"></span>
+                    {item}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Services */}
+          <div className="space-y-4 flex flex-col items-start lg:items-center">
+            <h4 className="text-lg font-semibold text-white">خدمات ما</h4>
+            <ul className="space-y-2">
+              {[
+                "استخدام هوشمند",
+                "تحلیل بازار کار",
+                "مشاوره حرفه‌ای",
+                "آموزش مهارت‌ها",
+                "ارزیابی شخصیت",
+                "پیگیری مصاحبه",
+              ].map((item, index) => (
+                <li key={index}>
+                  <a
+                    href="#"
+                    className="text-gray-400 hover:text-yellow-400 transition-colors duration-300 text-sm flex items-center group"
+                  >
+                    <span className="w-2 h-2 bg-gray-600 rounded-full ml-2 group-hover:bg-yellow-400 transition-colors duration-300"></span>
+                    {item}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Social Media & Bottom Section */}
+        <div className="border-t border-gray-800 pt-8">
+          <div className="flex justify-center flex-col md:flex-row  items-center space-y-4 md:space-y-0">
+           
 
             {/* Copyright */}
-            <div className="text-center md:text-right">
-              <p className="text-gray-400 text-sm">
-                &copy; {new Date().getFullYear()} پلتفرم استخدامی دکتر برایان
-                اعتماد. تمام حقوق محفوظ است.
-              </p>
+            <div className=" md:text-right flex flex-col">
+            <div className="flex text-center  items-center gap-2 text-neutral-500 md:justify-center text-xs font-normal p-2 border-surface-05 md:mt-2 mt-4">کلیه حقوق مادی و معنوی این سایت متعلق به پلتفرم استخدامی دکتر برایان اعتماد می باشد</div>
+          <hr />
+          <div className="flex text-center  items-center gap-2 text-neutral-500 justify-center text-md font-normal p-2 border-surface-05 md:mt-2 mt-4">Designed by IRACODE</div>
             </div>
           </div>
         </div>

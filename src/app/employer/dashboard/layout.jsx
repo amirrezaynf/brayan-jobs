@@ -174,7 +174,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="hidden lg:fixed lg:right-0 lg:top-0 lg:h-full lg:w-64 xl:w-72 lg:bg-[#1e1e1e] lg:border-l lg:border-gray-800 lg:shadow-lg lg:p-4 xl:p-6 lg:flex lg:flex-col lg:items-center lg:z-50">
+    <aside className="hidden lg:fixed lg:right-0 lg:top-0 lg:h-full lg:w-64 xl:w-72 lg:bg-[#1e1e1e] lg:border-l lg:border-black lg:shadow-lg lg:p-4 xl:p-6 lg:flex lg:flex-col lg:items-center lg:z-50">
       <div className="mb-8 lg:mb-10 text-center">
         <Link href="/" className="flex items-center justify-center">
           <svg
@@ -201,7 +201,7 @@ const Sidebar = () => {
             className={`flex items-center justify-start w-full px-3 lg:px-4 py-2.5 lg:py-3 rounded-lg transition-colors duration-200 text-sm lg:text-base ${
               pathname === item.href
                 ? "bg-yellow-400 text-gray-900 shadow-md"
-                : "text-gray-400 hover:bg-gray-800 hover:text-white"
+                : "text-gray-400 hover:bg-black hover:text-white"
             }`}
             style={{ direction: "rtl" }}
           >

@@ -254,7 +254,7 @@ const ResumeCard = ({ application, onStatusChange, onViewResume }) => (
     className={`group relative bg-[#1e1e1e] rounded-xl p-5 border hover:border-yellow-400/50 transition-all duration-300 h-full ${
       application.isPro
         ? "border-purple-500/50 bg-gradient-to-br from-purple-500/5 to-pink-500/5"
-        : "border-gray-800"
+        : "border-black"
     }`}
   >
     
@@ -293,7 +293,7 @@ const ResumeCard = ({ application, onStatusChange, onViewResume }) => (
           </span>
         </div>
         {/* Online indicator */}
-        <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-400 rounded-full border-2 border-gray-800" />
+        <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-400 rounded-full border-2 border-black" />
       </div>
       
       <div className="flex-1 min-w-0">
@@ -346,7 +346,7 @@ const ResumeCard = ({ application, onStatusChange, onViewResume }) => (
     </div>
 
     {/* اطلاعات کوتاه با آیکون */}
-    <div className="mb-5 space-y-2 bg-gray-800/50 rounded-lg p-3">
+    <div className="mb-5 space-y-2 bg-black/50 rounded-lg p-3">
       <div className="flex items-center text-xs">
         <svg className="w-3 h-3 text-blue-400 ml-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
           <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
@@ -435,10 +435,10 @@ const Filters = ({
   setSearchTerm,
   applications,
 }) => (
-  <div className="bg-[#1e1e1e] rounded-xl p-4 sm:p-6 border border-gray-800 mb-6 lg:mr-6">
+  <div className="bg-[#1e1e1e] rounded-xl p-4 sm:p-6 border border-black mb-6 lg:mr-6">
     <div className="flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between">
       {/* جستجو */}
-      <div className="flex items-center bg-gray-800 rounded-lg px-3 sm:px-4 py-2 order-1 lg:order-2">
+      <div className="flex items-center bg-black rounded-lg px-3 sm:px-4 py-2 order-1 lg:order-2">
         <svg
           className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 ml-2 flex-shrink-0"
           fill="none"
@@ -468,7 +468,7 @@ const Filters = ({
           className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition duration-200 ${
             activeFilter === "all"
               ? "bg-yellow-400 text-gray-900"
-              : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+              : "bg-black text-gray-300 hover:bg-gray-700"
           }`}
         >
           همه ({applications.length})
@@ -478,7 +478,7 @@ const Filters = ({
           className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition duration-200 ${
             activeFilter === "new"
               ? "bg-yellow-400 text-gray-900"
-              : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+              : "bg-black text-gray-300 hover:bg-gray-700"
           }`}
         >
           جدید ({applications.filter((app) => app.status === "new").length})
@@ -488,7 +488,7 @@ const Filters = ({
           className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition duration-200 ${
             activeFilter === "reviewed"
               ? "bg-yellow-400 text-gray-900"
-              : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+              : "bg-black text-gray-300 hover:bg-gray-700"
           }`}
         >
           بررسی شده ({applications.filter((app) => app.status === "reviewed").length})
@@ -498,7 +498,7 @@ const Filters = ({
           className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition duration-200 ${
             activeFilter === "shortlisted"
               ? "bg-yellow-400 text-gray-900"
-              : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+              : "bg-black text-gray-300 hover:bg-gray-700"
           }`}
         >
           انتخاب شده ({applications.filter((app) => app.status === "shortlisted").length})
@@ -534,19 +534,19 @@ const Filters = ({
 // کامپوننت آمار سریع - responsive
 const QuickStats = () => (
   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8 lg:mr-6">
-    <div className="bg-[#1e1e1e] rounded-xl p-4 sm:p-6 border border-gray-800 text-center">
+    <div className="bg-[#1e1e1e] rounded-xl p-4 sm:p-6 border border-black text-center">
       <div className="text-2xl sm:text-3xl font-bold text-blue-400 mb-2">۲۰</div>
       <div className="text-gray-300 text-xs sm:text-sm">کل رزومه‌ها</div>
     </div>
-    <div className="bg-[#1e1e1e] rounded-xl p-4 sm:p-6 border border-gray-800 text-center">
+    <div className="bg-[#1e1e1e] rounded-xl p-4 sm:p-6 border border-black text-center">
       <div className="text-2xl sm:text-3xl font-bold text-green-400 mb-2">۶</div>
       <div className="text-gray-300 text-xs sm:text-sm">رزومه جدید</div>
     </div>
-    <div className="bg-[#1e1e1e] rounded-xl p-4 sm:p-6 border border-gray-800 text-center">
+    <div className="bg-[#1e1e1e] rounded-xl p-4 sm:p-6 border border-black text-center">
       <div className="text-2xl sm:text-3xl font-bold text-yellow-400 mb-2">۵</div>
       <div className="text-gray-300 text-xs sm:text-sm">انتخاب شده</div>
     </div>
-    <div className="bg-[#1e1e1e] rounded-xl p-4 sm:p-6 border border-gray-800 text-center">
+    <div className="bg-[#1e1e1e] rounded-xl p-4 sm:p-6 border border-black text-center">
       <div className="text-2xl sm:text-3xl font-bold text-purple-400 mb-2">۷</div>
       <div className="text-gray-300 text-xs sm:text-sm">بررسی شده</div>
     </div>
@@ -716,7 +716,7 @@ function ApplicationsPageContent() {
             />
           ))
         ) : (
-          <div className="col-span-full bg-[#1e1e1e] rounded-xl p-12 text-center border border-gray-800">
+          <div className="col-span-full bg-[#1e1e1e] rounded-xl p-12 text-center border border-black">
             <svg
               className="w-16 h-16 text-gray-600 mx-auto mb-4"
               fill="none"
@@ -750,7 +750,7 @@ function ApplicationsPageContent() {
               className={`px-4 py-2 rounded-lg transition duration-200 ${
                 currentPage === 1
                   ? "bg-gray-700 text-gray-500 cursor-not-allowed"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  : "bg-black text-gray-300 hover:bg-gray-700"
               }`}
             >
               قبلی
@@ -776,7 +776,7 @@ function ApplicationsPageContent() {
                   className={`px-4 py-2 rounded-lg font-medium transition duration-200 ${
                     currentPage === pageNumber
                       ? "bg-yellow-400 text-gray-900"
-                      : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                      : "bg-black text-gray-300 hover:bg-gray-700"
                   }`}
                 >
                   {pageNumber}
@@ -790,7 +790,7 @@ function ApplicationsPageContent() {
               className={`px-4 py-2 rounded-lg transition duration-200 ${
                 currentPage === totalPages
                   ? "bg-gray-700 text-gray-500 cursor-not-allowed"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  : "bg-black text-gray-300 hover:bg-gray-700"
               }`}
             >
               بعدی
