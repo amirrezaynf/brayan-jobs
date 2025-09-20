@@ -42,16 +42,16 @@ export default function VacanciesPage() {
 
   // Check URL parameter to open create form
   useEffect(() => {
-    const createParam = searchParams.get('create');
-    if (createParam === 'true') {
+    const createParam = searchParams.get("create");
+    if (createParam === "true") {
       setShowCreateForm(true);
       setEditingJob(null);
-      
+
       // Clean up URL parameter
       if (typeof window !== "undefined") {
         const url = new URL(window.location);
-        url.searchParams.delete('create');
-        window.history.replaceState({}, '', url);
+        url.searchParams.delete("create");
+        window.history.replaceState({}, "", url);
       }
     }
   }, [searchParams]);
@@ -342,9 +342,11 @@ export default function VacanciesPage() {
   };
 
   return (
-    <div className="bg-[#1e1e1e] rounded-xl p-4 sm:p-6 shadow-lg border border-gray-800">
+    <div className="bg-[#1e1e1e] rounded-xl p-4 sm:p-6 shadow-lg border border-black">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-        <h1 className="text-xl sm:text-2xl font-bold text-white">مدیریت آگهی‌ها</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-white">
+          مدیریت آگهی‌ها
+        </h1>
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
           <div className="flex border border-gray-700 rounded-lg p-1 order-2 sm:order-1">
             <button
@@ -415,7 +417,7 @@ export default function VacanciesPage() {
       {showCreateForm && (
         <form
           onSubmit={handleSubmit}
-          className="bg-gray-800 rounded-lg p-4 sm:p-6 mb-6 border border-gray-700"
+          className="bg-black rounded-lg p-4 sm:p-6 mb-6 border border-gray-700"
         >
           <h2 className="text-lg sm:text-xl font-bold text-white mb-4 sm:mb-6 text-right">
             {editingJob ? "ویرایش آگهی استخدام" : "ایجاد آگهی استخدام جدید"}
@@ -838,7 +840,7 @@ export default function VacanciesPage() {
             {filteredVacancies.map((job, index) => (
               <tr
                 key={index}
-                className="border-b border-gray-800 hover:bg-gray-800/50"
+                className="border-b border-black hover:bg-black/50"
               >
                 <td className="p-3 font-semibold text-white">{job.title}</td>
                 <td className="p-3">{job.date}</td>
@@ -889,9 +891,14 @@ export default function VacanciesPage() {
       {/* Mobile Cards */}
       <div className="md:hidden space-y-4">
         {filteredVacancies.map((job, index) => (
-          <div key={index} className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+          <div
+            key={index}
+            className="bg-black rounded-lg p-4 border border-gray-700"
+          >
             <div className="flex justify-between items-start mb-3">
-              <h3 className="font-semibold text-white text-sm leading-tight flex-1 ml-2">{job.title}</h3>
+              <h3 className="font-semibold text-white text-sm leading-tight flex-1 ml-2">
+                {job.title}
+              </h3>
               <span
                 className={`px-2 py-1 text-xs rounded-full flex-shrink-0 ${
                   job.status === "active"
@@ -939,8 +946,18 @@ export default function VacanciesPage() {
       {filteredVacancies.length === 0 && (
         <div className="text-center py-12">
           <div className="text-gray-500 mb-2">
-            <svg className="w-12 h-12 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            <svg
+              className="w-12 h-12 mx-auto mb-4 opacity-50"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
             </svg>
           </div>
           <p className="text-gray-500 text-sm sm:text-base">
