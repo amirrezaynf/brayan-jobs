@@ -4,6 +4,7 @@ import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { loadCompanyData } from "@/constants/companyData";
 import VacancyContainer from "@/components/modules/employer/vacancy/VacancyContainer";
+import { getUserVacancies, deleteVacancy } from "@/app/action/vacancy";
 
 function VacanciesContent() {
   const searchParams = useSearchParams();
@@ -11,6 +12,7 @@ function VacanciesContent() {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [vacancies, setVacancies] = useState([]);
   const [editingJob, setEditingJob] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Load jobs from localStorage on component mount
   useEffect(() => {
@@ -33,40 +35,77 @@ function VacanciesContent() {
     }
   }, [searchParams]);
 
-  const loadJobs = () => {
-    const savedJobs = localStorage.getItem("employerJobs");
-    if (savedJobs) {
-      setVacancies(JSON.parse(savedJobs));
-    } else {
-      // Default sample jobs
-      const sampleJobs = [
-        {
-          id: 1,
-          title: "توسعه‌دهنده React Senior",
-          company: "شرکت فناوری اطلاعات پارامکس",
-          date: "۱۴۰۲/۱۲/۱۵",
-          applicants: 12,
-          status: "active",
-        },
-        {
-          id: 2,
-          title: "طراح UI/UX",
-          company: "شرکت فناوری اطلاعات پارامکس",
-          date: "۱۴۰۲/۱۲/۱۰",
-          applicants: 8,
-          status: "active",
-        },
-        {
-          id: 3,
-          title: "مدیر محصول",
-          company: "شرکت فناوری اطلاعات پارامکس",
-          date: "۱۴۰۲/۱۲/۰۵",
-          applicants: 5,
-          status: "draft",
-        },
-      ];
-      setVacancies(sampleJobs);
-      localStorage.setItem("employerJobs", JSON.stringify(sampleJobs));
+  const loadJobs = async () => {
+    setIsLoading(true);
+    try {
+      const result = await getUserVacancies();
+      
+      if (result.success) {
+        // Map API data to component format
+        const mappedVacancies = result.data.map(vacancy => ({
+          id: vacancy.id,
+          title: vacancy.title,
+          company: vacancy.company?.name || "شرکت نامشخص",
+          date: vacancy.created_at ? new Date(vacancy.created_at).toLocaleDateString("fa-IR") : new Date().toLocaleDateString("fa-IR"),
+          applicants: vacancy.applicants_count || 0,
+          status: vacancy.status || "active",
+          // Keep original API data for editing
+          ...vacancy
+        }));
+        setVacancies(mappedVacancies);
+      } else {
+        // If API fails, try to load from localStorage as fallback
+        const savedJobs = localStorage.getItem("employerJobs");
+        if (savedJobs) {
+          setVacancies(JSON.parse(savedJobs));
+        } else {
+          // Default sample jobs if no data available
+          const sampleJobs = [
+            {
+              id: 1,
+              title: "توسعه‌دهنده React Senior",
+              company: "شرکت فناوری اطلاعات پارامکس",
+              date: "۱۴۰۲/۱۲/۱۵",
+              applicants: 12,
+              status: "active",
+            },
+            {
+              id: 2,
+              title: "طراح UI/UX",
+              company: "شرکت فناوری اطلاعات پارامکس",
+              date: "۱۴۰۲/۱۲/۱۰",
+              applicants: 8,
+              status: "active",
+            },
+            {
+              id: 3,
+              title: "مدیر محصول",
+              company: "شرکت فناوری اطلاعات پارامکس",
+              date: "۱۴۰۲/۱۲/۰۵",
+              applicants: 5,
+              status: "draft",
+            },
+          ];
+          setVacancies(sampleJobs);
+          localStorage.setItem("employerJobs", JSON.stringify(sampleJobs));
+        }
+        
+        // Show error message if API failed
+        if (result.error) {
+          showErrorMessage(result.error);
+        }
+      }
+    } catch (error) {
+      console.error("Error loading vacancies:", error);
+      showErrorMessage("خطا در بارگذاری آگهی‌ها");
+      
+      // Fallback to localStorage
+      const savedJobs = localStorage.getItem("employerJobs");
+      if (savedJobs) {
+        setVacancies(JSON.parse(savedJobs));
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -82,11 +121,28 @@ function VacanciesContent() {
     document.body.appendChild(successMessage);
 
     setTimeout(() => {
-      document.body.removeChild(successMessage);
+      if (document.body.contains(successMessage)) {
+        document.body.removeChild(successMessage);
+      }
     }, 3000);
   };
 
+  const showErrorMessage = (message) => {
+    const errorMessage = document.createElement("div");
+    errorMessage.className =
+      "fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50";
+    errorMessage.textContent = message;
+    document.body.appendChild(errorMessage);
+
+    setTimeout(() => {
+      if (document.body.contains(errorMessage)) {
+        document.body.removeChild(errorMessage);
+      }
+    }, 4000);
+  };
+
   const handleSubmit = (jobData) => {
+    // Update local state with the new/updated job data
     if (editingJob) {
       // Update existing job
       const updatedJobs = vacancies.map((job) =>
@@ -94,25 +150,19 @@ function VacanciesContent() {
       );
       setVacancies(updatedJobs);
       saveJobs(updatedJobs);
-      showSuccessMessage("آگهی با موفقیت به‌روزرسانی شد!");
     } else {
-      // Create new job
-      const newJobWithId = {
-        ...jobData,
-        id: Date.now(),
-        date: new Date().toLocaleDateString("fa-IR"),
-        applicants: 0,
-        status: "active",
-      };
-      const updatedJobs = [...vacancies, newJobWithId];
+      // Add new job
+      const updatedJobs = [...vacancies, jobData];
       setVacancies(updatedJobs);
       saveJobs(updatedJobs);
-      showSuccessMessage("آگهی با موفقیت منتشر شد!");
     }
 
     // Close form
     setShowCreateForm(false);
     setEditingJob(null);
+    
+    // Reload jobs from API to get the latest data
+    loadJobs();
   };
 
   const handleEditJob = (job) => {
@@ -120,12 +170,24 @@ function VacanciesContent() {
     setShowCreateForm(true);
   };
 
-  const handleDeleteJob = (jobId) => {
+  const handleDeleteJob = async (jobId) => {
     if (window.confirm("آیا از حذف این آگهی اطمینان دارید؟")) {
-      const updatedJobs = vacancies.filter((job) => job.id !== jobId);
-      setVacancies(updatedJobs);
-      saveJobs(updatedJobs);
-      showSuccessMessage("آگهی با موفقیت حذف شد!");
+      try {
+        const result = await deleteVacancy(jobId);
+        
+        if (result.success) {
+          // Remove from local state
+          const updatedJobs = vacancies.filter((job) => job.id !== jobId);
+          setVacancies(updatedJobs);
+          saveJobs(updatedJobs);
+          showSuccessMessage(result.message || "آگهی با موفقیت حذف شد!");
+        } else {
+          showErrorMessage(result.error || "خطا در حذف آگهی");
+        }
+      } catch (error) {
+        console.error("Error deleting vacancy:", error);
+        showErrorMessage("خطا در ارتباط با سرور");
+      }
     }
   };
 
@@ -219,8 +281,17 @@ function VacanciesContent() {
         />
       )}
 
+      {/* Loading State */}
+      {isLoading && (
+        <div className="flex justify-center items-center py-12">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-400"></div>
+          <span className="mr-3 text-gray-400">در حال بارگذاری آگهی‌ها...</span>
+        </div>
+      )}
+
       {/* Desktop Table */}
-      <div className="hidden md:block overflow-x-auto">
+      {!isLoading && (
+        <div className="hidden md:block overflow-x-auto">
         <table className="w-full text-right">
           <thead>
             <tr className="border-b border-gray-700 text-gray-400 text-sm">
@@ -275,9 +346,11 @@ function VacanciesContent() {
             ))}
           </tbody>
         </table>
-      </div>
+        </div>
+      )}
 
       {/* Mobile Cards */}
+      {!isLoading && (
       <div className="md:hidden space-y-4">
         {filteredVacancies.map((job) => (
           <div
@@ -325,9 +398,10 @@ function VacanciesContent() {
           </div>
         ))}
       </div>
+      )}
 
       {/* Empty State */}
-      {filteredVacancies.length === 0 && (
+      {!isLoading && filteredVacancies.length === 0 && (
         <div className="text-center py-12">
           <svg
             className="w-16 h-16 text-gray-600 mx-auto mb-4"
