@@ -64,6 +64,9 @@ export default function ResumeBasicInfo({
           files={profileImage}
           setFiles={setProfileImage}
           multiple={false}
+          acceptedTypes={["image/jpeg", "image/jpg", "image/png"]}
+          maxFileSize={2 * 1024 * 1024} // 2MB for profile images
+          showTypeHint={true}
         />
       </div>
     </section>

@@ -38,7 +38,7 @@ export default function ResumeJobInfo({ jobInfo, handleJobInfoChange }) {
       </div>
 
       {jobInfo.showSalary && (
-        <div className="space-y-4 p-4 bg-gray-800/50 rounded-lg">
+        <div className="space-y-4 p-4 border-gray-800 border rounded-lg">
           <div className="flex gap-6">
             <label className="flex items-center cursor-pointer">
               <input
