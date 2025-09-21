@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   registerStep1,
   registerStep2,
@@ -19,6 +20,7 @@ const validatePassword = (password) => {
 };
 
 export default function useRegisterFlow(initialData, role = "specialist") {
+  const router = useRouter();
   const [step, setStep] = useState(1);
   const [data, setData] = useState(initialData);
   const [errors, setErrors] = useState({});
@@ -137,9 +139,6 @@ export default function useRegisterFlow(initialData, role = "specialist") {
 
         if (result.success) {
           setAuthToken(result.token);
-          // Store token in localStorage for persistence
-          localStorage.setItem("authToken", result.token);
-          localStorage.setItem("user", JSON.stringify(result.user));
           setStep((s) => s + 1);
         } else {
           setErrors({ general: result.error });
@@ -192,21 +191,6 @@ export default function useRegisterFlow(initialData, role = "specialist") {
     setErrors({});
 
     try {
-      const storedUser = localStorage.getItem("user");
-      let userData = null;
-
-      if (storedUser) {
-        try {
-          userData = JSON.parse(storedUser);
-        } catch (parseError) {
-          localStorage.removeItem("user"); // پاک کردن داده خراب
-          setErrors({
-            general: "خطا در اطلاعات ذخیره شده. لطفاً مجدداً وارد شوید.",
-          });
-          return;
-        }
-      }
-
       // Prepare step 4 data based on role
       let step4Data = {};
 
@@ -232,7 +216,7 @@ export default function useRegisterFlow(initialData, role = "specialist") {
         // Redirect to appropriate dashboard
         const redirectUrl = role === "employer" ? "/dashboard" : "/karjoo";
         setTimeout(() => {
-          window.location.href = redirectUrl;
+          router.push(redirectUrl);
         }, 2000); // Give user time to see success message
       } else {
         // Convert technical error messages to user-friendly Persian

@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import AuthTab from "@/components/ui/tabs/AuthTab";
 import RegisterSteps from "./RegisterSteps";
@@ -9,21 +10,26 @@ import { login } from "@/app/_action/auth";
 
 // --- Main AuthForms Component ---
 export default function AuthForms() {
+  const router = useRouter();
   const [userRole, setUserRole] = useState("specialist");
   const [activeTab, setActiveTab] = useState("login");
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [employerErrors, setEmployerErrors] = useState({});
 
-  // login states
-  const [loginData, setLoginData] = useState({ contact: "", password: "" });
+  // Login data states
+  const [loginData, setLoginData] = useState({
+    contact: "",
+    password: "",
+  });
+
   const [employerLoginData, setEmployerLoginData] = useState({
     contact: "",
     password: "",
   });
-  const [errors, setErrors] = useState({});
-  const [employerErrors, setEmployerErrors] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
 
-  // register flows with role parameter
-  const specialistFlow = useRegisterFlow(
+  // Register flows for both user types
+  const specialistRegisterFlow = useRegisterFlow(
     {
       contact: "",
       verificationCode: "",
@@ -38,7 +44,7 @@ export default function AuthForms() {
     "specialist"
   );
 
-  const employerFlow = useRegisterFlow(
+  const employerRegisterFlow = useRegisterFlow(
     {
       contact: "",
       verificationCode: "",
@@ -63,13 +69,9 @@ export default function AuthForms() {
       const result = await login(loginData.contact, loginData.password);
 
       if (result.success) {
-        // Store token and user data
-        localStorage.setItem("authToken", result.token);
-        localStorage.setItem("user", JSON.stringify(result.user));
-
         // Redirect based on user role
         const redirectUrl = result.user.role === 2 ? "/employer" : "/karjoo";
-        window.location.href = redirectUrl;
+        router.push(redirectUrl);
       } else {
         setErrors({ general: result.error });
       }
@@ -92,13 +94,9 @@ export default function AuthForms() {
       );
 
       if (result.success) {
-        // Store token and user data
-        localStorage.setItem("authToken", result.token);
-        localStorage.setItem("user", JSON.stringify(result.user));
-
         // Redirect based on user role
         const redirectUrl = result.user.role === 2 ? "/dashboard" : "/karjoo";
-        window.location.href = redirectUrl;
+        router.push(redirectUrl);
       } else {
         setEmployerErrors({ general: result.error });
       }
@@ -181,7 +179,10 @@ export default function AuthForms() {
                   onSubmit={handleLoginSubmit}
                 />
               ) : (
-                <RegisterSteps flow={specialistFlow} role="specialist" />
+                <RegisterSteps
+                  flow={specialistRegisterFlow}
+                  role="specialist"
+                />
               ))}
 
             {/* Employer */}
@@ -195,7 +196,7 @@ export default function AuthForms() {
                   onSubmit={handleEmployerLoginSubmit}
                 />
               ) : (
-                <RegisterSteps flow={employerFlow} role="employer" />
+                <RegisterSteps flow={employerRegisterFlow} role="employer" />
               ))}
           </div>
         </div>
