@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 
@@ -61,7 +62,7 @@ export default function Header() {
         <div className="container mx-auto px-6 py-4 flex flex-row-reverse justify-end lg:flex-row lg:justify-between  items-center">
           <div className="flex  items-center space-x-4 space-x-reverse">
             <Link href="/">
-              <LogoIcon />
+              <Image src="/picture/karyabilogo.png" width={40} height={40} className="w-full h-full" />
             </Link>
             <div className="flex flex-col mr-4  items-center ">
               <h1 className="text-lg font-bold text-white">
