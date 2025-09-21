@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 
@@ -61,7 +62,13 @@ export default function Header() {
         <div className="container mx-auto px-6 py-4 flex flex-row-reverse justify-end lg:flex-row lg:justify-between  items-center">
           <div className="flex  items-center space-x-4 space-x-reverse">
             <Link href="/">
-              <LogoIcon />
+              <Image 
+                src="/picture/karyabilogo.png" 
+                width={40} 
+                height={40} 
+                className="w-full h-full" 
+                alt="لوگو پلتفرم استخدامی دکتر برایان اعتماد"
+              />
             </Link>
             <div className="flex flex-col mr-4  items-center ">
               <h1 className="text-lg font-bold text-white">
@@ -75,28 +82,28 @@ export default function Header() {
           </div>
 
           <nav className="hidden lg:flex items-center space-x-8  font-medium">
-            <a href="#" className="header-link text-gray-300">
+            <Link href="#" className="header-link text-gray-300">
               بهترین آگهی‌ها
-            </a>
-            <a href="#" className="header-link text-gray-300">
+            </Link>
+            <Link href="#" className="header-link text-gray-300">
               جستجوی آگهی
-            </a>
+            </Link>
           </nav>
 
           <div className="hidden lg:flex items-center space-x-4 ">
             <div className="flex items-center space-x-4 ">
-              <a
+              <Link
                 href="/employer"
                 className="text-gray-300 hover:gold-text  transition"
               >
                 بخش کارفرمایان
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/auth"
                 className="px-5 py-2 rounded-lg gold-bg text-black  hover:opacity-90 transition duration-300"
               >
                 ورود / ثبت نام
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -128,21 +135,21 @@ export default function Header() {
             </div>
             <nav className="flex flex-col space-y-6 text-lg items-start">
             
-              <a href="#" className="header-link text-gray-300 w-full pb-2">
+              <Link href="#" className="header-link text-gray-300 w-full pb-2">
                 بهترین آگهی‌ها
-              </a>
-              <a href="#" className="header-link text-gray-300 w-full pb-2">
+              </Link>
+              <Link href="#" className="header-link text-gray-300 w-full pb-2">
                 جستجوی آگهی
-              </a>
-              <a href="#" className="header-link text-gray-300 w-full pb-2">
+              </Link>
+              <Link href="/employer" className="header-link text-gray-300 w-full pb-2">
                 بخش کارفرمایان
-              </a>
-              <a
-                href="#"
+              </Link>
+              <Link
+                href="/auth"
                 className="mt-4 w-full text-center px-5 py-2 rounded-lg gold-bg text-black font-semibold hover:opacity-90 transition duration-300"
               >
                 ورود / ثبت نام
-              </a>
+              </Link>
             </nav>
           </div>
         </div>

@@ -10,7 +10,6 @@ export default function ResumeDocuments({ documents, setDocuments }) {
           <FileCheck className="w-6 h-6 ml-2 text-yellow-500" />
           مدارک و گواهینامه‌ها
         </h2>
-       
       </div>
 
       <div className="space-y-4">
@@ -20,6 +19,14 @@ export default function ResumeDocuments({ documents, setDocuments }) {
           files={documents}
           setFiles={setDocuments}
           multiple={true}
+          acceptedTypes={[
+            "application/pdf",
+            "image/jpeg",
+            "image/jpg",
+            "image/png",
+          ]}
+          maxFileSize={5 * 1024 * 1024} // 5MB for documents
+          showTypeHint={true}
         />
 
         {/* راهنمای فرمت فایل */}
@@ -28,7 +35,7 @@ export default function ResumeDocuments({ documents, setDocuments }) {
             راهنمای آپلود فایل:
           </h4>
           <ul className="text-xs text-gray-400 space-y-1">
-            <li>• فرمت‌های مجاز: PDF, DOC, DOCX, JPG, PNG</li>
+            <li>• فرمت‌های مجاز: PDF, JPG, PNG</li>
             <li>• حداکثر حجم هر فایل: 5 مگابایت</li>
             <li>• می‌توانید چندین فایل را همزمان آپلود کنید</li>
             <li>• نام فایل‌ها باید به زبان انگلیسی یا فارسی باشد</li>
