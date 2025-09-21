@@ -139,6 +139,7 @@ export default function useRegisterFlow(initialData, role = "specialist") {
 
         if (result.success) {
           setAuthToken(result.token);
+          localStorage.setItem("authToken", result.token);
           setStep((s) => s + 1);
         } else {
           setErrors({ general: result.error });
