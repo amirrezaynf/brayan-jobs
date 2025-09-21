@@ -25,9 +25,9 @@ export default function VacancyBasicInfo({
             onChange={(e) => handleBasicInfoChange("company", e.target.value)}
           />
           {errors.company ? (
-            <p className="text-red-400 text-sm mt-2">{errors.company}</p>
+            <p className="text-red-400 text-sm mt-1">{errors.company}</p>
           ) : (
-            <p className="text-gray-500 text-xs mt-2">
+            <p className="text-gray-500 text-xs mt-1">
               نام کامل شرکت یا سازمان خود را وارد کنید
             </p>
           )}
@@ -42,10 +42,10 @@ export default function VacancyBasicInfo({
             onChange={(e) => handleBasicInfoChange("title", e.target.value)}
           />
           {errors.title ? (
-            <p className="text-red-400 text-sm mt-2">{errors.title}</p>
+            <p className="text-red-400 text-sm mt-1">{errors.title}</p>
           ) : (
-            <p className="text-gray-500 text-xs mt-2">
-              عنوان شغل را به طور دقیق وارد کنید
+            <p className="text-gray-500 text-xs mt-1">
+              عنوان شغل و موقعیت شغلی را به طور دقیق وارد کنید
             </p>
           )}
         </div>
@@ -68,9 +68,9 @@ export default function VacancyBasicInfo({
             ]}
           />
           {errors.category ? (
-            <p className="text-red-400 text-sm mt-2">{errors.category}</p>
+            <p className="text-red-400 text-sm mt-1">{errors.category}</p>
           ) : (
-            <p className="text-gray-500 text-xs mt-2">
+            <p className="text-gray-500 text-xs mt-1">
               دسته‌بندی شغلی مناسب با آگهی خود را انتخاب کنید
             </p>
           )}
@@ -94,49 +94,13 @@ export default function VacancyBasicInfo({
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-400 mb-2">
-            حقوق
+            حقوق (تومان)
           </label>
-          <div className="space-y-4">
-            {basicInfo.salaryType === "amount" && (
-              <div>
-                <CustomInput
-                  placeholder="مثال: ۱۵,۰۰۰,۰۰۰"
-                  value={basicInfo.salary}
-                  onChange={(e) =>
-                    handleBasicInfoChange("salary", e.target.value)
-                  }
-                />
-              </div>
-            )}
-          </div>
-          <div className="flex gap-6 mt-4">
-            <label className="flex items-center cursor-pointer">
-              <input
-                type="radio"
-                name="salaryType"
-                value="agreement"
-                checked={basicInfo.salaryType === "agreement"}
-                onChange={(e) =>
-                  handleBasicInfoChange("salaryType", e.target.value)
-                }
-                className="w-4 h-4 text-yellow-500 bg-gray-700 border-gray-600 focus:ring-yellow-500 focus:ring-2 focus:ring-offset-0 accent-yellow-500"
-              />
-              <span className="mr-2 text-gray-300">توافقی</span>
-            </label>
-            <label className="flex items-center cursor-pointer">
-              <input
-                type="radio"
-                name="salaryType"
-                value="amount"
-                checked={basicInfo.salaryType === "amount"}
-                onChange={(e) =>
-                  handleBasicInfoChange("salaryType", e.target.value)
-                }
-                className="w-4 h-4 text-yellow-500 bg-gray-700 border-gray-600 focus:ring-yellow-500 focus:ring-2 focus:ring-offset-0 accent-yellow-500"
-              />
-              <span className="mr-2 text-gray-300">درج مبلغ</span>
-            </label>
-          </div>
+          <CustomInput
+            placeholder="مثال: ۱۵,۰۰۰,۰۰۰"
+            value={basicInfo.salary}
+            onChange={(e) => handleBasicInfoChange("salary", e.target.value)}
+          />
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-400 mb-2">
@@ -148,9 +112,9 @@ export default function VacancyBasicInfo({
             onChange={(e) => handleBasicInfoChange("location", e.target.value)}
           />
           {errors.location ? (
-            <p className="text-red-400 text-sm mt-2">{errors.location}</p>
+            <p className="text-red-400 text-sm mt-1">{errors.location}</p>
           ) : (
-            <p className="text-gray-500 text-xs mt-2">
+            <p className="text-gray-500 text-xs mt-1">
               شهر و آدرس دقیق محل کار را وارد کنید
             </p>
           )}

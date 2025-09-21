@@ -194,48 +194,50 @@ export default function AdvertisementLandingClient() {
   const specialization = searchParams.get("specialization");
 
   useEffect(() => {
-    let allAds = [];
+    let allAds = [...sampleAdvertisements]; // همیشه با sample advertisements شروع کنیم
+    
     if (typeof window !== "undefined") {
-      if (userType === "employer") {
-        const savedJobs = localStorage.getItem("allJobs");
-        if (savedJobs) {
-          const employerJobs = JSON.parse(savedJobs).filter(
-            (job) => job.userType === "employer"
-          );
-          allAds = [...employerJobs];
-        }
-
-        const postedJobs = localStorage.getItem("postedJobs");
-        if (postedJobs) {
-          const parsedPostedJobs = JSON.parse(postedJobs);
-          const newPostedJobs = parsedPostedJobs.filter(
-            (job) => !allAds.some((ad) => ad.id === job.id)
-          );
-          allAds = [...allAds, ...newPostedJobs];
-        }
-      } else {
-        allAds = [...sampleAdvertisements];
-
-        const savedJobs = localStorage.getItem("allJobs");
-        if (savedJobs) {
+      // اضافه کردن آگهی‌های ذخیره شده از localStorage
+      const savedJobs = localStorage.getItem("allJobs");
+      if (savedJobs) {
+        try {
           const parsedJobs = JSON.parse(savedJobs);
-          const newJobs = parsedJobs.filter((job) => {
-            const exists = sampleAdvertisements.some(
-              (sample) =>
-                sample.title === job.title && sample.company === job.company
+          const validJobs = parsedJobs.filter(job => job && job.id);
+          
+          if (userType === "employer") {
+            // برای کارفرمایان، فقط آگهی‌های کارفرما را اضافه کن
+            const employerJobs = validJobs.filter(job => job.userType === "employer");
+            const newEmployerJobs = employerJobs.filter(
+              job => !allAds.some(ad => ad.id === job.id)
             );
-            return !exists;
-          });
-          allAds = [...allAds, ...newJobs];
+            allAds = [...allAds, ...newEmployerJobs];
+          } else {
+            // برای کاربران عادی، همه آگهی‌ها را اضافه کن
+            const newJobs = validJobs.filter(job => {
+              const exists = allAds.some(ad => 
+                ad.id === job.id || (ad.title === job.title && ad.company === job.company)
+              );
+              return !exists;
+            });
+            allAds = [...allAds, ...newJobs];
+          }
+        } catch (error) {
+          console.error("Error parsing savedJobs:", error);
         }
+      }
 
-        const postedJobs = localStorage.getItem("postedJobs");
-        if (postedJobs) {
+      // اضافه کردن آگهی‌های پست شده
+      const postedJobs = localStorage.getItem("postedJobs");
+      if (postedJobs) {
+        try {
           const parsedPostedJobs = JSON.parse(postedJobs);
-          const newPostedJobs = parsedPostedJobs.filter(
-            (job) => !allAds.some((ad) => ad.id === job.id)
+          const validPostedJobs = parsedPostedJobs.filter(job => job && job.id);
+          const newPostedJobs = validPostedJobs.filter(
+            job => !allAds.some(ad => ad.id === job.id)
           );
           allAds = [...allAds, ...newPostedJobs];
+        } catch (error) {
+          console.error("Error parsing postedJobs:", error);
         }
       }
     }
@@ -249,6 +251,11 @@ export default function AdvertisementLandingClient() {
       filtered = filtered.filter((ad) => ad.specialization === specialization);
     }
 
+    console.log("Debug - userType:", userType);
+    console.log("Debug - allAds length:", allAds.length);
+    console.log("Debug - filtered length:", filtered.length);
+    console.log("Debug - sample ads length:", sampleAdvertisements.length);
+    
     setFilteredAds(filtered);
     setAds(filtered);
   }, [jobCategory, specialization, userType]);
@@ -486,9 +493,10 @@ export default function AdvertisementLandingClient() {
     if (currentPage > 1) {
       buttons.push(
         <button
-          key='prev'
+          key="prev"
           onClick={() => handlePageChange(currentPage - 1)}
-          className='px-3 py-2 bg-[#2a2a2a] text-white rounded-lg hover:bg-yellow-500/20 hover:text-yellow-400 transition-colors duration-200 border border-gray-700'>
+          className="px-3 py-2 bg-[#2a2a2a] text-white rounded-lg hover:bg-yellow-500/20 hover:text-yellow-400 transition-colors duration-200 border border-gray-700"
+        >
           قبلی
         </button>
       );
@@ -499,13 +507,14 @@ export default function AdvertisementLandingClient() {
         <button
           key={1}
           onClick={() => handlePageChange(1)}
-          className='px-3 py-2 bg-[#2a2a2a] text-white rounded-lg hover:bg-yellow-500/20 hover:text-yellow-400 transition-colors duration-200 border border-gray-700'>
+          className="px-3 py-2 bg-[#2a2a2a] text-white rounded-lg hover:bg-yellow-500/20 hover:text-yellow-400 transition-colors duration-200 border border-gray-700"
+        >
           ۱
         </button>
       );
       if (startPage > 2) {
         buttons.push(
-          <span key='ellipsis-start' className='px-2 py-2 text-gray-500'>
+          <span key="ellipsis-start" className="px-2 py-2 text-gray-500">
             ...
           </span>
         );
@@ -521,7 +530,8 @@ export default function AdvertisementLandingClient() {
             currentPage === page
               ? "bg-yellow-500 text-black border-yellow-500"
               : "bg-[#2a2a2a] text-white hover:bg-yellow-500/20 hover:text-yellow-400 border-gray-700"
-          }`}>
+          }`}
+        >
           {page}
         </button>
       );
@@ -530,7 +540,7 @@ export default function AdvertisementLandingClient() {
     if (endPage < totalPages) {
       if (endPage < totalPages - 1) {
         buttons.push(
-          <span key='ellipsis-end' className='px-2 py-2 text-gray-500'>
+          <span key="ellipsis-end" className="px-2 py-2 text-gray-500">
             ...
           </span>
         );
@@ -539,7 +549,8 @@ export default function AdvertisementLandingClient() {
         <button
           key={totalPages}
           onClick={() => handlePageChange(totalPages)}
-          className='px-3 py-2 bg-[#2a2a2a] text-white rounded-lg hover:bg-yellow-500/20 hover:text-yellow-400 transition-colors duration-200 border border-gray-700'>
+          className="px-3 py-2 bg-[#2a2a2a] text-white rounded-lg hover:bg-yellow-500/20 hover:text-yellow-400 transition-colors duration-200 border border-gray-700"
+        >
           {totalPages}
         </button>
       );
@@ -548,9 +559,10 @@ export default function AdvertisementLandingClient() {
     if (currentPage < totalPages) {
       buttons.push(
         <button
-          key='next'
+          key="next"
           onClick={() => handlePageChange(currentPage + 1)}
-          className='px-3 py-2 bg-[#2a2a2a] text-white rounded-lg hover:bg-yellow-500/20 hover:text-yellow-400 transition-colors duration-200 border border-gray-700'>
+          className="px-3 py-2 bg-[#2a2a2a] text-white rounded-lg hover:bg-yellow-500/20 hover:text-yellow-400 transition-colors duration-200 border border-gray-700"
+        >
           بعدی
         </button>
       );
@@ -561,7 +573,7 @@ export default function AdvertisementLandingClient() {
 
   return (
     <>
-      <div className='flex gap-10 max-w-10xl mx-auto px-6 py-8'>
+      <div className="flex gap-10 max-w-10xl mx-auto px-6 py-8">
         {/* Left Sidebar - Fixed Filters */}
         <AdvertisementSidebar
           searchFilter={searchFilter}
@@ -591,93 +603,97 @@ export default function AdvertisementLandingClient() {
         />
 
         {/* Main Content */}
-        <div className='flex-1 py-0 '>
-          <div className='container mx-auto px-6 lg:px-0'>
-            <div className='mb-4'>
-              <h1 className='text-2xl font-bold text-white mb-2'>
+        <div className="flex-1 py-0 ">
+          <div className="container mx-auto px-6 lg:px-0">
+            <div className="mb-4">
+              <h1 className="text-2xl font-bold text-white mb-2">
                 نتایج جستجو آگهی‌ها
               </h1>
-              <p className='text-gray-400'>
+              <p className="text-gray-400">
                 {ads.length} آگهی پیدا شد
                 {jobCategory && ` در دسته ${jobCategory}`}
               </p>
             </div>
 
             {/* Results */}
-            <div className='w-full '>
+            <div className="w-full ">
               {totalItems > 0 ? (
                 <div>
-                  <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6'>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6">
                     {currentAds.map((ad) => (
                       <div
                         key={ad.id}
-                        className='bg-gradient-to-br from-black/50 to-black/10 backdrop-blur-sm rounded-xl p-4 border border-gray-700 hover:border-yellow-500/50 transition-all duration-300 relative overflow-hidden shadow-lg min-h-[240px] flex flex-col'>
+                        className="bg-gradient-to-br from-black/50 to-black/10 backdrop-blur-sm rounded-xl p-4 border border-gray-700 hover:border-yellow-500/50 transition-all duration-300 relative overflow-hidden shadow-lg min-h-[240px] flex flex-col"
+                      >
                         {ad.urgent && (
-                          <span className='absolute top-2 left-2 bg-yellow-500/20 text-yellow-400 text-xs px-2 py-1 rounded-full whitespace-nowrap z-10'>
+                          <span className="absolute p-4 top-2 left-2 bg-yellow-500/20 text-yellow-400 text-xs px-2 py-1 rounded-full whitespace-nowrap z-10">
                             فوری
                           </span>
                         )}
-                        <div className='flex items-start justify-between mb-4'>
-                          <div className='flex items-start gap-3 flex-1 min-w-0'>
-                            <div className='w-10 h-10 bg-yellow-500/10 rounded-lg flex items-center justify-center flex-shrink-0'>
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex items-start gap-3 flex-1 min-w-0">
+                            <div className="w-10 h-10 bg-yellow-500/10 rounded-lg flex items-center justify-center flex-shrink-0">
                               <svg
-                                xmlns='http://www.w3.org/2000/svg'
-                                width='20'
-                                height='20'
-                                viewBox='0 0 24 24'
-                                fill='none'
-                                stroke='currentColor'
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
                                 strokeWidth={2}
-                                className='text-yellow-500'>
+                                className="text-yellow-500"
+                              >
                                 <path
-                                  strokeLinecap='round'
-                                  strokeLinejoin='round'
-                                  d='M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01'
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
                                 />
                               </svg>
                             </div>
-                            <div className='min-w-0 flex-1'>
-                              <h3 className='text-lg font-bold text-white truncate mb-1'>
+                            <div className="min-w-0 flex-1">
+                              <h3 className="text-lg font-bold text-white truncate mb-1">
                                 {ad.title}
                               </h3>
-                              <div className='flex items-center gap-3 text-sm text-gray-400 mb-2'>
-                                <span className='flex items-center gap-1'>
+                              <div className="flex items-center gap-3 text-sm text-gray-400 mb-2">
+                                <span className="flex items-center gap-1">
                                   <svg
-                                    xmlns='http://www.w3.org/2000/svg'
-                                    width='14'
-                                    height='14'
-                                    viewBox='0 0 24 24'
-                                    fill='none'
-                                    stroke='currentColor'
-                                    strokeWidth='2'>
-                                    <path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'></path>
-                                    <circle cx='12' cy='10' r='3'></circle>
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="14"
+                                    height="14"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                  >
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
                                   </svg>
                                   {ad.location}
                                 </span>
-                                <span className='flex items-center gap-1'>
+                                <span className="flex items-center gap-1">
                                   <svg
-                                    xmlns='http://www.w3.org/2000/svg'
-                                    width='14'
-                                    height='14'
-                                    viewBox='0 0 24 24'
-                                    fill='none'
-                                    stroke='currentColor'
-                                    strokeWidth='2'>
-                                    <path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'></path>
-                                    <circle cx='12' cy='7' r='4'></circle>
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="14"
+                                    height="14"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                  >
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
                                   </svg>
                                   {ad.applicants}
                                 </span>
                               </div>
-                              <p className='text-xs md:text-sm text-gray-300 line-clamp-2 mb-3'>
+                              <p className="text-xs md:text-sm text-gray-300 line-clamp-2 mb-3">
                                 {ad.description}
                               </p>
-                              <div className='flex items-center justify-between'>
-                                <span className='text-sm text-gray-400'>
+                              <div className="flex items-center justify-between">
+                                <span className="text-sm text-gray-400">
                                   {ad.company}
                                 </span>
-                                <span className='text-sm text-gray-500'>
+                                <span className="text-sm text-gray-500">
                                   {toJalali(ad.date)}
                                 </span>
                               </div>
@@ -685,22 +701,23 @@ export default function AdvertisementLandingClient() {
                           </div>
                         </div>
 
-                        <div className='flex items-center justify-between mt-4 pt-4 border-t border-gray-700'>
-                          <div className='flex items-center gap-2'>
-                            <span className='bg-yellow-500/20 text-yellow-400 text-xs px-2 py-1 rounded-full font-medium'>
+                        <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-700">
+                          <div className="flex items-center gap-2">
+                            <span className="bg-yellow-500/20 text-yellow-400 text-xs px-2 py-1 rounded-full font-medium">
                               {ad.category}
                             </span>
-                            <span className='text-sm text-gray-400'>
+                            <span className="text-sm text-gray-400">
                               {ad.type}
                             </span>
                           </div>
-                          <div className='flex items-center gap-2'>
-                            <span className='text-yellow-400 font-bold'>
+                          <div className="flex items-center gap-2">
+                            <span className="text-yellow-400 font-bold">
                               {ad.salary}
                             </span>
                             <button
                               onClick={() => handleViewAd(ad.id)}
-                              className='bg-yellow-500 hover:bg-yellow-500 text-black px-4 py-2 rounded-lg font-medium transition-colors duration-200 text-sm'>
+                              className="bg-yellow-500 hover:bg-yellow-500 text-black px-4 py-2 rounded-lg font-medium transition-colors duration-200 text-sm"
+                            >
                               مشاهده
                             </button>
                           </div>
@@ -710,28 +727,28 @@ export default function AdvertisementLandingClient() {
                   </div>
 
                   {/* Pagination */}
-                  <div className='mt-12 flex flex-col items-center gap-4'>
-                    <div className='text-sm text-gray-400 mb-2'>
+                  <div className="mt-12 flex flex-col items-center gap-4">
+                    <div className="text-sm text-gray-400 mb-2">
                       صفحه {currentPage} از {totalPages}
                     </div>
 
-                    <div className='flex items-center justify-center gap-1'>
+                    <div className="flex items-center justify-center gap-1">
                       {renderPaginationButtons()}
                     </div>
 
                     {totalPages > 5 && (
-                      <div className='flex items-center gap-2 mt-2'>
-                        <span className='text-sm text-gray-500'>
+                      <div className="flex items-center gap-2 mt-2">
+                        <span className="text-sm text-gray-500">
                           رفتن به صفحه:
                         </span>
                         <input
-                          type='number'
+                          type="number"
                           min={1}
                           max={totalPages}
                           onChange={(e) =>
                             handlePageChange(Number(e.target.value))
                           }
-                          className='w-20 px-2 py-1 bg-[#2a2a2a] border border-gray-600 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500'
+                          className="w-20 px-2 py-1 bg-[#2a2a2a] border border-gray-600 rounded text-white text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
                           placeholder={String(currentPage)}
                         />
                       </div>
@@ -739,29 +756,31 @@ export default function AdvertisementLandingClient() {
                   </div>
                 </div>
               ) : (
-                <div className='text-center py-16'>
+                <div className="text-center py-16">
                   <svg
-                    className='w-16 h-16 text-gray-600 mx-auto mb-4'
-                    fill='none'
-                    stroke='currentColor'
-                    viewBox='0 0 24 24'>
+                    className="w-16 h-16 text-gray-600 mx-auto mb-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
                     <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth='2'
-                      d='M9.172 16.172a4 4 0 015.656 0M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                     />
                   </svg>
-                  <h3 className='text-xl font-semibold text-gray-300 mb-2'>
+                  <h3 className="text-xl font-semibold text-gray-300 mb-2">
                     هیچ آگهی‌ای یافت نشد
                   </h3>
-                  <p className='text-gray-500 mb-6'>
+                  <p className="text-gray-500 mb-6">
                     هیچ آگهی‌ای با معیارهای جستجوی شما مطابقت ندارد. فیلترها را
                     تغییر دهید.
                   </p>
                   <button
                     onClick={() => router.push("/")}
-                    className='bg-yellow-500 hover:bg-yellow-500 text-black px-6 py-3 rounded-lg font-medium transition-colors duration-200'>
+                    className="bg-yellow-500 hover:bg-yellow-500 text-black px-6 py-3 rounded-lg font-medium transition-colors duration-200"
+                  >
                     بازگشت به صفحه اصلی
                   </button>
                 </div>

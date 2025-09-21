@@ -7,10 +7,11 @@ export default function AdvertisementsPage() {
     <>
       <Suspense
         fallback={
-          <div className='min-h-screen dark-bg py-8 flex items-center justify-center'>
-            <div className='text-white'>در حال بارگذاری...</div>
+          <div className="min-h-screen dark-bg py-8 flex items-center justify-center">
+            <div className="text-white">در حال بارگذاری...</div>
           </div>
-        }>
+        }
+      >
         <AdvertisementLandingClient />
       </Suspense>
     </>

@@ -21,7 +21,6 @@ export default function VacancyContainer({ onClose, editingJob, onSubmit }) {
         category: editingJob.category || "",
         type: editingJob.type || "full-time",
         salary: editingJob.salary || "",
-        salaryType: editingJob.salaryType || "agreement",
         location: editingJob.location || "",
       };
     }
@@ -35,7 +34,6 @@ export default function VacancyContainer({ onClose, editingJob, onSubmit }) {
         companyData.industryType === "technology" ? "فناوری اطلاعات" : "",
       type: "full-time",
       salary: "",
-      salaryType: "agreement",
       location: companyData.city
         ? `${companyData.city}, ${companyData.province}`
         : "",
@@ -109,12 +107,7 @@ export default function VacancyContainer({ onClose, editingJob, onSubmit }) {
 
   // Handlers
   const handleBasicInfoChange = (field, value) => {
-    if (field === "salaryType") {
-      // وقتی نوع حقوق تغییر می‌کند، مبلغ حقوق را پاک کن
-      setBasicInfo((prev) => ({ ...prev, [field]: value, salary: "" }));
-    } else {
-      setBasicInfo((prev) => ({ ...prev, [field]: value }));
-    }
+    setBasicInfo((prev) => ({ ...prev, [field]: value }));
     // پاک کردن خطا وقتی کاربر شروع به تایپ می‌کند
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: "" }));
@@ -171,7 +164,7 @@ export default function VacancyContainer({ onClose, editingJob, onSubmit }) {
       newErrors.company = "لطفاً نام شرکت یا سازمان خود را وارد کنید";
     }
     if (!basicInfo.title.trim()) {
-      newErrors.title = "لطفاً عنوان شغل  را وارد کنید";
+      newErrors.title = "لطفاً عنوان شغل و موقعیت شغلی را وارد کنید";
     }
     if (!basicInfo.category.trim()) {
       newErrors.category = "لطفاً دسته‌بندی شغلی مناسب را انتخاب کنید";
@@ -210,9 +203,6 @@ export default function VacancyContainer({ onClose, editingJob, onSubmit }) {
     // Combine all data
     const jobData = {
       ...basicInfo,
-      // اگر نوع حقوق توافقی باشد، salary را "توافقی" قرار بده
-      salary:
-        basicInfo.salaryType === "agreement" ? "توافقی" : basicInfo.salary,
       description,
       requirements,
       ...jobRequirements,

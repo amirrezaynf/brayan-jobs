@@ -249,15 +249,19 @@ const initialApplicationsData = [
   // تعداد رزومه‌ها به ۲۰ تا کاهش یافت
 ];
 
-// کامپوننت کارت رزومه مشابه karjoo
+// کامپوننت کارت رزومه زیبا و مدرن
 const ResumeCard = ({ application, onStatusChange, onViewResume }) => (
-  <div className={`group relative bg-gradient-to-br from-black/50 to-black/10 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-gray-800 hover:border-yellow-400/50 transition-all duration-300 w-full min-w-0 ${
-    application.isPro ? "border-purple-500/50" : ""
-  }`}>
+  <div
+    className={`group relative bg-[#1e1e1e] rounded-xl p-5 border hover:border-yellow-400/50 transition-all duration-300 h-full ${
+      application.isPro
+        ? "border-purple-500/50 bg-gradient-to-br from-purple-500/5 to-pink-500/5"
+        : "border-black"
+    }`}
+  >
     {/* Pro Badge - Top Right */}
     {application.isPro && (
-      <div className="absolute top-3 right-3 z-10">
-        <div className="inline-flex items-center bg-gradient-to-r from-purple-500 to-purple-600 text-white px-2 py-1 rounded-full text-xs font-bold shadow-lg">
+      <div className="absolute top-3 left-3 z-10">
+        <div className="inline-flex items-center bg-gradient-to-r from-yellow-400 to-amber-500 text-white px-2 py-1 rounded-full text-xs font-bold shadow-lg">
           <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
             <path
               fillRule="evenodd"
@@ -270,96 +274,166 @@ const ResumeCard = ({ application, onStatusChange, onViewResume }) => (
       </div>
     )}
 
-    <div className="flex items-start justify-between mb-4 md:mb-6">
-      <div className="flex items-center gap-2 space-x-reverse min-w-0 flex-1">
-        <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br ${
-          application.isPro 
-            ? "from-purple-500/20 to-purple-600/30 border-2 border-purple-500/50" 
-            : "from-blue-400/20 to-blue-600/30 border-2 border-blue-400/50"
-        } flex items-center justify-center flex-shrink-0`}>
-          <span className={`font-bold text-sm md:text-lg ${
-            application.isPro ? "text-purple-300" : "text-blue-400"
-          }`}>
+    {/* Header با آواتار و نام */}
+    <div className="flex items-center mb-4 relative z-10">
+      <div className="relative">
+        <div
+          className={`w-12 h-12 rounded-full flex items-center justify-center border-2 ml-3 flex-shrink-0 ${
+            application.isPro
+              ? "bg-gradient-to-br from-purple-500/20 to-pink-500/30 border-purple-500/50"
+              : "bg-gradient-to-br from-blue-400/20 to-blue-600/30 border-blue-400/50"
+          }`}
+        >
+          <span
+            className={`font-bold text-sm ${
+              application.isPro ? "text-purple-300" : "text-blue-400"
+            }`}
+          >
             {application.name.charAt(0)}
           </span>
         </div>
-        <div className="text-right min-w-0 flex-1">
-          <h3 className="text-base md:text-lg font-bold text-white truncate">
-            {application.name}
-          </h3>
-          <p className="text-gray-400 text-sm my-1 truncate">
-            {application.position}
-          </p>
-          <p className="text-gray-500 text-xs">{application.appliedDate}</p>
-        </div>
+        {/* Online indicator */}
+        <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-400 rounded-full border-2 border-black" />
       </div>
 
-      <div className="flex flex-col items-end gap-2 flex-shrink-0">
-        <span
-          className={`px-2 md:px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
-            application.status === "new"
-              ? "bg-green-400/10 text-green-400"
-              : application.status === "reviewed"
-              ? "bg-blue-400/10 text-blue-400"
-              : application.status === "shortlisted"
-              ? "bg-yellow-400/10 text-yellow-400"
-              : "bg-red-400/10 text-red-400"
+      <div className="flex-1 min-w-0">
+        <h3
+          className={`text-sm font-bold truncate mb-1 ${
+            application.isPro ? "text-purple-100" : "text-white"
           }`}
         >
-          {application.status === "new"
-            ? "جدید"
+          {application.name}
+        </h3>
+        <p className="text-gray-400 text-xs truncate flex items-center">
+          <svg
+            className="w-3 h-3 ml-1 text-gray-500"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fillRule="evenodd"
+              d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z"
+              clipRule="evenodd"
+            />
+          </svg>
+          {application.position}
+        </p>
+      </div>
+    </div>
+
+    {/* Status Badge و Score */}
+    <div className="flex justify-between items-center mb-4">
+      <div
+        className={`px-3 py-1.5 rounded-full text-xs font-medium ${
+          application.status === "new"
+            ? "bg-green-400/10 text-green-400 border border-green-400/20"
             : application.status === "reviewed"
-            ? "بررسی شده"
+            ? "bg-blue-400/10 text-blue-400 border border-blue-400/20"
             : application.status === "shortlisted"
-            ? "انتخاب شده"
-            : "رد شده"}
-        </span>
-        <div className="flex items-center gap-1">
-          <span className="text-yellow-400 text-xs md:text-sm font-bold">
-            {application.score}%
-          </span>
-          <span className="text-gray-400 text-xs">تطبیق</span>
-        </div>
-      </div>
-    </div>
-
-    <div className="space-y-3 md:space-y-4 mb-4 md:mb-6">
-      <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
-        <div className="text-right min-w-0">
-          <span className="text-gray-400 text-xs md:text-sm">موقعیت:</span>
-          <span className="text-blue-400 text-sm md:text-base font-medium mr-2 break-words">
-            {application.jobTitle}
-          </span>
-        </div>
-        <div className="text-right sm:text-left min-w-0">
-          <span className="text-gray-400 text-xs md:text-sm">تجربه:</span>
-          <span className="text-gray-300 text-sm md:text-base mr-2 break-words">
-            {application.experience} سال
-          </span>
-        </div>
+            ? "bg-yellow-400/10 text-yellow-400 border border-yellow-400/20"
+            : application.status === "rejected"
+            ? "bg-red-400/10 text-red-400 border border-red-400/20"
+            : "bg-gray-400/10 text-gray-400 border border-gray-400/20"
+        }`}
+      >
+        {application.status === "new"
+          ? "جدید"
+          : application.status === "reviewed"
+          ? "بررسی شده"
+          : application.status === "shortlisted"
+          ? "انتخاب شده"
+          : "رد شده"}
       </div>
 
-      <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
-        <div className="text-right min-w-0">
-          <span className="text-gray-400 text-xs md:text-sm">تحصیلات:</span>
-          <span className="text-green-400 text-sm md:text-base mr-2 break-words">
-            {application.education}
-          </span>
-        </div>
-      </div>
-    </div>
-
-    <div className="flex items-center justify-between">
-      <div className="flex flex-wrap gap-2 min-w-0 flex-1">
-        <button
-          onClick={() => onViewResume(application.id)}
-          className="bg-blue-400/10 text-blue-400 px-3 md:px-4 py-2 rounded-lg hover:bg-blue-400/20 transition duration-200 text-xs md:text-sm whitespace-nowrap"
+      <div className="flex items-center bg-yellow-400/10 px-2.5 py-1 rounded-full border border-yellow-400/20">
+        <svg
+          className="w-3 h-3 text-yellow-400 ml-1"
+          fill="currentColor"
+          viewBox="0 0 20 20"
         >
-          مشاهده رزومه
-        </button>
-        {application.status !== "shortlisted" && (
-          <button
-            onClick={() => {
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+        <span className="text-yellow-400 text-xs font-bold">
+          {application.score}
+        </span>
+      </div>
+    </div>
+
+    {/* اطلاعات کوتاه با آیکون */}
+    <div className="mb-5 space-y-2 bg-black/50 rounded-lg p-3">
+      <div className="flex items-center text-xs">
+        <svg
+          className="w-3 h-3 text-blue-400 ml-2 flex-shrink-0"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path
+            fillRule="evenodd"
+            d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"
+            clipRule="evenodd"
+          />
+        </svg>
+        <span className="text-gray-300 truncate">{application.jobTitle}</span>
+      </div>
+
+      <div className="flex items-center text-xs">
+        <svg
+          className="w-3 h-3 text-green-400 ml-2 flex-shrink-0"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path
+            fillRule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+            clipRule="evenodd"
+          />
+        </svg>
+        <span className="text-gray-400">
+          {application.experience} سال تجربه
+        </span>
+      </div>
+
+      <div className="flex items-center text-xs">
+        <svg
+          className="w-3 h-3 text-gray-400 ml-2 flex-shrink-0"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path
+            fillRule="evenodd"
+            d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+            clipRule="evenodd"
+          />
+        </svg>
+        <span className="text-gray-500">{application.appliedDate}</span>
+      </div>
+    </div>
+
+    {/* دکمه‌های عملیات */}
+    <div className="space-y-3">
+      <button
+        onClick={() => onViewResume(application.id)}
+        className="w-full bg-blue-400/10 text-blue-400 px-4 py-2.5 rounded-lg hover:bg-blue-400/20 transition duration-200 text-xs font-medium flex items-center justify-center group"
+      >
+        <svg
+          className="w-4 h-4 ml-2 group-hover:scale-110 transition-transform"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+          <path
+            fillRule="evenodd"
+            d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+            clipRule="evenodd"
+          />
+        </svg>
+        مشاهده رزومه
+      </button>
+
+      <div className="flex gap-2">
+        <button
+          onClick={() => {
+            if (application.status !== "shortlisted") {
               if (
                 window.confirm(
                   `آیا مطمئن هستید که ${application.name} را برای مصاحبه انتخاب کنید؟`
@@ -367,15 +441,27 @@ const ResumeCard = ({ application, onStatusChange, onViewResume }) => (
               ) {
                 onStatusChange(application.id, "shortlisted");
               }
-            }}
-            className="bg-green-400/10 text-green-400 px-3 md:px-4 py-2 rounded-lg hover:bg-green-400/20 transition duration-200 text-xs md:text-sm whitespace-nowrap"
+            }
+          }}
+          className="flex-1 bg-green-400/10 text-green-400 px-3 py-2 rounded-lg hover:bg-green-400/20 transition duration-200 text-xs font-medium flex items-center justify-center group"
+        >
+          <svg
+            className="w-3 h-3 ml-1 group-hover:scale-110 transition-transform"
+            fill="currentColor"
+            viewBox="0 0 20 20"
           >
-            انتخاب
-          </button>
-        )}
-        {application.status !== "rejected" && (
-          <button
-            onClick={() => {
+            <path
+              fillRule="evenodd"
+              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+              clipRule="evenodd"
+            />
+          </svg>
+          مصاحبه
+        </button>
+
+        <button
+          onClick={() => {
+            if (application.status !== "rejected") {
               if (
                 window.confirm(
                   `آیا مطمئن هستید که درخواست ${application.name} را رد کنید؟`
@@ -383,12 +469,23 @@ const ResumeCard = ({ application, onStatusChange, onViewResume }) => (
               ) {
                 onStatusChange(application.id, "rejected");
               }
-            }}
-            className="bg-red-400/10 text-red-400 px-3 md:px-4 py-2 rounded-lg hover:bg-red-400/20 transition duration-200 text-xs md:text-sm whitespace-nowrap"
+            }
+          }}
+          className="flex-1 bg-red-400/10 text-red-400 px-3 py-2 rounded-lg hover:bg-red-400/20 transition duration-200 text-xs font-medium flex items-center justify-center group"
+        >
+          <svg
+            className="w-3 h-3 ml-1 group-hover:scale-110 transition-transform"
+            fill="currentColor"
+            viewBox="0 0 20 20"
           >
-            رد
-          </button>
-        )}
+            <path
+              fillRule="evenodd"
+              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+              clipRule="evenodd"
+            />
+          </svg>
+          رد
+        </button>
       </div>
     </div>
   </div>
@@ -458,7 +555,8 @@ const Filters = ({
               : "bg-black text-gray-300 hover:bg-gray-700"
           }`}
         >
-          بررسی شده ({applications.filter((app) => app.status === "reviewed").length})
+          بررسی شده (
+          {applications.filter((app) => app.status === "reviewed").length})
         </button>
         <button
           onClick={() => setActiveFilter("shortlisted")}
@@ -468,7 +566,8 @@ const Filters = ({
               : "bg-black text-gray-300 hover:bg-gray-700"
           }`}
         >
-          انتخاب شده ({applications.filter((app) => app.status === "shortlisted").length})
+          انتخاب شده (
+          {applications.filter((app) => app.status === "shortlisted").length})
         </button>
         <button
           onClick={() => setActiveFilter("pro")}
@@ -502,19 +601,27 @@ const Filters = ({
 const QuickStats = () => (
   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8 lg:mr-6">
     <div className="bg-[#1e1e1e] rounded-xl p-4 sm:p-6 border border-black text-center">
-      <div className="text-2xl sm:text-3xl font-bold text-blue-400 mb-2">۲۰</div>
+      <div className="text-2xl sm:text-3xl font-bold text-blue-400 mb-2">
+        ۲۰
+      </div>
       <div className="text-gray-300 text-xs sm:text-sm">کل رزومه‌ها</div>
     </div>
     <div className="bg-[#1e1e1e] rounded-xl p-4 sm:p-6 border border-black text-center">
-      <div className="text-2xl sm:text-3xl font-bold text-green-400 mb-2">۶</div>
+      <div className="text-2xl sm:text-3xl font-bold text-green-400 mb-2">
+        ۶
+      </div>
       <div className="text-gray-300 text-xs sm:text-sm">رزومه جدید</div>
     </div>
     <div className="bg-[#1e1e1e] rounded-xl p-4 sm:p-6 border border-black text-center">
-      <div className="text-2xl sm:text-3xl font-bold text-yellow-400 mb-2">۵</div>
+      <div className="text-2xl sm:text-3xl font-bold text-yellow-400 mb-2">
+        ۵
+      </div>
       <div className="text-gray-300 text-xs sm:text-sm">انتخاب شده</div>
     </div>
     <div className="bg-[#1e1e1e] rounded-xl p-4 sm:p-6 border border-black text-center">
-      <div className="text-2xl sm:text-3xl font-bold text-purple-400 mb-2">۷</div>
+      <div className="text-2xl sm:text-3xl font-bold text-purple-400 mb-2">
+        ۷
+      </div>
       <div className="text-gray-300 text-xs sm:text-sm">بررسی شده</div>
     </div>
   </div>
@@ -549,11 +656,11 @@ function ApplicationsPageContent() {
 
   // بررسی URL برای نمایش جزئیات رزومه
   React.useEffect(() => {
-    const pathParts = pathname.split('/');
+    const pathParts = pathname.split("/");
     const lastPart = pathParts[pathParts.length - 1];
-    
+
     // اگر URL شامل ID رزومه باشد (مثل /applications/1)
-    if (lastPart && !isNaN(lastPart) && lastPart !== 'applications') {
+    if (lastPart && !isNaN(lastPart) && lastPart !== "applications") {
       setSelectedResumeId(parseInt(lastPart));
     }
   }, [pathname]);
@@ -647,12 +754,12 @@ function ApplicationsPageContent() {
   // اگر رزومه‌ای انتخاب شده، جزئیات آن را نمایش دهیم
   if (selectedResumeId) {
     return (
-      <ResumeDetailView 
-        resumeId={selectedResumeId} 
+      <ResumeDetailView
+        resumeId={selectedResumeId}
         onBack={() => {
           setSelectedResumeId(null);
-          router.push('/employer/dashboard/applications');
-        }} 
+          router.push("/employer/dashboard/applications");
+        }}
       />
     );
   }

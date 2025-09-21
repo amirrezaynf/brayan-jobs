@@ -137,7 +137,7 @@ export default function VacancyBenefits({
               onChange={(e) =>
                 handleWorkConditionsChange("travelRequired", e.target.checked)
               }
-              className="w-4 h-4 text-yellow-500 bg-[#2a2a2a] border-[#444] rounded focus:ring-yellow-500 focus:ring-2 accent-yellow-500"
+              className="w-4 h-4 text-yellow-500 bg-[#2a2a2a] border-[#444] rounded focus:ring-yellow-500 focus:ring-2"
             />
             <span className="text-gray-300 mr-2">سفرهای کاری</span>
           </label>
@@ -148,7 +148,7 @@ export default function VacancyBenefits({
               onChange={(e) =>
                 handleWorkConditionsChange("urgent", e.target.checked)
               }
-              className="w-4 h-4 text-yellow-500 bg-[#2a2a2a] border-[#444] rounded focus:ring-yellow-500 focus:ring-2 accent-yellow-500"
+              className="w-4 h-4 text-yellow-500 bg-[#2a2a2a] border-[#444] rounded focus:ring-yellow-500 focus:ring-2"
             />
             <span className="text-gray-300 mr-2">فوری</span>
           </label>
