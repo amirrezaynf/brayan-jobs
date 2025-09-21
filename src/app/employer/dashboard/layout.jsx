@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
-import { COMPANY_DATA, loadCompanyData } from "@/constants/companyData";
+import EmployerHeader from "@/components/layout/header/EmployerHeader";
+import EmployerMobileMenu from "@/components/modules/employer/EmployerMobileMenu";
 
 // کامپوننت GlobalStyles را می‌توان در یک layout بالاتر یا همینجا قرار داد
 const GlobalStyles = () => (
@@ -174,11 +174,11 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="fixed right-0 top-0 h-full w-64 bg-[#1e1e1e] border-l border-gray-800 shadow-lg p-6 flex flex-col items-center z-50">
-      <div className="mb-10 text-center">
+    <aside className="hidden lg:fixed lg:right-0 lg:top-0 lg:h-full lg:w-64 xl:w-72 lg:bg-[#1e1e1e] lg:border-l lg:border-black lg:shadow-lg lg:p-4 xl:p-6 lg:flex lg:flex-col lg:items-center lg:z-50">
+      <div className="mb-8 lg:mb-10 text-center">
         <Link href="/" className="flex items-center justify-center">
           <svg
-            className="w-10 h-10 text-yellow-400"
+            className="w-8 h-8 lg:w-10 lg:h-10 text-yellow-400"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -193,20 +193,20 @@ const Sidebar = () => {
           </svg>
         </Link>
       </div>
-      <nav className="space-y-4 flex flex-col items-center w-full">
+      <nav className="space-y-2 lg:space-y-3 xl:space-y-4 flex flex-col items-center w-full">
         {navItems.map((item) => (
           <Link
             key={item.href}
             href={item.href}
-            className={`flex items-center justify-start w-full px-4 py-3 rounded-lg transition-colors duration-200 ${
+            className={`flex items-center justify-start w-full px-3 lg:px-4 py-2.5 lg:py-3 rounded-lg transition-colors duration-200 text-sm lg:text-base ${
               pathname === item.href
                 ? "bg-yellow-400 text-gray-900 shadow-md"
-                : "text-gray-400 hover:bg-gray-800 hover:text-white"
+                : "text-gray-400 hover:bg-black hover:text-white"
             }`}
             style={{ direction: "rtl" }}
           >
-            {item.icon}
-            <span className="mr-3">{item.label}</span>
+            <div className="flex-shrink-0">{item.icon}</div>
+            <span className="mr-2 lg:mr-3 truncate">{item.label}</span>
           </Link>
         ))}
       </nav>
@@ -214,100 +214,34 @@ const Sidebar = () => {
   );
 };
 
-const Topbar = () => {
-  const [companyData, setCompanyData] = useState(COMPANY_DATA);
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-    const loadedData = loadCompanyData();
-    setCompanyData(loadedData);
-
-    // Listen for company data changes
-    const handleDataChange = (event) => {
-      setCompanyData(event.detail);
-    };
-
-    window.addEventListener("companyDataChanged", handleDataChange);
-
-    return () => {
-      window.removeEventListener("companyDataChanged", handleDataChange);
-    };
-  }, []);
-
-  // Use default data for server-side rendering to avoid hydration mismatch
-  const displayData = isClient ? companyData : COMPANY_DATA;
-
-  // Get the display name based on user preference
-  const displayName = isClient
-    ? displayData.displayNamePreference === "english" &&
-      displayData.companyNameEn &&
-      displayData.companyNameEn.trim()
-      ? displayData.companyNameEn
-      : displayData.companyName || "پروفایل شرکت"
-    : COMPANY_DATA.companyName;
-
-  return (
-    <header className="flex items-center justify-between p-6 bg-[#1e1e1e] border-b border-gray-800 sticky top-0 z-40">
-      <div className="flex items-center space-x-4">
-        <Link
-          href="/employer/dashboard/vacancies"
-          className="bg-yellow-400 text-gray-900 px-5 py-2 rounded-lg hover:bg-yellow-300 transition duration-300 font-bold flex items-center"
-        >
-          <span className="ml-2">ثبت آگهی استخدام</span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </Link>
-      </div>
-      <div className="flex items-center space-x-4" style={{ direction: "rtl" }}>
-        <Link
-          href="/employer/dashboard/profile"
-          className="flex items-center ml-4 hover:bg-gray-800 rounded-lg px-3 py-2 transition-colors duration-200"
-        >
-          <div className="h-10 w-10 bg-yellow-400 rounded-full flex items-center justify-center text-gray-900 font-bold text-lg overflow-hidden">
-            {displayData.companyLogo ? (
-              <Image
-                src={displayData.companyLogo}
-                alt="Company Logo"
-                width={40}
-                height={40}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              displayName.charAt(0)
-            )}
-          </div>
-          <span className="mr-2 ml-4 text-white font-medium">
-            {displayName}
-          </span>
-        </Link>
-      </div>
-    </header>
-  );
-};
+// Topbar component removed - now using EmployerHeader
 
 export default function DashboardLayout({ children }) {
+  const [activeTab, setActiveTab] = useState("home");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   return (
     <>
       <GlobalStyles />
       <div className="flex min-h-screen bg-gray-950 text-gray-200">
         <Sidebar />
-        <div className="flex-1" style={{ marginRight: "16rem" }}>
-          {" "}
-          {/* 16rem = w-64 of sidebar */}
-          <Topbar />
-          <main className="p-6">{children}</main>
+        <div className="flex-1 lg:mr-75">
+          <EmployerHeader
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            isMobileMenuOpen={isMobileMenuOpen}
+            setIsMobileMenuOpen={setIsMobileMenuOpen}
+          />
+          <main className="p-3 sm:p-4 lg:p-6">{children}</main>
         </div>
+
+        {/* Mobile Menu */}
+        <EmployerMobileMenu
+          isOpen={isMobileMenuOpen}
+          onClose={() => setIsMobileMenuOpen(false)}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        />
       </div>
     </>
   );

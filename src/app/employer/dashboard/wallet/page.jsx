@@ -87,36 +87,36 @@ export default function WalletPage() {
   ];
 
   return (
-    <div className="space-y-8">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-white">کیف پول و امور مالی</h1>
-        <div className="flex space-x-4 space-x-reverse">
+    <div className="space-y-6 sm:space-y-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">کیف پول و امور مالی</h1>
+        <div className="flex flex-wrap gap-2 sm:gap-4">
           <button
             onClick={() => setActiveTab("overview")}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-sm sm:text-base ${
               activeTab === "overview"
                 ? "bg-yellow-400 text-gray-900"
-                : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                : "bg-black text-gray-300 hover:bg-gray-700"
             }`}
           >
             نمای کلی
           </button>
           <button
             onClick={() => setActiveTab("packages")}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-sm sm:text-base ${
               activeTab === "packages"
                 ? "bg-yellow-400 text-gray-900"
-                : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                : "bg-black text-gray-300 hover:bg-gray-700"
             }`}
           >
             بسته‌ها
           </button>
           <button
             onClick={() => setActiveTab("transactions")}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-sm sm:text-base ${
               activeTab === "transactions"
                 ? "bg-yellow-400 text-gray-900"
-                : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                : "bg-black text-gray-300 hover:bg-gray-700"
             }`}
           >
             تراکنش‌ها
@@ -125,18 +125,18 @@ export default function WalletPage() {
       </div>
 
       {activeTab === "overview" && (
-        <div className="space-y-8">
+        <div className="space-y-6 sm:space-y-8">
           {/* Balance Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-gradient-to-tr from-yellow-500/20 to-gray-900 rounded-xl p-8 border border-yellow-400/50">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-white">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            <div className="bg-gradient-to-tr from-yellow-500/20 to-gray-900 rounded-xl p-4 sm:p-6 lg:p-8 border border-yellow-400/50">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <h3 className="text-base sm:text-lg font-semibold text-white">
                   موجودی فعلی
                 </h3>
-                <div className="text-yellow-400 bg-yellow-400/10 rounded-full p-2">
+                <div className="text-yellow-400 bg-yellow-400/10 rounded-full p-1.5 sm:p-2 flex-shrink-0">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
+                    className="h-5 w-5 sm:h-6 sm:w-6"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -150,21 +150,21 @@ export default function WalletPage() {
                   </svg>
                 </div>
               </div>
-              <p className="text-4xl font-bold text-yellow-400 mb-2">
+              <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-yellow-400 mb-1 sm:mb-2">
                 ۲,۵۰۰,۰۰۰ تومان
               </p>
-              <p className="text-sm text-gray-400">موجودی قابل استفاده</p>
+              <p className="text-xs sm:text-sm text-gray-400">موجودی قابل استفاده</p>
             </div>
 
-            <div className="bg-[#1e1e1e] rounded-xl p-8 border border-gray-800">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-white">
+            <div className="bg-[#1e1e1e] rounded-xl p-4 sm:p-6 lg:p-8 border border-black">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <h3 className="text-base sm:text-lg font-semibold text-white">
                   هزینه‌های ماه جاری
                 </h3>
-                <div className="text-red-400 bg-red-400/10 rounded-full p-2">
+                <div className="text-red-400 bg-red-400/10 rounded-full p-1.5 sm:p-2 flex-shrink-0">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
+                    className="h-5 w-5 sm:h-6 sm:w-6"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -178,21 +178,21 @@ export default function WalletPage() {
                   </svg>
                 </div>
               </div>
-              <p className="text-4xl font-bold text-red-400 mb-2">
+              <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-red-400 mb-1 sm:mb-2">
                 ۳۲۰,۰۰۰ تومان
               </p>
-              <p className="text-sm text-gray-400">+۱۵% نسبت به ماه گذشته</p>
+              <p className="text-xs sm:text-sm text-gray-400">+۱۵% نسبت به ماه گذشته</p>
             </div>
 
-            <div className="bg-[#1e1e1e] rounded-xl p-8 border border-gray-800">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-white">
+            <div className="bg-[#1e1e1e] rounded-xl p-4 sm:p-6 lg:p-8 border border-black sm:col-span-2 lg:col-span-1">
+              <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <h3 className="text-base sm:text-lg font-semibold text-white">
                   میانگین هزینه روزانه
                 </h3>
-                <div className="text-blue-400 bg-blue-400/10 rounded-full p-2">
+                <div className="text-blue-400 bg-blue-400/10 rounded-full p-1.5 sm:p-2 flex-shrink-0">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
+                    className="h-5 w-5 sm:h-6 sm:w-6"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -206,25 +206,25 @@ export default function WalletPage() {
                   </svg>
                 </div>
               </div>
-              <p className="text-4xl font-bold text-blue-400 mb-2">
+              <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-400 mb-1 sm:mb-2">
                 ۱۰,۶۶۷ تومان
               </p>
-              <p className="text-sm text-gray-400">بر اساس ۳۰ روز گذشته</p>
+              <p className="text-xs sm:text-sm text-gray-400">بر اساس ۳۰ روز گذشته</p>
             </div>
           </div>
 
           {/* Quick Actions */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800">
-              <h3 className="text-lg font-semibold text-white mb-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+            <div className="bg-[#1e1e1e] rounded-xl p-4 sm:p-6 border border-black">
+              <h3 className="text-base sm:text-lg font-semibold text-white mb-4">
                 افزایش موجودی
               </h3>
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-3 sm:space-y-4">
+                <div className="grid grid-cols-2 gap-2 sm:gap-4">
                   {[100000, 200000, 500000, 1000000].map((amount) => (
                     <button
                       key={amount}
-                      className="bg-gray-800 hover:bg-gray-700 text-white py-3 px-4 rounded-lg transition-colors"
+                      className="bg-black hover:bg-gray-700 text-white py-2 sm:py-3 px-2 sm:px-4 rounded-lg transition-colors text-xs sm:text-sm"
                     >
                       {amount.toLocaleString()} تومان
                     </button>
@@ -233,30 +233,30 @@ export default function WalletPage() {
                 <input
                   type="number"
                   placeholder="مبلغ دلخواه"
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-400"
+                  className="w-full bg-black border border-gray-700 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 text-white placeholder-gray-400 text-sm sm:text-base"
                 />
-                <button className="w-full bg-yellow-400 text-gray-900 font-bold py-3 rounded-lg hover:bg-yellow-300 transition-colors">
+                <button className="w-full bg-yellow-400 text-gray-900 font-bold py-2.5 sm:py-3 rounded-lg hover:bg-yellow-300 transition-colors text-sm sm:text-base">
                   پرداخت و افزایش موجودی
                 </button>
               </div>
             </div>
 
-            <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800">
-              <h3 className="text-lg font-semibold text-white mb-4">
+            <div className="bg-[#1e1e1e] rounded-xl p-4 sm:p-6 border border-black">
+              <h3 className="text-base sm:text-lg font-semibold text-white mb-4">
                 روش‌های پرداخت
               </h3>
-              <div className="space-y-3">
+              <div className="space-y-2 sm:space-y-3">
                 {paymentMethods.map((method, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between p-3 bg-gray-800 rounded-lg"
+                    className="flex items-center justify-between p-2.5 sm:p-3 bg-black rounded-lg"
                   >
                     <div className="flex items-center">
-                      <span className="text-2xl ml-3">{method.icon}</span>
-                      <span className="text-white">{method.name}</span>
+                      <span className="text-xl sm:text-2xl ml-2 sm:ml-3 flex-shrink-0">{method.icon}</span>
+                      <span className="text-white text-sm sm:text-base">{method.name}</span>
                     </div>
                     <span
-                      className={`text-sm ${
+                      className={`text-xs sm:text-sm ${
                         method.available ? "text-green-400" : "text-red-400"
                       }`}
                     >
@@ -288,7 +288,7 @@ export default function WalletPage() {
                 className={`bg-[#1e1e1e] rounded-xl p-8 border transition-all duration-200 ${
                   pkg.popular
                     ? "border-yellow-400 shadow-lg shadow-yellow-400/10"
-                    : "border-gray-800"
+                    : "border-black"
                 }`}
               >
                 {pkg.popular && (
@@ -324,7 +324,7 @@ export default function WalletPage() {
                   className={`w-full py-3 rounded-lg font-bold transition-colors ${
                     pkg.popular
                       ? "bg-yellow-400 text-gray-900 hover:bg-yellow-300"
-                      : "bg-gray-800 text-white hover:bg-gray-700"
+                      : "bg-black text-white hover:bg-gray-700"
                   }`}
                 >
                   خرید بسته
@@ -340,7 +340,7 @@ export default function WalletPage() {
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-bold text-white">تاریخچه تراکنش‌ها</h2>
             <div className="flex space-x-4 space-x-reverse">
-              <select className="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white">
+              <select className="bg-black border border-gray-700 rounded-lg px-4 py-2 text-white">
                 <option>همه تراکنش‌ها</option>
                 <option>واریزی‌ها</option>
                 <option>برداشت‌ها</option>
@@ -348,14 +348,14 @@ export default function WalletPage() {
               </select>
               <input
                 type="date"
-                className="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white"
+                className="bg-black border border-gray-700 rounded-lg px-4 py-2 text-white"
               />
             </div>
           </div>
 
-          <div className="bg-[#1e1e1e] rounded-xl border border-gray-800 overflow-hidden">
+          <div className="bg-[#1e1e1e] rounded-xl border border-black overflow-hidden">
             <table className="w-full text-right">
-              <thead className="bg-gray-800">
+              <thead className="bg-black">
                 <tr className="text-gray-400 text-sm">
                   <th className="p-4">شناسه تراکنش</th>
                   <th className="p-4">تاریخ</th>
@@ -369,7 +369,7 @@ export default function WalletPage() {
                 {transactions.map((t, i) => (
                   <tr
                     key={i}
-                    className="border-b border-gray-800 hover:bg-gray-800/50"
+                    className="border-b border-black hover:bg-black/50"
                   >
                     <td className="p-4 text-gray-300 font-mono text-sm">
                       {t.id}
@@ -409,21 +409,21 @@ export default function WalletPage() {
 
           {/* Transaction Summary */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800 text-center">
+            <div className="bg-[#1e1e1e] rounded-xl p-6 border border-black text-center">
               <p className="text-2xl font-bold text-green-400 mb-2">
                 ۱,۲۰۰,۰۰۰
               </p>
               <p className="text-sm text-gray-400">کل واریزی‌ها</p>
             </div>
-            <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800 text-center">
+            <div className="bg-[#1e1e1e] rounded-xl p-6 border border-black text-center">
               <p className="text-2xl font-bold text-red-400 mb-2">۵۲۰,۰۰۰</p>
               <p className="text-sm text-gray-400">کل برداشت‌ها</p>
             </div>
-            <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800 text-center">
+            <div className="bg-[#1e1e1e] rounded-xl p-6 border border-black text-center">
               <p className="text-2xl font-bold text-blue-400 mb-2">۲۵,۰۰۰</p>
               <p className="text-sm text-gray-400">بازگشت وجه</p>
             </div>
-            <div className="bg-[#1e1e1e] rounded-xl p-6 border border-gray-800 text-center">
+            <div className="bg-[#1e1e1e] rounded-xl p-6 border border-black text-center">
               <p className="text-2xl font-bold text-yellow-400 mb-2">
                 ۲,۵۰۰,۰۰۰
               </p>

@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { loadCompanyData } from "@/constants/companyData";
 
-export default function VacanciesPage() {
+function VacanciesContent() {
+  const searchParams = useSearchParams();
   const [filter, setFilter] = useState("active");
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [vacancies, setVacancies] = useState([]);
@@ -37,6 +39,22 @@ export default function VacanciesPage() {
   useEffect(() => {
     loadJobs();
   }, []);
+
+  // Check URL parameter to open create form
+  useEffect(() => {
+    const createParam = searchParams.get("create");
+    if (createParam === "true") {
+      setShowCreateForm(true);
+      setEditingJob(null);
+
+      // Clean up URL parameter
+      if (typeof window !== "undefined") {
+        const url = new URL(window.location);
+        url.searchParams.delete("create");
+        window.history.replaceState({}, "", url);
+      }
+    }
+  }, [searchParams]);
 
   // Load company profile data when creating new job
   useEffect(() => {
@@ -320,14 +338,16 @@ export default function VacanciesPage() {
   };
 
   return (
-    <div className="bg-[#1e1e1e] rounded-xl p-6 shadow-lg border border-gray-800">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-white">مدیریت آگهی‌ها</h1>
-        <div className="flex items-center space-x-4">
-          <div className="flex border border-gray-700 rounded-lg p-1">
+    <div className="bg-[#1e1e1e] rounded-xl p-4 sm:p-6 shadow-lg border border-black">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+        <h1 className="text-xl sm:text-2xl font-bold text-white">
+          مدیریت آگهی‌ها
+        </h1>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
+          <div className="flex border border-gray-700 rounded-lg p-1 order-2 sm:order-1">
             <button
               onClick={() => setFilter("expired")}
-              className={`px-4 py-1.5 rounded-md text-sm ${
+              className={`px-3 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm flex-1 sm:flex-none ${
                 filter === "expired"
                   ? "bg-yellow-400 text-gray-900"
                   : "text-gray-400"
@@ -338,7 +358,7 @@ export default function VacanciesPage() {
 
             <button
               onClick={() => setFilter("active")}
-              className={`px-4 py-1.5 rounded-md text-sm ${
+              className={`px-3 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm flex-1 sm:flex-none ${
                 filter === "active"
                   ? "bg-yellow-400 text-gray-900"
                   : "text-gray-400"
@@ -348,7 +368,7 @@ export default function VacanciesPage() {
             </button>
             <button
               onClick={() => setFilter("all")}
-              className={`px-4 py-1.5 rounded-md text-sm ${
+              className={`px-3 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm flex-1 sm:flex-none ${
                 filter === "all"
                   ? "bg-yellow-400 text-gray-900"
                   : "text-gray-400"
@@ -364,14 +384,14 @@ export default function VacanciesPage() {
                 setEditingJob(null);
               }
             }}
-            className="bg-yellow-400 text-gray-900 px-6 py-2 rounded-lg hover:bg-yellow-300 transition duration-300 font-bold flex items-center shadow-lg shadow-yellow-500/20"
+            className="bg-yellow-400 text-gray-900 px-4 sm:px-6 py-2 rounded-lg hover:bg-yellow-300 transition duration-300 font-bold flex items-center justify-center shadow-lg shadow-yellow-500/20 text-sm sm:text-base order-1 sm:order-2"
           >
             <span className="ml-2">
               {showCreateForm ? "لغو ایجاد" : "ایجاد آگهی جدید"}
             </span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
+              className="h-4 w-4 sm:h-5 sm:w-5"
               viewBox="0 0 20 20"
               fill="currentColor"
             >
@@ -393,15 +413,15 @@ export default function VacanciesPage() {
       {showCreateForm && (
         <form
           onSubmit={handleSubmit}
-          className="bg-gray-800 rounded-lg p-6 mb-6 border border-gray-700"
+          className="bg-black rounded-lg p-4 sm:p-6 mb-6 border border-gray-700"
         >
-          <h2 className="text-xl font-bold text-white mb-6 text-right">
+          <h2 className="text-lg sm:text-xl font-bold text-white mb-4 sm:mb-6 text-right">
             {editingJob ? "ویرایش آگهی استخدام" : "ایجاد آگهی استخدام جدید"}
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
             {/* رتبه/توضیح شرکت */}
-            <div>
+            <div className="lg:col-span-2">
               <label className="block text-sm font-medium text-gray-300 mb-2 text-right">
                 نام شرکت *
               </label>
@@ -411,14 +431,14 @@ export default function VacanciesPage() {
                 onChange={(e) =>
                   setNewJob({ ...newJob, company: e.target.value })
                 }
-                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-right"
+                className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-right text-sm sm:text-base"
                 placeholder="مثال: شرکت فناوری اطلاعات پارامکس"
                 required
               />
             </div>
 
             {/* عنوان آگهی */}
-            <div className="md:col-span-2">
+            <div className="lg:col-span-2">
               <label className="block text-sm font-medium text-gray-300 mb-2 text-right">
                 عنوان آگهی *
               </label>
@@ -428,7 +448,7 @@ export default function VacanciesPage() {
                 onChange={(e) =>
                   setNewJob({ ...newJob, title: e.target.value })
                 }
-                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-right"
+                className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-right text-sm sm:text-base"
                 placeholder="مثال: توسعه‌دهنده Front-End (React)"
                 required
               />
@@ -444,7 +464,7 @@ export default function VacanciesPage() {
                 onChange={(e) =>
                   setNewJob({ ...newJob, category: e.target.value })
                 }
-                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-right"
+                className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-right text-sm sm:text-base"
                 required
               >
                 <option value="">انتخاب دسته‌بندی</option>
@@ -466,7 +486,7 @@ export default function VacanciesPage() {
               <select
                 value={newJob.type}
                 onChange={(e) => setNewJob({ ...newJob, type: e.target.value })}
-                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-right"
+                className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-right text-sm sm:text-base"
               >
                 <option value="full-time">تمام وقت</option>
                 <option value="part-time">پاره وقت</option>
@@ -487,7 +507,7 @@ export default function VacanciesPage() {
                 onChange={(e) =>
                   setNewJob({ ...newJob, salary: e.target.value })
                 }
-                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-right"
+                className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-right text-sm sm:text-base"
                 placeholder="مثال: ۱۵,۰۰۰,۰۰۰"
               />
             </div>
@@ -503,14 +523,14 @@ export default function VacanciesPage() {
                 onChange={(e) =>
                   setNewJob({ ...newJob, location: e.target.value })
                 }
-                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-right"
+                className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-right text-sm sm:text-base"
                 placeholder="مثال: تهران، میدان تجریش"
                 required
               />
             </div>
 
             {/* شرح شغلی */}
-            <div className="md:col-span-2">
+            <div className="lg:col-span-2">
               <label className="block text-sm font-medium text-gray-300 mb-2 text-right">
                 شرح شغلی *
               </label>
@@ -520,14 +540,14 @@ export default function VacanciesPage() {
                   setNewJob({ ...newJob, description: e.target.value })
                 }
                 rows={4}
-                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-right resize-vertical"
+                className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-right resize-vertical text-sm sm:text-base"
                 placeholder="شرح کامل شغلی، وظایف و مسئولیت‌ها را وارد کنید..."
                 required
               />
             </div>
 
             {/* شرایط و الزامات */}
-            <div className="md:col-span-2">
+            <div className="lg:col-span-2">
               <label className="block text-sm font-medium text-gray-300 mb-2 text-right">
                 شرایط و الزامات *
               </label>
@@ -537,7 +557,7 @@ export default function VacanciesPage() {
                   setNewJob({ ...newJob, requirements: e.target.value })
                 }
                 rows={4}
-                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-right resize-vertical"
+                className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent text-right resize-vertical text-sm sm:text-base"
                 placeholder="مهارت‌ها، تجربیات و شرایط مورد نیاز را وارد کنید..."
                 required
               />
@@ -768,23 +788,24 @@ export default function VacanciesPage() {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex justify-end space-x-4 mt-8">
+          <div className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-4 mt-6 sm:mt-8">
             <button
               onClick={() => {
                 setShowCreateForm(false);
                 setEditingJob(null);
               }}
-              className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition duration-300"
+              type="button"
+              className="px-4 sm:px-6 py-2.5 sm:py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition duration-300 font-bold text-sm sm:text-base order-2 sm:order-1"
             >
               لغو
             </button>
-            <button className="px-6 py-3 bg-yellow-400 text-gray-900 rounded-lg hover:bg-yellow-300 transition duration-300 font-bold flex items-center">
+            <button className="px-4 sm:px-6 py-2.5 sm:py-3 bg-yellow-400 text-gray-900 rounded-lg hover:bg-yellow-300 transition duration-300 font-bold flex items-center justify-center text-sm sm:text-base order-1 sm:order-2">
               <span className="ml-2">
                 {editingJob ? "بروزرسانی آگهی" : "انتشار آگهی"}
               </span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
+                className="h-4 w-4 sm:h-5 sm:w-5"
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
@@ -799,7 +820,8 @@ export default function VacanciesPage() {
         </form>
       )}
 
-      <div className="overflow-x-auto">
+      {/* Desktop Table */}
+      <div className="hidden md:block overflow-x-auto">
         <table className="w-full text-right">
           <thead>
             <tr className="border-b border-gray-700 text-gray-400 text-sm">
@@ -814,7 +836,7 @@ export default function VacanciesPage() {
             {filteredVacancies.map((job, index) => (
               <tr
                 key={index}
-                className="border-b border-gray-800 hover:bg-gray-800/50"
+                className="border-b border-black hover:bg-black/50"
               >
                 <td className="p-3 font-semibold text-white">{job.title}</td>
                 <td className="p-3">{job.date}</td>
@@ -839,19 +861,19 @@ export default function VacanciesPage() {
                 <td className="p-3 space-x-2 space-x-reverse">
                   <button
                     onClick={() => handleEditJob(job)}
-                    className="text-gray-400 hover:text-yellow-400 transition-colors"
+                    className="text-gray-400 hover:text-yellow-400 transition-colors text-sm"
                   >
                     ویرایش
                   </button>
                   <button
                     onClick={() => handleViewJob(job)}
-                    className="text-gray-400 hover:text-yellow-400 transition-colors"
+                    className="text-gray-400 hover:text-yellow-400 transition-colors text-sm"
                   >
                     مشاهده
                   </button>
                   <button
                     onClick={() => handleDeleteJob(job)}
-                    className="text-gray-400 hover:text-red-400 transition-colors"
+                    className="text-gray-400 hover:text-red-400 transition-colors text-sm"
                   >
                     حذف
                   </button>
@@ -860,12 +882,100 @@ export default function VacanciesPage() {
             ))}
           </tbody>
         </table>
-        {filteredVacancies.length === 0 && (
-          <p className="text-center text-gray-500 py-10">
+      </div>
+
+      {/* Mobile Cards */}
+      <div className="md:hidden space-y-4">
+        {filteredVacancies.map((job, index) => (
+          <div
+            key={index}
+            className="bg-black rounded-lg p-4 border border-gray-700"
+          >
+            <div className="flex justify-between items-start mb-3">
+              <h3 className="font-semibold text-white text-sm leading-tight flex-1 ml-2">
+                {job.title}
+              </h3>
+              <span
+                className={`px-2 py-1 text-xs rounded-full flex-shrink-0 ${
+                  job.status === "active"
+                    ? "bg-green-500/20 text-green-400"
+                    : job.status === "expired"
+                    ? "bg-red-500/20 text-red-400"
+                    : "bg-gray-500/20 text-gray-400"
+                }`}
+              >
+                {job.status === "active"
+                  ? "فعال"
+                  : job.status === "expired"
+                  ? "منقضی"
+                  : "پیش‌نویس"}
+              </span>
+            </div>
+            <div className="flex justify-between items-center text-sm text-gray-400 mb-3">
+              <span>تاریخ: {job.date}</span>
+              <span>{job.applicants} داوطلب</span>
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={() => handleEditJob(job)}
+                className="flex-1 bg-yellow-400/10 text-yellow-400 py-2 px-3 rounded-lg hover:bg-yellow-400/20 transition-colors text-sm font-medium"
+              >
+                ویرایش
+              </button>
+              <button
+                onClick={() => handleViewJob(job)}
+                className="flex-1 bg-blue-400/10 text-blue-400 py-2 px-3 rounded-lg hover:bg-blue-400/20 transition-colors text-sm font-medium"
+              >
+                مشاهده
+              </button>
+              <button
+                onClick={() => handleDeleteJob(job)}
+                className="flex-1 bg-red-400/10 text-red-400 py-2 px-3 rounded-lg hover:bg-red-400/20 transition-colors text-sm font-medium"
+              >
+                حذف
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {filteredVacancies.length === 0 && (
+        <div className="text-center py-12">
+          <div className="text-gray-500 mb-2">
+            <svg
+              className="w-12 h-12 mx-auto mb-4 opacity-50"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+          </div>
+          <p className="text-gray-500 text-sm sm:text-base">
             هیچ آگهی در این دسته‌بندی یافت نشد.
           </p>
-        )}
-      </div>
+        </div>
+      )}
     </div>
+  );
+}
+
+export default function VacanciesPage() {
+  return (
+    <Suspense fallback={<div className="bg-[#1e1e1e] rounded-xl p-6 shadow-lg border border-black">
+      <div className="flex justify-center items-center py-12">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-400 mx-auto mb-4"></div>
+          <p className="text-gray-400">در حال بارگذاری...</p>
+        </div>
+      </div>
+    </div>}>
+      <VacanciesContent />
+    </Suspense>
   );
 }
