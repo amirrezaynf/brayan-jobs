@@ -7,7 +7,7 @@ import {
   registerStep3,
   registerStep4,
   resendVerificationCode,
-} from "@/app/_action/auth";
+} from "@/app/action/auth";
 import {
   validateContact,
   validatePassword as serverValidatePassword,

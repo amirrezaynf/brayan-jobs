@@ -6,7 +6,7 @@ import AuthTab from "@/components/ui/tabs/AuthTab";
 import RegisterSteps from "./RegisterSteps";
 import LoginForm from "./LoginForm";
 import useRegisterFlow from "@/hooks/useRegisterFlow";
-import { login } from "@/app/_action/auth";
+import { login } from "@/app/action/auth";
 
 // --- Main AuthForms Component ---
 export default function AuthForms() {
