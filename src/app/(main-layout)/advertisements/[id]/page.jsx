@@ -1,4 +1,4 @@
-import { getVacancyById } from "@/app/action/advertisements";
+import { getVacancyById } from "@/app/actions/advertisements";
 import AdvertisementSingleView from "@/components/modules/advertisements/AdvertisementSingleView";
 import { notFound } from "next/navigation";
 
