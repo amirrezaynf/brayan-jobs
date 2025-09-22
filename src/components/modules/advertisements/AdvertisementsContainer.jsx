@@ -237,10 +237,6 @@ export default function AdvertisementsContainer({
     setSelectedCity("");
   }, [selectedProvince]);
 
-  const handleViewAd = (adId) => {
-    router.push(`/advertisements/${adId}`);
-  };
-
   // Pagination calculations
   const totalItems = ads.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -296,7 +292,7 @@ export default function AdvertisementsContainer({
           <div className="w-full">
             {totalItems > 0 ? (
               <div>
-                <AdvertisementsList ads={currentAds} onViewAd={handleViewAd} />
+                <AdvertisementsList ads={currentAds} />
 
                 <AdvertisementsPagination
                   currentPage={currentPage}
