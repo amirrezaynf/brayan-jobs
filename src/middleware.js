@@ -5,8 +5,8 @@ export default withAuth({
     authorized: ({ token }) => Boolean(token?.accessToken),
   },
   pages: {
-    signIn: "/authentication",
-    error: "/403",
+    // signIn: "/authentication",
+    // error: "/403",
   },
 });
 
