@@ -4,7 +4,7 @@ import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { loadCompanyData } from "@/constants/companyData";
 import VacancyContainer from "@/components/modules/employer/vacancy/VacancyContainer";
-import { getUserVacancies, deleteVacancy } from "@/app/action/vacancy";
+import { getUserVacancies, deleteVacancy } from "@/app/actions/vacancy";
 
 function VacanciesContent() {
   const searchParams = useSearchParams();

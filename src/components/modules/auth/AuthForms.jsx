@@ -1,34 +1,27 @@
 "use client";
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useSession, signIn } from "next-auth/react";
 
 import AuthTab from "@/components/ui/tabs/AuthTab";
 import RegisterSteps from "./RegisterSteps";
 import LoginForm from "./LoginForm";
 import useRegisterFlow from "@/hooks/useRegisterFlow";
-import { login } from "@/app/action/auth";
 
-// --- Main AuthForms Component ---
 export default function AuthForms() {
   const router = useRouter();
+  const { data: session } = useSession();
+
   const [userRole, setUserRole] = useState("specialist");
   const [activeTab, setActiveTab] = useState("login");
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [employerErrors, setEmployerErrors] = useState({});
 
-  // Login data states
-  const [loginData, setLoginData] = useState({
-    contact: "",
-    password: "",
-  });
+  const [loginData, setLoginData] = useState({ contact: "", password: "" });
+  const [employerLoginData, setEmployerLoginData] = useState({ contact: "", password: "" });
 
-  const [employerLoginData, setEmployerLoginData] = useState({
-    contact: "",
-    password: "",
-  });
-
-  // Register flows for both user types
   const specialistRegisterFlow = useRegisterFlow(
     {
       contact: "",
@@ -60,22 +53,35 @@ export default function AuthForms() {
     "employer"
   );
 
+  // Redirect if session exists
+  useEffect(() => {
+    if (session?.user) {
+      console.log("✅ Session user:", session.user);
+      console.log("✅ AccessToken:", session.accessToken);
+
+      const role = session.user.role;
+      if (role === 2) router.push("/employer");
+      else router.push("/karjoo");
+    }
+  }, [session, router]);
+
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setErrors({});
 
     try {
-      const result = await login(loginData.contact, loginData.password);
+      const result = await signIn("credentials", {
+        redirect: false,
+        mode: "login",
+        contact: loginData.contact,
+        password: loginData.password,
+      });
 
-      if (result.success) {
-        // Redirect based on user role
-        const redirectUrl = result.user.role === 2 ? "/employer" : "/karjoo";
-        router.push(redirectUrl);
-      } else {
-        setErrors({ general: result.error });
-      }
-    } catch (error) {
+      console.log("💡 Login result:", result);
+      if (result?.error) setErrors({ general: result.error });
+    } catch (err) {
+      console.error(err);
       setErrors({ general: "خطا در ورود به سیستم" });
     } finally {
       setIsLoading(false);
@@ -88,20 +94,42 @@ export default function AuthForms() {
     setEmployerErrors({});
 
     try {
-      const result = await login(
-        employerLoginData.contact,
-        employerLoginData.password
-      );
+      const result = await signIn("credentials", {
+        redirect: false,
+        mode: "login",
+        contact: employerLoginData.contact,
+        password: employerLoginData.password,
+      });
 
-      if (result.success) {
-        // Redirect based on user role
-        const redirectUrl = result.user.role === 2 ? "/dashboard" : "/karjoo";
-        router.push(redirectUrl);
-      } else {
-        setEmployerErrors({ general: result.error });
-      }
-    } catch (error) {
+      console.log("💡 Employer Login result:", result);
+      if (result?.error) setEmployerErrors({ general: result.error });
+    } catch (err) {
+      console.error(err);
       setEmployerErrors({ general: "خطا در ورود به سیستم" });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRegisterStep3 = async (flowData) => {
+    setIsLoading(true);
+    try {
+      const result = await signIn("credentials", {
+        redirect: false,
+        mode: "register",
+        contact: flowData.contact,
+        firstName: flowData.firstName,
+        lastName: flowData.lastName,
+        password: flowData.password,
+        confirmPassword: flowData.confirmPassword,
+        role: userRole,
+      });
+
+      console.log("💡 Register Step3 result:", result);
+      if (result?.error) setErrors({ general: result.error });
+    } catch (err) {
+      console.error(err);
+      setErrors({ general: "خطا در ثبت‌نام" });
     } finally {
       setIsLoading(false);
     }
@@ -143,6 +171,7 @@ export default function AuthForms() {
           />
         </div>
 
+        {/* Auth Tabs */}
         <div className="bg-gray-800/60 border border-gray-700 rounded-2xl shadow-2xl backdrop-blur-lg overflow-hidden">
           <div className="flex">
             <AuthTab
@@ -168,7 +197,6 @@ export default function AuthForms() {
           </div>
 
           <div className="p-8">
-            {/* Specialist */}
             {userRole === "specialist" &&
               (activeTab === "login" ? (
                 <LoginForm
@@ -182,10 +210,10 @@ export default function AuthForms() {
                 <RegisterSteps
                   flow={specialistRegisterFlow}
                   role="specialist"
+                  onComplete={handleRegisterStep3}
                 />
               ))}
 
-            {/* Employer */}
             {userRole === "employer" &&
               (activeTab === "login" ? (
                 <LoginForm
@@ -196,7 +224,11 @@ export default function AuthForms() {
                   onSubmit={handleEmployerLoginSubmit}
                 />
               ) : (
-                <RegisterSteps flow={employerRegisterFlow} role="employer" />
+                <RegisterSteps
+                  flow={employerRegisterFlow}
+                  role="employer"
+                  onComplete={handleRegisterStep3}
+                />
               ))}
           </div>
         </div>

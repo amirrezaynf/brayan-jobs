@@ -1,5 +1,4 @@
 import React from "react";
-
 export default function AdvertisementCard({ ad, onViewAd }) {
   const toJalali = (gregorianDate) => {
     const gDate = new Date(gregorianDate);

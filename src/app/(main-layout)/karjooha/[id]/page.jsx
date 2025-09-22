@@ -22,7 +22,7 @@ import { resumeData } from "@/constants/karjoohaData";
 import KarjoohaSkills from "@/components/modules/karjooha/KarjoohaSkills";
 import KarjoohaLanguages from "@/components/modules/karjooha/KarjoohaLanguages";
 import KarjoohaContactInfo from "@/components/modules/karjooha/KarjoohaContactInfo";
-import KarjoohaActions from "@/components/ui/actions/KarjoohaActions";
+import KarjoohaActions from "@/components/ui/action/KarjoohaActions";
 
 export default function ResumeViewPage({ params }) {
   return (
