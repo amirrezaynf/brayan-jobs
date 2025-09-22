@@ -1,7 +1,5 @@
 import React from "react";
-import Link from "next/link";
-
-export default function AdvertisementCard({ ad }) {
+export default function AdvertisementCard({ ad, onViewAd }) {
   const toJalali = (gregorianDate) => {
     const gDate = new Date(gregorianDate);
     return gDate.toLocaleDateString("fa-IR", {

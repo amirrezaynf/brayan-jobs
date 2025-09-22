@@ -5,12 +5,16 @@ import VacancyBasicInfo from "./VacancyBasicInfo";
 import VacancyDescription from "./VacancyDescription";
 import VacancyRequirements from "./VacancyRequirements";
 import VacancyBenefits from "./VacancyBenefits";
-import { Send, X } from "lucide-react";
+import { Send, X, Loader2 } from "lucide-react";
 import { loadCompanyData } from "@/constants/companyData";
+import { createVacancy, updateVacancy } from "@/app/actions/vacancy";
 
 export default function VacancyContainer({ onClose, editingJob, onSubmit }) {
   // State برای مدیریت خطاهای validation
   const [errors, setErrors] = useState({});
+  
+  // State برای loading
+  const [isLoading, setIsLoading] = useState(false);
 
   // اطلاعات پایه
   const [basicInfo, setBasicInfo] = useState(() => {
@@ -37,6 +41,23 @@ export default function VacancyContainer({ onClose, editingJob, onSubmit }) {
       location: companyData.city
         ? `${companyData.city}, ${companyData.province}`
         : "",
+    };
+  });
+
+  // مدیریت حقوق
+  const [salaryInfo, setSalaryInfo] = useState(() => {
+    if (editingJob) {
+      // اگر آگهی در حال ویرایش است، تشخیص نوع حقوق
+      const hasSalary = editingJob.salary && editingJob.salary.trim() !== "";
+      return {
+        salaryType: hasSalary && editingJob.salary !== "توافقی" ? "amount" : "agreement",
+        salaryAmount: hasSalary && editingJob.salary !== "توافقی" ? editingJob.salary : "",
+      };
+    }
+    
+    return {
+      salaryType: "amount", // پیش‌فرض روی درج مبلغ
+      salaryAmount: "",
     };
   });
 
@@ -114,6 +135,10 @@ export default function VacancyContainer({ onClose, editingJob, onSubmit }) {
     }
   };
 
+  const handleSalaryInfoChange = (field, value) => {
+    setSalaryInfo((prev) => ({ ...prev, [field]: value }));
+  };
+
   const handleDescriptionChange = (field, value) => {
     if (field === "description") {
       setDescription(value);
@@ -185,7 +210,7 @@ export default function VacancyContainer({ onClose, editingJob, onSubmit }) {
     return { isValid: Object.keys(newErrors).length === 0, errors: newErrors };
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // اجرای validation
@@ -200,21 +225,83 @@ export default function VacancyContainer({ onClose, editingJob, onSubmit }) {
       return;
     }
 
-    // Combine all data
-    const jobData = {
-      ...basicInfo,
-      description,
-      requirements,
-      ...jobRequirements,
-      benefits: benefits.filter((benefit) => benefit.trim() !== ""), // فیلتر کردن مزایای خالی
-      ...workConditions,
-      id: editingJob?.id || Date.now(),
-      status: editingJob?.status || "active",
-      createdAt: editingJob?.createdAt || new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
+    setIsLoading(true);
 
-    onSubmit(jobData);
+    try {
+      // تعیین مقدار حقوق بر اساس انتخاب کاربر
+      let salaryValue = "";
+      if (salaryInfo.salaryType === "agreement") {
+        salaryValue = "توافقی";
+      } else if (salaryInfo.salaryType === "amount" && salaryInfo.salaryAmount.trim()) {
+        salaryValue = salaryInfo.salaryAmount.trim();
+      }
+
+      // Combine all data
+      const jobData = {
+        ...basicInfo,
+        salary: salaryValue, // استفاده از مقدار محاسبه شده حقوق
+        description,
+        requirements,
+        ...jobRequirements,
+        benefits: benefits.filter((benefit) => benefit.trim() !== ""), // فیلتر کردن مزایای خالی
+        ...workConditions,
+      };
+
+      let result;
+      
+      if (editingJob) {
+        // Update existing vacancy
+        result = await updateVacancy(editingJob.id, jobData);
+      } else {
+        // Create new vacancy
+        result = await createVacancy(jobData);
+      }
+
+      if (result.success) {
+        // Show success message
+        showSuccessMessage(result.message);
+        
+        // Call the onSubmit callback with the result data
+        if (onSubmit) {
+          const responseData = {
+            ...jobData,
+            id: result.data?.id || editingJob?.id || Date.now(),
+            status: result.data?.status || "active",
+            createdAt: result.data?.created_at || editingJob?.createdAt || new Date().toISOString(),
+            updatedAt: result.data?.updated_at || new Date().toISOString(),
+            applicants: result.data?.applicants_count || editingJob?.applicants || 0,
+            date: result.data?.created_at ? new Date(result.data.created_at).toLocaleDateString("fa-IR") : new Date().toLocaleDateString("fa-IR")
+          };
+          onSubmit(responseData);
+        }
+        
+        // Close form after successful submission
+        onClose();
+      } else {
+        // Show error message
+        showErrorMessage(result.error || "خطا در ثبت آگهی");
+      }
+    } catch (error) {
+      console.error("Error submitting vacancy:", error);
+      showErrorMessage("خطا در ارتباط با سرور");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // تابع نمایش پیام موفقیت
+  const showSuccessMessage = (message) => {
+    const successMessage = document.createElement("div");
+    successMessage.className =
+      "fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50";
+    successMessage.textContent = message;
+    document.body.appendChild(successMessage);
+
+    setTimeout(() => {
+      if (document.body.contains(successMessage)) {
+        document.body.removeChild(successMessage);
+      }
+    }, 4000);
   };
 
   return (
@@ -237,6 +324,8 @@ export default function VacancyContainer({ onClose, editingJob, onSubmit }) {
         <VacancyBasicInfo
           basicInfo={basicInfo}
           handleBasicInfoChange={handleBasicInfoChange}
+          salaryInfo={salaryInfo}
+          handleSalaryInfoChange={handleSalaryInfoChange}
           errors={errors}
         />
 
@@ -267,16 +356,25 @@ export default function VacancyContainer({ onClose, editingJob, onSubmit }) {
           <button
             type="button"
             onClick={onClose}
-            className="px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition duration-200"
+            disabled={isLoading}
+            className="px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             لغو
           </button>
           <button
             type="submit"
-            className="px-6 py-3 bg-yellow-500 text-gray-900 rounded-lg hover:bg-yellow-400 transition duration-200 flex items-center font-medium"
+            disabled={isLoading}
+            className="px-6 py-3 bg-yellow-500 text-gray-900 rounded-lg hover:bg-yellow-400 transition duration-200 flex items-center font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <Send className="w-5 h-5 ml-2" />
-            {editingJob ? "به‌روزرسانی آگهی" : "انتشار آگهی"}
+            {isLoading ? (
+              <Loader2 className="w-5 h-5 ml-2 animate-spin" />
+            ) : (
+              <Send className="w-5 h-5 ml-2" />
+            )}
+            {isLoading 
+              ? (editingJob ? "در حال به‌روزرسانی..." : "در حال ثبت...")
+              : (editingJob ? "به‌روزرسانی آگهی" : "انتشار آگهی")
+            }
           </button>
         </div>
       </form>
