@@ -8,6 +8,14 @@ import LoginForm from "./LoginForm";
 import useRegisterFlow from "@/hooks/useRegisterFlow";
 import { login } from "@/app/actions/auth";
 
+// Cookie helper functions
+const setCookie = (name, value, days = 7) => {
+  const expires = new Date();
+  expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+  const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
+  document.cookie = `${name}=${value}; expires=${expires.toUTCString()}; path=/; SameSite=strict${secure}`;
+};
+
 // --- Main AuthForms Component ---
 export default function AuthForms() {
   const router = useRouter();
@@ -69,6 +77,8 @@ export default function AuthForms() {
       const result = await login(loginData.contact, loginData.password);
 
       if (result.success) {
+        // Store token in cookie instead of localStorage
+        setCookie("authToken", result.token, 7); // 7 days expiration
         // Redirect based on user role
         const redirectUrl = result.user.role === 2 ? "/employer" : "/karjoo";
         router.push(redirectUrl);
@@ -94,6 +104,8 @@ export default function AuthForms() {
       );
 
       if (result.success) {
+        // Store token in cookie instead of localStorage
+        setCookie("authToken", result.token, 7); // 7 days expiration
         // Redirect based on user role
         const redirectUrl = result.user.role === 2 ? "/dashboard" : "/karjoo";
         router.push(redirectUrl);

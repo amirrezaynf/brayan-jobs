@@ -5,8 +5,6 @@ import {
   registerStep1,
   registerStep2,
   registerStep3,
-  registerStep4,
-  resendVerificationCode,
 } from "@/app/actions/auth";
 import {
   validateContact,
@@ -14,6 +12,29 @@ import {
   getRoleNumber,
   detectContactType,
 } from "@/utils/auth";
+
+// Cookie helper functions
+const setCookie = (name, value, days = 7) => {
+  const expires = new Date();
+  expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+  const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
+  document.cookie = `${name}=${value}; expires=${expires.toUTCString()}; path=/; SameSite=strict${secure}`;
+};
+
+const getCookie = (name) => {
+  const nameEQ = name + "=";
+  const ca = document.cookie.split(";");
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) === " ") c = c.substring(1, c.length);
+    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+  }
+  return null;
+};
+
+const deleteCookie = (name) => {
+  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=strict`;
+};
 
 const validatePassword = (password) => {
   return serverValidatePassword(password);
@@ -30,6 +51,14 @@ export default function useRegisterFlow(initialData, role = "specialist") {
 
   const [resendTimer, setResendTimer] = useState(0);
   const [canResend, setCanResend] = useState(false);
+
+  // Initialize token from cookie on component mount
+  useEffect(() => {
+    const tokenFromCookie = getCookie("authToken");
+    if (tokenFromCookie) {
+      setAuthToken(tokenFromCookie);
+    }
+  }, []);
 
   // Timer effect
   useEffect(() => {
@@ -139,6 +168,8 @@ export default function useRegisterFlow(initialData, role = "specialist") {
 
         if (result.success) {
           setAuthToken(result.token);
+          // Store token in cookie instead of localStorage
+          setCookie("authToken", result.token, 7); // 7 days expiration
           setStep((s) => s + 1);
         } else {
           setErrors({ general: result.error });
