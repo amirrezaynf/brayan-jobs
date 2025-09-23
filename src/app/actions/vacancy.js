@@ -309,6 +309,7 @@ export async function createVacancy(vacancyData, clientToken = null) {
       headers,
       body: JSON.stringify(mappedData),
       signal: controller.signal,
+      cache: "no-store",
     });
 
     clearTimeout(timeoutId);
@@ -413,6 +414,7 @@ export async function updateVacancy(id, vacancyData, clientToken = null) {
       headers,
       body: JSON.stringify(mappedData),
       signal: controller.signal,
+      cache: "no-store",
     });
 
     clearTimeout(timeoutId);
@@ -470,6 +472,7 @@ export async function deleteVacancy(id) {
       method: "DELETE",
       headers,
       signal: controller.signal,
+      cache: "no-store",
     });
 
     clearTimeout(timeoutId);
@@ -518,10 +521,20 @@ export async function getUserActiveVacancies(userId = null) {
 
     // Use the main endpoint to get all active vacancies
     // The API will filter based on authentication token
-    const response = await fetch(`${API_BASE_URL}`, {
+    // Add timestamp to prevent any caching
+    const timestamp = Date.now();
+    const url = `${API_BASE_URL}?_t=${timestamp}`;
+    
+    const response = await fetch(url, {
       method: "GET", 
-      headers,
+      headers: {
+        ...headers,
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+      },
       signal: controller.signal,
+      cache: "no-store", // Force fresh data from server
     });
 
     clearTimeout(timeoutId);
@@ -611,6 +624,7 @@ export async function getVacancyDetails(id) {
       method: "GET",
       headers,
       signal: controller.signal,
+      cache: "no-store",
     });
 
     clearTimeout(timeoutId);
@@ -672,6 +686,7 @@ export async function getActiveVacancies(params = {}) {
         Accept: "application/json",
       },
       signal: controller.signal,
+      cache: "no-store",
     });
 
     clearTimeout(timeoutId);
@@ -718,6 +733,7 @@ export async function getUrgentVacancies() {
         Accept: "application/json",
       },
       signal: controller.signal,
+      cache: "no-store",
     });
 
     clearTimeout(timeoutId);
@@ -762,6 +778,7 @@ export async function getRemoteVacancies() {
         Accept: "application/json",
       },
       signal: controller.signal,
+      cache: "no-store",
     });
 
     clearTimeout(timeoutId);

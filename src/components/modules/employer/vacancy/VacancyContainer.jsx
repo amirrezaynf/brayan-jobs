@@ -323,9 +323,59 @@ export default function VacancyContainer({ onClose, editingJob, onSubmit }) {
     <div className="bg-[#1a1a1a] rounded-xl p-6 mb-6 border border-gray-800">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-white">
-          {editingJob ? "ویرایش آگهی استخدام" : "ایجاد آگهی استخدام جدید"}
-        </h2>
+        <div className="flex items-center gap-3">
+          {editingJob ? (
+            <div className="flex items-center gap-3">
+              <div className="bg-blue-500/20 p-2 rounded-lg">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-blue-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white">ویرایش آگهی استخدام</h2>
+                <p className="text-sm text-blue-400 mt-1">
+                  در حال ویرایش: {editingJob.title || "آگهی انتخاب شده"}
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center gap-3">
+              <div className="bg-yellow-400/20 p-2 rounded-lg">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-yellow-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white">ایجاد آگهی استخدام جدید</h2>
+                <p className="text-sm text-gray-400 mt-1">
+                  اطلاعات آگهی شغلی خود را وارد کنید
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
         <button
           onClick={onClose}
           className="p-2 text-gray-400 hover:text-white transition-colors"
