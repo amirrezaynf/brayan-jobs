@@ -141,44 +141,75 @@ export default function AdvertisementsContainer({
       result = result.filter((ad) => ad.location === selectedCity);
     }
 
-    // Salary filtering logic
-    result = result.filter((ad) => {
-      const isNegotiableSalary = ad.salary.toLowerCase().includes("توافقی");
-
-      if (showNoLimit) return true;
-      if (showNegotiable) return isNegotiableSalary;
-
-      if (showRangeFilter) {
-        if (isNegotiableSalary) return false;
-
-        const persianDigits = ad.salary.match(/[\u06F0-\u06F9]/g);
-        if (!persianDigits) return false;
-
-        const englishDigits = persianDigits
-          .map((digit) => {
-            const charCode = digit.charCodeAt(0);
-            return String(charCode - "\u06F0".charCodeAt(0));
-          })
-          .join("");
-
-        const salaryNum = parseInt(englishDigits, 10);
-        return salaryNum >= salaryRange[0] && salaryNum <= salaryRange[1];
+    // Helper function to safely handle salary filtering
+    const getSalaryInfo = (salary) => {
+      // If salary is null or undefined, treat as negotiable
+      if (!salary && salary !== 0) {
+        return { isNegotiable: true, numericValue: 0 };
       }
 
-      if (isNegotiableSalary) return true;
+      // If salary is already a number, use it directly
+      if (typeof salary === "number") {
+        return { isNegotiable: false, numericValue: salary };
+      }
 
-      const persianDigits = ad.salary.match(/[\u06F0-\u06F9]/g);
-      if (!persianDigits) return false;
+      // If salary is a string, process it
+      if (typeof salary === "string") {
+        const salaryStr = salary.trim();
 
-      const englishDigits = persianDigits
-        .map((digit) => {
-          const charCode = digit.charCodeAt(0);
-          return String(charCode - "\u06F0".charCodeAt(0));
-        })
-        .join("");
+        // Check if it's negotiable salary
+        if (salaryStr.toLowerCase().includes("توافقی")) {
+          return { isNegotiable: true, numericValue: 0 };
+        }
 
-      const salaryNum = parseInt(englishDigits, 10);
-      return salaryNum >= salaryRange[0] && salaryNum <= salaryRange[1];
+        // Try to extract numeric value from Persian digits
+        const persianDigits = salaryStr.match(/[\u06F0-\u06F9]/g);
+        if (persianDigits) {
+          const englishDigits = persianDigits
+            .map((digit) => {
+              const charCode = digit.charCodeAt(0);
+              return String(charCode - "\u06F0".charCodeAt(0));
+            })
+            .join("");
+          return {
+            isNegotiable: false,
+            numericValue: parseInt(englishDigits, 10) || 0,
+          };
+        }
+
+        // Try to extract numeric value from regular digits
+        const regularDigits = salaryStr.match(/\d+/g);
+        if (regularDigits) {
+          const numericValue = parseInt(regularDigits.join(""), 10);
+          return { isNegotiable: false, numericValue: numericValue || 0 };
+        }
+      }
+
+      // If we can't parse it, treat as 0
+      return { isNegotiable: false, numericValue: 0 };
+    };
+
+    // Salary filtering logic
+    result = result.filter((ad) => {
+      const salaryInfo = getSalaryInfo(ad.salary);
+
+      if (showNoLimit) return true;
+      if (showNegotiable) return salaryInfo.isNegotiable;
+
+      if (showRangeFilter) {
+        if (salaryInfo.isNegotiable) return false;
+        return (
+          salaryInfo.numericValue >= salaryRange[0] &&
+          salaryInfo.numericValue <= salaryRange[1]
+        );
+      }
+
+      // Default behavior: show both negotiable and within range
+      if (salaryInfo.isNegotiable) return true;
+      return (
+        salaryInfo.numericValue >= salaryRange[0] &&
+        salaryInfo.numericValue <= salaryRange[1]
+      );
     });
 
     // Sorting logic

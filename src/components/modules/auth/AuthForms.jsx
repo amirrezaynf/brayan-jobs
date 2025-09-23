@@ -69,7 +69,6 @@ export default function AuthForms() {
       const result = await login(loginData.contact, loginData.password);
 
       if (result.success) {
-        localStorage.setItem("authToken", result.token);
         // Redirect based on user role
         const redirectUrl = result.user.role === 2 ? "/employer" : "/karjoo";
         router.push(redirectUrl);
@@ -95,7 +94,6 @@ export default function AuthForms() {
       );
 
       if (result.success) {
-        localStorage.setItem("authToken", result.token);
         // Redirect based on user role
         const redirectUrl = result.user.role === 2 ? "/dashboard" : "/karjoo";
         router.push(redirectUrl);
