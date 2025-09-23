@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { Suspense } from "react";
+=======
+import React from "react";
+>>>>>>> d1403fdce47523412bdfbab327832ae51ccbb960
 import { getActiveVacancies } from "@/app/actions/advertisements";
 import AdvertisementsContainer from "@/components/modules/advertisements/AdvertisementsContainer";
 
@@ -14,7 +18,11 @@ function AdvertisementsLoading() {
   );
 }
 
+<<<<<<< HEAD
 // Helper function to fetch advertisements with error handling
+=======
+// Server-side function to fetch advertisements using server actions
+>>>>>>> d1403fdce47523412bdfbab327832ae51ccbb960
 async function fetchAdvertisements(searchParams) {
   try {
     // Map search params to API parameters
@@ -82,6 +90,7 @@ export default async function AdvertisementsPage({ searchParams }) {
   const { ads, meta, error } = await fetchAdvertisements(params);
 
   return (
+<<<<<<< HEAD
     <Suspense fallback={<AdvertisementsLoading />}>
       <AdvertisementsContainer
         initialAds={ads}
@@ -90,5 +99,13 @@ export default async function AdvertisementsPage({ searchParams }) {
         searchParams={params}
       />
     </Suspense>
+=======
+    <AdvertisementsContainer
+      initialAds={advertisements}
+      initialMeta={meta}
+      apiError={error}
+      searchParams={searchParams}
+    />
+>>>>>>> d1403fdce47523412bdfbab327832ae51ccbb960
   );
 }

@@ -5,8 +5,6 @@ import {
   registerStep1,
   registerStep2,
   registerStep3,
-  registerStep4,
-  resendVerificationCode,
 } from "@/app/actions/auth";
 import {
   validateContact,
