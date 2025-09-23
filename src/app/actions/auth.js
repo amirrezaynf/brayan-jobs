@@ -1,7 +1,6 @@
 "use server";
 
 import { getRoleNumber } from "@/utils/auth";
-import { fetcher } from "@/utils/fetcher";
 
 const BASE_URL = "https://imocc.iracode.com/api/v1/auth";
 
@@ -76,34 +75,35 @@ export async function registerStep3(formData) {
     const { contact, firstName, lastName, password, confirmPassword, role } =
       formData;
 
-    const { data, status } = await fetcher(
-      `${process.env.BASE_URL}/register/step-3`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          contact,
-          firstName,
-          lastName,
-          password,
-          password_confirmation: confirmPassword,
-          role: getRoleNumber(role), // 2 = کارفرما، 3 = کارجو
-        }),
-      }
-    );
+    const response = await fetch(`${BASE_URL}/register/step-3`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        contact,
+        firstName,
+        lastName,
+        password,
+        password_confirmation: confirmPassword,
+        role: getRoleNumber(role), // 2 = کارفرما، 3 = کارجو
+      }),
+    });
+
+    const result = await handleApiResponse(response);
 
     return {
       success: true,
-      data: data.data,
-      message: data.message,
-      token: data.data?.token,
-      user: data.data?.user,
+      data: result.data,
+      message: result.message,
+      token: result.data.token,
+      user: result.data.user,
     };
   } catch (error) {
     return {
       success: false,
       error: error.message,
-      status: error.status || 500,
-      details: error.data || null,
     };
   }
 }
