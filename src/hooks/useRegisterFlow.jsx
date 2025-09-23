@@ -7,14 +7,13 @@ import {
   registerStep3,
   registerStep4,
   resendVerificationCode,
-} from "@/app/actions/auth";
+} from "@/app/action/auth";
 import {
   validateContact,
   validatePassword as serverValidatePassword,
   getRoleNumber,
   detectContactType,
 } from "@/utils/auth";
-import { signIn } from "next-auth/react";
 
 const validatePassword = (password) => {
   return serverValidatePassword(password);
@@ -136,16 +135,8 @@ export default function useRegisterFlow(initialData, role = "specialist") {
           role: getRoleNumber(role),
         };
 
-        const result = await signIn("credentials", {
-          mode: "register",
-          redirect: false, // خیلی مهمه که 404 نگیری
-          contact: data.contact,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          password: data.password,
-          confirmPassword: data.confirmPassword,
-          role: role,
-        });
+        const result = await registerStep3(formData);
+
         if (result.success) {
           setAuthToken(result.token);
           setStep((s) => s + 1);
