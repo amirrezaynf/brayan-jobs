@@ -109,7 +109,7 @@ export default function AuthForms() {
     } finally {
       setIsLoading(false);
     }
-  };
+  };  
 
   const handleRegisterStep3 = async (flowData) => {
     setIsLoading(true);

@@ -99,7 +99,7 @@ export default function Header() {
                 بخش کارفرمایان
               </Link>
               <Link
-                href="/authentication"
+                href="/auth"
                 className="px-5 py-2 rounded-lg gold-bg text-black  hover:opacity-90 transition duration-300"
               >
                 ورود / ثبت نام
@@ -145,7 +145,7 @@ export default function Header() {
                 بخش کارفرمایان
               </Link>
               <Link
-                href="/authentication"
+                href="/auth"
                 className="mt-4 w-full text-center px-5 py-2 rounded-lg gold-bg text-black font-semibold hover:opacity-90 transition duration-300"
               >
                 ورود / ثبت نام

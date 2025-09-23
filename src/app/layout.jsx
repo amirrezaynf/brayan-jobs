@@ -34,9 +34,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang='fa' dir='rtl'>
-      <body>
-        <NextAuthProvider>{children}</NextAuthProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
