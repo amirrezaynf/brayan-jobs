@@ -4,7 +4,7 @@ import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { loadCompanyData } from "@/constants/companyData";
 import VacancyContainer from "@/components/modules/employer/vacancy/VacancyContainer";
-import { getUserVacancies, deleteVacancy } from "@/app/actions/vacancy";
+import { getUserActiveVacancies, getUserExpiredVacancies, deleteVacancy } from "@/app/actions/vacancy";
 
 function VacanciesContent() {
   const searchParams = useSearchParams();
@@ -14,10 +14,10 @@ function VacanciesContent() {
   const [editingJob, setEditingJob] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Load jobs from localStorage on component mount
+  // Load jobs from API on component mount and when filter changes
   useEffect(() => {
     loadJobs();
-  }, []);
+  }, [filter]);
 
   // Check URL parameter to open create form
   useEffect(() => {
@@ -38,57 +38,62 @@ function VacanciesContent() {
   const loadJobs = async () => {
     setIsLoading(true);
     try {
-      const result = await getUserVacancies();
+      let result;
+      
+      // Use different endpoints based on filter
+      if (filter === "expired") {
+        result = await getUserExpiredVacancies();
+      } else {
+        // For "active", "draft", and "all" filters, use active endpoint
+        result = await getUserActiveVacancies();
+      }
       
       if (result.success) {
-        // Map API data to component format
-        const mappedVacancies = result.data.map(vacancy => ({
-          id: vacancy.id,
-          title: vacancy.title,
-          company: vacancy.company?.name || "شرکت نامشخص",
-          date: vacancy.created_at ? new Date(vacancy.created_at).toLocaleDateString("fa-IR") : new Date().toLocaleDateString("fa-IR"),
-          applicants: vacancy.applicants_count || 0,
-          status: vacancy.status || "active",
-          // Keep original API data for editing
-          ...vacancy
-        }));
+        // Map API data to component format with enhanced information
+        const mappedVacancies = result.data.map(vacancy => {
+          // Calculate days until expiry
+          let daysUntilExpiry = 0;
+          if (vacancy.expires_at) {
+            const expiryDate = new Date(vacancy.expires_at);
+            const today = new Date();
+            daysUntilExpiry = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
+          }
+
+          // Format salary
+          let formattedSalary = "توافقی";
+          if (vacancy.salary && vacancy.salary > 0) {
+            formattedSalary = vacancy.salary.toLocaleString("fa-IR") + " تومان";
+          }
+
+          return {
+            id: vacancy.id,
+            title: vacancy.title,
+            company: vacancy.company?.display_name || vacancy.company?.name || "شرکت نامشخص",
+            date: vacancy.published_at ? new Date(vacancy.published_at).toLocaleDateString("fa-IR") : 
+                  vacancy.created_at ? new Date(vacancy.created_at).toLocaleDateString("fa-IR") : 
+                  new Date().toLocaleDateString("fa-IR"),
+            applicants: vacancy.applicants_count || 0,
+            status: vacancy.status || "active",
+            
+            // Enhanced information from API
+            contract_type: vacancy.contract_type,
+            salary: formattedSalary,
+            location: vacancy.location_text,
+            is_urgent: vacancy.is_urgent,
+            is_remote_possible: vacancy.is_remote_possible,
+            days_until_expiry: daysUntilExpiry,
+            expires_at: vacancy.expires_at,
+            
+            // Keep original API data for editing
+            ...vacancy
+          };
+        });
+        
         setVacancies(mappedVacancies);
       } else {
-        // If API fails, try to load from localStorage as fallback
-        const savedJobs = localStorage.getItem("employerJobs");
-        if (savedJobs) {
-          setVacancies(JSON.parse(savedJobs));
-        } else {
-          // Default sample jobs if no data available
-          const sampleJobs = [
-            {
-              id: 1,
-              title: "توسعه‌دهنده React Senior",
-              company: "شرکت فناوری اطلاعات پارامکس",
-              date: "۱۴۰۲/۱۲/۱۵",
-              applicants: 12,
-              status: "active",
-            },
-            {
-              id: 2,
-              title: "طراح UI/UX",
-              company: "شرکت فناوری اطلاعات پارامکس",
-              date: "۱۴۰۲/۱۲/۱۰",
-              applicants: 8,
-              status: "active",
-            },
-            {
-              id: 3,
-              title: "مدیر محصول",
-              company: "شرکت فناوری اطلاعات پارامکس",
-              date: "۱۴۰۲/۱۲/۰۵",
-              applicants: 5,
-              status: "draft",
-            },
-          ];
-          setVacancies(sampleJobs);
-          localStorage.setItem("employerJobs", JSON.stringify(sampleJobs));
-        }
+        // If API fails, show empty list
+        console.error("❌ Failed to load vacancies from API:", result.error);
+        setVacancies([]);
         
         // Show error message if API failed
         if (result.error) {
@@ -98,20 +103,12 @@ function VacanciesContent() {
     } catch (error) {
       console.error("Error loading vacancies:", error);
       showErrorMessage("خطا در بارگذاری آگهی‌ها");
-      
-      // Fallback to localStorage
-      const savedJobs = localStorage.getItem("employerJobs");
-      if (savedJobs) {
-        setVacancies(JSON.parse(savedJobs));
-      }
+      setVacancies([]);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const saveJobs = (jobs) => {
-    localStorage.setItem("employerJobs", JSON.stringify(jobs));
-  };
 
   const showSuccessMessage = (message) => {
     const successMessage = document.createElement("div");
@@ -141,22 +138,7 @@ function VacanciesContent() {
     }, 4000);
   };
 
-  const handleSubmit = (jobData) => {
-    // Update local state with the new/updated job data
-    if (editingJob) {
-      // Update existing job
-      const updatedJobs = vacancies.map((job) =>
-        job.id === editingJob.id ? { ...jobData, id: editingJob.id } : job
-      );
-      setVacancies(updatedJobs);
-      saveJobs(updatedJobs);
-    } else {
-      // Add new job
-      const updatedJobs = [...vacancies, jobData];
-      setVacancies(updatedJobs);
-      saveJobs(updatedJobs);
-    }
-
+  const handleJobSubmit = (jobData) => {
     // Close form
     setShowCreateForm(false);
     setEditingJob(null);
@@ -176,11 +158,9 @@ function VacanciesContent() {
         const result = await deleteVacancy(jobId);
         
         if (result.success) {
-          // Remove from local state
-          const updatedJobs = vacancies.filter((job) => job.id !== jobId);
-          setVacancies(updatedJobs);
-          saveJobs(updatedJobs);
           showSuccessMessage(result.message || "آگهی با موفقیت حذف شد!");
+          // Reload jobs from API to get the latest data
+          loadJobs();
         } else {
           showErrorMessage(result.error || "خطا در حذف آگهی");
         }
@@ -277,7 +257,7 @@ function VacanciesContent() {
             setEditingJob(null);
           }}
           editingJob={editingJob}
-          onSubmit={handleSubmit}
+          onSubmit={handleJobSubmit}
         />
       )}
 
@@ -296,6 +276,8 @@ function VacanciesContent() {
           <thead>
             <tr className="border-b border-gray-700 text-gray-400 text-sm">
               <th className="p-3">عنوان آگهی</th>
+              <th className="p-3">نوع قرارداد</th>
+              <th className="p-3">حقوق</th>
               <th className="p-3">تاریخ انتشار</th>
               <th className="p-3">تعداد کارجویان</th>
               <th className="p-3">وضعیت</th>
@@ -308,9 +290,43 @@ function VacanciesContent() {
                 key={job.id}
                 className="border-b border-black hover:bg-black/50"
               >
-                <td className="p-3 font-semibold text-white">{job.title}</td>
-                <td className="p-3">{job.date}</td>
-                <td className="p-3">{job.applicants} نفر</td>
+                <td className="p-3">
+                  <div className="flex flex-col">
+                    <span className="font-semibold text-white">{job.title}</span>
+                    <div className="flex items-center gap-2 mt-1">
+                      {job.is_urgent && (
+                        <span className="px-2 py-0.5 text-xs bg-red-500/20 text-red-400 rounded-full">
+                          فوری
+                        </span>
+                      )}
+                      {job.is_remote_possible && (
+                        <span className="px-2 py-0.5 text-xs bg-blue-500/20 text-blue-400 rounded-full">
+                          دورکاری
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </td>
+                <td className="p-3 text-gray-300">
+                  {job.contract_type === "full-time" ? "تمام وقت" :
+                   job.contract_type === "part-time" ? "پاره وقت" :
+                   job.contract_type === "contract" ? "قراردادی" :
+                   job.contract_type === "internship" ? "کارآموزی" :
+                   job.contract_type === "freelance" ? "فریلنسر" :
+                   job.contract_type || "نامشخص"}
+                </td>
+                <td className="p-3 text-gray-300">{job.salary}</td>
+                <td className="p-3 text-gray-300">
+                  <div className="flex flex-col">
+                    <span>{job.date}</span>
+                    {job.days_until_expiry > 0 && job.days_until_expiry <= 7 && (
+                      <span className="text-xs text-yellow-400 mt-1">
+                        {job.days_until_expiry} روز تا انقضا
+                      </span>
+                    )}
+                  </div>
+                </td>
+                <td className="p-3 text-gray-300">{job.applicants} نفر</td>
                 <td className="p-3">
                   <span
                     className={`px-2 py-1 text-xs rounded-full ${
@@ -358,11 +374,25 @@ function VacanciesContent() {
             className="bg-black rounded-lg p-4 border border-gray-700"
           >
             <div className="flex justify-between items-start mb-3">
-              <h3 className="font-semibold text-white text-right flex-1">
-                {job.title}
-              </h3>
+              <div className="flex-1">
+                <h3 className="font-semibold text-white text-right mb-2">
+                  {job.title}
+                </h3>
+                <div className="flex items-center gap-2 flex-wrap">
+                  {job.is_urgent && (
+                    <span className="px-2 py-0.5 text-xs bg-red-500/20 text-red-400 rounded-full">
+                      فوری
+                    </span>
+                  )}
+                  {job.is_remote_possible && (
+                    <span className="px-2 py-0.5 text-xs bg-blue-500/20 text-blue-400 rounded-full">
+                      دورکاری
+                    </span>
+                  )}
+                </div>
+              </div>
               <span
-                className={`px-2 py-1 text-xs rounded-full ml-2 ${
+                className={`px-2 py-1 text-xs rounded-full ml-2 flex-shrink-0 ${
                   job.status === "active"
                     ? "bg-green-500/20 text-green-400"
                     : job.status === "expired"
@@ -378,7 +408,21 @@ function VacanciesContent() {
               </span>
             </div>
             <div className="text-gray-400 text-sm space-y-1 text-right">
+              <p>نوع قرارداد: {
+                job.contract_type === "full-time" ? "تمام وقت" :
+                job.contract_type === "part-time" ? "پاره وقت" :
+                job.contract_type === "contract" ? "قراردادی" :
+                job.contract_type === "internship" ? "کارآموزی" :
+                job.contract_type === "freelance" ? "فریلنسر" :
+                job.contract_type || "نامشخص"
+              }</p>
+              <p>حقوق: {job.salary}</p>
               <p>تاریخ انتشار: {job.date}</p>
+              {job.days_until_expiry > 0 && job.days_until_expiry <= 7 && (
+                <p className="text-yellow-400">
+                  ⚠️ {job.days_until_expiry} روز تا انقضا
+                </p>
+              )}
               <p>تعداد کارجویان: {job.applicants} نفر</p>
             </div>
             <div className="flex justify-end space-x-4 space-x-reverse mt-4">

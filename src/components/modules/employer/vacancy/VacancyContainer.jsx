@@ -7,7 +7,7 @@ import VacancyRequirements from "./VacancyRequirements";
 import VacancyBenefits from "./VacancyBenefits";
 import { Send, X, Loader2 } from "lucide-react";
 import { loadCompanyData } from "@/constants/companyData";
-import { createVacancy, updateVacancy } from "@/app/actions/vacancy";
+import { createVacancyClient, updateVacancyClient } from "@/utils/vacancyAPI";
 
 export default function VacancyContainer({ onClose, editingJob, onSubmit }) {
   // State برای مدیریت خطاهای validation
@@ -20,12 +20,12 @@ export default function VacancyContainer({ onClose, editingJob, onSubmit }) {
   const [basicInfo, setBasicInfo] = useState(() => {
     if (editingJob) {
       return {
-        company: editingJob.company || "",
+        company: editingJob.company?.display_name || editingJob.company?.name || "",
         title: editingJob.title || "",
-        category: editingJob.category || "",
-        type: editingJob.type || "full-time",
-        salary: editingJob.salary || "",
-        location: editingJob.location || "",
+        category: editingJob.expert_activity_field?.name || editingJob.category || "",
+        type: editingJob.contract_type || editingJob.type || "full-time",
+        salary: typeof editingJob.salary === 'number' ? editingJob.salary.toString() : (editingJob.salary || ""),
+        location: editingJob.location_text || editingJob.location || "",
       };
     }
 
@@ -48,10 +48,12 @@ export default function VacancyContainer({ onClose, editingJob, onSubmit }) {
   const [salaryInfo, setSalaryInfo] = useState(() => {
     if (editingJob) {
       // اگر آگهی در حال ویرایش است، تشخیص نوع حقوق
-      const hasSalary = editingJob.salary && editingJob.salary.trim() !== "";
+      // Convert salary to string if it's a number
+      const salaryStr = typeof editingJob.salary === 'number' ? editingJob.salary.toString() : (editingJob.salary || "");
+      const hasSalary = salaryStr && salaryStr.trim() !== "";
       return {
-        salaryType: hasSalary && editingJob.salary !== "توافقی" ? "amount" : "agreement",
-        salaryAmount: hasSalary && editingJob.salary !== "توافقی" ? editingJob.salary : "",
+        salaryType: hasSalary && salaryStr !== "توافقی" ? "amount" : "agreement",
+        salaryAmount: hasSalary && salaryStr !== "توافقی" ? salaryStr : "",
       };
     }
     
@@ -80,10 +82,10 @@ export default function VacancyContainer({ onClose, editingJob, onSubmit }) {
   const [jobRequirements, setJobRequirements] = useState(() => {
     if (editingJob) {
       return {
-        gender: editingJob.gender || "both",
-        education: editingJob.education || "",
-        experience: editingJob.experience || "",
-        militaryService: editingJob.militaryService || "",
+        gender: editingJob.gender_preference || editingJob.gender || "both",
+        education: editingJob.min_education_level || editingJob.education || "",
+        experience: editingJob.experience_level || editingJob.experience || "",
+        militaryService: editingJob.military_service_status || editingJob.militaryService || "",
       };
     }
     return {
@@ -108,12 +110,12 @@ export default function VacancyContainer({ onClose, editingJob, onSubmit }) {
   const [workConditions, setWorkConditions] = useState(() => {
     if (editingJob) {
       return {
-        workHours: editingJob.workHours || "",
-        probationPeriod: editingJob.probationPeriod || "",
-        insurance: editingJob.insurance || "",
-        remoteWork: editingJob.remoteWork || false,
-        travelRequired: editingJob.travelRequired || false,
-        urgent: editingJob.urgent || false,
+        workHours: editingJob.working_hours || editingJob.workHours || "",
+        probationPeriod: editingJob.probation_period || editingJob.probationPeriod || "",
+        insurance: editingJob.insurance_status || editingJob.insurance || "",
+        remoteWork: editingJob.is_remote_possible || editingJob.remoteWork || false,
+        travelRequired: editingJob.travel_required || editingJob.travelRequired || false,
+        urgent: editingJob.is_urgent || editingJob.urgent || false,
       };
     }
     return {
@@ -184,25 +186,25 @@ export default function VacancyContainer({ onClose, editingJob, onSubmit }) {
   const validateForm = () => {
     const newErrors = {};
 
-    // اطلاعات پایه
-    if (!basicInfo.company.trim()) {
+    // اطلاعات پایه - Safe string checks
+    if (!basicInfo.company || !basicInfo.company.trim()) {
       newErrors.company = "لطفاً نام شرکت یا سازمان خود را وارد کنید";
     }
-    if (!basicInfo.title.trim()) {
+    if (!basicInfo.title || !basicInfo.title.trim()) {
       newErrors.title = "لطفاً عنوان شغل و موقعیت شغلی را وارد کنید";
     }
-    if (!basicInfo.category.trim()) {
+    if (!basicInfo.category || !basicInfo.category.trim()) {
       newErrors.category = "لطفاً دسته‌بندی شغلی مناسب را انتخاب کنید";
     }
-    if (!basicInfo.location.trim()) {
+    if (!basicInfo.location || !basicInfo.location.trim()) {
       newErrors.location = "لطفاً محل کار را مشخص کنید";
     }
 
-    // شرح شغل
-    if (!description.trim()) {
+    // شرح شغل - Safe string checks
+    if (!description || !description.trim()) {
       newErrors.description = "لطفاً شرح کامل شغل و وظایف را بنویسید";
     }
-    if (!requirements.trim()) {
+    if (!requirements || !requirements.trim()) {
       newErrors.requirements = "لطفاً شرایط و الزامات شغلی را مشخص کنید";
     }
 
@@ -228,6 +230,8 @@ export default function VacancyContainer({ onClose, editingJob, onSubmit }) {
     setIsLoading(true);
 
     try {
+      console.log("🔥 ===== FORM SUBMISSION STARTED =====");
+      
       // تعیین مقدار حقوق بر اساس انتخاب کاربر
       let salaryValue = "";
       if (salaryInfo.salaryType === "agreement") {
@@ -247,17 +251,22 @@ export default function VacancyContainer({ onClose, editingJob, onSubmit }) {
         ...workConditions,
       };
 
+      console.log("📦 Job data to submit:", jobData);
+
       let result;
       
       if (editingJob) {
-        // Update existing vacancy
-        result = await updateVacancy(editingJob.id, jobData);
+        console.log("🔄 Updating existing vacancy:", editingJob.id);
+        result = await updateVacancyClient(editingJob.id, jobData);
       } else {
-        // Create new vacancy
-        result = await createVacancy(jobData);
+        console.log("🆕 Creating new vacancy");
+        result = await createVacancyClient(jobData);
       }
 
+      console.log("📡 API Result:", result);
+
       if (result.success) {
+        console.log("✅ Submission successful!");
         // Show success message
         showSuccessMessage(result.message);
         
@@ -278,11 +287,17 @@ export default function VacancyContainer({ onClose, editingJob, onSubmit }) {
         // Close form after successful submission
         onClose();
       } else {
+        console.error("❌ Submission failed:", result.error);
         // Show error message
         showErrorMessage(result.error || "خطا در ثبت آگهی");
       }
     } catch (error) {
-      console.error("Error submitting vacancy:", error);
+      console.error("💥 Exception during submission:", error);
+      console.error("💥 Error details:", {
+        message: error.message,
+        stack: error.stack,
+        name: error.name
+      });
       showErrorMessage("خطا در ارتباط با سرور");
     } finally {
       setIsLoading(false);

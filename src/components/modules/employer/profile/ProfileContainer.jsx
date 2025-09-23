@@ -51,15 +51,18 @@ const ProfileContainer = () => {
 
         if (apiResult.success && apiResult.data) {
           console.log("✅ ProfileContainer: Loading from API");
-          console.log("📦 ProfileContainer: API data received:", apiResult.data);
-          
+          console.log(
+            "📦 ProfileContainer: API data received:",
+            apiResult.data
+          );
+
           // Data is already mapped by mapAPIDataToForm in Server Action
           setCompanyData({ ...COMPANY_DATA, ...apiResult.data });
-          
+
           if (apiResult.data.companyLogo) {
             setCompanyLogo(apiResult.data.companyLogo);
           }
-          
+
           const savedPreference =
             apiResult.data.displayNamePreference || "persian";
           setDisplayNamePreference(savedPreference);
@@ -68,17 +71,23 @@ const ProfileContainer = () => {
           // Get company ID from rawData if available
           if (apiResult.rawData && apiResult.rawData.id) {
             setCompanyId(apiResult.rawData.id);
-            console.log("🆔 ProfileContainer: Company ID set:", apiResult.rawData.id);
+            console.log(
+              "🆔 ProfileContainer: Company ID set:",
+              apiResult.rawData.id
+            );
           } else if (apiResult.data.id) {
             setCompanyId(apiResult.data.id);
-            console.log("🆔 ProfileContainer: Company ID set from data:", apiResult.data.id);
+            console.log(
+              "🆔 ProfileContainer: Company ID set from data:",
+              apiResult.data.id
+            );
           }
         } else {
           console.warn(
             "⚠️ ProfileContainer: API failed, trying localStorage..."
           );
           console.warn("⚠️ ProfileContainer: API error:", apiResult.error);
-          
+
           // Fallback to localStorage
           const localStorageResult = getCompanyFromLocalStorage();
           console.log(
@@ -236,57 +245,87 @@ const ProfileContainer = () => {
   const loadCompanyFromAPI = async () => {
     try {
       console.log("🔄 ===== LOADING COMPANY DATA FROM API =====");
-      console.log("🔄 ProfileContainer: Starting API call to getCompany('my')...");
-      
+      console.log(
+        "🔄 ProfileContainer: Starting API call to getCompany('my')..."
+      );
+
       const startTime = Date.now();
       const result = await getCompany("my");
       const endTime = Date.now();
-      
-      console.log(`📡 ProfileContainer: API call completed in ${endTime - startTime}ms`);
+
+      console.log(
+        `📡 ProfileContainer: API call completed in ${endTime - startTime}ms`
+      );
       console.log("📡 ProfileContainer: Full API result:", result);
       console.log("📡 ProfileContainer: Result success:", result?.success);
       console.log("📡 ProfileContainer: Result data exists:", !!result?.data);
-      console.log("📡 ProfileContainer: Result rawData exists:", !!result?.rawData);
-      
+      console.log(
+        "📡 ProfileContainer: Result rawData exists:",
+        !!result?.rawData
+      );
+
       if (result?.rawData) {
-        console.log("📦 ProfileContainer: Raw API data from server:", result.rawData);
-        console.log("📦 ProfileContainer: Raw data keys:", Object.keys(result.rawData));
-        console.log("📦 ProfileContainer: Company ID in raw data:", result.rawData.id);
+        console.log(
+          "📦 ProfileContainer: Raw API data from server:",
+          result.rawData
+        );
+        console.log(
+          "📦 ProfileContainer: Raw data keys:",
+          Object.keys(result.rawData)
+        );
+        console.log(
+          "📦 ProfileContainer: Company ID in raw data:",
+          result.rawData.id
+        );
       }
-      
+
       if (result?.data) {
         console.log("🔄 ProfileContainer: Mapped form data:", result.data);
-        console.log("🔄 ProfileContainer: Mapped data keys:", Object.keys(result.data));
-        console.log("🔄 ProfileContainer: Company name mapped:", result.data.companyName);
-        console.log("🔄 ProfileContainer: Company size mapped:", result.data.companySize);
-        console.log("🔄 ProfileContainer: Industry mapped:", result.data.industryType);
+        console.log(
+          "🔄 ProfileContainer: Mapped data keys:",
+          Object.keys(result.data)
+        );
+        console.log(
+          "🔄 ProfileContainer: Company name mapped:",
+          result.data.companyName
+        );
+        console.log(
+          "🔄 ProfileContainer: Company size mapped:",
+          result.data.companySize
+        );
+        console.log(
+          "🔄 ProfileContainer: Industry mapped:",
+          result.data.industryType
+        );
         console.log("🔄 ProfileContainer: Location mapped:", {
           country: result.data.country,
           province: result.data.province,
-          city: result.data.city
+          city: result.data.city,
         });
         console.log("🔄 ProfileContainer: Social media mapped:", {
           linkedin: result.data.linkedin,
           instagram: result.data.instagram,
-          telegram: result.data.telegram
+          telegram: result.data.telegram,
         });
       }
 
       if (result.success && result.data) {
-        console.log("✅ ProfileContainer: Company data loaded successfully from API");
-        
+        console.log(
+          "✅ ProfileContainer: Company data loaded successfully from API"
+        );
+
         // Data is already mapped by mapAPIDataToForm in Server Action
         return {
           success: true,
           data: result.data,
-          rawData: result.rawData // Keep raw data for company ID
+          rawData: result.rawData, // Keep raw data for company ID
         };
       } else {
         console.warn("⚠️ ===== API LOAD FAILED =====");
         console.warn("⚠️ ProfileContainer: API returned no data");
         console.warn("⚠️ ProfileContainer: Error:", result?.error);
         console.warn("⚠️ ProfileContainer: Full result for debugging:", result);
-        
+
         return {
           success: false,
           error: result?.error || "خطا در دریافت اطلاعات",
@@ -294,11 +333,14 @@ const ProfileContainer = () => {
       }
     } catch (error) {
       console.error("❌ ===== API LOAD EXCEPTION =====");
-      console.error("❌ ProfileContainer: Exception in loadCompanyFromAPI:", error);
+      console.error(
+        "❌ ProfileContainer: Exception in loadCompanyFromAPI:",
+        error
+      );
       console.error("❌ ProfileContainer: Error name:", error.name);
       console.error("❌ ProfileContainer: Error message:", error.message);
       console.error("❌ ProfileContainer: Error stack:", error.stack);
-      
+
       return {
         success: false,
         error: `خطا در ارتباط با سرور: ${error.message}`,
@@ -538,29 +580,38 @@ const ProfileContainer = () => {
               console.log("🔄 ===== TEST LOAD BUTTON CLICKED =====");
               console.log("🔄 Test Load: Button clicked, starting test...");
               alert("شروع تست دریافت اطلاعات...");
-              
+
               // Test basic function availability
               console.log("🔄 Test Load: Checking function availability...");
               console.log("🔄 Test Load: getCompany type:", typeof getCompany);
-              console.log("🔄 Test Load: loadCompanyFromAPI type:", typeof loadCompanyFromAPI);
-              
+              console.log(
+                "🔄 Test Load: loadCompanyFromAPI type:",
+                typeof loadCompanyFromAPI
+              );
+
               try {
                 console.log("🔄 Test Load: Starting loadCompanyFromAPI...");
                 const result = await loadCompanyFromAPI();
                 console.log("🔄 Test Load: Result received:", result);
                 console.log("🔄 Test Load: Result type:", typeof result);
-                console.log("🔄 Test Load: Result keys:", result ? Object.keys(result) : 'null');
-                
+                console.log(
+                  "🔄 Test Load: Result keys:",
+                  result ? Object.keys(result) : "null"
+                );
+
                 if (result && result.success) {
                   console.log("✅ Test Load: Success case");
-                  alert("✅ دریافت موفق!\n" + 
-                    `نام شرکت: ${result.data?.companyName || 'نامشخص'}\n` +
-                    `اندازه: ${result.data?.companySize || 'نامشخص'}\n` +
-                    `صنعت: ${result.data?.industryType || 'نامشخص'}`
+                  alert(
+                    "✅ دریافت موفق!\n" +
+                      `نام شرکت: ${result.data?.companyName || "نامشخص"}\n` +
+                      `اندازه: ${result.data?.companySize || "نامشخص"}\n` +
+                      `صنعت: ${result.data?.industryType || "نامشخص"}`
                   );
                 } else {
                   console.log("❌ Test Load: Failure case");
-                  alert("❌ دریافت ناموفق: " + (result?.error || 'خطای نامشخص'));
+                  alert(
+                    "❌ دریافت ناموفق: " + (result?.error || "خطای نامشخص")
+                  );
                 }
               } catch (error) {
                 console.error("❌ Test Load: Exception caught:", error);
