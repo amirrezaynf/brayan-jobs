@@ -20,7 +20,10 @@ export default function AuthForms() {
   const [employerErrors, setEmployerErrors] = useState({});
 
   const [loginData, setLoginData] = useState({ contact: "", password: "" });
-  const [employerLoginData, setEmployerLoginData] = useState({ contact: "", password: "" });
+  const [employerLoginData, setEmployerLoginData] = useState({
+    contact: "",
+    password: "",
+  });
 
   const specialistRegisterFlow = useRegisterFlow(
     {
