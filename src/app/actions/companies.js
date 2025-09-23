@@ -12,6 +12,7 @@ export async function testServerAction() {
   );
   console.log("🧪 Server Action: Current time:", new Date().toISOString());
 
+
   try {
     const result = {
       success: true,
@@ -310,7 +311,6 @@ export async function createCompany(companyData) {
  * @returns {Promise<Object>} API response
  */
 export async function updateCompany(id, companyData) {
-
   try {
     // Try to get token from data first (client-side passed token)
     let token = companyData?._token || null;
@@ -332,10 +332,10 @@ export async function updateCompany(id, companyData) {
 
     // Remove _token from data before mapping
     const { _token, ...cleanData } = companyData;
-    
+
     // Map form data to API format
     const mappedData = mapCompanyDataToAPI(cleanData);
-    
+
     // Add ID to mapped data for update
     if (id) {
       mappedData.id = id;
@@ -343,7 +343,7 @@ export async function updateCompany(id, companyData) {
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 15000);
-    
+
     const response = await fetch(`${API_BASE_URL}/companies`, {
       method: "POST",
       headers: {
@@ -618,20 +618,25 @@ export async function getCompany(slug = "my", clientToken = null) {
         "📦 Server Action: Available companies:",
         rawData.map((c) => ({ id: c.id, name: c.name, user_id: c.user_id }))
       );
-      
+
       // For 'my' endpoint, should only return current user's companies
       // But if multiple, take the most recent one
       console.log("🔍 Server Action: Filtering companies for current user...");
-      console.log("🔍 Server Action: All companies user_ids:", rawData.map(c => c.user_id));
-      
+      console.log(
+        "🔍 Server Action: All companies user_ids:",
+        rawData.map((c) => c.user_id)
+      );
+
       // TEMPORARY: Take most recent company without user filtering
       // TODO: Backend should implement proper user filtering
-      console.log("⚠️ TEMPORARY: Taking most recent company without user filtering");
+      console.log(
+        "⚠️ TEMPORARY: Taking most recent company without user filtering"
+      );
       rawData = rawData.sort((a, b) => b.id - a.id)[0];
       console.log("📦 Server Action: Selected user's most recent company:", {
         id: rawData.id,
         name: rawData.name,
-        user_id: rawData.user_id
+        user_id: rawData.user_id,
       });
     }
 

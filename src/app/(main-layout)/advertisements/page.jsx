@@ -1,5 +1,5 @@
 import React from "react";
-import { getActiveVacancies } from "@/app/action/advertisements";
+import { getActiveVacancies } from "@/app/actions/advertisements";
 import AdvertisementsContainer from "@/components/modules/advertisements/AdvertisementsContainer";
 
 // Loading component for suspense

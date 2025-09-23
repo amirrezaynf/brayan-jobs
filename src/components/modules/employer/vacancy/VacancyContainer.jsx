@@ -7,7 +7,7 @@ import VacancyRequirements from "./VacancyRequirements";
 import VacancyBenefits from "./VacancyBenefits";
 import { Send, X, Loader2 } from "lucide-react";
 import { loadCompanyData } from "@/constants/companyData";
-import { createVacancy, updateVacancy } from "@/app/action/vacancy";
+import { createVacancy, updateVacancy } from "@/app/actions/vacancy";
 
 export default function VacancyContainer({ onClose, editingJob, onSubmit }) {
   // State برای مدیریت خطاهای validation
