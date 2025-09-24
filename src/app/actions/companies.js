@@ -1184,23 +1184,10 @@ function mapCompanyDataToAPI(formData) {
   const mappedType = mapCompanyTypeToAPI(formData.companyType);
   console.log("🏢 Server Action: Mapped type:", mappedType);
 
-  // Map industry to activity field using proper function
-  console.log("🏭 Server Action: Mapping industry to activity field...");
-  console.log(
-    "🏭 Server Action: Raw industry from form:",
-    formData.industryType
-  );
-  const mappedActivityField = mapIndustryToActivityField(formData.industryType);
-  console.log(
-    "🏭 Server Action: Mapped activity field ID:",
-    mappedActivityField
-  );
-  
-  if (!mappedActivityField) {
-    console.log("🏭 ⚠️  No valid activity field mapping found - expert_activity_field_id will be excluded from API request");
-  } else {
-    console.log("🏭 ✅ Valid activity field mapping found - expert_activity_field_id will be included:", mappedActivityField);
-  }
+  // TEMPORARILY DISABLE activity field mapping to prevent validation errors
+  console.log("🏭 Server Action: Skipping industry to activity field mapping to prevent API validation errors");
+  console.log("🏭 Server Action: expert_activity_field_id will NOT be included in API request");
+  const mappedActivityField = null; // Force to null to skip this field entirely
 
   // Build the mapped data with proper transformations
   const mappedData = {
@@ -1267,7 +1254,7 @@ function mapCompanyDataToAPI(formData) {
     name: mappedData.name,
     size: mappedData.size,
     type: mappedData.type,
-    expert_activity_field_id: mappedData.expert_activity_field_id,
+    expert_activity_field_id: "EXCLUDED_TO_PREVENT_VALIDATION_ERROR",
     hasContactInfo: !!(mappedData.email || mappedData.mobile),
     hasSocialMedia: !!(
       mappedData.linkedin_url ||
