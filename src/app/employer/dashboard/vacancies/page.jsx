@@ -4,7 +4,7 @@ import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { loadCompanyData } from "@/constants/companyData";
 import VacancyContainer from "@/components/modules/employer/vacancy/VacancyContainer";
-import { getUserVacancies, deleteVacancy } from "@/app/actions/vacancy";
+import { getUserActiveVacancies, deleteVacancy } from "@/app/actions/vacancy";
 import APIDebugger from "@/components/debug/APIDebugger";
 
 function VacanciesContent() {
@@ -15,10 +15,10 @@ function VacanciesContent() {
   const [editingJob, setEditingJob] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Load jobs from localStorage on component mount
+  // Load jobs from API on component mount and when filter changes
   useEffect(() => {
     loadJobs();
-  }, []);
+  }, [filter]);
 
   // Check URL parameter to open create form
   useEffect(() => {
@@ -39,19 +39,21 @@ function VacanciesContent() {
   const loadJobs = async () => {
     setIsLoading(true);
     try {
-      const result = await getUserVacancies();
-      
+      const result = await getUserActiveVacancies();
+
       if (result.success) {
         // Map API data to component format
-        const mappedVacancies = result.data.map(vacancy => ({
+        const mappedVacancies = result.data.map((vacancy) => ({
           id: vacancy.id,
           title: vacancy.title,
           company: vacancy.company?.name || "شرکت نامشخص",
-          date: vacancy.created_at ? new Date(vacancy.created_at).toLocaleDateString("fa-IR") : new Date().toLocaleDateString("fa-IR"),
+          date: vacancy.created_at
+            ? new Date(vacancy.created_at).toLocaleDateString("fa-IR")
+            : new Date().toLocaleDateString("fa-IR"),
           applicants: vacancy.applicants_count || 0,
           status: vacancy.status || "active",
           // Keep original API data for editing
-          ...vacancy
+          ...vacancy,
         }));
         setVacancies(mappedVacancies);
       } else {
@@ -90,7 +92,7 @@ function VacanciesContent() {
           setVacancies(sampleJobs);
           localStorage.setItem("employerJobs", JSON.stringify(sampleJobs));
         }
-        
+
         // Show error message if API failed
         if (result.error) {
           showErrorMessage(result.error);
@@ -99,19 +101,10 @@ function VacanciesContent() {
     } catch (error) {
       console.error("Error loading vacancies:", error);
       showErrorMessage("خطا در بارگذاری آگهی‌ها");
-      
-      // Fallback to localStorage
-      const savedJobs = localStorage.getItem("employerJobs");
-      if (savedJobs) {
-        setVacancies(JSON.parse(savedJobs));
-      }
+      setVacancies([]);
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const saveJobs = (jobs) => {
-    localStorage.setItem("employerJobs", JSON.stringify(jobs));
   };
 
   const showSuccessMessage = (message) => {
@@ -142,26 +135,11 @@ function VacanciesContent() {
     }, 4000);
   };
 
-  const handleSubmit = (jobData) => {
-    // Update local state with the new/updated job data
-    if (editingJob) {
-      // Update existing job
-      const updatedJobs = vacancies.map((job) =>
-        job.id === editingJob.id ? { ...jobData, id: editingJob.id } : job
-      );
-      setVacancies(updatedJobs);
-      saveJobs(updatedJobs);
-    } else {
-      // Add new job
-      const updatedJobs = [...vacancies, jobData];
-      setVacancies(updatedJobs);
-      saveJobs(updatedJobs);
-    }
-
+  const handleJobSubmit = (jobData) => {
     // Close form
     setShowCreateForm(false);
     setEditingJob(null);
-    
+
     // Reload jobs from API to get the latest data
     loadJobs();
   };
@@ -175,13 +153,11 @@ function VacanciesContent() {
     if (window.confirm("آیا از حذف این آگهی اطمینان دارید؟")) {
       try {
         const result = await deleteVacancy(jobId);
-        
+
         if (result.success) {
-          // Remove from local state
-          const updatedJobs = vacancies.filter((job) => job.id !== jobId);
-          setVacancies(updatedJobs);
-          saveJobs(updatedJobs);
           showSuccessMessage(result.message || "آگهی با موفقیت حذف شد!");
+          // Reload jobs from API to get the latest data
+          loadJobs();
         } else {
           showErrorMessage(result.error || "خطا در حذف آگهی");
         }
@@ -236,9 +212,21 @@ function VacanciesContent() {
         <div className="flex flex-wrap gap-2 sm:gap-3">
           {[
             { key: "all", label: "همه", count: vacancies.length },
-            { key: "active", label: "فعال", count: vacancies.filter(j => j.status === "active").length },
-            { key: "draft", label: "پیش‌نویس", count: vacancies.filter(j => j.status === "draft").length },
-            { key: "expired", label: "منقضی", count: vacancies.filter(j => j.status === "expired").length },
+            {
+              key: "active",
+              label: "فعال",
+              count: vacancies.filter((j) => j.status === "active").length,
+            },
+            {
+              key: "draft",
+              label: "پیش‌نویس",
+              count: vacancies.filter((j) => j.status === "draft").length,
+            },
+            {
+              key: "expired",
+              label: "منقضی",
+              count: vacancies.filter((j) => j.status === "expired").length,
+            },
           ].map((item) => (
             <button
               key={item.key}
@@ -283,7 +271,7 @@ function VacanciesContent() {
             setEditingJob(null);
           }}
           editingJob={editingJob}
-          onSubmit={handleSubmit}
+          onSubmit={handleJobSubmit}
         />
       )}
 
@@ -298,112 +286,112 @@ function VacanciesContent() {
       {/* Desktop Table */}
       {!isLoading && (
         <div className="hidden md:block overflow-x-auto">
-        <table className="w-full text-right">
-          <thead>
-            <tr className="border-b border-gray-700 text-gray-400 text-sm">
-              <th className="p-3">عنوان آگهی</th>
-              <th className="p-3">تاریخ انتشار</th>
-              <th className="p-3">تعداد کارجویان</th>
-              <th className="p-3">وضعیت</th>
-              <th className="p-3">عملیات</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredVacancies.map((job) => (
-              <tr
-                key={job.id}
-                className="border-b border-black hover:bg-black/50"
-              >
-                <td className="p-3 font-semibold text-white">{job.title}</td>
-                <td className="p-3">{job.date}</td>
-                <td className="p-3">{job.applicants} نفر</td>
-                <td className="p-3">
-                  <span
-                    className={`px-2 py-1 text-xs rounded-full ${
-                      job.status === "active"
-                        ? "bg-green-500/20 text-green-400"
-                        : job.status === "expired"
-                        ? "bg-red-500/20 text-red-400"
-                        : "bg-gray-500/20 text-gray-400"
-                    }`}
-                  >
-                    {job.status === "active"
-                      ? "فعال"
-                      : job.status === "expired"
-                      ? "منقضی"
-                      : "پیش‌نویس"}
-                  </span>
-                </td>
-                <td className="p-3 space-x-4">
-                  <button
-                    onClick={() => handleEditJob(job)}
-                    className="text-gray-400 hover:text-yellow-400 transition-colors text-sm"
-                  >
-                    ویرایش
-                  </button>
-                  <button
-                    onClick={() => handleDeleteJob(job.id)}
-                    className="text-gray-400 hover:text-red-400 transition-colors text-sm"
-                  >
-                    حذف
-                  </button>
-                </td>
+          <table className="w-full text-right">
+            <thead>
+              <tr className="border-b border-gray-700 text-gray-400 text-sm">
+                <th className="p-3">عنوان آگهی</th>
+                <th className="p-3">تاریخ انتشار</th>
+                <th className="p-3">تعداد کارجویان</th>
+                <th className="p-3">وضعیت</th>
+                <th className="p-3">عملیات</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredVacancies.map((job) => (
+                <tr
+                  key={job.id}
+                  className="border-b border-black hover:bg-black/50"
+                >
+                  <td className="p-3 font-semibold text-white">{job.title}</td>
+                  <td className="p-3">{job.date}</td>
+                  <td className="p-3">{job.applicants} نفر</td>
+                  <td className="p-3">
+                    <span
+                      className={`px-2 py-1 text-xs rounded-full ${
+                        job.status === "active"
+                          ? "bg-green-500/20 text-green-400"
+                          : job.status === "expired"
+                          ? "bg-red-500/20 text-red-400"
+                          : "bg-gray-500/20 text-gray-400"
+                      }`}
+                    >
+                      {job.status === "active"
+                        ? "فعال"
+                        : job.status === "expired"
+                        ? "منقضی"
+                        : "پیش‌نویس"}
+                    </span>
+                  </td>
+                  <td className="p-3 space-x-4">
+                    <button
+                      onClick={() => handleEditJob(job)}
+                      className="text-gray-400 hover:text-yellow-400 transition-colors text-sm"
+                    >
+                      ویرایش
+                    </button>
+                    <button
+                      onClick={() => handleDeleteJob(job.id)}
+                      className="text-gray-400 hover:text-red-400 transition-colors text-sm"
+                    >
+                      حذف
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
 
       {/* Mobile Cards */}
       {!isLoading && (
-      <div className="md:hidden space-y-4">
-        {filteredVacancies.map((job) => (
-          <div
-            key={job.id}
-            className="bg-black rounded-lg p-4 border border-gray-700"
-          >
-            <div className="flex justify-between items-start mb-3">
-              <h3 className="font-semibold text-white text-right flex-1">
-                {job.title}
-              </h3>
-              <span
-                className={`px-2 py-1 text-xs rounded-full ml-2 ${
-                  job.status === "active"
-                    ? "bg-green-500/20 text-green-400"
+        <div className="md:hidden space-y-4">
+          {filteredVacancies.map((job) => (
+            <div
+              key={job.id}
+              className="bg-black rounded-lg p-4 border border-gray-700"
+            >
+              <div className="flex justify-between items-start mb-3">
+                <h3 className="font-semibold text-white text-right flex-1">
+                  {job.title}
+                </h3>
+                <span
+                  className={`px-2 py-1 text-xs rounded-full ml-2 ${
+                    job.status === "active"
+                      ? "bg-green-500/20 text-green-400"
+                      : job.status === "expired"
+                      ? "bg-red-500/20 text-red-400"
+                      : "bg-gray-500/20 text-gray-400"
+                  }`}
+                >
+                  {job.status === "active"
+                    ? "فعال"
                     : job.status === "expired"
-                    ? "bg-red-500/20 text-red-400"
-                    : "bg-gray-500/20 text-gray-400"
-                }`}
-              >
-                {job.status === "active"
-                  ? "فعال"
-                  : job.status === "expired"
-                  ? "منقضی"
-                  : "پیش‌نویس"}
-              </span>
+                    ? "منقضی"
+                    : "پیش‌نویس"}
+                </span>
+              </div>
+              <div className="text-gray-400 text-sm space-y-1 text-right">
+                <p>تاریخ انتشار: {job.date}</p>
+                <p>تعداد کارجویان: {job.applicants} نفر</p>
+              </div>
+              <div className="flex justify-end space-x-4 space-x-reverse mt-4">
+                <button
+                  onClick={() => handleEditJob(job)}
+                  className="text-yellow-400 hover:text-yellow-300 transition-colors text-sm"
+                >
+                  ویرایش
+                </button>
+                <button
+                  onClick={() => handleDeleteJob(job.id)}
+                  className="text-red-400 hover:text-red-300 transition-colors text-sm"
+                >
+                  حذف
+                </button>
+              </div>
             </div>
-            <div className="text-gray-400 text-sm space-y-1 text-right">
-              <p>تاریخ انتشار: {job.date}</p>
-              <p>تعداد کارجویان: {job.applicants} نفر</p>
-            </div>
-            <div className="flex justify-end space-x-4 space-x-reverse mt-4">
-              <button
-                onClick={() => handleEditJob(job)}
-                className="text-yellow-400 hover:text-yellow-300 transition-colors text-sm"
-              >
-                ویرایش
-              </button>
-              <button
-                onClick={() => handleDeleteJob(job.id)}
-                className="text-red-400 hover:text-red-300 transition-colors text-sm"
-              >
-                حذف
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
       )}
 
       {/* Empty State */}
@@ -426,10 +414,15 @@ function VacanciesContent() {
             هیچ آگهی‌ای یافت نشد
           </h3>
           <p className="text-gray-500 mb-4">
-            {filter === "all" 
+            {filter === "all"
               ? "هنوز آگهی‌ای ایجاد نکرده‌اید"
-              : `هیچ آگهی ${filter === "active" ? "فعال" : filter === "draft" ? "پیش‌نویس" : "منقضی"}ی وجود ندارد`
-            }
+              : `هیچ آگهی ${
+                  filter === "active"
+                    ? "فعال"
+                    : filter === "draft"
+                    ? "پیش‌نویس"
+                    : "منقضی"
+                }ی وجود ندارد`}
           </p>
           <button
             onClick={() => setShowCreateForm(true)}

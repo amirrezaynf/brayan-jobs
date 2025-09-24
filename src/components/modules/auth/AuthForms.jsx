@@ -69,7 +69,15 @@ export default function AuthForms() {
       const result = await login(loginData.contact, loginData.password);
 
       if (result.success) {
+        // Store token in both formats for compatibility
         localStorage.setItem("authToken", result.token);
+        localStorage.setItem("auth_token", result.token);
+        
+        // Also set cookie for server-side access
+        document.cookie = `auth_token=${result.token}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
+        
+        console.log("✅ Login successful, token stored:", result.token ? `${result.token.substring(0, 10)}...` : "null");
+        
         // Redirect based on user role
         const redirectUrl = result.user.role === 2 ? "/employer" : "/karjoo";
         router.push(redirectUrl);
@@ -95,9 +103,17 @@ export default function AuthForms() {
       );
 
       if (result.success) {
+        // Store token in both formats for compatibility
         localStorage.setItem("authToken", result.token);
+        localStorage.setItem("auth_token", result.token);
+        
+        // Also set cookie for server-side access
+        document.cookie = `auth_token=${result.token}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
+        
+        console.log("✅ Employer login successful, token stored:", result.token ? `${result.token.substring(0, 10)}...` : "null");
+        
         // Redirect based on user role
-        const redirectUrl = result.user.role === 2 ? "/dashboard" : "/karjoo";
+        const redirectUrl = result.user.role === 2 ? "/employer/dashboard" : "/karjoo";
         router.push(redirectUrl);
       } else {
         setEmployerErrors({ general: result.error });

@@ -137,7 +137,17 @@ export default function useRegisterFlow(initialData, role = "specialist") {
 
         if (result.success) {
           setAuthToken(result.token);
+          // Store token in both formats for compatibility
           localStorage.setItem("authToken", result.token);
+          localStorage.setItem("auth_token", result.token);
+          
+          // Also set cookie for server-side access
+          if (typeof document !== 'undefined') {
+            document.cookie = `auth_token=${result.token}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
+          }
+          
+          console.log("✅ Registration successful, token stored:", result.token ? `${result.token.substring(0, 10)}...` : "null");
+          
           setStep((s) => s + 1);
         } else {
           setErrors({ general: result.error });
