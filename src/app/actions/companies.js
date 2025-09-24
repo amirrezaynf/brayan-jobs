@@ -337,37 +337,22 @@ export async function updateCompany(id, companyData) {
     // Map form data to API format
     const mappedData = mapCompanyDataToAPI(cleanData);
 
-    // Add ID to mapped data for update
-    if (id) {
-      mappedData.id = id;
-    }
+    // Don't include ID in the request body for updates
+    // ID should only be in the URL path for update operations
+    console.log("🔍 Server Action: Company ID for operation:", id || "NEW_COMPANY");
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-    // Try PUT first (as per API documentation), then fallback to POST if needed
+    // Use proper endpoint for update (with ID) vs create
     let response;
     try {
-      response = await fetch(`${API_BASE_URL}/companies`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-        body: JSON.stringify(mappedData),
-        signal: controller.signal,
-      });
-
-      console.log("📡 Server Action: PUT response status:", response.status);
-
-      // If PUT fails with method not allowed, try POST as fallback
-      if (response.status === 405) {
-        console.log(
-          "🔄 Server Action: PUT not allowed, trying POST fallback..."
-        );
-        response = await fetch(`${API_BASE_URL}/companies`, {
-          method: "POST",
+      if (id && id !== "undefined" && id !== "null" && id.toString().trim() !== "") {
+        // For updates, use PUT to /companies/{id}
+        console.log("🔄 Server Action: Updating existing company with ID:", id);
+        console.log("🔍 Server Action: ID type:", typeof id, "ID value:", JSON.stringify(id));
+        response = await fetch(`${API_BASE_URL}/companies/${id}`, {
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -376,10 +361,53 @@ export async function updateCompany(id, companyData) {
           body: JSON.stringify(mappedData),
           signal: controller.signal,
         });
-        console.log(
-          "📡 Server Action: POST fallback response status:",
-          response.status
-        );
+        console.log("📡 Server Action: PUT update response status:", response.status);
+
+        // If PUT fails, try different fallbacks
+        if (response.status === 405 || response.status === 422) {
+          console.log("🔄 Server Action: PUT failed, trying PATCH fallback...");
+          response = await fetch(`${API_BASE_URL}/companies/${id}`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+            },
+            body: JSON.stringify(mappedData),
+            signal: controller.signal,
+          });
+          console.log("📡 Server Action: PATCH fallback response status:", response.status);
+        }
+        
+        // If company not found (404), try creating new company instead
+        if (response.status === 404) {
+          console.log("🔄 Server Action: Company not found, trying to create new company...");
+          response = await fetch(`${API_BASE_URL}/companies`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+            },
+            body: JSON.stringify(mappedData),
+            signal: controller.signal,
+          });
+          console.log("📡 Server Action: Create fallback response status:", response.status);
+        }
+      } else {
+        // For creation, use PUT to /companies (as per API docs)
+        console.log("🆕 Server Action: Creating new company");
+        response = await fetch(`${API_BASE_URL}/companies`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+          body: JSON.stringify(mappedData),
+          signal: controller.signal,
+        });
+        console.log("📡 Server Action: PUT create response status:", response.status);
       }
     } catch (fetchError) {
       console.error("❌ Server Action: Fetch error:", fetchError);
@@ -406,10 +434,27 @@ export async function updateCompany(id, companyData) {
 
         if (parsedError.message) {
           errorMessage = parsedError.message;
+          
+          // Handle duplicate email error specifically
+          if (errorMessage.includes("email") && errorMessage.includes("already") || 
+              errorMessage.includes("ایمیل") && errorMessage.includes("استفاده")) {
+            errorMessage = "این ایمیل قبلاً توسط شرکت دیگری استفاده شده است. لطفاً ایمیل دیگری انتخاب کنید.";
+          }
+          
+          // Handle company not found error
+          if (errorMessage.includes("No query results for model") && errorMessage.includes("Company")) {
+            errorMessage = "شرکت مورد نظر یافت نشد. ممکن است حذف شده باشد یا دسترسی لازم را نداشته باشید.";
+          }
         } else if (parsedError.errors) {
           const firstError = Object.values(parsedError.errors)[0];
           if (Array.isArray(firstError)) {
             errorMessage = firstError[0];
+            
+            // Handle duplicate email in validation errors
+            if (errorMessage.includes("email") && errorMessage.includes("taken") ||
+                errorMessage.includes("ایمیل") && errorMessage.includes("استفاده")) {
+              errorMessage = "این ایمیل قبلاً توسط شرکت دیگری استفاده شده است. لطفاً ایمیل دیگری انتخاب کنید.";
+            }
           }
         }
       } catch (parseError) {
@@ -1208,12 +1253,12 @@ function mapCompanyDataToAPI(formData) {
       expert_activity_field_id: mappedActivityField,
     }),
 
-    // Contact info (only if not empty)
-    ...(formData.email && { email: formData.email }),
-    ...(formData.website && { website: formData.website }),
-    ...(formData.mobile && { mobile: formData.mobile }),
-    ...(formData.phone && { phone: formData.phone }),
-    ...(formData.fax && { fax: formData.fax }),
+    // Contact info (only if not empty and valid)
+    ...(formData.email && formData.email.trim() !== "" && { email: formData.email.trim() }),
+    ...(formData.website && formData.website.trim() !== "" && { website: formData.website.trim() }),
+    ...(formData.mobile && formData.mobile.trim() !== "" && { mobile: formData.mobile.trim() }),
+    ...(formData.phone && formData.phone.trim() !== "" && { phone: formData.phone.trim() }),
+    ...(formData.fax && formData.fax.trim() !== "" && { fax: formData.fax.trim() }),
 
     // Social media URLs (only if not empty)
     ...(formData.linkedin && {
