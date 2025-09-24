@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { loadCompanyData } from "@/constants/companyData";
 import VacancyContainer from "@/components/modules/employer/vacancy/VacancyContainer";
 import { getUserVacancies, deleteVacancy } from "@/app/actions/vacancy";
+import APIDebugger from "@/components/debug/APIDebugger";
 
 function VacanciesContent() {
   const searchParams = useSearchParams();
@@ -223,6 +224,11 @@ function VacanciesContent() {
             />
           </svg>
         </div>
+      </div>
+
+      {/* API Debugger - Remove this after testing */}
+      <div className="lg:mr-6">
+        <APIDebugger />
       </div>
 
       {/* Filters and Create Button */}
