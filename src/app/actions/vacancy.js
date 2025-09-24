@@ -61,7 +61,10 @@ async function getHeaders(includeAuth = true) {
 
 // Data mapping functions طبق مستندات API
 function mapFormDataToAPI(formData) {
-  console.log("🔄 Mapping form data to API format:", formData);
+  console.log("🔄 ===== MAPPING FORM DATA TO API =====");
+  console.log("🔄 Raw form data:", formData);
+  console.log("🔄 Form data keys:", Object.keys(formData));
+  console.log("🔄 Form data values:", Object.values(formData));
   
   // Map contract type
   const contractTypeMap = {
@@ -166,41 +169,47 @@ function mapFormDataToAPI(formData) {
     return foundSkills;
   }
 
+  // Validate required fields
+  if (!formData.title || !formData.title.trim()) {
+    throw new Error("عنوان آگهی الزامی است");
+  }
+  if (!formData.description || !formData.description.trim()) {
+    throw new Error("توضیحات آگهی الزامی است");
+  }
+
+  // Create minimal payload first to test basic functionality
   const mappedData = {
-    title: formData.title || "",
-    description: formData.description || "",
-    requirements: formData.requirements || "",
-    responsibilities: formData.responsibilities || formData.description || "",
+    title: formData.title.trim(),
+    description: formData.description.trim(),
+    contract_type: "full-time", // Fixed value for testing
     
-    // Contract and work details
-    contract_type: contractTypeMap[formData.type] || "full-time",
-    salary: parseSalary(formData.salary),
-    location_text: formData.location || "",
-    working_hours: formData.workHours || "۹ صبح تا ۶ عصر",
+    // Only include optional fields if they have valid values
+    ...(formData.requirements?.trim() && { requirements: formData.requirements.trim() }),
+    ...(formData.location?.trim() && { location_text: formData.location.trim() }),
+    ...(formData.salary && parseSalary(formData.salary) && { salary: parseSalary(formData.salary) }),
     
-    // Requirements
-    gender_preference: genderMap[formData.gender] || "both",
-    min_education_level: educationMap[formData.education] || "diploma",
-    experience_level: experienceMap[formData.experience] || "fresh",
-    military_service_status: militaryMap[formData.militaryService] || "not-required",
+    // Safe default values
+    gender_preference: "both",
+    min_education_level: "diploma", 
+    experience_level: "fresh",
+    is_remote_possible: false,
+    is_urgent: false,
     
-    // Benefits and conditions
-    insurance_status: insuranceMap[formData.insurance] || "full",
-    probation_period: formData.probationPeriod || "۳ ماه",
-    benefits: Array.isArray(formData.benefits) ? formData.benefits : [],
-    required_skills: extractSkills(formData.requirements),
-    
-    // Work conditions
-    is_remote_possible: Boolean(formData.remoteWork),
-    travel_required: Boolean(formData.travelRequired),
-    is_urgent: Boolean(formData.urgent),
-    
-    // Default values
-    expert_activity_field_id: 1, // فناوری اطلاعات
-    expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // 30 روز از الان
+    // Date in simple format
+    expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
   };
 
+  console.log("✅ ===== FINAL MAPPED DATA =====");
   console.log("✅ Mapped data:", mappedData);
+  console.log("✅ Data types check:");
+  console.log("  - title:", typeof mappedData.title, mappedData.title);
+  console.log("  - description:", typeof mappedData.description, mappedData.description);
+  console.log("  - contract_type:", typeof mappedData.contract_type, mappedData.contract_type);
+  console.log("  - salary:", typeof mappedData.salary, mappedData.salary);
+  console.log("  - expires_at:", typeof mappedData.expires_at, mappedData.expires_at);
+  console.log("  - is_remote_possible:", typeof mappedData.is_remote_possible, mappedData.is_remote_possible);
+  console.log("  - is_urgent:", typeof mappedData.is_urgent, mappedData.is_urgent);
+  
   return mappedData;
 }
 
@@ -260,6 +269,32 @@ export async function createVacancy(vacancyData, clientToken = null) {
     console.log("📦 Raw vacancy data:", vacancyData);
     console.log("🔑 Client token provided:", clientToken ? `${clientToken.substring(0, 10)}...` : "null");
     
+    // Check if user has a company first
+    console.log("🏢 Checking user company status...");
+    
+    // Try to get company data from localStorage or API
+    let companyData = null;
+    try {
+      if (typeof window !== 'undefined') {
+        const storedCompanyData = localStorage.getItem('companyData');
+        if (storedCompanyData) {
+          companyData = JSON.parse(storedCompanyData);
+          console.log("🏢 Found company data in localStorage:", companyData);
+          console.log("🏢 Company ID:", companyData.id);
+          console.log("🏢 Company Name:", companyData.companyName);
+          
+          // Check if company has ID (means it's saved to server)
+          if (!companyData.id) {
+            console.log("⚠️ Company exists in localStorage but has no ID - might not be saved to server");
+          }
+        } else {
+          console.log("⚠️ No company data found in localStorage");
+        }
+      }
+    } catch (error) {
+      console.log("⚠️ Could not get company data from localStorage:", error);
+    }
+    
     // Map form data to API format
     const mappedData = mapFormDataToAPI(vacancyData);
     console.log("🔄 Mapped data for API:", mappedData);
@@ -300,6 +335,28 @@ export async function createVacancy(vacancyData, clientToken = null) {
     console.log("🔑 Final headers:", headers);
     console.log("🌐 API URL:", API_BASE_URL);
     
+    // Test: Try to get user's company first
+    console.log("🧪 Testing: Getting user's company info...");
+    try {
+      const testResponse = await fetch(`https://imocc.iracode.com/api/v1/companies`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          Accept: "application/json",
+        },
+      });
+      console.log("🧪 Company test response:", testResponse.status);
+      if (testResponse.ok) {
+        const companyData = await testResponse.json();
+        console.log("🧪 User's company data:", companyData);
+      } else {
+        const errorText = await testResponse.text();
+        console.log("🧪 Company test error:", errorText);
+      }
+    } catch (testError) {
+      console.log("🧪 Company test failed:", testError);
+    }
+    
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
 
@@ -322,15 +379,43 @@ export async function createVacancy(vacancyData, clientToken = null) {
 
     if (!response.ok) {
       let errorData = {};
+      let errorMessage = `خطای سرور: ${response.status}`;
+      
       try {
         const responseText = await response.text();
         console.log("❌ Raw error response:", responseText);
+        console.log("❌ Response status:", response.status);
+        console.log("❌ Response headers:", Object.fromEntries(response.headers.entries()));
+        
         errorData = JSON.parse(responseText);
         console.log("❌ Parsed error data:", errorData);
+        
+        // Extract detailed error information
+        if (errorData.message) {
+          errorMessage = errorData.message;
+        } else if (errorData.errors) {
+          // Handle Laravel validation errors
+          const validationErrors = Object.values(errorData.errors).flat();
+          errorMessage = validationErrors.join(', ');
+          console.log("❌ Validation errors:", validationErrors);
+        } else if (errorData.error) {
+          errorMessage = errorData.error;
+          
+          // Handle specific company-related errors
+          if (errorMessage.includes('شرکتی متصل نیست') || errorMessage.includes('company')) {
+            errorMessage = "❌ مشکل در ارتباط با شرکت!\n\n🔍 احتمالات:\n1️⃣ شرکت در localStorage هست اما در سرور ثبت نشده\n2️⃣ شرکت ثبت شده اما تأیید نشده\n3️⃣ مشکل در ارتباط کاربر با شرکت\n\n💡 راه حل:\n- به بخش 'پروفایل شرکت' بروید\n- دوباره اطلاعات را ذخیره کنید\n- مطمئن شوید که پیام موفقیت نمایش داده شود";
+          }
+        }
+        
+        // Log the mapped data that was sent for debugging
+        console.log("❌ Data that was sent to API:", JSON.stringify(mappedData, null, 2));
+        
       } catch (parseError) {
         console.log("❌ Could not parse error response:", parseError);
+        errorMessage = `خطای سرور: ${response.status} - ${response.statusText}`;
       }
-      throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+      
+      throw new Error(errorMessage);
     }
 
     const result = await response.json();
