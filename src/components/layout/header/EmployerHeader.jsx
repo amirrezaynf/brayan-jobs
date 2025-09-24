@@ -112,7 +112,8 @@ export default function EmployerHeader({
               onClick={() => {
                 // Navigate to vacancies page and trigger form
                 if (typeof window !== "undefined") {
-                  window.location.href = "/employer/dashboard/vacancies?create=true";
+                  window.location.href =
+                    "/employer/dashboard/vacancies?create=true";
                 }
               }}
               className="hidden sm:flex bg-yellow-400 text-gray-900 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg hover:bg-yellow-300 transition duration-300 font-bold items-center text-xs sm:text-sm lg:text-base"

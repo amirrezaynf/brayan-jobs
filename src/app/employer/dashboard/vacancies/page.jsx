@@ -4,7 +4,8 @@ import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { loadCompanyData } from "@/constants/companyData";
 import VacancyContainer from "@/components/modules/employer/vacancy/VacancyContainer";
-import { getUserVacancies, deleteVacancy } from "@/app/actions/vacancy";
+import { getUserActiveVacancies, deleteVacancy } from "@/app/actions/vacancy";
+import APIDebugger from "@/components/debug/APIDebugger";
 
 function VacanciesContent() {
   const searchParams = useSearchParams();
@@ -14,10 +15,10 @@ function VacanciesContent() {
   const [editingJob, setEditingJob] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Load jobs from localStorage on component mount
+  // Load jobs from API on component mount and when filter changes
   useEffect(() => {
     loadJobs();
-  }, []);
+  }, [filter]);
 
   // Check URL parameter to open create form
   useEffect(() => {
@@ -38,7 +39,7 @@ function VacanciesContent() {
   const loadJobs = async () => {
     setIsLoading(true);
     try {
-      const result = await getUserVacancies();
+      const result = await getUserActiveVacancies();
 
       if (result.success) {
         // Map API data to component format
@@ -100,19 +101,10 @@ function VacanciesContent() {
     } catch (error) {
       console.error("Error loading vacancies:", error);
       showErrorMessage("خطا در بارگذاری آگهی‌ها");
-
-      // Fallback to localStorage
-      const savedJobs = localStorage.getItem("employerJobs");
-      if (savedJobs) {
-        setVacancies(JSON.parse(savedJobs));
-      }
+      setVacancies([]);
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const saveJobs = (jobs) => {
-    localStorage.setItem("employerJobs", JSON.stringify(jobs));
   };
 
   const showSuccessMessage = (message) => {
@@ -143,22 +135,7 @@ function VacanciesContent() {
     }, 4000);
   };
 
-  const handleSubmit = (jobData) => {
-    // Update local state with the new/updated job data
-    if (editingJob) {
-      // Update existing job
-      const updatedJobs = vacancies.map((job) =>
-        job.id === editingJob.id ? { ...jobData, id: editingJob.id } : job
-      );
-      setVacancies(updatedJobs);
-      saveJobs(updatedJobs);
-    } else {
-      // Add new job
-      const updatedJobs = [...vacancies, jobData];
-      setVacancies(updatedJobs);
-      saveJobs(updatedJobs);
-    }
-
+  const handleJobSubmit = (jobData) => {
     // Close form
     setShowCreateForm(false);
     setEditingJob(null);
@@ -178,11 +155,9 @@ function VacanciesContent() {
         const result = await deleteVacancy(jobId);
 
         if (result.success) {
-          // Remove from local state
-          const updatedJobs = vacancies.filter((job) => job.id !== jobId);
-          setVacancies(updatedJobs);
-          saveJobs(updatedJobs);
           showSuccessMessage(result.message || "آگهی با موفقیت حذف شد!");
+          // Reload jobs from API to get the latest data
+          loadJobs();
         } else {
           showErrorMessage(result.error || "خطا در حذف آگهی");
         }
@@ -225,6 +200,11 @@ function VacanciesContent() {
             />
           </svg>
         </div>
+      </div>
+
+      {/* API Debugger - Remove this after testing */}
+      <div className="lg:mr-6">
+        <APIDebugger />
       </div>
 
       {/* Filters and Create Button */}
@@ -291,7 +271,7 @@ function VacanciesContent() {
             setEditingJob(null);
           }}
           editingJob={editingJob}
-          onSubmit={handleSubmit}
+          onSubmit={handleJobSubmit}
         />
       )}
 
@@ -458,14 +438,7 @@ function VacanciesContent() {
 
 export default function VacanciesPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="flex justify-center items-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-400"></div>
-          <span className="mr-3 text-gray-400">در حال بارگذاری...</span>
-        </div>
-      }
-    >
+    <Suspense fallback={<div>Loading...</div>}>
       <VacanciesContent />
     </Suspense>
   );
