@@ -357,6 +357,7 @@ export default function ProfilePage() {
 
       // Try API first
       let apiResult;
+
       try {
         if (companyId) {
           apiResult = await updateCompany(companyId, dataWithToken);
