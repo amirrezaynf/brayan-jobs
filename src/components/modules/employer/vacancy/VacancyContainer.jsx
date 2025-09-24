@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import VacancyBasicInfo from "./VacancyBasicInfo";
 import VacancyDescription from "./VacancyDescription";
 import VacancyRequirements from "./VacancyRequirements";
@@ -10,6 +11,8 @@ import { loadCompanyData } from "@/constants/companyData";
 import { createVacancyClient, updateVacancyClient } from "@/utils/vacancyAPI";
 
 export default function VacancyContainer({ onClose, editingJob, onSubmit }) {
+  const router = useRouter();
+  
   // State برای مدیریت خطاهای validation
   const [errors, setErrors] = useState({});
   
@@ -240,6 +243,12 @@ export default function VacancyContainer({ onClose, editingJob, onSubmit }) {
         salaryValue = salaryInfo.salaryAmount.trim();
       }
 
+      // Get company data for API
+      const companyData = loadCompanyData();
+      
+      // Get auth token from localStorage for server action
+      const authToken = localStorage.getItem("authToken") || localStorage.getItem("auth_token");
+      
       // Combine all data
       const jobData = {
         ...basicInfo,
@@ -249,6 +258,10 @@ export default function VacancyContainer({ onClose, editingJob, onSubmit }) {
         ...jobRequirements,
         benefits: benefits.filter((benefit) => benefit.trim() !== ""), // فیلتر کردن مزایای خالی
         ...workConditions,
+        // Add company_id for API
+        company_id: companyData.id || 1, // Use company ID from localStorage or default
+        // Pass auth token to server action
+        _authToken: authToken,
       };
 
       console.log("📦 Job data to submit:", jobData);
@@ -286,6 +299,13 @@ export default function VacancyContainer({ onClose, editingJob, onSubmit }) {
         
         // Close form after successful submission
         onClose();
+        
+        // Redirect to job advertisements page after successful creation
+        if (!editingJob) {
+          setTimeout(() => {
+            router.push("/advertisements");
+          }, 2000); // Wait 2 seconds to show success message
+        }
       } else {
         console.error("❌ Submission failed:", result.error);
         // Show error message

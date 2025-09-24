@@ -12,7 +12,6 @@ export async function testServerAction() {
   );
   console.log("🧪 Server Action: Current time:", new Date().toISOString());
 
-
   try {
     const result = {
       success: true,
@@ -168,7 +167,7 @@ export async function createCompany(companyData) {
     const timeoutId = setTimeout(() => controller.abort(), 15000);
 
     const url = `${API_BASE_URL}/companies`;
-    console.log("📡 Server Action: Making POST request to:", url);
+    console.log("📡 Server Action: Making PUT request to:", url);
     console.log("📡 Server Action: Request headers:", {
       "Content-Type": "application/json",
       Authorization: `Bearer ${
@@ -185,7 +184,7 @@ export async function createCompany(companyData) {
     try {
       console.log("🚀 Server Action: Starting fetch request...");
       console.log("🚀 Server Action: Fetch URL:", url);
-      console.log("🚀 Server Action: Fetch method: POST");
+      console.log("🚀 Server Action: Fetch method: PUT");
       console.log("🚀 Server Action: Fetch headers:", {
         "Content-Type": "application/json",
         Authorization: `Bearer ${
@@ -200,7 +199,7 @@ export async function createCompany(companyData) {
       );
 
       response = await fetch(url, {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -311,6 +310,8 @@ export async function createCompany(companyData) {
  * @returns {Promise<Object>} API response
  */
 export async function updateCompany(id, companyData) {
+  console.log("LOG TEST");
+
   try {
     // Try to get token from data first (client-side passed token)
     let token = companyData?._token || null;
@@ -336,24 +337,82 @@ export async function updateCompany(id, companyData) {
     // Map form data to API format
     const mappedData = mapCompanyDataToAPI(cleanData);
 
-    // Add ID to mapped data for update
-    if (id) {
-      mappedData.id = id;
-    }
+    // Don't include ID in the request body for updates
+    // ID should only be in the URL path for update operations
+    console.log("🔍 Server Action: Company ID for operation:", id || "NEW_COMPANY");
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-    const response = await fetch(`${API_BASE_URL}/companies`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-      body: JSON.stringify(mappedData),
-      signal: controller.signal,
-    });
+    // Use proper endpoint for update (with ID) vs create
+    let response;
+    try {
+      if (id && id !== "undefined" && id !== "null" && id.toString().trim() !== "") {
+        // For updates, use PUT to /companies/{id}
+        console.log("🔄 Server Action: Updating existing company with ID:", id);
+        console.log("🔍 Server Action: ID type:", typeof id, "ID value:", JSON.stringify(id));
+        response = await fetch(`${API_BASE_URL}/companies/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+          body: JSON.stringify(mappedData),
+          signal: controller.signal,
+        });
+        console.log("📡 Server Action: PUT update response status:", response.status);
+
+        // If PUT fails, try different fallbacks
+        if (response.status === 405 || response.status === 422) {
+          console.log("🔄 Server Action: PUT failed, trying PATCH fallback...");
+          response = await fetch(`${API_BASE_URL}/companies/${id}`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+            },
+            body: JSON.stringify(mappedData),
+            signal: controller.signal,
+          });
+          console.log("📡 Server Action: PATCH fallback response status:", response.status);
+        }
+        
+        // If company not found (404), try creating new company instead
+        if (response.status === 404) {
+          console.log("🔄 Server Action: Company not found, trying to create new company...");
+          response = await fetch(`${API_BASE_URL}/companies`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+            },
+            body: JSON.stringify(mappedData),
+            signal: controller.signal,
+          });
+          console.log("📡 Server Action: Create fallback response status:", response.status);
+        }
+      } else {
+        // For creation, use PUT to /companies (as per API docs)
+        console.log("🆕 Server Action: Creating new company");
+        response = await fetch(`${API_BASE_URL}/companies`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+          body: JSON.stringify(mappedData),
+          signal: controller.signal,
+        });
+        console.log("📡 Server Action: PUT create response status:", response.status);
+      }
+    } catch (fetchError) {
+      console.error("❌ Server Action: Fetch error:", fetchError);
+      throw fetchError;
+    }
 
     clearTimeout(timeoutId);
 
@@ -375,10 +434,27 @@ export async function updateCompany(id, companyData) {
 
         if (parsedError.message) {
           errorMessage = parsedError.message;
+          
+          // Handle duplicate email error specifically
+          if (errorMessage.includes("email") && errorMessage.includes("already") || 
+              errorMessage.includes("ایمیل") && errorMessage.includes("استفاده")) {
+            errorMessage = "این ایمیل قبلاً توسط شرکت دیگری استفاده شده است. لطفاً ایمیل دیگری انتخاب کنید.";
+          }
+          
+          // Handle company not found error
+          if (errorMessage.includes("No query results for model") && errorMessage.includes("Company")) {
+            errorMessage = "شرکت مورد نظر یافت نشد. ممکن است حذف شده باشد یا دسترسی لازم را نداشته باشید.";
+          }
         } else if (parsedError.errors) {
           const firstError = Object.values(parsedError.errors)[0];
           if (Array.isArray(firstError)) {
             errorMessage = firstError[0];
+            
+            // Handle duplicate email in validation errors
+            if (errorMessage.includes("email") && errorMessage.includes("taken") ||
+                errorMessage.includes("ایمیل") && errorMessage.includes("استفاده")) {
+              errorMessage = "این ایمیل قبلاً توسط شرکت دیگری استفاده شده است. لطفاً ایمیل دیگری انتخاب کنید.";
+            }
           }
         }
       } catch (parseError) {
@@ -1134,28 +1210,55 @@ function mapAPIDataToForm(apiData) {
  * @returns {Object} Mapped data for API
  */
 function mapCompanyDataToAPI(formData) {
-  console.log("🔄 Server Action: Mapping form data to API format:", formData);
+  console.log("🔄 ===== MAPPING FORM DATA TO API =====");
+  console.log("🔄 Server Action: Input form data:", formData);
   console.log(
     "🔄 Server Action: Available form fields:",
     Object.keys(formData)
   );
 
-  // Simple mapping with only essential fields to avoid validation errors
+  // Map company size using proper function
+  console.log("📏 Server Action: Mapping company size...");
+  console.log("📏 Server Action: Raw size from form:", formData.companySize);
+  const mappedSize = mapFormSizeToAPI(formData.companySize);
+  console.log("📏 Server Action: Mapped size:", mappedSize);
+
+  // Map company type using proper function
+  console.log("🏢 Server Action: Mapping company type...");
+  console.log("🏢 Server Action: Raw type from form:", formData.companyType);
+  const mappedType = mapCompanyTypeToAPI(formData.companyType);
+  console.log("🏢 Server Action: Mapped type:", mappedType);
+
+  // TEMPORARILY DISABLE activity field mapping to prevent validation errors
+  console.log("🏭 Server Action: Skipping industry to activity field mapping to prevent API validation errors");
+  console.log("🏭 Server Action: expert_activity_field_id will NOT be included in API request");
+  const mappedActivityField = null; // Force to null to skip this field entirely
+
+  // Build the mapped data with proper transformations
   const mappedData = {
     name: formData.companyName || "شرکت نمونه",
     name_en: formData.companyNameEn || "Sample Company",
-    display_name: formData.companyName || "شرکت نمونه",
+    display_name: formData.displayName || formData.companyName || "شرکت نمونه",
+    code: formData.companyCode || "",
     introduction: formData.description || "توضیحات شرکت",
-    founded_year: parseInt(formData.establishedYear) || 2020,
-    size: 1, // Default small company (1-10 people)
-    type: "سهامی خاص", // Default type
-    expert_activity_field_id: 1, // Default IT field
+    founded_year:
+      parseInt(formData.establishedYear) || new Date().getFullYear(),
+    size: mappedSize,
+    type: mappedType,
 
-    // Contact info (only if not empty)
-    ...(formData.email && { email: formData.email }),
-    ...(formData.website && { website: formData.website }),
-    ...(formData.mobile && { mobile: formData.mobile }),
-    ...(formData.phone && { phone: formData.phone }),
+    // Only include activity field if we have a valid mapping and it's a valid number
+    ...(mappedActivityField && 
+        typeof mappedActivityField === 'number' && 
+        mappedActivityField > 0 && {
+      expert_activity_field_id: mappedActivityField,
+    }),
+
+    // Contact info (only if not empty and valid)
+    ...(formData.email && formData.email.trim() !== "" && { email: formData.email.trim() }),
+    ...(formData.website && formData.website.trim() !== "" && { website: formData.website.trim() }),
+    ...(formData.mobile && formData.mobile.trim() !== "" && { mobile: formData.mobile.trim() }),
+    ...(formData.phone && formData.phone.trim() !== "" && { phone: formData.phone.trim() }),
+    ...(formData.fax && formData.fax.trim() !== "" && { fax: formData.fax.trim() }),
 
     // Social media URLs (only if not empty)
     ...(formData.linkedin && {
@@ -1175,6 +1278,10 @@ function mapCompanyDataToAPI(formData) {
       work_environment: formData.workEnvironment,
     }),
 
+    // Location data (only if provided)
+    ...(formData.address && { address: formData.address }),
+    ...(formData.postalCode && { postal_code: formData.postalCode }),
+
     // Convert arrays to proper format (only if not empty)
     ...(Array.isArray(formData.services) &&
       formData.services.length > 0 && { services: formData.services }),
@@ -1186,7 +1293,26 @@ function mapCompanyDataToAPI(formData) {
       formData.benefits.length > 0 && { benefits: formData.benefits }),
   };
 
-  console.log("🔄 Server Action: Mapped API data:", mappedData);
+  console.log("✅ ===== MAPPING COMPLETED =====");
+  console.log("✅ Server Action: Final mapped API data:", mappedData);
+  console.log("✅ Server Action: Mapping summary:", {
+    name: mappedData.name,
+    size: mappedData.size,
+    type: mappedData.type,
+    expert_activity_field_id: "EXCLUDED_TO_PREVENT_VALIDATION_ERROR",
+    hasContactInfo: !!(mappedData.email || mappedData.mobile),
+    hasSocialMedia: !!(
+      mappedData.linkedin_url ||
+      mappedData.instagram_url ||
+      mappedData.telegram_url
+    ),
+    hasArrays: !!(
+      mappedData.services ||
+      mappedData.technical_specialties ||
+      mappedData.benefits
+    ),
+  });
+
   return mappedData;
 }
 
@@ -1313,17 +1439,62 @@ function mapCompanyTypeToAPI(type) {
  * Map industry type to activity field ID
  */
 function mapIndustryToActivityField(industry) {
+  console.log("🏭 Mapping industry to activity field:", industry);
+  console.log("🏭 Industry type:", typeof industry);
+  console.log("🏭 Industry value (JSON):", JSON.stringify(industry));
+
+  if (
+    !industry ||
+    industry === "" ||
+    industry === null ||
+    industry === undefined
+  ) {
+    console.log("🏭 No industry provided, returning null");
+    return null;
+  }
+
+  // Handle if industry is an object (sometimes form data comes as objects)
+  let industryValue = industry;
+  if (typeof industry === 'object' && industry !== null) {
+    industryValue = industry.value || industry.label || industry.id || industry;
+    console.log("🏭 Extracted industry value from object:", industryValue);
+  }
+
+  // Enhanced mapping with both English and Persian keys
+  // Based on API documentation, only these IDs are valid:
   const industryMap = {
-    technology: 1,
-    manufacturing: 2,
-    service: 3,
-    finance: 4,
-    healthcare: 5,
-    education: 6,
-    retail: 7,
-    construction: 8,
+    // English keys - Only map to confirmed valid IDs
+    technology: 9, // فناوری اطلاعات
+    "information-technology": 9,
+    it: 9,
+    finance: 10, // بانکداری و مالی
+    banking: 10,
+    "banking-finance": 10,
+    
+    // Persian keys - Only map to confirmed valid IDs
+    "فناوری اطلاعات": 9,
+    فناوری: 9,
+    آی‌تی: 9,
+    "بانکداری و مالی": 10,
+    بانکداری: 10,
+    مالی: 10,
+    
+    // Remove other mappings that might have invalid IDs
+    // Only keep the ones we know are valid from API docs
   };
-  return industryMap[industry] || 1;
+
+  const result = industryMap[industryValue];
+  console.log("🏭 Looking up industry value:", industryValue);
+  console.log("🏭 Available industry keys:", Object.keys(industryMap));
+  console.log("🏭 Mapped result:", result);
+
+  if (!result) {
+    console.log("🏭 ⚠️  Industry not found in mapping, returning null to skip field");
+    console.log("🏭 ⚠️  This will prevent the expert_activity_field_id from being sent to API");
+  }
+
+  // Return null for unknown industries instead of default
+  return result || null;
 }
 
 /**

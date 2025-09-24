@@ -2,56 +2,72 @@
 
 import { cookies } from "next/headers";
 
-// API Configuration
+// API Configuration - Updated to match the provided API documentation
 const API_BASE_URL = "https://imocc.iracode.com/api/v1/job-advertisements";
 
-// Helper function to get auth token
-async function getAuthToken() {
-  try {
-    console.log("🔑 Getting auth token...");
-    
-    // Try to get from cookies first (server-side)
+// Fallback API URL for development/testing
+const FALLBACK_API_URL = "https://api.iracode.com/api/v1/job-advertisements";
+
+// Helper function to get auth token (enhanced version)
+function getAuthToken(clientToken = null) {
+  console.log("🔐 Server Action: Getting auth token...");
+
+  // If token is passed from client, use it first
+  if (clientToken) {
+    console.log(
+      "🔐 Server Action: Using token from client:",
+      clientToken ? `${clientToken.substring(0, 20)}...` : "null"
+    );
+    return clientToken;
+  }
+
+  // Check if we're in server environment
+  if (typeof window === "undefined") {
+    // Server-side: get from cookies
     try {
       const cookieStore = cookies();
-      const authToken = cookieStore.get("auth_token")?.value;
-      console.log("🔑 Token from cookies:", authToken ? `${authToken.substring(0, 10)}...` : "null");
-      if (authToken) return authToken;
-    } catch (cookieError) {
-      console.log("⚠️ Could not access cookies (might be client-side):", cookieError.message);
+      // Check both possible cookie names
+      let token =
+        cookieStore.get("auth_token")?.value ||
+        cookieStore.get("authToken")?.value;
+      console.log(
+        "🔐 Server Action: Token from cookies:",
+        token ? `${token.substring(0, 20)}...` : "null"
+      );
+      return token;
+    } catch (error) {
+      console.error("🔐 Server Action: Error accessing cookies:", error);
+      return null;
     }
-    
-    // Fallback to localStorage (client-side) - but this won't work in server actions
-    if (typeof window !== 'undefined') {
-      console.log("🔑 Trying localStorage...");
-      const localToken = localStorage.getItem("auth_token");
-      console.log("🔑 Token from localStorage:", localToken ? `${localToken.substring(0, 10)}...` : "null");
-      return localToken;
-    }
-    
-    console.log("⚠️ No token found in any storage");
-    return null;
-  } catch (error) {
-    console.error("❌ Error getting auth token:", error);
-    return null;
+  } else {
+    console.log(
+      "🔐 Server Action: Client environment detected, checking localStorage"
+    );
+    // Client-side: get from localStorage (check both possible names)
+    let token =
+      localStorage.getItem("authToken") || localStorage.getItem("auth_token");
+    console.log(
+      "🔐 Server Action: Token from localStorage:",
+      token ? `${token.substring(0, 20)}...` : "null"
+    );
+    return token;
   }
 }
 
 // Helper function for headers
-async function getHeaders(includeAuth = true) {
-  console.log("🔧 Building headers, includeAuth:", includeAuth);
-  
+function getHeaders(includeAuth = true, clientToken = null) {
   const headers = {
     "Content-Type": "application/json",
     Accept: "application/json",
   };
 
   if (includeAuth) {
-    const token = await getAuthToken();
+    const token = getAuthToken(clientToken);
     if (token) {
       headers.Authorization = `Bearer ${token}`;
-      console.log("🔑 Authorization header added");
+      console.log("🔑 Server Action: Authorization header added");
     } else {
-      console.log("⚠️ No auth token found");
+      console.log("❌ Server Action: No token available for authorization");
     }
   }
 
@@ -59,304 +75,127 @@ async function getHeaders(includeAuth = true) {
   return headers;
 }
 
-// Data mapping functions طبق مستندات API
-function mapFormDataToAPI(formData) {
-  console.log("🔄 Mapping form data to API format:", formData);
-  
-  // Map contract type
-  const contractTypeMap = {
-    "full-time": "full-time",
-    "part-time": "part-time", 
-    "contract": "contract",
-    "internship": "internship",
-    "freelance": "freelance",
-    "تمام وقت": "full-time",
-    "پاره وقت": "part-time",
-    "قراردادی": "contract", 
-    "کارآموزی": "internship",
-    "فریلنسر": "freelance"
-  };
-
-  // Map experience level
-  const experienceMap = {
-    "fresh": "fresh",
-    "1-2": "1-2",
-    "2-5": "2-5", 
-    "5+": "5+",
-    "بدون تجربه": "fresh",
-    "۱-۲ سال": "1-2",
-    "۲-۵ سال": "2-5",
-    "بیش از ۵ سال": "5+"
-  };
-
-  // Map education level
-  const educationMap = {
-    "diploma": "diploma",
-    "associate": "associate",
-    "bachelor": "bachelor", 
-    "master": "master",
-    "phd": "phd",
-    "دیپلم": "diploma",
-    "کاردانی": "associate",
-    "کارشناسی": "bachelor",
-    "کارشناسی ارشد": "master",
-    "دکتری": "phd"
-  };
-
-  // Map military service
-  const militaryMap = {
-    "completed": "completed",
-    "exempt": "exempt",
-    "not-required": "not-required",
-    "پایان خدمت": "completed",
-    "معافیت": "exempt", 
-    "مشمول نمی‌شود": "not-required"
-  };
-
-  // Map insurance
-  const insuranceMap = {
-    "full": "full",
-    "basic": "basic",
-    "none": "none",
-    "کامل": "full",
-    "پایه": "basic",
-    "بدون بیمه": "none"
-  };
-
-  // Map gender
-  const genderMap = {
-    "both": "both",
-    "male": "male", 
-    "female": "female",
-    "مرد و زن": "both",
-    "مرد": "male",
-    "زن": "female"
-  };
-
-  // Parse salary
-  function parseSalary(salaryStr) {
-    if (!salaryStr || salaryStr === "توافقی") {
-      return null;
-    }
-    
-    // Remove commas and convert to number
-    const numericValue = salaryStr.replace(/[,،]/g, "");
-    const parsed = parseInt(numericValue);
-    return isNaN(parsed) ? null : parsed;
-  }
-
-  // Extract skills from requirements text
-  function extractSkills(requirementsText) {
-    if (!requirementsText) return [];
-    
-    const skillKeywords = [
-      "React", "JavaScript", "TypeScript", "Node.js", "Python", "Java", 
-      "PHP", "Laravel", "Vue.js", "Angular", "CSS", "HTML", "SQL",
-      "MongoDB", "PostgreSQL", "MySQL", "Git", "Docker", "Kubernetes",
-      "AWS", "Azure", "Linux", "Windows", "MacOS", "Figma", "Photoshop"
-    ];
-    
-    const foundSkills = [];
-    skillKeywords.forEach(skill => {
-      if (requirementsText.includes(skill)) {
-        foundSkills.push(skill);
-      }
-    });
-    
-    return foundSkills;
-  }
-
-  const mappedData = {
-    title: formData.title || "",
-    description: formData.description || "",
-    requirements: formData.requirements || "",
-    responsibilities: formData.responsibilities || formData.description || "",
-    
-    // Contract and work details
-    contract_type: contractTypeMap[formData.type] || "full-time",
-    salary: parseSalary(formData.salary),
-    location_text: formData.location || "",
-    working_hours: formData.workHours || "۹ صبح تا ۶ عصر",
-    
-    // Requirements
-    gender_preference: genderMap[formData.gender] || "both",
-    min_education_level: educationMap[formData.education] || "diploma",
-    experience_level: experienceMap[formData.experience] || "fresh",
-    military_service_status: militaryMap[formData.militaryService] || "not-required",
-    
-    // Benefits and conditions
-    insurance_status: insuranceMap[formData.insurance] || "full",
-    probation_period: formData.probationPeriod || "۳ ماه",
-    benefits: Array.isArray(formData.benefits) ? formData.benefits : [],
-    required_skills: extractSkills(formData.requirements),
-    
-    // Work conditions
-    is_remote_possible: Boolean(formData.remoteWork),
-    travel_required: Boolean(formData.travelRequired),
-    is_urgent: Boolean(formData.urgent),
-    
-    // Default values
-    expert_activity_field_id: 1, // فناوری اطلاعات
-    expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // 30 روز از الان
-  };
-
-  console.log("✅ Mapped data:", mappedData);
-  return mappedData;
-}
-
-// Fallback functions for localStorage
-function saveVacancyToLocalStorage(vacancy) {
+// Create new vacancy with enhanced error handling
+export async function createVacancy(vacancyData) {
   try {
-    const existingVacancies = JSON.parse(localStorage.getItem("userVacancies") || "[]");
-    const updatedVacancies = [...existingVacancies, { ...vacancy, id: Date.now() }];
-    localStorage.setItem("userVacancies", JSON.stringify(updatedVacancies));
-    return { success: true, data: vacancy };
-  } catch (error) {
-    console.error("Error saving to localStorage:", error);
-    return { success: false, error: "خطا در ذخیره محلی" };
-  }
-}
+    console.log("🚀 Creating vacancy with data:", vacancyData);
 
-function updateVacancyInLocalStorage(id, vacancy) {
-  try {
-    const existingVacancies = JSON.parse(localStorage.getItem("userVacancies") || "[]");
-    const updatedVacancies = existingVacancies.map(v => 
-      v.id === id ? { ...vacancy, id } : v
-    );
-    localStorage.setItem("userVacancies", JSON.stringify(updatedVacancies));
-    return { success: true, data: vacancy };
-  } catch (error) {
-    console.error("Error updating localStorage:", error);
-    return { success: false, error: "خطا در به‌روزرسانی محلی" };
-  }
-}
+    // Extract auth token from form data
+    const clientToken = vacancyData._authToken;
+    console.log("🔑 Client token received:", clientToken ? "Yes" : "No");
 
-function deleteVacancyFromLocalStorage(id) {
-  try {
-    const existingVacancies = JSON.parse(localStorage.getItem("userVacancies") || "[]");
-    const updatedVacancies = existingVacancies.filter(v => v.id !== id);
-    localStorage.setItem("userVacancies", JSON.stringify(updatedVacancies));
-    return { success: true };
-  } catch (error) {
-    console.error("Error deleting from localStorage:", error);
-    return { success: false, error: "خطا در حذف محلی" };
-  }
-}
+    // Transform form data to API format (remove _authToken from API data)
+    const { _authToken, ...formDataWithoutToken } = vacancyData;
+    const apiData = transformFormDataToAPI(formDataWithoutToken);
+    console.log("📝 Transformed API data:", apiData);
 
-function getVacanciesFromLocalStorage() {
-  try {
-    const vacancies = JSON.parse(localStorage.getItem("userVacancies") || "[]");
-    return { success: true, data: vacancies };
-  } catch (error) {
-    console.error("Error reading from localStorage:", error);
-    return { success: false, data: [], error: "خطا در خواندن داده‌های محلی" };
-  }
-}
-
-// Create new vacancy - with client token parameter
-export async function createVacancy(vacancyData, clientToken = null) {
-  try {
-    console.log("🚀 ===== CREATE VACANCY SERVER ACTION =====");
-    console.log("📦 Raw vacancy data:", vacancyData);
-    console.log("🔑 Client token provided:", clientToken ? `${clientToken.substring(0, 10)}...` : "null");
-    
-    // Map form data to API format
-    const mappedData = mapFormDataToAPI(vacancyData);
-    console.log("🔄 Mapped data for API:", mappedData);
-    
-    // Build headers with client token if provided
-    const headers = {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    };
-    
-    // Try to get token from cookies first, then use client token
-    let authToken = null;
-    try {
-      const cookieStore = cookies();
-      authToken = cookieStore.get("auth_token")?.value;
-      console.log("🔑 Token from cookies:", authToken ? `${authToken.substring(0, 10)}...` : "null");
-    } catch (cookieError) {
-      console.log("⚠️ Could not access cookies:", cookieError.message);
-    }
-    
-    // Use client token as fallback
-    if (!authToken && clientToken) {
-      authToken = clientToken;
-      console.log("🔑 Using client token as fallback");
-    }
-    
-    if (authToken) {
-      headers.Authorization = `Bearer ${authToken}`;
-      console.log("🔑 Authorization header added");
-    } else {
-      console.log("❌ No auth token available");
-      return {
-        success: false,
-        error: "لطفاً ابتدا وارد حساب کاربری خود شوید",
-      };
-    }
-    
-    console.log("🔑 Final headers:", headers);
+    const headers = getHeaders(true, clientToken);
+    console.log("🔑 Request headers:", headers);
     console.log("🌐 API URL:", API_BASE_URL);
-    
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
 
-    console.log("📡 Starting fetch request...");
-    const response = await fetch(`${API_BASE_URL}`, {
-      method: "POST",
-      headers,
-      body: JSON.stringify(mappedData),
-      signal: controller.signal,
-      cache: "no-store",
-    });
+    // First attempt with main API
+    let response;
+    try {
+      response = await fetch(`${API_BASE_URL}`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify(apiData),
+        mode: "cors", // Explicitly set CORS mode
+        credentials: "include", // Include credentials
+      });
+    } catch (fetchError) {
+      console.error(
+        "❌ Fetch failed with main API, trying fallback:",
+        fetchError
+      );
 
-    clearTimeout(timeoutId);
-    console.log("📡 Response received:", {
-      status: response.status,
-      statusText: response.statusText,
-      ok: response.ok,
-      url: response.url
-    });
+      // Try fallback API
+      try {
+        response = await fetch(`${FALLBACK_API_URL}`, {
+          method: "POST",
+          headers,
+          body: JSON.stringify(apiData),
+          mode: "cors",
+          credentials: "include",
+        });
+      } catch (fallbackError) {
+        console.error("❌ Fallback API also failed:", fallbackError);
+        throw new Error(
+          "خطا در اتصال به سرور. لطفاً اتصال اینترنت خود را بررسی کنید."
+        );
+      }
+    }
 
     if (!response.ok) {
-      let errorData = {};
-      try {
-        const responseText = await response.text();
-        console.log("❌ Raw error response:", responseText);
-        errorData = JSON.parse(responseText);
-        console.log("❌ Parsed error data:", errorData);
-      } catch (parseError) {
-        console.log("❌ Could not parse error response:", parseError);
+      const errorData = await response.json().catch(() => ({}));
+      console.error("❌ API Error Response:", {
+        status: response.status,
+        statusText: response.statusText,
+        errorData,
+        sentData: apiData, // Log the data we sent
+      });
+
+      // Handle specific error cases
+      if (response.status === 400) {
+        const validationErrors = errorData.errors || {};
+        const errorMessages = Object.values(validationErrors).flat();
+        console.error("❌ 400 Bad Request Details:", {
+          errors: validationErrors,
+          messages: errorMessages,
+          sentData: apiData,
+        });
+        throw new Error(
+          errorMessages.join("، ") ||
+            "درخواست نامعتبر - لطفاً اطلاعات را بررسی کنید"
+        );
       }
-      throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+      if (response.status === 403) {
+        throw new Error("فقط کارفرمایان می‌توانند آگهی ایجاد کنند");
+      }
+      if (response.status === 422) {
+        const validationErrors = errorData.errors || {};
+        const errorMessages = Object.values(validationErrors).flat();
+        console.error("❌ 422 Validation Error Details:", {
+          errors: validationErrors,
+          messages: errorMessages,
+          sentData: apiData,
+        });
+        throw new Error(
+          errorMessages.join("، ") || "اطلاعات وارد شده نامعتبر است"
+        );
+      }
+
+      throw new Error(
+        errorData.message || `خطا در ارتباط با سرور (${response.status})`
+      );
     }
 
     const result = await response.json();
     console.log("✅ Vacancy created successfully:", result);
-    
+
     return {
       success: true,
       data: result.data,
       message: result.message || "آگهی با موفقیت ایجاد شد",
     };
   } catch (error) {
-    console.error("❌ ===== CREATE VACANCY ERROR =====");
-    console.error("❌ Error type:", error.constructor.name);
-    console.error("❌ Error message:", error.message);
-    console.error("❌ Error stack:", error.stack);
-    
-    // Check if it's a network error
-    if (error.name === 'AbortError') {
-      console.error("❌ Request timed out");
-    } else if (error.message.includes('fetch')) {
-      console.error("❌ Network/fetch error");
+    console.error("❌ Error creating vacancy:", error);
+
+    // Provide more specific error messages
+    let errorMessage = "خطا در ایجاد آگهی";
+
+    if (error.name === "TypeError" && error.message.includes("fetch")) {
+      errorMessage =
+        "خطا در اتصال به سرور. لطفاً اتصال اینترنت خود را بررسی کنید.";
+    } else if (error.message.includes("CORS")) {
+      errorMessage = "خطا در دسترسی به سرور. لطفاً صفحه را رفرش کنید.";
+    } else if (error.message) {
+      errorMessage = error.message;
     }
-    
+
     return {
       success: false,
-      error: error.message || "خطا در ایجاد آگهی",
+      error: errorMessage,
     };
   }
 }
@@ -364,94 +203,77 @@ export async function createVacancy(vacancyData, clientToken = null) {
 // Update existing vacancy
 export async function updateVacancy(id, vacancyData, clientToken = null) {
   try {
-    console.log("🚀 ===== UPDATE VACANCY SERVER ACTION =====");
-    console.log("📦 Updating vacancy", id, "with data:", vacancyData);
-    console.log("🔑 Client token provided:", clientToken ? `${clientToken.substring(0, 10)}...` : "null");
-    
-    // Map form data to API format
-    const mappedData = mapFormDataToAPI(vacancyData);
-    console.log("🔄 Mapped data for API:", mappedData);
-    
-    // Build headers with client token if provided
-    const headers = {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    };
-    
-    // Try to get token from cookies first, then use client token
-    let authToken = null;
-    try {
-      const cookieStore = cookies();
-      authToken = cookieStore.get("auth_token")?.value;
-      console.log("🔑 Token from cookies:", authToken ? `${authToken.substring(0, 10)}...` : "null");
-    } catch (cookieError) {
-      console.log("⚠️ Could not access cookies:", cookieError.message);
-    }
-    
-    // Use client token as fallback
-    if (!authToken && clientToken) {
-      authToken = clientToken;
-      console.log("🔑 Using client token as fallback");
-    }
-    
-    if (authToken) {
-      headers.Authorization = `Bearer ${authToken}`;
-      console.log("🔑 Authorization header added");
-    } else {
-      console.log("❌ No auth token available");
-      return {
-        success: false,
-        error: "لطفاً ابتدا وارد حساب کاربری خود شوید",
-      };
-    }
-    
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+    console.log("🚀 Updating vacancy", id, "with data:", vacancyData);
 
-    console.log("📡 Starting update request...");
-    const response = await fetch(`${API_BASE_URL}/${id}`, {
+    // Extract auth token from form data
+    const clientToken = vacancyData._authToken;
+    console.log(
+      "🔑 Client token received for update:",
+      clientToken ? "Yes" : "No"
+    );
+
+    // Transform form data to API format (remove _authToken from API data)
+    const { _authToken, ...formDataWithoutToken } = vacancyData;
+    const apiData = transformFormDataToAPI(formDataWithoutToken);
+    console.log("📝 Transformed API data for update:", apiData);
+
+    const headers = getHeaders(true, clientToken);
+
+    // Try PUT first, then PATCH as fallback
+    let response = await fetch(`${API_BASE_URL}/${id}`, {
       method: "PUT",
       headers,
-      body: JSON.stringify(mappedData),
-      signal: controller.signal,
-      cache: "no-store",
+      body: JSON.stringify(apiData),
     });
 
-    clearTimeout(timeoutId);
-    console.log("📡 Update response received:", {
-      status: response.status,
-      statusText: response.statusText,
-      ok: response.ok,
-      url: response.url
-    });
+    // If PUT fails with 405, try PATCH
+    if (!response.ok && response.status === 405) {
+      console.log("🔄 PUT failed, trying PATCH method");
+      response = await fetch(`${API_BASE_URL}/${id}`, {
+        method: "PATCH",
+        headers,
+        body: JSON.stringify(apiData),
+      });
+    }
 
     if (!response.ok) {
-      let errorData = {};
-      try {
-        const responseText = await response.text();
-        console.log("❌ Raw error response:", responseText);
-        errorData = JSON.parse(responseText);
-        console.log("❌ Parsed error data:", errorData);
-      } catch (parseError) {
-        console.log("❌ Could not parse error response:", parseError);
+      const errorData = await response.json().catch(() => ({}));
+      console.error("❌ API Error Response:", {
+        status: response.status,
+        statusText: response.statusText,
+        errorData,
+      });
+
+      // Handle specific error cases
+      if (response.status === 403) {
+        throw new Error("شما مجاز به ویرایش این آگهی نیستید");
       }
-      throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+      if (response.status === 404) {
+        throw new Error("آگهی مورد نظر یافت نشد");
+      }
+      if (response.status === 422) {
+        const validationErrors = errorData.errors || {};
+        const errorMessages = Object.values(validationErrors).flat();
+        throw new Error(
+          errorMessages.join("، ") || "اطلاعات وارد شده نامعتبر است"
+        );
+      }
+
+      throw new Error(
+        errorData.message || `خطا در ارتباط با سرور (${response.status})`
+      );
     }
 
     const result = await response.json();
     console.log("✅ Vacancy updated successfully:", result);
-    
+
     return {
       success: true,
       data: result.data,
       message: result.message || "آگهی با موفقیت به‌روزرسانی شد",
     };
   } catch (error) {
-    console.error("❌ ===== UPDATE VACANCY ERROR =====");
-    console.error("❌ Error type:", error.constructor.name);
-    console.error("❌ Error message:", error.message);
-    console.error("❌ Error stack:", error.stack);
-    
+    console.error("❌ Error updating vacancy:", error);
     return {
       success: false,
       error: error.message || "خطا در به‌روزرسانی آگهی",
@@ -463,11 +285,8 @@ export async function updateVacancy(id, vacancyData, clientToken = null) {
 export async function deleteVacancy(id) {
   try {
     console.log("🚀 Deleting vacancy:", id);
-    
-    const headers = await getHeaders();
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
+    const headers = getHeaders();
     const response = await fetch(`${API_BASE_URL}/${id}`, {
       method: "DELETE",
       headers,
@@ -478,31 +297,20 @@ export async function deleteVacancy(id) {
     clearTimeout(timeoutId);
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+      const errorData = await response.json();
+      throw new Error(
+        errorData.message || `HTTP error! status: ${response.status}`
+      );
     }
 
     console.log("✅ Vacancy deleted successfully");
-    
+
     return {
       success: true,
       message: "آگهی با موفقیت حذف شد",
     };
   } catch (error) {
     console.error("❌ Error deleting vacancy:", error);
-    
-    // Fallback to localStorage if API fails
-    if (typeof window !== 'undefined') {
-      console.log("🔄 Falling back to localStorage...");
-      const fallbackResult = deleteVacancyFromLocalStorage(id);
-      if (fallbackResult.success) {
-        return {
-          success: true,
-          message: "آگهی به صورت محلی حذف شد (اتصال به سرور برقرار نشد)",
-        };
-      }
-    }
-    
     return {
       success: false,
       error: error.message || "خطا در حذف آگهی",
@@ -513,61 +321,31 @@ export async function deleteVacancy(id) {
 // Get user active vacancies
 export async function getUserActiveVacancies(userId = null) {
   try {
-    console.log("🚀 Getting user active vacancies");
-    
-    const headers = await getHeaders();
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+    console.log("🚀 Getting user vacancies");
 
-    // Use the main endpoint to get all active vacancies
-    // The API will filter based on authentication token
-    // Add timestamp to prevent any caching
-    const timestamp = Date.now();
-    const url = `${API_BASE_URL}?_t=${timestamp}`;
-    
-    const response = await fetch(url, {
-      method: "GET", 
-      headers: {
-        ...headers,
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0',
-      },
-      signal: controller.signal,
-      cache: "no-store", // Force fresh data from server
+    const headers = getHeaders();
+    const response = await fetch(`${API_BASE_URL}/my/active`, {
+      method: "GET",
+      headers,
     });
 
-    clearTimeout(timeoutId);
-
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+      const errorData = await response.json();
+      throw new Error(
+        errorData.message || `HTTP error! status: ${response.status}`
+      );
     }
 
     const result = await response.json();
-    console.log("✅ User active vacancies retrieved successfully:", result);
-    
+    console.log("✅ User vacancies retrieved successfully:", result);
+
     return {
       success: true,
       data: result.data || [],
       message: result.message,
     };
   } catch (error) {
-    console.error("❌ Error getting user active vacancies:", error);
-    
-    // Fallback to localStorage if API fails
-    if (typeof window !== 'undefined') {
-      console.log("🔄 Falling back to localStorage...");
-      const fallbackResult = getVacanciesFromLocalStorage();
-      if (fallbackResult.success) {
-        return {
-          success: true,
-          data: fallbackResult.data,
-          message: "آگهی‌ها از حافظه محلی بارگذاری شدند (اتصال به سرور برقرار نشد)",
-        };
-      }
-    }
-    
+    console.error("❌ Error getting user vacancies:", error);
     return {
       success: false,
       error: error.message || "خطا در دریافت آگهی‌ها",
@@ -576,50 +354,12 @@ export async function getUserActiveVacancies(userId = null) {
   }
 }
 
-// Get user expired vacancies  
-export async function getUserExpiredVacancies(userId = null) {
-  try {
-    console.log("🚀 Getting user expired vacancies");
-    
-    const headers = await getHeaders();
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
-
-    // For now, return empty array for expired vacancies
-    // Until we have a proper endpoint for expired vacancies
-    console.log("⚠️ Returning empty array for expired vacancies");
-    
-    return {
-      success: true,
-      data: [],
-      message: "Expired vacancies not implemented yet",
-    };
-  } catch (error) {
-    console.error("❌ Error getting user expired vacancies:", error);
-    
-    // Fallback to empty array for expired vacancies
-    return {
-      success: false,
-      error: error.message || "خطا در دریافت آگهی‌های منقضی",
-      data: [],
-    };
-  }
-}
-
-// Backward compatibility - alias for getUserActiveVacancies
-export async function getUserVacancies() {
-  return getUserActiveVacancies();
-}
-
 // Get vacancy details
 export async function getVacancyDetails(id) {
   try {
     console.log("🚀 Getting vacancy details for:", id);
-    
-    const headers = await getHeaders();
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
+    const headers = getHeaders();
     const response = await fetch(`${API_BASE_URL}/${id}`, {
       method: "GET",
       headers,
@@ -630,13 +370,15 @@ export async function getVacancyDetails(id) {
     clearTimeout(timeoutId);
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+      const errorData = await response.json();
+      throw new Error(
+        errorData.message || `HTTP error! status: ${response.status}`
+      );
     }
 
     const result = await response.json();
     console.log("✅ Vacancy details retrieved successfully:", result);
-    
+
     return {
       success: true,
       data: result.data,
@@ -645,60 +387,396 @@ export async function getVacancyDetails(id) {
   } catch (error) {
     console.error("❌ Error getting vacancy details:", error);
     return {
-      success: false,
       error: error.message || "خطا در دریافت جزئیات آگهی",
       data: null,
     };
   }
 }
 
-// Get active vacancies (public endpoint)
+// Validate required fields
+function validateVacancyData(formData) {
+  const errors = [];
+
+  if (!formData.title || formData.title.trim() === "") {
+    errors.push("عنوان شغل الزامی است");
+  }
+
+  if (!formData.description || formData.description.trim() === "") {
+    errors.push("شرح شغل الزامی است");
+  }
+
+  if (!formData.requirements || formData.requirements.trim() === "") {
+    errors.push("الزامات شغل الزامی است");
+  }
+
+  if (!formData.category) {
+    errors.push("دسته‌بندی شغل الزامی است");
+  }
+
+  if (!formData.type) {
+    errors.push("نوع قرارداد الزامی است");
+  }
+
+  if (!formData.location || formData.location.trim() === "") {
+    errors.push("محل کار الزامی است");
+  }
+
+  return errors;
+}
+
+// Transform form data to API format
+function transformFormDataToAPI(formData) {
+  console.log("🔄 Transforming form data to API format:", formData);
+
+  // Validate required fields first
+  const validationErrors = validateVacancyData(formData);
+  if (validationErrors.length > 0) {
+    throw new Error(`فیلدهای زیر الزامی هستند: ${validationErrors.join("، ")}`);
+  }
+
+  // Map contract type from Persian/form to API format
+  const contractTypeMap = {
+    "full-time": "full-time",
+    "part-time": "part-time",
+    contract: "contract",
+    internship: "internship",
+    freelance: "freelance",
+    "تمام وقت": "full-time",
+    "پاره وقت": "part-time",
+    قراردادی: "contract",
+    کارآموزی: "internship",
+    فریلنسر: "freelance",
+  };
+
+  // Map experience level from Persian/form to API format
+  const experienceLevelMap = {
+    fresh: "fresh",
+    "1-2": "1-2",
+    "2-5": "2-5",
+    "5+": "5+",
+    تازه‌کار: "fresh",
+    "۱ تا ۲ سال": "1-2",
+    "۲ تا ۵ سال": "2-5",
+    "بیش از ۵ سال": "5+",
+  };
+
+  // Map education level from Persian/form to API format
+  const educationLevelMap = {
+    diploma: "diploma",
+    associate: "associate",
+    bachelor: "bachelor",
+    master: "master",
+    phd: "phd",
+    دیپلم: "diploma",
+    کاردانی: "associate",
+    کارشناسی: "bachelor",
+    "کارشناسی ارشد": "master",
+    دکتری: "phd",
+  };
+
+  // Map military service status
+  const militaryServiceMap = {
+    completed: "completed",
+    exempt: "exempt",
+    "not-required": "not-required",
+    "پایان خدمت": "completed",
+    معافیت: "exempt",
+    "مشمول نیست": "not-required",
+  };
+
+  // Map insurance status
+  const insuranceStatusMap = {
+    full: "full",
+    basic: "basic",
+    none: "none",
+    "بیمه کامل": "full",
+    "بیمه پایه": "basic",
+    "بدون بیمه": "none",
+  };
+
+  // Map gender preference
+  const genderMap = {
+    both: "both",
+    male: "male",
+    female: "female",
+    "هر دو": "both",
+    مرد: "male",
+    زن: "female",
+  };
+
+  // Get company data from form data or default
+  // Note: localStorage is not available in server actions
+  let companyId = formData.company_id || null;
+
+  // If no company_id provided, try to extract from company name or use default
+  if (!companyId && formData.company) {
+    // For now, use a default company ID - this should be passed from the client
+    console.warn(
+      "No company_id provided, using default. Company name:",
+      formData.company
+    );
+    companyId = 1; // Default company ID - should be replaced with actual logic
+  }
+
+  // Map activity field based on category
+  const categoryToActivityFieldMap = {
+    "فناوری اطلاعات": 1,
+    "بانکداری و مالی": 2,
+    مهندسی: 3,
+    "پزشکی و درمان": 4,
+    آموزش: 5,
+    "بازاریابی و فروش": 6,
+    "منابع انسانی": 7,
+    حقوقی: 8,
+    "طراحی و گرافیک": 9,
+    "ساخت و تولید": 10,
+  };
+
+  // Parse salary - handle both numeric and "توافقی" cases
+  let salaryValue = null;
+  if (formData.salary && formData.salary !== "توافقی") {
+    // Remove any non-numeric characters and convert to number
+    const numericSalary = parseInt(
+      formData.salary.toString().replace(/[^\d]/g, "")
+    );
+    if (!isNaN(numericSalary) && numericSalary > 0) {
+      salaryValue = numericSalary;
+    }
+  }
+
+  // Calculate expiration date (default to 30 days from now)
+  const expirationDate = new Date();
+  expirationDate.setDate(expirationDate.getDate() + 30);
+
+  const apiData = {
+    // Required fields
+    title: formData.title || "",
+    description: formData.description || "",
+    requirements: formData.requirements || "",
+
+    // Company and activity field
+    ...(companyId && { company_id: companyId }),
+    expert_activity_field_id:
+      categoryToActivityFieldMap[formData.category] || 1,
+
+    // Contract and salary
+    contract_type: contractTypeMap[formData.type] || "full-time",
+    ...(salaryValue && { salary: salaryValue }),
+
+    // Location
+    location_text: formData.location || "",
+
+    // Job requirements and preferences
+    gender_preference: genderMap[formData.gender] || "both",
+    min_education_level: educationLevelMap[formData.education] || "bachelor",
+    experience_level: experienceLevelMap[formData.experience] || "fresh",
+    military_service_status:
+      militaryServiceMap[formData.militaryService] || "completed",
+
+    // Work conditions
+    working_hours: formData.workHours || "9 تا 17",
+    insurance_status: insuranceStatusMap[formData.insurance] || "full",
+    probation_period: formData.probationPeriod || "3 ماه",
+
+    // Benefits and skills
+    benefits: Array.isArray(formData.benefits)
+      ? formData.benefits.filter((b) => b && b.trim())
+      : [],
+    required_skills: Array.isArray(formData.required_skills)
+      ? formData.required_skills.filter((s) => s && s.trim())
+      : [],
+
+    // Boolean flags
+    is_remote_possible: Boolean(formData.remoteWork),
+    travel_required: Boolean(formData.travelRequired),
+    is_urgent: Boolean(formData.urgent),
+
+    // Expiration date
+    expires_at: expirationDate.toISOString().split("T")[0], // YYYY-MM-DD format
+
+    // Additional responsibilities if provided
+    ...(formData.responsibilities && {
+      responsibilities: formData.responsibilities,
+    }),
+  };
+
+  console.log("✅ Transformed API data:", apiData);
+  return apiData;
+}
+
+// Test authentication token with client token
+export async function testAuthToken(clientToken = null) {
+  try {
+    console.log("🧪 Testing authentication token...");
+
+    const token = getAuthToken(clientToken);
+    console.log(
+      "🔑 Retrieved token:",
+      token ? `${token.substring(0, 20)}...` : "null"
+    );
+
+    if (!token) {
+      return {
+        success: false,
+        error: "هیچ توکن احراز هویتی یافت نشد",
+        details: "لطفاً مجدداً وارد حساب کاربری خود شوید",
+      };
+    }
+
+    // Test authenticated endpoint
+    const headers = getHeaders(true, clientToken);
+    const response = await fetch(`${API_BASE_URL}?per_page=1`, {
+      method: "GET",
+      headers,
+      mode: "cors",
+    });
+
+    console.log("📊 Auth test response:", {
+      status: response.status,
+      statusText: response.statusText,
+      url: response.url,
+    });
+
+    if (response.status === 401) {
+      return {
+        success: false,
+        error: "توکن احراز هویت نامعتبر است",
+        details: "لطفاً مجدداً وارد حساب کاربری خود شوید",
+      };
+    }
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        success: false,
+        error: `خطا در تست احراز هویت: ${response.status}`,
+        details: errorText,
+      };
+    }
+
+    const result = await response.json();
+
+    return {
+      success: true,
+      message: "احراز هویت موفق بود",
+      token: token ? `${token.substring(0, 20)}...` : null,
+      data: result,
+    };
+  } catch (error) {
+    console.error("❌ Auth test failed:", error);
+    return {
+      success: false,
+      error: `خطا در تست احراز هویت: ${error.message}`,
+      details: error,
+    };
+  }
+}
+
+// Test API connectivity
+export async function testAPIConnection() {
+  try {
+    console.log("🧪 Testing API connection...");
+
+    const headers = getHeaders(false); // No auth required for public endpoint
+    console.log("🔑 Test headers:", headers);
+
+    // Test with a simple GET request to public endpoint
+    const response = await fetch(`${API_BASE_URL}?per_page=1`, {
+      method: "GET",
+      headers,
+      mode: "cors",
+    });
+
+    console.log("📊 Test response:", {
+      status: response.status,
+      statusText: response.statusText,
+      url: response.url,
+      headers: Object.fromEntries(response.headers.entries()),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.log("❌ Test response body:", errorText);
+
+      return {
+        success: false,
+        error: `API Test Failed: ${response.status} ${response.statusText}`,
+        details: errorText,
+      };
+    }
+
+    const result = await response.json();
+    console.log("✅ API connection test successful:", result);
+
+    return {
+      success: true,
+      message: "اتصال به API موفق بود",
+      data: result,
+    };
+  } catch (error) {
+    console.error("❌ API connection test failed:", error);
+    return {
+      success: false,
+      error: `خطا در اتصال: ${error.message}`,
+      details: error,
+    };
+  }
+}
+
+// Get all active vacancies with filtering
 export async function getActiveVacancies(params = {}) {
   try {
     console.log("🚀 Getting active vacancies with params:", params);
-    
+
+    const headers = await getHeaders(false); // Public endpoint
+
     // Build query string
     const queryParams = new URLSearchParams();
-    
+
     if (params.search) queryParams.append("search", params.search);
     if (params.company_id) queryParams.append("company_id", params.company_id);
-    if (params.expert_activity_field_id) queryParams.append("expert_activity_field_id", params.expert_activity_field_id);
-    if (params.contract_type) queryParams.append("contract_type", params.contract_type);
-    if (params.experience_level) queryParams.append("experience_level", params.experience_level);
-    if (params.is_remote !== undefined) queryParams.append("is_remote", params.is_remote);
-    if (params.is_urgent !== undefined) queryParams.append("is_urgent", params.is_urgent);
+    if (params.expert_activity_field_id)
+      queryParams.append(
+        "expert_activity_field_id",
+        params.expert_activity_field_id
+      );
+    if (params.contract_type)
+      queryParams.append("contract_type", params.contract_type);
+    if (params.experience_level)
+      queryParams.append("experience_level", params.experience_level);
+    if (typeof params.is_remote === "boolean")
+      queryParams.append("is_remote", params.is_remote);
+    if (typeof params.is_urgent === "boolean")
+      queryParams.append("is_urgent", params.is_urgent);
     if (params.salary_min) queryParams.append("salary_min", params.salary_min);
     if (params.salary_max) queryParams.append("salary_max", params.salary_max);
     if (params.sort_by) queryParams.append("sort_by", params.sort_by);
     if (params.sort_order) queryParams.append("sort_order", params.sort_order);
-    if (params.per_page) queryParams.append("per_page", Math.min(params.per_page, 50));
-    if (params.page) queryParams.append("page", params.page);
 
-    const url = `${API_BASE_URL.replace('/job-advertisements', '/vacancies')}${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
-    
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000);
+    const perPage = Math.min(Math.max(1, params.per_page || 20), 50);
+    const page = Math.max(1, params.page || 1);
+    queryParams.append("per_page", perPage);
+    queryParams.append("page", page);
+
+    const url = `${API_BASE_URL}${
+      queryParams.toString() ? `?${queryParams.toString()}` : ""
+    }`;
 
     const response = await fetch(url, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      signal: controller.signal,
-      cache: "no-store",
+      headers,
     });
-
-    clearTimeout(timeoutId);
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+      throw new Error(
+        errorData.message || `خطا در ارتباط با سرور (${response.status})`
+      );
     }
 
     const result = await response.json();
     console.log("✅ Active vacancies retrieved successfully:", result);
-    
+
     return {
       success: true,
       data: result.data || [],
@@ -720,32 +798,23 @@ export async function getActiveVacancies(params = {}) {
 export async function getUrgentVacancies() {
   try {
     console.log("🚀 Getting urgent vacancies");
-    
-    const url = `${API_BASE_URL.replace('/job-advertisements', '/vacancies/urgent')}`;
-    
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-    const response = await fetch(url, {
+    const headers = await getHeaders(false); // Public endpoint
+    const response = await fetch(`${API_BASE_URL}/urgent`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      signal: controller.signal,
-      cache: "no-store",
+      headers,
     });
-
-    clearTimeout(timeoutId);
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+      throw new Error(
+        errorData.message || `خطا در ارتباط با سرور (${response.status})`
+      );
     }
 
     const result = await response.json();
     console.log("✅ Urgent vacancies retrieved successfully:", result);
-    
+
     return {
       success: true,
       data: result.data || [],
@@ -765,32 +834,23 @@ export async function getUrgentVacancies() {
 export async function getRemoteVacancies() {
   try {
     console.log("🚀 Getting remote vacancies");
-    
-    const url = `${API_BASE_URL.replace('/job-advertisements', '/vacancies/remote')}`;
-    
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-    const response = await fetch(url, {
+    const headers = await getHeaders(false); // Public endpoint
+    const response = await fetch(`${API_BASE_URL}/remote`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      signal: controller.signal,
-      cache: "no-store",
+      headers,
     });
-
-    clearTimeout(timeoutId);
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+      throw new Error(
+        errorData.message || `خطا در ارتباط با سرور (${response.status})`
+      );
     }
 
     const result = await response.json();
     console.log("✅ Remote vacancies retrieved successfully:", result);
-    
+
     return {
       success: true,
       data: result.data || [],
