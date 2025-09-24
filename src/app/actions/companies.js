@@ -345,10 +345,72 @@ export async function updateCompany(id, companyData) {
 
     // Map form data to API format
     const mappedData = mapCompanyDataToAPI(cleanData);
+    
+    // For updates, create a minimal payload with only essential fields to avoid validation conflicts
+    console.log("🔄 Server Action: Creating minimal update payload to avoid validation conflicts...");
+    
+    // Essential fields that are safe to update
+    const updatePayload = {
+      name: mappedData.name,
+      name_en: mappedData.name_en,
+      display_name: mappedData.display_name,
+      introduction: mappedData.introduction,
+      founded_year: mappedData.founded_year,
+      size: mappedData.size,
+      type: mappedData.type,
+    };
+    
+    // Only include optional fields if they exist and are not empty
+    if (mappedData.website && mappedData.website.trim()) {
+      updatePayload.website = mappedData.website;
+    }
+    if (mappedData.mobile && mappedData.mobile.trim()) {
+      updatePayload.mobile = mappedData.mobile;
+    }
+    if (mappedData.phone && mappedData.phone.trim()) {
+      updatePayload.phone = mappedData.phone;
+    }
+    if (mappedData.linkedin_url) {
+      updatePayload.linkedin_url = mappedData.linkedin_url;
+    }
+    if (mappedData.instagram_url) {
+      updatePayload.instagram_url = mappedData.instagram_url;
+    }
+    if (mappedData.telegram_url) {
+      updatePayload.telegram_url = mappedData.telegram_url;
+    }
+    if (mappedData.vision) {
+      updatePayload.vision = mappedData.vision;
+    }
+    if (mappedData.mission) {
+      updatePayload.mission = mappedData.mission;
+    }
+    if (mappedData.work_environment) {
+      updatePayload.work_environment = mappedData.work_environment;
+    }
+    
+    // Arrays
+    if (mappedData.services && mappedData.services.length > 0) {
+      updatePayload.services = mappedData.services;
+    }
+    if (mappedData.technical_specialties && mappedData.technical_specialties.length > 0) {
+      updatePayload.technical_specialties = mappedData.technical_specialties;
+    }
+    if (mappedData.benefits && mappedData.benefits.length > 0) {
+      updatePayload.benefits = mappedData.benefits;
+    }
+    
+    console.log("🔄 Server Action: Email field excluded from update to prevent duplicate validation");
+    console.log("🔄 Server Action: Update payload fields:", Object.keys(updatePayload));
+    console.log("🔄 Server Action: Email in payload?", updatePayload.hasOwnProperty('email'));
+    console.log("🔄 Server Action: Full payload:", JSON.stringify(updatePayload, null, 2));
+    
+    // Use the minimal payload instead of full mappedData
+    const finalPayload = updatePayload;
 
     // Don't include ID in request body for updates - only in URL
     console.log("🔄 Server Action: Company ID for update:", id);
-    console.log("🔄 Server Action: Mapped data (without ID in body):", mappedData);
+    console.log("🔄 Server Action: Final payload for update:", finalPayload);
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 15000);
@@ -368,7 +430,7 @@ export async function updateCompany(id, companyData) {
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
       },
-      body: JSON.stringify(mappedData),
+      body: JSON.stringify(finalPayload),
       signal: controller.signal,
     });
 
@@ -393,7 +455,7 @@ export async function updateCompany(id, companyData) {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
         },
-        body: JSON.stringify(mappedData),
+        body: JSON.stringify(finalPayload),
         signal: controller.signal,
       });
       
@@ -420,7 +482,7 @@ export async function updateCompany(id, companyData) {
             Authorization: `Bearer ${token}`,
             Accept: "application/json",
           },
-          body: JSON.stringify(mappedData),
+          body: JSON.stringify(finalPayload),
           signal: controller.signal,
         });
         
@@ -461,8 +523,9 @@ export async function updateCompany(id, companyData) {
           // Check for specific error patterns and provide Persian translations
           if (errorMessage.includes("No query results") || errorMessage.includes("not found")) {
             errorMessage = "شرکت یافت نشد یا حذف شده است";
-          } else if (errorMessage.includes("duplicate") || errorMessage.includes("unique")) {
-            errorMessage = "این اطلاعات قبلاً ثبت شده است";
+          } else if (errorMessage.includes("duplicate") || errorMessage.includes("unique") || 
+                     (errorMessage.includes("email") && errorMessage.includes("taken"))) {
+            errorMessage = "این ایمیل قبلاً توسط شرکت دیگری استفاده شده است. لطفاً ایمیل دیگری انتخاب کنید.";
           } else if (errorMessage.includes("validation") || errorMessage.includes("invalid")) {
             errorMessage = "اطلاعات وارد شده نامعتبر است";
           }
@@ -470,6 +533,11 @@ export async function updateCompany(id, companyData) {
           const firstError = Object.values(parsedError.errors)[0];
           if (Array.isArray(firstError)) {
             errorMessage = firstError[0];
+            
+            // Handle duplicate email in validation errors for updates
+            if (errorMessage.includes("email") && errorMessage.includes("taken")) {
+              errorMessage = "این ایمیل قبلاً توسط شرکت دیگری استفاده شده است. لطفاً ایمیل دیگری انتخاب کنید.";
+            }
           }
         }
       } catch (parseError) {
