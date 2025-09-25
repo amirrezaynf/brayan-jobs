@@ -10,9 +10,18 @@ import ResumeSkills from "./ResumeSkills";
 import ResumeLanguages from "./ResumeLanguages";
 import ResumeAdditionalInfo from "./ResumeAdditionalInfo";
 import ResumeDocuments from "./ResumeDocuments";
-import { Send } from "lucide-react";
+import { Send, Loader2 } from "lucide-react";
+import {
+  createCompleteResume,
+  prepareResumeFormData,
+} from "../../../../app/actions/resume";
 
 export default function ResumeContainer() {
+  // States برای loading و error handling
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [submitSuccess, setSubmitSuccess] = useState("");
+
   // اطلاعات پایه
   const [basicInfo, setBasicInfo] = useState({
     firstName: "",
@@ -116,24 +125,78 @@ export default function ResumeContainer() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("🚀 شروع ارسال فرم");
 
-    const resumeData = {
-      basicInfo,
-      residence,
-      jobInfo,
-      workExperiences,
-      skills,
-      languages,
-      certificates,
-      portfolioLink,
-      portfolioFiles,
-      additionalInfo,
-      documents,
-    };
+    // پاک کردن پیام‌های قبلی
+    setSubmitError("");
+    setSubmitSuccess("");
+    setIsSubmitting(true);
 
-    alert("رزومه شما با موفقیت ارسال شد!");
+    try {
+      // جمع‌آوری داده‌های فرم
+      const resumeData = {
+        basicInfo,
+        profileImage,
+        residence,
+        jobInfo,
+        workExperiences,
+        skills,
+        languages,
+        certificates,
+        portfolioLink,
+        portfolioFiles,
+        additionalInfo,
+        documents,
+      };
+
+      console.log("📊 داده‌های فرم:", resumeData);
+
+      // تبدیل به FormData
+      const formData = await prepareResumeFormData(resumeData);
+
+      // دریافت token از localStorage
+      const authToken = localStorage.getItem("authToken");
+      if (!authToken) {
+        throw new Error("لطفاً ابتدا وارد حساب کاربری خود شوید");
+      }
+
+      // اضافه کردن token به FormData
+      formData.append("authToken", authToken);
+
+      console.log("📤 ارسال به API...");
+
+      // ارسال به API
+      const result = await createCompleteResume(formData);
+
+      if (result.success) {
+        console.log("✅ رزومه با موفقیت ایجاد شد");
+        setSubmitSuccess(result.message || "رزومه شما با موفقیت ایجاد شد!");
+
+        // پاک کردن فرم بعد از 3 ثانیه
+        setTimeout(() => {
+          // می‌توانید فرم را reset کنید یا کاربر را redirect کنید
+          console.log("🔄 فرم آماده برای استفاده مجدد");
+        }, 3000);
+      } else {
+        console.error("❌ خطا در ایجاد رزومه:", result.error);
+        setSubmitError(result.error || "خطا در ایجاد رزومه");
+
+        // نمایش خطاهای validation اگر وجود دارد
+        if (result.validationErrors) {
+          console.error("🔍 خطاهای validation:", result.validationErrors);
+        }
+      }
+    } catch (error) {
+      console.error("❌ خطا در handleSubmit:", error);
+      setSubmitError(
+        error.message || "خطا در ارسال رزومه. لطفاً دوباره تلاش کنید"
+      );
+    } finally {
+      setIsSubmitting(false);
+      console.log("🏁 پایان ارسال فرم");
+    }
   };
 
   return (
@@ -143,6 +206,25 @@ export default function ResumeContainer() {
           <div className="px-6 py-8 sm:px-10">
             {/* Header */}
             <ResumeHeader />
+
+            {/* نمایش پیام‌های موفقیت و خطا */}
+            {submitSuccess && (
+              <div className="mb-6 p-4 bg-green-900/20 border border-green-500/30 rounded-lg text-green-400">
+                <div className="flex items-center">
+                  <div className="w-2 h-2 bg-green-400 rounded-full ml-3"></div>
+                  {submitSuccess}
+                </div>
+              </div>
+            )}
+
+            {submitError && (
+              <div className="mb-6 p-4 bg-red-900/20 border border-red-500/30 rounded-lg text-red-400">
+                <div className="flex items-center">
+                  <div className="w-2 h-2 bg-red-400 rounded-full ml-3"></div>
+                  {submitError}
+                </div>
+              </div>
+            )}
 
             <form onSubmit={handleSubmit} className="space-y-8">
               {/* اطلاعات پایه */}
@@ -208,10 +290,20 @@ export default function ResumeContainer() {
               <div className="pt-6">
                 <button
                   type="submit"
-                  className="w-full flex justify-center items-center bg-yellow-500 text-gray-900 font-bold py-3 px-6 rounded-lg hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-yellow-400 transition-transform transform hover:scale-105"
+                  disabled={isSubmitting}
+                  className="w-full flex justify-center items-center bg-yellow-500 text-gray-900 font-bold py-3 px-6 rounded-lg hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-yellow-400 transition-transform transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                 >
-                  <Send className="w-5 h-5 ml-2" />
-                  ارسال رزومه
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 ml-2 animate-spin" />
+                      در حال ارسال...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-5 h-5 ml-2" />
+                      ارسال رزومه
+                    </>
+                  )}
                 </button>
               </div>
             </form>

@@ -3,6 +3,14 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { COMPANY_DATA } from "@/constants/companyData";
 import EmployersSidebar from "@/components/ui/filter/EmployersSidebar";
+import {
+  LocationIcon,
+  StarIcon,
+  VerifiedIcon,
+  BuildingIcon,
+  UserIcon,
+  BriefcaseIcon,
+} from "@/icons";
 
 // Function to get all company data from constants
 const getCompanyData = () => {
@@ -63,21 +71,27 @@ const mockEmployers = [
     logo: "DK",
     industry: "فناوری اطلاعات",
     location: "تهران",
-    description: "بزرگترین فروشگاه آنلاین ایران با بیش از 10 میلیون کاربر فعال و ارائه خدمات تجارت الکترونیک پیشرفته.",
+    description:
+      "بزرگترین فروشگاه آنلاین ایران با بیش از 10 میلیون کاربر فعال و ارائه خدمات تجارت الکترونیک پیشرفته.",
     employeeCount: "بیش از 500 نفر",
     openPositions: 25,
     website: "https://digikala.com",
     foundedYear: 1385,
     rating: 4.8,
     reviews: 1250,
-    benefits: ["بیمه تکمیلی", "ساعت کاری منعطف", "بونس عملکرد", "آموزش‌های تخصصی"],
+    benefits: [
+      "بیمه تکمیلی",
+      "ساعت کاری منعطف",
+      "بونس عملکرد",
+      "آموزش‌های تخصصی",
+    ],
     isVerified: true,
     address: "تهران، خیابان آفریقا",
     phone: "021-91000000",
     mobile: "09120000000",
     email: "careers@digikala.com",
     linkedin: "https://linkedin.com/company/digikala",
-    instagram: "@digikala"
+    instagram: "@digikala",
   },
   {
     id: 2,
@@ -86,21 +100,27 @@ const mockEmployers = [
     logo: "SN",
     industry: "فناوری اطلاعات",
     location: "تهران",
-    description: "سوپراپ ایرانی ارائه‌دهنده خدمات حمل‌ونقل، سفارش غذا، پرداخت و خدمات شهری با بیش از 5 میلیون کاربر.",
+    description:
+      "سوپراپ ایرانی ارائه‌دهنده خدمات حمل‌ونقل، سفارش غذا، پرداخت و خدمات شهری با بیش از 5 میلیون کاربر.",
     employeeCount: "101-500 نفر",
     openPositions: 18,
     website: "https://snapp.ir",
     foundedYear: 1393,
     rating: 4.6,
     reviews: 890,
-    benefits: ["محیط کاری نوآورانه", "پکیج رقابتی", "کار از راه دور", "رشد حرفه‌ای"],
+    benefits: [
+      "محیط کاری نوآورانه",
+      "پکیج رقابتی",
+      "کار از راه دور",
+      "رشد حرفه‌ای",
+    ],
     isVerified: true,
     address: "تهران، خیابان کارگر شمالی",
     phone: "021-88000000",
     mobile: "09121111111",
     email: "jobs@snapp.ir",
     linkedin: "https://linkedin.com/company/snapp",
-    instagram: "@snapp.ir"
+    instagram: "@snapp.ir",
   },
   {
     id: 3,
@@ -109,7 +129,8 @@ const mockEmployers = [
     logo: "BP",
     industry: "مالی و بانکی",
     location: "تهران",
-    description: "یکی از بانک‌های خصوصی پیشرو در ایران با ارائه خدمات بانکی دیجیتال و سنتی به بیش از 3 میلیون مشتری.",
+    description:
+      "یکی از بانک‌های خصوصی پیشرو در ایران با ارائه خدمات بانکی دیجیتال و سنتی به بیش از 3 میلیون مشتری.",
     employeeCount: "بیش از 500 نفر",
     openPositions: 12,
     website: "https://bpi.ir",
@@ -123,7 +144,7 @@ const mockEmployers = [
     mobile: "09122222222",
     email: "hr@bpi.ir",
     linkedin: "https://linkedin.com/company/bank-pasargad",
-    instagram: "@bank_pasargad"
+    instagram: "@bank_pasargad",
   },
   {
     id: 4,
@@ -132,7 +153,8 @@ const mockEmployers = [
     logo: "IK",
     industry: "تولیدی",
     location: "تهران",
-    description: "بزرگترین خودروساز ایران با بیش از 50 سال تجربه در تولید و عرضه انواع خودروهای سواری و تجاری.",
+    description:
+      "بزرگترین خودروساز ایران با بیش از 50 سال تجربه در تولید و عرضه انواع خودروهای سواری و تجاری.",
     employeeCount: "بیش از 500 نفر",
     openPositions: 8,
     website: "https://ikco.ir",
@@ -146,7 +168,7 @@ const mockEmployers = [
     mobile: "09123333333",
     email: "career@ikco.ir",
     linkedin: "https://linkedin.com/company/iran-khodro",
-    instagram: "@ikco_official"
+    instagram: "@ikco_official",
   },
   {
     id: 5,
@@ -155,7 +177,8 @@ const mockEmployers = [
     logo: "NI",
     industry: "انرژی",
     location: "تهران",
-    description: "شرکت ملی نفت ایران مسئول اکتشاف، تولید و تصفیه نفت و گاز طبیعی در سراسر کشور.",
+    description:
+      "شرکت ملی نفت ایران مسئول اکتشاف، تولید و تصفیه نفت و گاز طبیعی در سراسر کشور.",
     employeeCount: "بیش از 500 نفر",
     openPositions: 15,
     website: "https://nioc.ir",
@@ -169,7 +192,7 @@ const mockEmployers = [
     mobile: "09124444444",
     email: "jobs@nioc.ir",
     linkedin: "https://linkedin.com/company/nioc",
-    instagram: "@nioc_official"
+    instagram: "@nioc_official",
   },
   {
     id: 6,
@@ -178,7 +201,8 @@ const mockEmployers = [
     logo: "TP",
     industry: "فناوری اطلاعات",
     location: "مشهد",
-    description: "اپلیکیشن درخواست خودرو با پوشش سراسری در ایران، ارائه‌دهنده خدمات حمل‌ونقل هوشمند و مطمئن.",
+    description:
+      "اپلیکیشن درخواست خودرو با پوشش سراسری در ایران، ارائه‌دهنده خدمات حمل‌ونقل هوشمند و مطمئن.",
     employeeCount: "51-100 نفر",
     openPositions: 22,
     website: "https://tapsi.ir",
@@ -192,7 +216,7 @@ const mockEmployers = [
     mobile: "09155555555",
     email: "careers@tapsi.ir",
     linkedin: "https://linkedin.com/company/tapsi",
-    instagram: "@tapsi_ir"
+    instagram: "@tapsi_ir",
   },
   {
     id: 7,
@@ -201,21 +225,27 @@ const mockEmployers = [
     logo: "CB",
     industry: "فناوری اطلاعات",
     location: "تهران",
-    description: "اولین و بزرگترین مارکت اپلیکیشن ایرانی با بیش از 40 میلیون کاربر و میزبان هزاران اپلیکیشن و بازی.",
+    description:
+      "اولین و بزرگترین مارکت اپلیکیشن ایرانی با بیش از 40 میلیون کاربر و میزبان هزاران اپلیکیشن و بازی.",
     employeeCount: "101-500 نفر",
     openPositions: 14,
     website: "https://cafebazaar.ir",
     foundedYear: 1389,
     rating: 4.6,
     reviews: 720,
-    benefits: ["کتابخانه فنی", "ناهار رایگان", "فضای کاری مدرن", "ساعت انعطاف‌پذیر"],
+    benefits: [
+      "کتابخانه فنی",
+      "ناهار رایگان",
+      "فضای کاری مدرن",
+      "ساعت انعطاف‌پذیر",
+    ],
     isVerified: true,
     address: "تهران، خیابان آزادی",
     phone: "021-88500000",
     mobile: "09126666666",
     email: "jobs@cafebazaar.ir",
     linkedin: "https://linkedin.com/company/cafebazaar",
-    instagram: "@cafebazaar"
+    instagram: "@cafebazaar",
   },
   {
     id: 8,
@@ -224,7 +254,8 @@ const mockEmployers = [
     logo: "HO",
     industry: "ارتباطات",
     location: "تهران",
-    description: "اولین و بزرگترین اپراتور تلفن همراه ایران با ارائه خدمات پیشرفته مخابراتی و دیجیتال به بیش از 60 میلیون مشترک.",
+    description:
+      "اولین و بزرگترین اپراتور تلفن همراه ایران با ارائه خدمات پیشرفته مخابراتی و دیجیتال به بیش از 60 میلیون مشترک.",
     employeeCount: "بیش از 500 نفر",
     openPositions: 9,
     website: "https://mci.ir",
@@ -238,7 +269,7 @@ const mockEmployers = [
     mobile: "09127777777",
     email: "hr@mci.ir",
     linkedin: "https://linkedin.com/company/mci-iran",
-    instagram: "@hamrah_e_avval"
+    instagram: "@hamrah_e_avval",
   },
   {
     id: 9,
@@ -247,7 +278,8 @@ const mockEmployers = [
     logo: "IS",
     industry: "ارتباطات",
     location: "تهران",
-    description: "دومین اپراتور بزرگ تلفن همراه ایران با ارائه خدمات نوین ارتباطی و اینترنت پرسرعت به میلیون‌ها کاربر.",
+    description:
+      "دومین اپراتور بزرگ تلفن همراه ایران با ارائه خدمات نوین ارتباطی و اینترنت پرسرعت به میلیون‌ها کاربر.",
     employeeCount: "101-500 نفر",
     openPositions: 16,
     website: "https://irancell.ir",
@@ -261,7 +293,7 @@ const mockEmployers = [
     mobile: "09190000000",
     email: "careers@irancell.ir",
     linkedin: "https://linkedin.com/company/irancell",
-    instagram: "@irancell_official"
+    instagram: "@irancell_official",
   },
   {
     id: 10,
@@ -270,21 +302,27 @@ const mockEmployers = [
     logo: "PO",
     industry: "فناوری اطلاعات",
     location: "تهران",
-    description: "شرکت پیشرو در زمینه خدمات اینترنت و هاستینگ با بیش از 15 سال تجربه در ارائه خدمات زیرساخت IT.",
+    description:
+      "شرکت پیشرو در زمینه خدمات اینترنت و هاستینگ با بیش از 15 سال تجربه در ارائه خدمات زیرساخت IT.",
     employeeCount: "51-100 نفر",
     openPositions: 8,
     website: "https://parsonline.com",
     foundedYear: 1384,
     rating: 4.4,
     reviews: 320,
-    benefits: ["محیط کاری دوستانه", "پروژه‌های چالش‌برانگیز", "رشد حرفه‌ای", "ساعت کاری منعطف"],
+    benefits: [
+      "محیط کاری دوستانه",
+      "پروژه‌های چالش‌برانگیز",
+      "رشد حرفه‌ای",
+      "ساعت کاری منعطف",
+    ],
     isVerified: true,
     address: "تهران، خیابان کریمخان",
     phone: "021-88880000",
     mobile: "09128888888",
     email: "jobs@parsonline.com",
     linkedin: "https://linkedin.com/company/parsonline",
-    instagram: "@parsonline_ir"
+    instagram: "@parsonline_ir",
   },
   {
     id: 11,
@@ -293,7 +331,8 @@ const mockEmployers = [
     logo: "FM",
     industry: "تولیدی",
     location: "اصفهان",
-    description: "بزرگترین تولیدکننده فولاد خاورمیانه با ظرفیت تولید بالا و استانداردهای بین‌المللی کیفیت.",
+    description:
+      "بزرگترین تولیدکننده فولاد خاورمیانه با ظرفیت تولید بالا و استانداردهای بین‌المللی کیفیت.",
     employeeCount: "بیش از 500 نفر",
     openPositions: 12,
     website: "https://msc.ir",
@@ -307,7 +346,7 @@ const mockEmployers = [
     mobile: "09139999999",
     email: "hr@msc.ir",
     linkedin: "https://linkedin.com/company/msc",
-    instagram: "@mobarakeh_steel"
+    instagram: "@mobarakeh_steel",
   },
   {
     id: 12,
@@ -316,22 +355,28 @@ const mockEmployers = [
     logo: "GI",
     industry: "تولیدی",
     location: "تهران",
-    description: "هلدینگ بزرگ خودروسازی ایران شامل شرکت‌های تابعه متعدد در زمینه تولید، قطعه‌سازی و خدمات پس از فروش.",
+    description:
+      "هلدینگ بزرگ خودروسازی ایران شامل شرکت‌های تابعه متعدد در زمینه تولید، قطعه‌سازی و خدمات پس از فروش.",
     employeeCount: "بیش از 500 نفر",
     openPositions: 20,
     website: "https://ikco.ir",
     foundedYear: 1341,
     rating: 4.0,
     reviews: 750,
-    benefits: ["بیمه اجتماعی", "سرویس ایاب و ذهاب", "وعده غذایی", "تسهیلات خرید خودرو"],
+    benefits: [
+      "بیمه اجتماعی",
+      "سرویس ایاب و ذهاب",
+      "وعده غذایی",
+      "تسهیلات خرید خودرو",
+    ],
     isVerified: true,
     address: "تهران، اتوبان کرج",
     phone: "021-44500000",
     mobile: "09121010101",
     email: "recruitment@ikco.ir",
     linkedin: "https://linkedin.com/company/ikco-group",
-    instagram: "@ikco_group"
-  }
+    instagram: "@ikco_group",
+  },
 ];
 
 // Employer data from company profile + mock data
@@ -351,13 +396,7 @@ const industries = [
   "خدماتی",
 ];
 
-const countries = [
-  "همه کشورها",
-  "ایران",
-  "آلمان",
-  "کانادا",
-  "استرالیا",
-];
+const countries = ["همه کشورها", "ایران", "آلمان", "کانادا", "استرالیا"];
 
 const provinces = [
   "همه استان‌ها",
@@ -379,140 +418,12 @@ const cities = [
   "کرج",
 ];
 
-
-// Helper components
-const StarIcon = ({ filled = false }) => (
-  <svg
-    className={`w-4 h-4 ${filled ? "text-yellow-400" : "text-gray-600"}`}
-    fill={filled ? "currentColor" : "none"}
-    stroke='currentColor'
-    viewBox='0 0 24 24'>
-    <path
-      strokeLinecap='round'
-      strokeLinejoin='round'
-      strokeWidth={2}
-      d='M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z'
-    />
-  </svg>
-);
-
-const VerifiedIcon = () => (
-  <svg
-    className='w-5 h-5 text-blue-400'
-    fill='currentColor'
-    viewBox='0 0 24 24'>
-    <path d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z' />
-  </svg>
-);
-
-const LocationIcon = () => (
-  <svg
-    xmlns='http://www.w3.org/2000/svg'
-    width='16'
-    height='16'
-    viewBox='0 0 24 24'
-    fill='none'
-    stroke='currentColor'
-    strokeWidth='2'
-    strokeLinecap='round'
-    strokeLinejoin='round'
-    className='ml-1'>
-    <path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'></path>
-    <circle cx='12' cy='10' r='3'></circle>
-  </svg>
-);
-
-const BuildingIcon = () => (
-  <svg
-    xmlns='http://www.w3.org/2000/svg'
-    width='16'
-    height='16'
-    viewBox='0 0 24 24'
-    fill='none'
-    stroke='currentColor'
-    strokeWidth='2'
-    strokeLinecap='round'
-    strokeLinejoin='round'
-    className='ml-1'>
-    <rect x='4' y='2' width='16' height='20' rx='2' ry='2'></rect>
-    <rect x='9' y='22' width='6' height='0'></rect>
-    <line x1='9' y1='22' x2='9' y2='18'></line>
-    <line x1='15' y1='22' x2='15' y2='18'></line>
-    <line x1='10' y1='6' x2='14' y2='6'></line>
-    <line x1='10' y1='10' x2='14' y2='10'></line>
-    <line x1='10' y1='14' x2='14' y2='14'></line>
-  </svg>
-);
-
-const UserIcon = () => (
-  <svg
-    xmlns='http://www.w3.org/2000/svg'
-    width='16'
-    height='16'
-    viewBox='0 0 24 24'
-    fill='none'
-    stroke='currentColor'
-    strokeWidth='2'
-    strokeLinecap='round'
-    strokeLinejoin='round'
-    className='ml-1'>
-    <path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'></path>
-    <circle cx='12' cy='7' r='4'></circle>
-  </svg>
-);
-
-const BriefcaseIcon = () => (
-  <svg
-    xmlns='http://www.w3.org/2000/svg'
-    width='16'
-    height='16'
-    viewBox='0 0 24 24'
-    fill='none'
-    stroke='currentColor'
-    strokeWidth='2'
-    strokeLinecap='round'
-    strokeLinejoin='round'
-    className='ml-1'>
-    <rect x='2' y='7' width='20' height='14' rx='2' ry='2'></rect>
-    <path d='M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16'></path>
-  </svg>
-);
-
-const SearchIcon = () => (
-  <svg
-    xmlns='http://www.w3.org/2000/svg'
-    width='20'
-    height='20'
-    viewBox='0 0 24 24'
-    fill='none'
-    stroke='currentColor'
-    strokeWidth='2'
-    strokeLinecap='round'
-    strokeLinejoin='round'>
-    <circle cx='11' cy='11' r='8'></circle>
-    <line x1='21' y1='21' x2='16.65' y2='16.65'></line>
-  </svg>
-);
-
-const FilterIcon = () => (
-  <svg
-    xmlns='http://www.w3.org/2000/svg'
-    width='20'
-    height='20'
-    viewBox='0 0 24 24'
-    fill='none'
-    stroke='currentColor'
-    strokeWidth='2'
-    strokeLinecap='round'
-    strokeLinejoin='round'>
-    <polygon points='22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3'></polygon>
-  </svg>
-);
+// All inline icon components removed; using centralized icons from '@/icons'
 
 export default function EmployersPage() {
   const [currentEmployers, setCurrentEmployers] = useState(employers);
   const [filteredEmployers, setFilteredEmployers] = useState(employers);
-  
+
   // Filter States
   const [searchFilter, setSearchFilter] = useState("");
   const [sortBy, setSortBy] = useState("newest");
@@ -520,11 +431,12 @@ export default function EmployersPage() {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedProvince, setSelectedProvince] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
-  
+
   // Available cities based on selected province
-  const availableCities = selectedProvince && selectedProvince !== "" 
-    ? cities.filter(city => city === "همه شهرها" || city !== "همه شهرها")
-    : cities;
+  const availableCities =
+    selectedProvince && selectedProvince !== ""
+      ? cities.filter((city) => city === "همه شهرها" || city !== "همه شهرها")
+      : cities;
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -536,12 +448,26 @@ export default function EmployersPage() {
 
   useEffect(() => {
     filterEmployers();
-  }, [searchFilter, selectedIndustry, selectedCountry, selectedProvince, selectedCity, sortBy]);
+  }, [
+    searchFilter,
+    selectedIndustry,
+    selectedCountry,
+    selectedProvince,
+    selectedCity,
+    sortBy,
+  ]);
 
   // Reset to first page when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchFilter, selectedIndustry, selectedCountry, selectedProvince, selectedCity, sortBy]);
+  }, [
+    searchFilter,
+    selectedIndustry,
+    selectedCountry,
+    selectedProvince,
+    selectedCity,
+    sortBy,
+  ]);
 
   const filterEmployers = () => {
     let filtered = [...currentEmployers];
@@ -551,8 +477,12 @@ export default function EmployersPage() {
       filtered = filtered.filter(
         (employer) =>
           employer.name.toLowerCase().includes(searchFilter.toLowerCase()) ||
-          employer.industry.toLowerCase().includes(searchFilter.toLowerCase()) ||
-          employer.description.toLowerCase().includes(searchFilter.toLowerCase())
+          employer.industry
+            .toLowerCase()
+            .includes(searchFilter.toLowerCase()) ||
+          employer.description
+            .toLowerCase()
+            .includes(searchFilter.toLowerCase())
       );
     }
 
@@ -577,11 +507,10 @@ export default function EmployersPage() {
 
     // City filter
     if (selectedCity && selectedCity !== "") {
-      filtered = filtered.filter((employer) =>
-        employer.location === selectedCity
+      filtered = filtered.filter(
+        (employer) => employer.location === selectedCity
       );
     }
-
 
     // Sort employers
     filtered.sort((a, b) => {
@@ -610,11 +539,17 @@ export default function EmployersPage() {
 
     for (let i = 0; i < 5; i++) {
       if (i < fullStars) {
-        stars.push(<StarIcon key={i} filled={true} />);
+        stars.push(
+          <StarIcon key={i} filled={true} className="w-4 h-4 text-yellow-400" />
+        );
       } else if (i === fullStars && hasHalfStar) {
-        stars.push(<StarIcon key={i} filled={false} />);
+        stars.push(
+          <StarIcon key={i} filled={false} className="w-4 h-4 text-gray-600" />
+        );
       } else {
-        stars.push(<StarIcon key={i} filled={false} />);
+        stars.push(
+          <StarIcon key={i} filled={false} className="w-4 h-4 text-gray-600" />
+        );
       }
     }
     return stars;
@@ -625,63 +560,85 @@ export default function EmployersPage() {
       {/* Header */}
 
       {/* Hero Section */}
-      <section className='relative h-[60vh] flex items-center justify-center text-center overflow-hidden'>
+      <section className="relative h-[60vh] flex items-center justify-center text-center overflow-hidden">
         {/* Background Image */}
-        <div 
-          className='absolute inset-0 bg-cover bg-center bg-no-repeat'
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: 'url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80")'
+            backgroundImage:
+              'url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80")',
           }}
         ></div>
-        <div className='absolute inset-0 bg-black/30'></div>
-        
-        <div className='relative z-20 container mx-auto px-6'>
-          <h1 className='text-4xl md:text-6xl font-extrabold mb-6 text-white' style={{textShadow: '4px 4px 8px rgba(0,0,0,0.8), 2px 2px 4px rgba(0,0,0,0.9)'}}>
+        <div className="absolute inset-0 bg-black/30"></div>
+
+        <div className="relative z-20 container mx-auto px-6">
+          <h1
+            className="text-4xl md:text-6xl font-extrabold mb-6 text-white"
+            style={{
+              textShadow:
+                "4px 4px 8px rgba(0,0,0,0.8), 2px 2px 4px rgba(0,0,0,0.9)",
+            }}
+          >
             کارفرمایان برتر ایران
           </h1>
-          <p className='max-w-3xl mx-auto text-xl text-gray-200 leading-relaxed' style={{textShadow: '3px 3px 6px rgba(0,0,0,0.8), 1px 1px 3px rgba(0,0,0,0.9)'}}>
-            با بزرگترین شرکت‌ها و سازمان‌های پیشرو کشور آشنا شوید و در محیطی حرفه‌ای و پویا کار کنید
+          <p
+            className="max-w-3xl mx-auto text-xl text-gray-200 leading-relaxed"
+            style={{
+              textShadow:
+                "3px 3px 6px rgba(0,0,0,0.8), 1px 1px 3px rgba(0,0,0,0.9)",
+            }}
+          >
+            با بزرگترین شرکت‌ها و سازمان‌های پیشرو کشور آشنا شوید و در محیطی
+            حرفه‌ای و پویا کار کنید
           </p>
-          
+
           {/* آمار سریع */}
-          <div className='mt-10 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto'>
-            <div className='bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20'>
-              <div className='flex items-center justify-center mb-3'>
-                <BuildingIcon className='w-8 h-8 text-yellow-400' />
+          <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+              <div className="flex items-center justify-center mb-3">
+                <BuildingIcon className="w-8 h-8 text-yellow-400" />
               </div>
-              <div className='text-3xl font-bold text-white mb-1'>
+              <div className="text-3xl font-bold text-white mb-1">
                 {currentEmployers.length}+
               </div>
-              <div className='text-gray-200 text-sm'>برند معتبر</div>
+              <div className="text-gray-200 text-sm">برند معتبر</div>
             </div>
-            
-            <div className='bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20'>
-              <div className='flex items-center justify-center mb-3'>
-                <BriefcaseIcon className='w-8 h-8 text-yellow-400' />
+
+            <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+              <div className="flex items-center justify-center mb-3">
+                <BriefcaseIcon className="w-8 h-8 text-yellow-400" />
               </div>
-              <div className='text-3xl font-bold text-white mb-1'>
-                {currentEmployers.reduce((acc, emp) => acc + emp.openPositions, 0)}+
+              <div className="text-3xl font-bold text-white mb-1">
+                {currentEmployers.reduce(
+                  (acc, emp) => acc + emp.openPositions,
+                  0
+                )}
+                +
               </div>
-              <div className='text-gray-200 text-sm'>موقعیت باز</div>
+              <div className="text-gray-200 text-sm">موقعیت باز</div>
             </div>
-            
-            <div className='bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20'>
-              <div className='flex items-center justify-center mb-3'>
-                <UserIcon className='w-8 h-8 text-yellow-400' />
+
+            <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
+              <div className="flex items-center justify-center mb-3">
+                <UserIcon className="w-8 h-8 text-yellow-400" />
               </div>
-              <div className='text-3xl font-bold text-white mb-1'>
-                {Math.round(currentEmployers.reduce((acc, emp) => acc + emp.rating, 0) / currentEmployers.length * 10) / 10}
+              <div className="text-3xl font-bold text-white mb-1">
+                {Math.round(
+                  (currentEmployers.reduce((acc, emp) => acc + emp.rating, 0) /
+                    currentEmployers.length) *
+                    10
+                ) / 10}
               </div>
-              <div className='text-gray-200 text-sm'>امتیاز کیفیت</div>
+              <div className="text-gray-200 text-sm">امتیاز کیفیت</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Main Content with Sidebar */}
-      <section className='py-12 bg-[#1a1a1a] min-h-screen'>
-        <div className='container mx-auto px-6'>
-          <div className='flex gap-8'>
+      <section className="py-12 bg-[#1a1a1a] min-h-screen">
+        <div className="container mx-auto px-6">
+          <div className="flex gap-8">
             {/* Sidebar */}
             <EmployersSidebar
               searchFilter={searchFilter}
@@ -703,13 +660,15 @@ export default function EmployersPage() {
             />
 
             {/* Main Content */}
-            <div className='flex-1'>
+            <div className="flex-1">
               {/* Results Count */}
-              <div className='flex items-center justify-between mb-6'>
-                <p className='text-gray-400'>
-                  نمایش {startIndex + 1}-{Math.min(endIndex, filteredEmployers.length)} از {filteredEmployers.length} شرکت
+              <div className="flex items-center justify-between mb-6">
+                <p className="text-gray-400">
+                  نمایش {startIndex + 1}-
+                  {Math.min(endIndex, filteredEmployers.length)} از{" "}
+                  {filteredEmployers.length} شرکت
                   {totalPages > 1 && (
-                    <span className='text-gray-500 text-sm mr-2'>
+                    <span className="text-gray-500 text-sm mr-2">
                       (صفحه {currentPage} از {totalPages})
                     </span>
                   )}
@@ -717,153 +676,167 @@ export default function EmployersPage() {
               </div>
 
               {/* Employers Grid */}
-              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-              {currentEmployersPage.map((employer) => (
-                <div
-                  key={employer.id}
-                  className='group cursor-pointer bg-gradient-to-br from-black/50 to-black/10 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/hover:border-yellow-400/30 transition-all duration-300 hover:shadow-xl hover:shadow-yellow-400/10'>
-                  {/* Header */}
-                  <div className='flex items-start justify-between mb-4'>
-                    <div className='flex items-center gap-4'>
-                      <div className='w-16 h-16 bg-gradient-to-br from-yellow-400/20 to-yellow-600/30 rounded-xl flex items-center justify-center text-yellow-400 font-bold text-xl border border-yellow-400/30'>
-                        {employer.logo}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {currentEmployersPage.map((employer) => (
+                  <div
+                    key={employer.id}
+                    className="group cursor-pointer bg-gradient-to-br from-black/50 to-black/10 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/hover:border-yellow-400/30 transition-all duration-300 hover:shadow-xl hover:shadow-yellow-400/10"
+                  >
+                    {/* Header */}
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-center gap-4">
+                        <div className="w-16 h-16 bg-gradient-to-br from-yellow-400/20 to-yellow-600/30 rounded-xl flex items-center justify-center text-yellow-400 font-bold text-xl border border-yellow-400/30">
+                          {employer.logo}
+                        </div>
+                        <div>
+                          <h3 className="text-xl font-bold text-white group-hover:text-yellow-400 transition-colors">
+                            {employer.name}
+                          </h3>
+                          <p className="text-sm text-gray-400">
+                            {employer.industry}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <h3 className='text-xl font-bold text-white group-hover:text-yellow-400 transition-colors'>
-                          {employer.name}
-                        </h3>
-                        <p className='text-sm text-gray-400'>
-                          {employer.industry}
-                        </p>
-                      </div>
-                    </div>
-                    {employer.isVerified && <VerifiedIcon />}
-                  </div>
-
-                  {/* Location & Stats */}
-                  <div className='flex items-center justify-between mb-4'>
-                    <div className='flex items-center text-gray-400 text-sm'>
-                      <LocationIcon />
-                      <span>{employer.location}</span>
-                    </div>
-                    <div className='flex items-center gap-3'>
-                      <div className='flex items-center text-gray-400 text-sm'>
-                        <UserIcon />
-                        <span>{employer.employeeCount}</span>
-                      </div>
-                      <div className='flex items-center text-gray-400 text-sm'>
-                        <BriefcaseIcon />
-                        <span>{employer.openPositions} موقعیت</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Rating */}
-                  <div className='flex items-center gap-2 mb-4'>
-                    <div className='flex items-center gap-1'>
-                      {renderStars(employer.rating)}
-                    </div>
-                    <span className='text-yellow-400 font-semibold'>
-                      {employer.rating}
-                    </span>
-                    <span className='text-gray-400 text-sm'>
-                      ({employer.reviews.toLocaleString()} نظر)
-                    </span>
-                  </div>
-
-                  {/* Description */}
-                  <p className='text-gray-400 text-sm mb-4 line-clamp-3'>
-                    {employer.description}
-                  </p>
-
-                  {/* Benefits Preview */}
-                  <div className='mb-6'>
-                    <p className='text-sm text-gray-400 mb-2'>مزایای کلیدی:</p>
-                    <div className='flex flex-wrap gap-1'>
-                      {employer.benefits.slice(0, 2).map((benefit, index) => (
-                        <span
-                          key={index}
-                          className='bg-yellow-400/10 text-yellow-300 text-xs px-2 py-1 rounded-full'>
-                          {benefit}
-                        </span>
-                      ))}
-                      {employer.benefits.length > 2 && (
-                        <span className='text-gray-500 text-xs px-2 py-1'>
-                          +{employer.benefits.length - 2} امتیاز دیگر
-                        </span>
+                      {employer.isVerified && (
+                        <VerifiedIcon className="w-5 h-5 text-blue-400" />
                       )}
                     </div>
-                  </div>
 
-                  {/* Actions */}
-                  <div className='flex gap-2'>
-                    <Link
-                      href={`/employers/${employer.id}`}
-                      className='flex-1 bg-yellow-400 text-black py-2 px-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-center'>
-                      مشاهده شرکت
-                    </Link>
-                    <Link
-                      href={`/jobs?company=${employer.id}`}
-                      className='bg-gray-700 text-white py-2 px-4 rounded-lg hover:bg-gray-600 transition-colors'>
-                      موقعیت‌های شغلی ({employer.openPositions})
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
+                    {/* Location & Stats */}
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center text-gray-400 text-sm">
+                        <LocationIcon className="ml-1 w-4 h-4" />
+                        <span>{employer.location}</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center text-gray-400 text-sm">
+                          <UserIcon className="ml-1 w-4 h-4" />
+                          <span>{employer.employeeCount}</span>
+                        </div>
+                        <div className="flex items-center text-gray-400 text-sm">
+                          <BriefcaseIcon className="ml-1 w-4 h-4" />
+                          <span>{employer.openPositions} موقعیت</span>
+                        </div>
+                      </div>
+                    </div>
 
-            {/* No Results */}
-            {filteredEmployers.length === 0 && (
-              <div className='text-center py-16'>
-                <div className='text-gray-400 text-lg mb-4'>
-                  هیچ شرکتی یافت نشد
-                </div>
-                <p className='text-gray-500'>
-                  با تغییر فیلترها یا کاهش محدودیت‌های جستجو، شرکت‌های بیشتری را
-                  پیدا کنید.
-                </p>
+                    {/* Rating */}
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="flex items-center gap-1">
+                        {renderStars(employer.rating)}
+                      </div>
+                      <span className="text-yellow-400 font-semibold">
+                        {employer.rating}
+                      </span>
+                      <span className="text-gray-400 text-sm">
+                        ({employer.reviews.toLocaleString()} نظر)
+                      </span>
+                    </div>
+
+                    {/* Description */}
+                    <p className="text-gray-400 text-sm mb-4 line-clamp-3">
+                      {employer.description}
+                    </p>
+
+                    {/* Benefits Preview */}
+                    <div className="mb-6">
+                      <p className="text-sm text-gray-400 mb-2">
+                        مزایای کلیدی:
+                      </p>
+                      <div className="flex flex-wrap gap-1">
+                        {employer.benefits.slice(0, 2).map((benefit, index) => (
+                          <span
+                            key={index}
+                            className="bg-yellow-400/10 text-yellow-300 text-xs px-2 py-1 rounded-full"
+                          >
+                            {benefit}
+                          </span>
+                        ))}
+                        {employer.benefits.length > 2 && (
+                          <span className="text-gray-500 text-xs px-2 py-1">
+                            +{employer.benefits.length - 2} امتیاز دیگر
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex gap-2">
+                      <Link
+                        href={`/employers/${employer.id}`}
+                        className="flex-1 bg-yellow-400 text-black py-2 px-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-center"
+                      >
+                        مشاهده شرکت
+                      </Link>
+                      <Link
+                        href={`/jobs?company=${employer.id}`}
+                        className="bg-gray-700 text-white py-2 px-4 rounded-lg hover:bg-gray-600 transition-colors"
+                      >
+                        موقعیت‌های شغلی ({employer.openPositions})
+                      </Link>
+                    </div>
+                  </div>
+                ))}
               </div>
-            )}
+
+              {/* No Results */}
+              {filteredEmployers.length === 0 && (
+                <div className="text-center py-16">
+                  <div className="text-gray-400 text-lg mb-4">
+                    هیچ شرکتی یافت نشد
+                  </div>
+                  <p className="text-gray-500">
+                    با تغییر فیلترها یا کاهش محدودیت‌های جستجو، شرکت‌های بیشتری
+                    را پیدا کنید.
+                  </p>
+                </div>
+              )}
 
               {/* Pagination */}
               {totalPages > 1 && (
-                <div className='flex justify-center items-center mt-12 gap-2'>
+                <div className="flex justify-center items-center mt-12 gap-2">
                   {/* Previous Button */}
                   <button
-                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(prev - 1, 1))
+                    }
                     disabled={currentPage === 1}
                     className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                       currentPage === 1
-                        ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                        : 'bg-gray-700 text-white hover:bg-gray-600'
+                        ? "bg-gray-600 text-gray-400 cursor-not-allowed"
+                        : "bg-gray-700 text-white hover:bg-gray-600"
                     }`}
                   >
                     قبلی
                   </button>
 
                   {/* Page Numbers */}
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                    <button
-                      key={page}
-                      onClick={() => setCurrentPage(page)}
-                      className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                        currentPage === page
-                          ? 'bg-yellow-500 text-black'
-                          : 'bg-gray-700 text-white hover:bg-gray-600'
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  ))}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                    (page) => (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                          currentPage === page
+                            ? "bg-yellow-500 text-black"
+                            : "bg-gray-700 text-white hover:bg-gray-600"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    )
+                  )}
 
                   {/* Next Button */}
                   <button
-                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                    }
                     disabled={currentPage === totalPages}
                     className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                       currentPage === totalPages
-                        ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                        : 'bg-gray-700 text-white hover:bg-gray-600'
+                        ? "bg-gray-600 text-gray-400 cursor-not-allowed"
+                        : "bg-gray-700 text-white hover:bg-gray-600"
                     }`}
                   >
                     بعدی

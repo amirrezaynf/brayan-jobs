@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {
   User,
   Lock,
@@ -61,7 +60,7 @@ export default function RegisterSteps({ flow, role }) {
       <div className="text-center animate-fadeIn">
         <CheckCircle className="mx-auto text-green-400" size={64} />
         <h3 className="text-2xl font-bold mt-4">
-          ثبت‌نام {role === "specialist" ? "متخصص" : "کارفرما"} با موفقیت انجام
+          ثبت‌نام {role === "jobSeeker" ? "متخصص" : "کارفرما"} با موفقیت انجام
           شد!
         </h3>
         <p className="text-gray-400 mt-2">
@@ -179,6 +178,7 @@ export default function RegisterSteps({ flow, role }) {
                 type="button"
                 onClick={() => setStep(1)}
                 disabled={isLoading}
+                className="cursor-pointer font-bold"
               >
                 ویرایش شماره تلفن یا ایمیل
               </button>
@@ -246,8 +246,9 @@ export default function RegisterSteps({ flow, role }) {
               <button
                 type="button"
                 onClick={back}
-                disabled={isLoading}
+                disabled={true}
                 className="w-1/2 text-white bg-gray-600 hover:bg-gray-700 disabled:bg-gray-800 disabled:cursor-not-allowed font-medium rounded-lg text-sm px-5 py-3"
+                title="پس از وارد کردن اطلاعات فردی، بازگشت غیرفعال است"
               >
                 بازگشت
               </button>
@@ -272,7 +273,7 @@ export default function RegisterSteps({ flow, role }) {
 
         {step === 4 && (
           <>
-            {role === "specialist" && (
+            {role === "jobSeeker" && (
               <>
                 {/* حوزه فعالیت - ردیف اول */}
                 <FormInput

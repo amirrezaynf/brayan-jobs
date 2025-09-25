@@ -1,7 +1,10 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { logout } from "@/app/actions/auth";
+import { MenuIcon, XIcon } from "@/icons";
 
 // Helper component for Icons
 const LogoIcon = () => (
@@ -20,41 +23,70 @@ const LogoIcon = () => (
     ></path>
   </svg>
 );
-const MenuIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="h-6 w-6  text-gray-300"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M4 6h16M4 12h16m-7 6h7"
-    />
-  </svg>
-);
-const XIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="h-6 w-6 text-gray-300"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M6 18L18 6M6 6l12 12"
-    />
-  </svg>
-);
+// Using centralized MenuIcon and XIcon from '@/icons'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const router = useRouter();
+
+  // Read user from cookie for client-side header state
+  const refreshUserFromCookie = () => {
+    try {
+      const userCookie = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("auth_user="))
+        ?.split("=")[1];
+      const tokenCookie = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("auth_token="))
+        ?.split("=")[1];
+      // Require both user and token cookies to consider logged-in
+      if (!userCookie || !tokenCookie) {
+        setUser(null);
+        return;
+      }
+      const decoded = decodeURIComponent(userCookie);
+      const parsed = JSON.parse(decoded);
+      setUser(parsed || null);
+    } catch (_) {
+      setUser(null);
+    }
+  };
+
+  useEffect(() => {
+    // initial read
+    refreshUserFromCookie();
+    // react to storage events (cross-tab or local updates)
+    const onStorage = (e) => {
+      if (e.key === "auth_changed") {
+        refreshUserFromCookie();
+      }
+    };
+    window.addEventListener("storage", onStorage);
+    // react to tab focus
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") refreshUserFromCookie();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, []);
+
+  const handleLogout = async () => {
+    const res = await logout();
+    // Clear any client-side traces and redirect to auth page
+    document.cookie = "auth_user=; path=/; max-age=0";
+    document.cookie = "auth_token=; path=/; max-age=0";
+    setUser(null);
+    // notify other tabs/components
+    try {
+      localStorage.setItem("auth_changed", Date.now().toString());
+    } catch {}
+    router.push("/auth");
+  };
 
   return (
     <>
@@ -62,11 +94,11 @@ export default function Header() {
         <div className="container mx-auto px-6 py-4 flex flex-row-reverse justify-end lg:flex-row lg:justify-between  items-center">
           <div className="flex  items-center space-x-4 space-x-reverse">
             <Link href="/">
-              <Image 
-                src="/picture/karyabilogo.png" 
-                width={40} 
-                height={40} 
-                className="w-full h-full" 
+              <Image
+                src="/picture/karyabilogo.png"
+                width={40}
+                height={40}
+                className="w-full h-full"
                 alt="لوگو پلتفرم استخدامی دکتر برایان اعتماد"
               />
             </Link>
@@ -82,6 +114,9 @@ export default function Header() {
           </div>
 
           <nav className="hidden lg:flex items-center space-x-8  font-medium">
+            <Link href="/about" className="header-link text-gray-300">
+              درباره ما
+            </Link>
             <Link href="#" className="header-link text-gray-300">
               بهترین آگهی‌ها
             </Link>
@@ -98,18 +133,27 @@ export default function Header() {
               >
                 بخش کارفرمایان
               </Link>
-              <Link
-                href="/auth"
-                className="px-5 py-2 rounded-lg gold-bg text-black  hover:opacity-90 transition duration-300"
-              >
-                ورود / ثبت نام
-              </Link>
+              {user ? (
+                <button
+                  onClick={handleLogout}
+                  className="px-5 py-2 rounded-lg bg-red-500/80 text-white hover:bg-red-500 transition duration-300"
+                >
+                  خروج
+                </button>
+              ) : (
+                <Link
+                  href="/auth"
+                  className="px-5 py-2 rounded-lg gold-bg text-black  hover:opacity-90 transition duration-300"
+                >
+                  ورود / ثبت نام
+                </Link>
+              )}
             </div>
           </div>
 
           {/* Mobile Menu Button */}
           <div className="lg:hidden ">
-            <button  onClick={() => setIsMenuOpen(true)}>
+            <button onClick={() => setIsMenuOpen(true)}>
               <MenuIcon />
             </button>
           </div>
@@ -134,22 +178,40 @@ export default function Header() {
               </button>
             </div>
             <nav className="flex flex-col space-y-6 text-lg items-start">
-            
+              <Link href="/about" className="header-link text-gray-300 w-full pb-2">
+                درباره ما
+              </Link>
               <Link href="#" className="header-link text-gray-300 w-full pb-2">
                 بهترین آگهی‌ها
               </Link>
               <Link href="#" className="header-link text-gray-300 w-full pb-2">
                 جستجوی آگهی
               </Link>
-              <Link href="/employer" className="header-link text-gray-300 w-full pb-2">
+              <Link
+                href="/employer"
+                className="header-link text-gray-300 w-full pb-2"
+              >
                 بخش کارفرمایان
               </Link>
-              <Link
-                href="/auth"
-                className="mt-4 w-full text-center px-5 py-2 rounded-lg gold-bg text-black font-semibold hover:opacity-90 transition duration-300"
-              >
-                ورود / ثبت نام
-              </Link>
+              {user ? (
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setIsMenuOpen(false);
+                  }}
+                  className="mt-4 w-full text-center px-5 py-2 rounded-lg bg-red-500/80 text-white font-semibold hover:bg-red-500 transition duration-300"
+                >
+                  خروج
+                </button>
+              ) : (
+                <Link
+                  href="/auth"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="mt-4 w-full text-center px-5 py-2 rounded-lg gold-bg text-black font-semibold hover:opacity-90 transition duration-300"
+                >
+                  ورود / ثبت نام
+                </Link>
+              )}
             </nav>
           </div>
         </div>

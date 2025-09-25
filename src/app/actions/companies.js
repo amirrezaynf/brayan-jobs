@@ -127,7 +127,6 @@ function getAuthToken() {
   }
 }
 
-
 /**
  * Create a new company
  * @param {Object} companyData - Company data to create
@@ -169,6 +168,7 @@ export async function createCompany(companyData) {
 
     const url = `${API_BASE_URL}/companies`;
     console.log("📡 Server Action: Making PUT request to:", url);
+    console.log("📡 Server Action: Making PUT request to:", url);
     console.log("📡 Server Action: Request headers:", {
       "Content-Type": "application/json",
       Authorization: `Bearer ${
@@ -186,6 +186,7 @@ export async function createCompany(companyData) {
       console.log("🚀 Server Action: Starting fetch request...");
       console.log("🚀 Server Action: Fetch URL:", url);
       console.log("🚀 Server Action: Fetch method: PUT");
+      console.log("🚀 Server Action: Fetch method: PUT");
       console.log("🚀 Server Action: Fetch headers:", {
         "Content-Type": "application/json",
         Authorization: `Bearer ${
@@ -200,6 +201,7 @@ export async function createCompany(companyData) {
       );
 
       response = await fetch(url, {
+        method: "PUT",
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -317,8 +319,15 @@ export async function updateCompany(id, companyData) {
 
   try {
     // Check if this is actually a new company creation
-    if (!id || id === "undefined" || id === "null" || id.toString().trim() === "") {
-      console.log("🆕 Server Action: No valid ID provided, redirecting to createCompany...");
+    if (
+      !id ||
+      id === "undefined" ||
+      id === "null" ||
+      id.toString().trim() === ""
+    ) {
+      console.log(
+        "🆕 Server Action: No valid ID provided, redirecting to createCompany..."
+      );
       return await createCompany(companyData);
     }
 
@@ -345,10 +354,12 @@ export async function updateCompany(id, companyData) {
 
     // Map form data to API format
     const mappedData = mapCompanyDataToAPI(cleanData);
-    
+
     // For updates, create a minimal payload with only essential fields to avoid validation conflicts
-    console.log("🔄 Server Action: Creating minimal update payload to avoid validation conflicts...");
-    
+    console.log(
+      "🔄 Server Action: Creating minimal update payload to avoid validation conflicts..."
+    );
+
     // Essential fields that are safe to update
     const updatePayload = {
       name: mappedData.name,
@@ -359,7 +370,7 @@ export async function updateCompany(id, companyData) {
       size: mappedData.size,
       type: mappedData.type,
     };
-    
+
     // Only include optional fields if they exist and are not empty
     if (mappedData.website && mappedData.website.trim()) {
       updatePayload.website = mappedData.website;
@@ -388,23 +399,37 @@ export async function updateCompany(id, companyData) {
     if (mappedData.work_environment) {
       updatePayload.work_environment = mappedData.work_environment;
     }
-    
+
     // Arrays
     if (mappedData.services && mappedData.services.length > 0) {
       updatePayload.services = mappedData.services;
     }
-    if (mappedData.technical_specialties && mappedData.technical_specialties.length > 0) {
+    if (
+      mappedData.technical_specialties &&
+      mappedData.technical_specialties.length > 0
+    ) {
       updatePayload.technical_specialties = mappedData.technical_specialties;
     }
     if (mappedData.benefits && mappedData.benefits.length > 0) {
       updatePayload.benefits = mappedData.benefits;
     }
-    
-    console.log("🔄 Server Action: Email field excluded from update to prevent duplicate validation");
-    console.log("🔄 Server Action: Update payload fields:", Object.keys(updatePayload));
-    console.log("🔄 Server Action: Email in payload?", updatePayload.hasOwnProperty('email'));
-    console.log("🔄 Server Action: Full payload:", JSON.stringify(updatePayload, null, 2));
-    
+
+    console.log(
+      "🔄 Server Action: Email field excluded from update to prevent duplicate validation"
+    );
+    console.log(
+      "🔄 Server Action: Update payload fields:",
+      Object.keys(updatePayload)
+    );
+    console.log(
+      "🔄 Server Action: Email in payload?",
+      updatePayload.hasOwnProperty("email")
+    );
+    console.log(
+      "🔄 Server Action: Full payload:",
+      JSON.stringify(updatePayload, null, 2)
+    );
+
     // Use the minimal payload instead of full mappedData
     const finalPayload = updatePayload;
 
@@ -420,9 +445,9 @@ export async function updateCompany(id, companyData) {
     if (id) {
       url = `${API_BASE_URL}/companies/${id}`;
     }
-    
+
     console.log("📡 Server Action: Making PUT request to:", url);
-    
+
     let response = await fetch(url, {
       method: "PUT",
       headers: {
@@ -440,14 +465,18 @@ export async function updateCompany(id, companyData) {
 
     // If company not found (404), redirect to createCompany
     if (!response.ok && response.status === 404) {
-      console.log("🔄 Server Action: Company not found (404), redirecting to createCompany...");
+      console.log(
+        "🔄 Server Action: Company not found (404), redirecting to createCompany..."
+      );
       return await createCompany(companyData);
     }
 
     // If PUT method is not allowed, try PATCH as fallback
     if (!response.ok && response.status === 405) {
-      console.log("🔄 Server Action: PUT not allowed for update, trying PATCH fallback...");
-      
+      console.log(
+        "🔄 Server Action: PUT not allowed for update, trying PATCH fallback..."
+      );
+
       const patchResponse = await fetch(url, {
         method: "PATCH",
         headers: {
@@ -458,9 +487,12 @@ export async function updateCompany(id, companyData) {
         body: JSON.stringify(finalPayload),
         signal: controller.signal,
       });
-      
-      console.log("📡 Server Action: PATCH fallback response status:", patchResponse.status);
-      
+
+      console.log(
+        "📡 Server Action: PATCH fallback response status:",
+        patchResponse.status
+      );
+
       if (patchResponse.ok) {
         const result = await patchResponse.json();
         console.log("✅ Server Action: PATCH fallback success:", result);
@@ -470,11 +502,13 @@ export async function updateCompany(id, companyData) {
           message: "اطلاعات شرکت با موفقیت به‌روزرسانی شد!",
         };
       }
-      
+
       // If PATCH also fails and it's a 404 (company not found), try creating new company
       if (patchResponse.status === 404) {
-        console.log("🔄 Server Action: Company not found during update, trying to create new...");
-        
+        console.log(
+          "🔄 Server Action: Company not found during update, trying to create new..."
+        );
+
         const createResponse = await fetch(`${API_BASE_URL}/companies`, {
           method: "PUT",
           headers: {
@@ -485,7 +519,7 @@ export async function updateCompany(id, companyData) {
           body: JSON.stringify(finalPayload),
           signal: controller.signal,
         });
-        
+
         if (createResponse.ok) {
           const result = await createResponse.json();
           console.log("✅ Server Action: Create fallback success:", result);
@@ -496,7 +530,7 @@ export async function updateCompany(id, companyData) {
           };
         }
       }
-      
+
       // Continue with PATCH response for error handling
       response = patchResponse;
     }
@@ -519,24 +553,38 @@ export async function updateCompany(id, companyData) {
 
         if (parsedError.message) {
           errorMessage = parsedError.message;
-          
+
           // Check for specific error patterns and provide Persian translations
-          if (errorMessage.includes("No query results") || errorMessage.includes("not found")) {
+          if (
+            errorMessage.includes("No query results") ||
+            errorMessage.includes("not found")
+          ) {
             errorMessage = "شرکت یافت نشد یا حذف شده است";
-          } else if (errorMessage.includes("duplicate") || errorMessage.includes("unique") || 
-                     (errorMessage.includes("email") && errorMessage.includes("taken"))) {
-            errorMessage = "این ایمیل قبلاً توسط شرکت دیگری استفاده شده است. لطفاً ایمیل دیگری انتخاب کنید.";
-          } else if (errorMessage.includes("validation") || errorMessage.includes("invalid")) {
+          } else if (
+            errorMessage.includes("duplicate") ||
+            errorMessage.includes("unique") ||
+            (errorMessage.includes("email") && errorMessage.includes("taken"))
+          ) {
+            errorMessage =
+              "این ایمیل قبلاً توسط شرکت دیگری استفاده شده است. لطفاً ایمیل دیگری انتخاب کنید.";
+          } else if (
+            errorMessage.includes("validation") ||
+            errorMessage.includes("invalid")
+          ) {
             errorMessage = "اطلاعات وارد شده نامعتبر است";
           }
         } else if (parsedError.errors) {
           const firstError = Object.values(parsedError.errors)[0];
           if (Array.isArray(firstError)) {
             errorMessage = firstError[0];
-            
+
             // Handle duplicate email in validation errors for updates
-            if (errorMessage.includes("email") && errorMessage.includes("taken")) {
-              errorMessage = "این ایمیل قبلاً توسط شرکت دیگری استفاده شده است. لطفاً ایمیل دیگری انتخاب کنید.";
+            if (
+              errorMessage.includes("email") &&
+              errorMessage.includes("taken")
+            ) {
+              errorMessage =
+                "این ایمیل قبلاً توسط شرکت دیگری استفاده شده است. لطفاً ایمیل دیگری انتخاب کنید.";
             }
           }
         }
@@ -555,14 +603,14 @@ export async function updateCompany(id, companyData) {
         404: "شرکت یافت نشد یا حذف شده است",
         422: "اطلاعات وارد شده نامعتبر است",
         429: "تعداد درخواست‌ها زیاد است. لطفاً کمی بعد تلاش کنید",
-        500: "خطای داخلی سرور. لطفاً بعداً تلاش کنید"
+        500: "خطای داخلی سرور. لطفاً بعداً تلاش کنید",
       };
 
       return {
         success: false,
         error: statusErrorMessages[response.status] || errorMessage,
         statusCode: response.status,
-        rawError: errorData
+        rawError: errorData,
       };
     }
 
@@ -1307,6 +1355,8 @@ function mapAPIDataToForm(apiData) {
 function mapCompanyDataToAPI(formData) {
   console.log("🔄 ===== MAPPING FORM DATA TO API =====");
   console.log("🔄 Server Action: Input form data:", formData);
+  console.log("🔄 ===== MAPPING FORM DATA TO API =====");
+  console.log("🔄 Server Action: Input form data:", formData);
   console.log(
     "🔄 Server Action: Available form fields:",
     Object.keys(formData)
@@ -1324,10 +1374,17 @@ function mapCompanyDataToAPI(formData) {
   console.log("🏢 Server Action: Mapped type to API:", mappedType);
 
   // Skip industry to activity field mapping to prevent API validation errors
-  console.log("🏭 Server Action: Skipping industry to activity field mapping to prevent validation errors");
-  console.log("🏭 Server Action: Raw industry from form:", formData.industryType);
+  console.log(
+    "🏭 Server Action: Skipping industry to activity field mapping to prevent validation errors"
+  );
+  console.log(
+    "🏭 Server Action: Raw industry from form:",
+    formData.industryType
+  );
   const mappedActivityField = null; // Force to null to skip this field entirely
-  console.log("🏭 Server Action: Activity field will NOT be included in API request");
+  console.log(
+    "🏭 Server Action: Activity field will NOT be included in API request"
+  );
 
   // Trim contact fields to prevent empty string issues
   const trimmedEmail = formData.email?.trim();
@@ -1339,15 +1396,20 @@ function mapCompanyDataToAPI(formData) {
     name_en: formData.companyNameEn || "Sample Company",
     display_name: formData.displayName || formData.companyName || "شرکت نمونه",
     code: formData.companyCode || "",
+    display_name: formData.displayName || formData.companyName || "شرکت نمونه",
+    code: formData.companyCode || "",
     introduction: formData.description || "توضیحات شرکت",
-    founded_year: parseInt(formData.establishedYear) || new Date().getFullYear(),
-    
+    founded_year:
+      parseInt(formData.establishedYear) || new Date().getFullYear(),
+
     // Use proper mapping functions instead of hardcoded values
     size: mappedSize,
     type: mappedType,
-    
+
     // Only include activity field if valid mapping exists
-    ...(mappedActivityField && { expert_activity_field_id: mappedActivityField }),
+    ...(mappedActivityField && {
+      expert_activity_field_id: mappedActivityField,
+    }),
 
     // Contact info (only if not empty after trimming)
     ...(trimmedEmail && { email: trimmedEmail }),
@@ -1376,7 +1438,9 @@ function mapCompanyDataToAPI(formData) {
 
     // Location data (if provided)
     ...(formData.address?.trim() && { address: formData.address.trim() }),
-    ...(formData.postalCode?.trim() && { postal_code: formData.postalCode.trim() }),
+    ...(formData.postalCode?.trim() && {
+      postal_code: formData.postalCode.trim(),
+    }),
 
     // Convert arrays to proper format (only if not empty)
     ...(Array.isArray(formData.services) &&
@@ -1398,9 +1462,13 @@ function mapCompanyDataToAPI(formData) {
     expert_activity_field_id: "EXCLUDED_TO_PREVENT_VALIDATION_ERROR",
     hasEmail: !!mappedData.email,
     hasWebsite: !!mappedData.website,
-    hasSocialMedia: !!(mappedData.linkedin_url || mappedData.instagram_url || mappedData.telegram_url)
+    hasSocialMedia: !!(
+      mappedData.linkedin_url ||
+      mappedData.instagram_url ||
+      mappedData.telegram_url
+    ),
   });
-  
+
   return mappedData;
 }
 
