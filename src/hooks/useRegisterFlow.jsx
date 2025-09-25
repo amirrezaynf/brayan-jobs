@@ -19,7 +19,7 @@ const validatePassword = (password) => {
   return serverValidatePassword(password);
 };
 
-export default function useRegisterFlow(initialData, role = "specialist") {
+export default function useRegisterFlow(initialData, role = "jobSeeker") {
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [data, setData] = useState(initialData);
@@ -52,6 +52,10 @@ export default function useRegisterFlow(initialData, role = "specialist") {
     const { name, value } = e.target;
     setData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: null }));
+    // If user edits contact at early steps, drop any temp token to avoid stale state
+    if (name === "contact" && authToken) {
+      setAuthToken(null);
+    }
   };
 
   const validate = () => {
@@ -75,7 +79,7 @@ export default function useRegisterFlow(initialData, role = "specialist") {
         newErrors.confirmPassword = "رمزهای عبور مطابقت ندارند.";
     }
     if (step === 4) {
-      // Validation for specialist fields
+      // Validation for jobSeeker fields
       if (data.fieldOfActivity !== undefined) {
         if (!data.fieldOfActivity)
           newErrors.fieldOfActivity = "حوزه فعالیت الزامی است.";
@@ -111,6 +115,8 @@ export default function useRegisterFlow(initialData, role = "specialist") {
         if (result.success) {
           setResendTimer(60);
           setCanResend(false);
+          // Starting over a fresh flow; ensure any old temp token is cleared
+          if (authToken) setAuthToken(null);
           setStep((s) => s + 1);
         } else {
           setErrors({ contact: result.error });
@@ -154,13 +160,25 @@ export default function useRegisterFlow(initialData, role = "specialist") {
   };
 
   const back = () => {
-    setStep((s) => Math.max(1, s - 1));
+    const newStep = Math.max(1, step - 1);
+    setStep(newStep);
     setErrors({});
     if (step === 2) {
       setResendTimer(0);
       setCanResend(false);
     }
+    // If user navigates back before step 3, drop any temporary token
+    if (newStep < 3 && authToken) {
+      setAuthToken(null);
+    }
   };
+
+  // Safety: if step is externally reset to 1, clear any temp token
+  useEffect(() => {
+    if (step === 1 && authToken) {
+      setAuthToken(null);
+    }
+  }, [step]);
 
   const resend = async () => {
     if (!canResend) return;
@@ -191,21 +209,48 @@ export default function useRegisterFlow(initialData, role = "specialist") {
     setErrors({});
 
     try {
+      // Ensure we have an auth token from step 3 before proceeding
+      if (!authToken) {
+        setErrors({
+          general:
+            "جلسه شما منقضی شده است. لطفاً از ابتدا وارد فرآیند ثبت‌نام شوید.",
+        });
+        return;
+      }
+
       // Prepare step 4 data based on role
       let step4Data = {};
 
-      if (role === "specialist") {
+      if (role === "jobSeeker") {
+        console.log()
+
         step4Data = {
-          field_of_activity: data.fieldOfActivity,
-          age: parseInt(data.age),
+          fieldOfActivity: data.fieldOfActivity,
+          age: (() => {
+            const parsed = parseInt(data.age, 10);
+            return Number.isNaN(parsed) ? null : parsed;
+          })(),
           education: data.education,
         };
+
+        // Guard against invalid age
+        if (step4Data.age === null) {
+          setErrors({ age: "سن نامعتبر است." });
+          return;
+        }
       } else if (role === "employer") {
+        // Normalize numeric fields and validate
+        const experience = parseInt(data.companyExperience, 10);
+        if (Number.isNaN(experience)) {
+          setErrors({ companyExperience: "سابقه فعالیت نامعتبر است." });
+          return;
+        }
+
         step4Data = {
-          company_name: data.companyName,
-          company_field: data.companyField,
-          company_experience: parseInt(data.companyExperience),
-          company_size: data.companySize,
+          companyName: data.companyName,
+          companyField: data.companyField,
+          companyExperience: experience,
+          companySize: data.companySize,
         };
       }
 
@@ -214,7 +259,7 @@ export default function useRegisterFlow(initialData, role = "specialist") {
       if (result.success) {
         setIsSubmitted(true);
         // Redirect to appropriate dashboard
-        const redirectUrl = role === "employer" ? "/dashboard" : "/karjoo";
+        const redirectUrl = role === "employer" ? "/employer" : "/karjoo";
         setTimeout(() => {
           router.push(redirectUrl);
         }, 2000); // Give user time to see success message

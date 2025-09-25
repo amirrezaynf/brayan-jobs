@@ -37,10 +37,10 @@ export function validatePassword(password) {
 export function getRoleNumber(roleString) {
   const roleMap = {
     employer: 2, // کارفرما
-    specialist: 3, // کارجو
+    jobSeeker: 3, // کارجو
   };
 
-  return roleMap[roleString] || 3; // Default to specialist
+  return roleMap[roleString] || 3; // Default to jobSeeker
 }
 
 // Helper function to detect contact type

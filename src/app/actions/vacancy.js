@@ -16,22 +16,22 @@ async function handleApiResponse(response) {
 // Helper function to get authentication token from cookies or localStorage
 function getAuthToken() {
   // In server-side context, try to get from cookies
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     try {
-      const { cookies } = require('next/headers');
+      const { cookies } = require("next/headers");
       const cookieStore = cookies();
-      return cookieStore.get('auth_token')?.value;
+      return cookieStore.get("auth_token")?.value;
     } catch (error) {
-      console.warn('Could not access cookies in server context:', error);
+      console.warn("Could not access cookies in server context:", error);
       return null;
     }
   }
-  
+
   // In client-side context, get from localStorage
   try {
-    return localStorage.getItem('auth_token');
+    return localStorage.getItem("auth_token");
   } catch (error) {
-    console.warn('Could not access localStorage:', error);
+    console.warn("Could not access localStorage:", error);
     return null;
   }
 }
@@ -41,26 +41,26 @@ function mapFormDataToAPI(formData) {
   // Map contract type
   const contractTypeMap = {
     "full-time": "full-time",
-    "part-time": "part-time", 
-    "contract": "contract",
-    "freelance": "freelance",
-    "remote": "remote"
+    "part-time": "part-time",
+    contract: "contract",
+    freelance: "freelance",
+    remote: "remote",
   };
 
   // Map gender preference
   const genderMap = {
-    "both": "both",
-    "male": "male", 
-    "female": "female"
+    both: "both",
+    male: "male",
+    female: "female",
   };
 
   // Map education level
   const educationMap = {
-    "دیپلم": "diploma",
-    "کاردانی": "associate",
-    "کارشناسی": "bachelor",
+    دیپلم: "diploma",
+    کاردانی: "associate",
+    کارشناسی: "bachelor",
     "کارشناسی ارشد": "master",
-    "دکتری": "phd"
+    دکتری: "phd",
   };
 
   // Map experience level
@@ -69,36 +69,53 @@ function mapFormDataToAPI(formData) {
     "۱ تا ۲ سال": "1-2",
     "۲ تا ۵ سال": "2-5",
     "۵ تا ۱۰ سال": "5-10",
-    "بیش از ۱۰ سال": "10+"
+    "بیش از ۱۰ سال": "10+",
   };
 
   // Map military service status
   const militaryServiceMap = {
-    "معاف": "exempt",
+    معاف: "exempt",
     "پایان خدمت": "completed",
     "در حال خدمت": "serving",
-    "مشمول": "eligible"
+    مشمول: "eligible",
   };
 
   // Map insurance status
   const insuranceMap = {
-    "full": "full",
-    "partial": "partial",
-    "none": "none"
+    full: "full",
+    partial: "partial",
+    none: "none",
   };
 
   // Extract skills from requirements text (simple implementation)
   const extractSkills = (requirementsText) => {
     const commonSkills = [
-      "Laravel", "PHP", "MySQL", "JavaScript", "React", "Vue.js", "Node.js", 
-      "Python", "Django", "HTML", "CSS", "Bootstrap", "Tailwind", "Git",
-      "Docker", "Redis", "PostgreSQL", "MongoDB", "REST API", "GraphQL"
+      "Laravel",
+      "PHP",
+      "MySQL",
+      "JavaScript",
+      "React",
+      "Vue.js",
+      "Node.js",
+      "Python",
+      "Django",
+      "HTML",
+      "CSS",
+      "Bootstrap",
+      "Tailwind",
+      "Git",
+      "Docker",
+      "Redis",
+      "PostgreSQL",
+      "MongoDB",
+      "REST API",
+      "GraphQL",
     ];
-    
-    const foundSkills = commonSkills.filter(skill => 
+
+    const foundSkills = commonSkills.filter((skill) =>
       requirementsText.toLowerCase().includes(skill.toLowerCase())
     );
-    
+
     return foundSkills.length > 0 ? foundSkills : ["برنامه‌نویسی"];
   };
 
@@ -107,7 +124,9 @@ function mapFormDataToAPI(formData) {
     expert_activity_field_id: 1, // This should be mapped from category
     title: formData.title,
     contract_type: contractTypeMap[formData.type] || "full-time",
-    salary: formData.salary ? parseInt(formData.salary.replace(/,/g, '')) : null,
+    salary: formData.salary
+      ? parseInt(formData.salary.replace(/,/g, ""))
+      : null,
     location_text: formData.location,
     description: formData.description,
     requirements: formData.requirements,
@@ -115,16 +134,23 @@ function mapFormDataToAPI(formData) {
     gender_preference: genderMap[formData.gender] || "both",
     min_education_level: educationMap[formData.education] || "bachelor",
     experience_level: experienceMap[formData.experience] || "1-2",
-    military_service_status: militaryServiceMap[formData.militaryService] || "completed",
+    military_service_status:
+      militaryServiceMap[formData.militaryService] || "completed",
     working_hours: formData.workHours || "9 تا 17",
     insurance_status: insuranceMap[formData.insurance] || "full",
     probation_period: formData.probationPeriod || "3 ماه",
-    benefits: Array.isArray(formData.benefits) ? formData.benefits : [formData.benefits].filter(Boolean),
+    benefits: Array.isArray(formData.benefits)
+      ? formData.benefits
+      : [formData.benefits].filter(Boolean),
     required_skills: extractSkills(formData.requirements || ""),
     is_remote_possible: formData.remoteWork || false,
     travel_required: formData.travelRequired || false,
     is_urgent: formData.urgent || false,
-    expires_at: formData.expiresAt || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] // 30 days from now
+    expires_at:
+      formData.expiresAt ||
+      new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+        .toISOString()
+        .split("T")[0], // 30 days from now
   };
 }
 
@@ -132,11 +158,11 @@ function mapFormDataToAPI(formData) {
 export async function createVacancy(formData) {
   try {
     const token = getAuthToken();
-    
+
     if (!token) {
       return {
         success: false,
-        error: "برای ثبت آگهی باید وارد حساب کاربری خود شوید"
+        error: "برای ثبت آگهی باید وارد حساب کاربری خود شوید",
       };
     }
 
@@ -146,10 +172,10 @@ export async function createVacancy(formData) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Accept": "application/json",
-        "Authorization": `Bearer ${token}`
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(apiData)
+      body: JSON.stringify(apiData),
     });
 
     const result = await handleApiResponse(response);
@@ -157,13 +183,12 @@ export async function createVacancy(formData) {
     return {
       success: true,
       data: result.data,
-      message: result.message || "آگهی با موفقیت ثبت شد"
+      message: result.message || "آگهی با موفقیت ثبت شد",
     };
-
   } catch (error) {
     return {
       success: false,
-      error: error.message
+      error: error.message,
     };
   }
 }
@@ -172,20 +197,20 @@ export async function createVacancy(formData) {
 export async function getUserVacancies() {
   try {
     const token = getAuthToken();
-    
+
     if (!token) {
       return {
         success: false,
-        error: "برای مشاهده آگهی‌ها باید وارد حساب کاربری خود شوید"
+        error: "برای مشاهده آگهی‌ها باید وارد حساب کاربری خود شوید",
       };
     }
 
     const response = await fetch(`${BASE_URL}/vacancies/my`, {
       method: "GET",
       headers: {
-        "Accept": "application/json",
-        "Authorization": `Bearer ${token}`
-      }
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     const result = await handleApiResponse(response);
@@ -193,13 +218,12 @@ export async function getUserVacancies() {
     return {
       success: true,
       data: result.data,
-      message: result.message
+      message: result.message,
     };
-
   } catch (error) {
     return {
       success: false,
-      error: error.message
+      error: error.message,
     };
   }
 }
@@ -208,11 +232,11 @@ export async function getUserVacancies() {
 export async function updateVacancy(vacancyId, formData) {
   try {
     const token = getAuthToken();
-    
+
     if (!token) {
       return {
         success: false,
-        error: "برای ویرایش آگهی باید وارد حساب کاربری خود شوید"
+        error: "برای ویرایش آگهی باید وارد حساب کاربری خود شوید",
       };
     }
 
@@ -222,10 +246,10 @@ export async function updateVacancy(vacancyId, formData) {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "Accept": "application/json",
-        "Authorization": `Bearer ${token}`
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(apiData)
+      body: JSON.stringify(apiData),
     });
 
     const result = await handleApiResponse(response);
@@ -233,13 +257,12 @@ export async function updateVacancy(vacancyId, formData) {
     return {
       success: true,
       data: result.data,
-      message: result.message || "آگهی با موفقیت به‌روزرسانی شد"
+      message: result.message || "آگهی با موفقیت به‌روزرسانی شد",
     };
-
   } catch (error) {
     return {
       success: false,
-      error: error.message
+      error: error.message,
     };
   }
 }
@@ -248,20 +271,20 @@ export async function updateVacancy(vacancyId, formData) {
 export async function deleteVacancy(vacancyId) {
   try {
     const token = getAuthToken();
-    
+
     if (!token) {
       return {
         success: false,
-        error: "برای حذف آگهی باید وارد حساب کاربری خود شوید"
+        error: "برای حذف آگهی باید وارد حساب کاربری خود شوید",
       };
     }
 
     const response = await fetch(`${BASE_URL}/vacancies/${vacancyId}`, {
       method: "DELETE",
       headers: {
-        "Accept": "application/json",
-        "Authorization": `Bearer ${token}`
-      }
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     const result = await handleApiResponse(response);
@@ -269,13 +292,12 @@ export async function deleteVacancy(vacancyId) {
     return {
       success: true,
       data: result.data,
-      message: result.message || "آگهی با موفقیت حذف شد"
+      message: result.message || "آگهی با موفقیت حذف شد",
     };
-
   } catch (error) {
     return {
       success: false,
-      error: error.message
+      error: error.message,
     };
   }
 }
@@ -284,20 +306,20 @@ export async function deleteVacancy(vacancyId) {
 export async function getVacancyDetails(vacancyId) {
   try {
     const token = getAuthToken();
-    
+
     if (!token) {
       return {
         success: false,
-        error: "برای مشاهده جزئیات آگهی باید وارد حساب کاربری خود شوید"
+        error: "برای مشاهده جزئیات آگهی باید وارد حساب کاربری خود شوید",
       };
     }
 
     const response = await fetch(`${BASE_URL}/vacancies/${vacancyId}`, {
       method: "GET",
       headers: {
-        "Accept": "application/json",
-        "Authorization": `Bearer ${token}`
-      }
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     const result = await handleApiResponse(response);
@@ -305,13 +327,12 @@ export async function getVacancyDetails(vacancyId) {
     return {
       success: true,
       data: result.data,
-      message: result.message
+      message: result.message,
     };
-
   } catch (error) {
     return {
       success: false,
-      error: error.message
+      error: error.message,
     };
   }
 }

@@ -1,6 +1,7 @@
 import "../globals.css";
 import KarjooHeader from "@/components/layout/header/KarjooHeader";
 import KarjooDashboard from "@/components/modules/karjoo/KarjooDashboard";
+import RoleGuard from "@/components/ui/guards/RoleGuard";
 export const metadata = {
   title: "Brian Jobs",
   description: "Brian Jobs",
@@ -11,6 +12,7 @@ export default function RootLayout({ children }) {
     <div className='min-h-screen bg-black/90  '>
 
 <div className="flex min-h-screen  text-gray-200">
+      <RoleGuard allowRoles={[3]} />
       <KarjooDashboard />
 
       {/* Main Content Area */}

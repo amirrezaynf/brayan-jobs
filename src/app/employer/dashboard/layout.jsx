@@ -5,6 +5,7 @@ import EmployerHeader from "@/components/layout/header/EmployerHeader";
 import EmployerMobileMenu from "@/components/modules/employer/EmployerMobileMenu";
 import EmployerSidebar from "@/components/modules/employer/EmployerSidebar";
 import GlobalStyles from "@/components/modules/employer/GlobalStyles";
+import RoleGuard from "@/components/ui/guards/RoleGuard";
 
 export default function DashboardLayout({ children }) {
   const [activeTab, setActiveTab] = useState("home");
@@ -12,6 +13,7 @@ export default function DashboardLayout({ children }) {
 
   return (
     <>
+      <RoleGuard allowRoles={[2]} />
       <GlobalStyles />
       <div className="flex min-h-screen bg-gray-950 text-gray-200">
         <EmployerSidebar />

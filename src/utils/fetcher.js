@@ -16,7 +16,7 @@ export const fetcher = async (
   cacheStatus = "no-store",
   nextRevalidate
 ) => {
-  console.log("🚀 ~ url:", url, language);
+  // console.log("🚀 ~ url:", url, language);
 
   const headers = {
     Accept: "application/json",
@@ -36,14 +36,14 @@ export const fetcher = async (
     config.next = { revalidate: nextRevalidate };
   }
 
-  console.log("🚀 ~ config:", url, config);
+  // console.log("🚀 ~ config:", url, config);
 
   try {
     const res = await fetch(url, config);
     const contentType = res.headers.get("Content-Type") || "";
 
-    console.log("📦 Raw response:", res);
-    console.log("📦 Content-Type:", contentType);
+    // console.log("📦 Raw response:", res);
+    // console.log("📦 Content-Type:", contentType);
 
     const isJson = contentType.includes("application/json");
     const data = isJson ? await res.json() : await res.text();

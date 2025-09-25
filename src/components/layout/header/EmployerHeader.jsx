@@ -5,6 +5,9 @@ import Link from "next/link";
 import Image from "next/image";
 import NotificationModal from "@/components/ui/modals/NotificationModal";
 import { COMPANY_DATA, loadCompanyData } from "@/constants/companyData";
+import { useRouter } from "next/navigation";
+import { logout } from "@/app/actions/auth";
+import { MenuIcon, BellIcon } from "@/icons";
 
 export default function EmployerHeader({
   activeTab,
@@ -15,6 +18,7 @@ export default function EmployerHeader({
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [companyData, setCompanyData] = useState(COMPANY_DATA);
   const [isClient, setIsClient] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     setIsClient(true);
@@ -57,6 +61,18 @@ export default function EmployerHeader({
     setIsMobileMenuOpen && setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (_) {}
+    // Clear client cookies just in case
+    try {
+      document.cookie = "auth_user=; path=/; max-age=0";
+      document.cookie = "auth_token=; path=/; max-age=0";
+    } catch (_) {}
+    router.push("/auth");
+  };
+
   return (
     <>
       <header className="backdrop-blur-sm shadow-md shadow-black/50 sticky top-0 z-30 bg-black/80">
@@ -92,20 +108,16 @@ export default function EmployerHeader({
               onClick={handleMobileMenuToggle}
               className="lg:hidden text-gray-400 hover:text-white transition-colors duration-200 p-1.5 sm:p-2 rounded-lg hover:bg-gray-800 order-last"
             >
-              <svg
-                className="w-5 h-5 sm:w-6 sm:h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
+              <MenuIcon className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
+
+          {/* Logout */}
+          <button
+            onClick={handleLogout}
+            className="bg-red-500/80 hover:bg-red-500 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg transition duration-300 text-xs sm:text-sm lg:text-base"
+          >
+            خروج
+          </button>
 
             {/* Create Job Button */}
             <button
@@ -137,20 +149,7 @@ export default function EmployerHeader({
               onClick={handleNotificationClick}
               className="relative text-gray-400 hover:text-white transition-colors duration-200 p-1.5 sm:p-2 rounded-lg hover:border border-gray-800 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-50"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                />
-              </svg>
+              <BellIcon className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6" />
               <span className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 block h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-red-500 ring-1 sm:ring-2 ring-gray-900 animate-pulse"></span>
             </button>
 

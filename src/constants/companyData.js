@@ -1,6 +1,3 @@
-// Unified company data for the entire platform
-// This ensures consistency across all sections
-
 export const COMPANY_DATA = {
   // Basic Information
   companyName: "دکتر برایان اعتماد",

@@ -1,43 +1,87 @@
 "use server";
 
 import { getRoleNumber } from "@/utils/auth";
+import { fetcher } from "@/utils/fetcher";
+import { cookies } from "next/headers";
 
-const BASE_URL = "https://imocc.iracode.com/api/v1/auth";
+// Centralized cookie setter to ensure consistent, secure attributes
+function setAuthCookies(token, user) {
+  if (!token) return;
+  const cookieStore = cookies();
+  const secure = process.env.NODE_ENV === "production";
 
-// Helper function to handle API responses
-async function handleApiResponse(response) {
-  const data = await response.json();
+  cookieStore.set("auth_token", token, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure,
+    path: "/",
+    maxAge: 60 * 60 * 24 * 7, // 7 days
+  });
 
-  if (!response.ok) {
-    throw new Error(data.message || "خطا در ارتباط با سرور");
+  // Store user only for UI hydration; avoid if unavailable
+  if (user) {
+    try {
+      const serialized = encodeURIComponent(JSON.stringify(user));
+      cookieStore.set("auth_user", serialized, {
+        httpOnly: false,
+        sameSite: "lax",
+        secure,
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7,
+      });
+    } catch (_) {
+      // If user object cannot be serialized, skip setting auth_user
+    }
   }
+}
 
-  return data;
+// Logout: clear authentication cookies
+export async function logout() {
+  try {
+    const cookieStore = cookies();
+    const secure = process.env.NODE_ENV === "production";
+
+    cookieStore.set("auth_token", "", {
+      httpOnly: true,
+      sameSite: "lax",
+      secure,
+      path: "/",
+      maxAge: 0,
+    });
+    cookieStore.set("auth_user", "", {
+      httpOnly: false,
+      sameSite: "lax",
+      secure,
+      path: "/",
+      maxAge: 0,
+    });
+
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: error?.message || "Logout failed" };
+  }
 }
 
 // Step 1: Send contact information and receive verification code
 export async function registerStep1(contact) {
   try {
-    const response = await fetch(`${BASE_URL}/register/step-1`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({ contact }),
-    });
-
-    const result = await handleApiResponse(response);
+    const { data: response } = await fetcher(
+      `${process.env.BASE_URL}/auth/register/step-1`,
+      {
+        method: "POST",
+        body: JSON.stringify({ contact }),
+      }
+    );
 
     return {
       success: true,
-      data: result.data,
-      message: result.message,
+      data: response?.data,
+      message: response?.message,
     };
   } catch (error) {
     return {
       success: false,
-      error: error.message,
+      error: error?.message || error?.data?.message,
     };
   }
 }
@@ -45,26 +89,23 @@ export async function registerStep1(contact) {
 // Step 2: Verify the sent code
 export async function registerStep2(contact, code) {
   try {
-    const response = await fetch(`${BASE_URL}/register/step-2`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({ contact, code }),
-    });
-
-    const result = await handleApiResponse(response);
+    const { data: response } = await fetcher(
+      `${process.env.BASE_URL}/auth/register/step-2`,
+      {
+        method: "POST",
+        body: JSON.stringify({ contact, code }),
+      }
+    );
 
     return {
       success: true,
-      data: result.data,
-      message: result.message,
+      data: response?.data,
+      message: response?.message,
     };
   } catch (error) {
     return {
       success: false,
-      error: error.message,
+      error: error?.message || error?.data?.message,
     };
   }
 }
@@ -75,35 +116,32 @@ export async function registerStep3(formData) {
     const { contact, firstName, lastName, password, confirmPassword, role } =
       formData;
 
-    const response = await fetch(`${BASE_URL}/register/step-3`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        contact,
-        firstName,
-        lastName,
-        password,
-        password_confirmation: confirmPassword,
-        role: getRoleNumber(role), // 2 = کارفرما، 3 = کارجو
-      }),
-    });
-
-    const result = await handleApiResponse(response);
+    const { data: response } = await fetcher(
+      `${process.env.BASE_URL}/auth/register/step-3`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          contact,
+          firstName,
+          lastName,
+          password,
+          password_confirmation: confirmPassword,
+          role,
+        }),
+      }
+    );
 
     return {
       success: true,
-      data: result.data,
-      message: result.message,
-      token: result.data.token,
-      user: result.data.user,
+      data: response?.data,
+      message: response?.message,
+      token: response?.data?.token,
+      user: response?.data?.user,
     };
   } catch (error) {
     return {
       success: false,
-      error: error.message,
+      error: error?.message || error?.data?.message,
     };
   }
 }
@@ -111,41 +149,34 @@ export async function registerStep3(formData) {
 // Step 4: Register additional information (requires authentication)
 export async function registerStep4(formData, token) {
   try {
-    const response = await fetch(`${BASE_URL}/register/step-4`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`,
+    const { data: response } = await fetcher(
+      `${process.env.BASE_URL}/auth/register/step-4`,
+      {
+        method: "POST",
+        body: JSON.stringify(formData),
       },
-      body: JSON.stringify(formData),
-    });
+      token
+    );
 
-    // Get response text first to handle both JSON and non-JSON responses
-    const responseText = await response.text();
-
-    let result;
-    try {
-      result = JSON.parse(responseText);
-    } catch (parseError) {
-      throw new Error("سرور پاسخ نامعتبری ارسال کرده است");
+    // Prefer backend-issued token if provided; fallback to step-3 token
+    const effectiveToken = response?.data?.token || token;
+    if (!effectiveToken) {
+      return {
+        success: false,
+        error: "توکن احراز هویت موجود نیست. لطفاً دوباره تلاش کنید.",
+      };
     }
-
-    if (!response.ok) {
-      const errorMessage =
-        result.message || result.error || "خطا در ارتباط با سرور";
-      throw new Error(errorMessage);
-    }
+    setAuthCookies(effectiveToken, response?.data?.user);
 
     return {
       success: true,
-      data: result.data,
-      message: result.message,
+      data: response?.data,
+      message: response?.message,
     };
   } catch (error) {
     return {
       success: false,
-      error: error.message,
+      error: error?.message || error?.data?.message,
     };
   }
 }
@@ -153,26 +184,23 @@ export async function registerStep4(formData, token) {
 // Resend verification code
 export async function resendVerificationCode(contact) {
   try {
-    const response = await fetch(`${BASE_URL}/register/resend-code`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({ contact }),
-    });
-
-    const result = await handleApiResponse(response);
+    const { data: response } = await fetcher(
+      `${process.env.BASE_URL}/auth/register/resend-code`,
+      {
+        method: "POST",
+        body: JSON.stringify({ contact }),
+      }
+    );
 
     return {
       success: true,
-      data: result.data,
-      message: result.message,
+      data: response?.data,
+      message: response?.message,
     };
   } catch (error) {
     return {
       success: false,
-      error: error.message,
+      error: error?.message || error?.data?.message,
     };
   }
 }
@@ -180,28 +208,30 @@ export async function resendVerificationCode(contact) {
 // Login function
 export async function login(contact, password) {
   try {
-    const response = await fetch(`${BASE_URL}/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({ contact, password }),
-    });
+    const { data: response } = await fetcher(
+      `${process.env.BASE_URL}/auth/login`,
+      {
+        method: "POST",
+        body: JSON.stringify({ contact, password }),
+      }
+    );
 
-    const result = await handleApiResponse(response);
+    // Persist cookies on successful login
+    const token = response?.data?.token;
+    const user = response?.data?.user;
+    setAuthCookies(token, user);
 
     return {
       success: true,
-      data: result.data,
-      message: result.message,
-      token: result.data.token,
-      user: result.data.user,
+      data: response?.data,
+      message: response?.message,
+      token,
+      user,
     };
   } catch (error) {
     return {
       success: false,
-      error: error.message,
+      error: error?.message || error?.data?.message,
     };
   }
 }

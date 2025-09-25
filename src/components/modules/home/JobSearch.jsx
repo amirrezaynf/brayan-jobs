@@ -1,6 +1,13 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import {
+  SearchIcon,
+  UserIcon,
+  CategoryIcon,
+  SpecializationIcon,
+} from "@/icons";
 import CustomSelect from "../../ui/select/CustomSelect";
 import CustomInput from "../../ui/input/CustomInput";
 
@@ -220,77 +227,8 @@ const userTypes = [
   { value: "employer", label: "آگهی ها" },
 ];
 
-// Helper component for Icons
-const SearchIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <circle cx="11" cy="11" r="8"></circle>
-    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-  </svg>
-);
-
-const UserIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-    <circle cx="12" cy="7" r="4"></circle>
-  </svg>
-);
-
-const CategoryIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <rect x="3" y="3" width="7" height="7"></rect>
-    <rect x="14" y="3" width="7" height="7"></rect>
-    <rect x="14" y="14" width="7" height="7"></rect>
-    <rect x="3" y="14" width="7" height="7"></rect>
-  </svg>
-);
-
-const SpecializationIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-  </svg>
-);
-
 export default function JobSearch() {
+  const router = useRouter();
   const [userType, setUserType] = useState("");
   const [jobCategory, setJobCategory] = useState("");
   const [specialization, setSpecialization] = useState("");
@@ -323,24 +261,26 @@ export default function JobSearch() {
     setSpecialization(""); // Reset specialization when job category changes
   }, [jobCategory]);
 
+  // Helper to set URLSearchParams from a key-value object (skips empty values)
+  const setParamsFromObject = (params, obj) => {
+    Object.entries(obj).forEach(([key, value]) => {
+      if (value) params.set(key, value);
+    });
+  };
+
   const handleSearch = () => {
-    // Create search params object
     const searchParams = new URLSearchParams();
+    setParamsFromObject(searchParams, {
+      userType,
+      jobCategory,
+      specialization,
+      country: selectedCountry,
+      province: selectedProvince,
+      city: selectedCity,
+    });
 
-    if (userType) searchParams.set("userType", userType);
-    if (jobCategory) searchParams.set("jobCategory", jobCategory);
-    if (specialization) searchParams.set("specialization", specialization);
-    if (selectedCountry) searchParams.set("country", selectedCountry);
-    if (selectedProvince) searchParams.set("province", selectedProvince);
-    if (selectedCity) searchParams.set("city", selectedCity);
-
-    // If user selected "employer" (advertisements), redirect to advertisements page
-    if (userType === "employer") {
-      window.location.href = `/advertisements?${searchParams.toString()}`;
-    } else {
-      // For job seekers, redirect to regular jobs page
-      window.location.href = `/jobs?${searchParams.toString()}`;
-    }
+    const basePath = userType === "employer" ? "/advertisements" : "/jobs";
+    router.push(`${basePath}?${searchParams.toString()}`);
   };
 
   return (
@@ -352,7 +292,7 @@ export default function JobSearch() {
             {/* User Type - Radio Buttons */}
             <div className="flex items-center gap-5 md:mt-6.5 bg-[#2a2a2a] border border-[#444] rounded-lg h-fit pr-5 py-3.5">
               <label className="text-sm font-medium text-gray-400 flex items-center  gap-2">
-                <UserIcon />
+                <UserIcon className="w-6 h-6" />
                 جستجو در
               </label>
               <div className="flex gap-4">
@@ -404,7 +344,7 @@ export default function JobSearch() {
               <div className="relative">
                 <CustomInput placeholder="مثلا: توسعه‌دهنده React" />
                 <span className="absolute left-3 top-4 text-gray-500">
-                  <SearchIcon />
+                  <SearchIcon className="w-6 h-6" />
                 </span>
               </div>
             </div>
@@ -412,7 +352,7 @@ export default function JobSearch() {
             {/* Job Category */}
             <div>
               <label className=" mb-2 text-sm font-medium text-gray-400 flex items-center gap-2">
-                <CategoryIcon />
+                <CategoryIcon className="w-6 h-6" />
                 دسته‌بندی شغلی
               </label>
               <CustomSelect
@@ -425,8 +365,8 @@ export default function JobSearch() {
 
             {/* Specialization */}
             <div>
-              <label className="block mb-2 text-sm font-medium text-gray-400 flex items-center gap-2">
-                <SpecializationIcon />
+              <label className="mb-2 text-sm font-medium text-gray-400 flex items-center gap-2">
+                <SpecializationIcon className="w-6 h-6" />
                 تخصص
               </label>
               <CustomSelect
