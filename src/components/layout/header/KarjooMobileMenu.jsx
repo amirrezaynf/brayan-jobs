@@ -71,23 +71,26 @@ export default function KarjooMobileMenu({
 
         <nav className=" space-y-4 flex flex-col items-center w-full">
           {menuItems.map((item) => (
-            <Link href={item.link ? item.link : "/karjoo"} className=" flex gap-3 w-full">
-            <button
+            <Link
               key={item.id}
-              onClick={() => {
-                setActiveTab(item.id);
-                setIsMobileMenuOpen(false);
-              }}
-              className={`flex items-center gap-2 w-full px-4 py-3 rounded-lg text-right transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-50 ${
-                activeTab === item.id
-                  ? "bg-yellow-400 text-gray-900 shadow-md"
-                  : "text-gray-400 hover:border border-gray-800 hover:text-white"
-              }`}
+              href={item.link ? item.link : "/karjoo"}
+              className=" flex gap-3 w-full"
             >
-              {item.icon}
+              <button
+                onClick={() => {
+                  setActiveTab(item.id);
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`flex items-center gap-2 w-full px-4 py-3 rounded-lg text-right transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-50 ${
+                  activeTab === item.id
+                    ? "bg-yellow-400 text-gray-900 shadow-md"
+                    : "text-gray-400 hover:border border-gray-800 hover:text-white"
+                }`}
+              >
+                {item.icon}
                 {item.label}
-            </button>
-              </Link>
+              </button>
+            </Link>
           ))}
         </nav>
 

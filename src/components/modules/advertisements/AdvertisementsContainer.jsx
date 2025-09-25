@@ -8,191 +8,56 @@ import AdvertisementsList from "./AdvertisementsList";
 import AdvertisementsEmptyState from "./AdvertisementsEmptyState";
 import AdvertisementsPagination from "./AdvertisementsPagination";
 
-// Sample advertisement data (normally would come from API)
-const sampleAdvertisements = [
-  {
-    id: 1,
-    title: "آگهی استخدام توسعه‌دهنده React",
-    company: "شرکت فناوری اطلاعات پارامکس",
-    location: "تهران",
-    province: "تهران",
-    description: "جستجوی توسعه‌دهنده React باتجربه برای پروژه‌های بزرگ",
-    category: "فناوری اطلاعات",
-    specialization: "برنامه‌نویسی وب",
-    type: "تمام وقت",
-    salary: "۱۵,۰۰۰,۰۰۰ تومان",
-    applicants: 12,
-    date: "2024-09-11",
-    urgent: true,
-    gender: "male",
-    education: "bachelor",
-    experience: "2-5",
-    militaryService: "completed",
-    workHours: "۹ صبح تا ۶ عصر",
-    insurance: "full",
-    probationPeriod: "۳ ماه",
-    remoteWork: false,
-    travelRequired: false,
-    responsibilities:
-      "توسعه و پیادهسازی کامپوننت‌های React، بهینه‌سازی عملکرد، همکاری با تیم طراحی UX/UI، نوشتن تست‌های واحد و یکپارچه، استقرار و نگهداری برنامه‌ها",
-    requirements:
-      "آشنایی کامل با React و Hooks، تجربه با TypeScript، دانش HTML/CSS پیشرفته، تجربه کار با Git، آشنایی با RESTful APIs",
-    skills: "React.js, TypeScript, HTML/CSS, Git, REST APIs",
-    benefits: [
-      "بیمه درمانی کامل",
-      "تسهیلات ورزشی",
-      "دوره‌های آموزشی",
-      "کیفیت کار برتر",
-    ],
-  },
-  {
-    id: 2,
-    title: "طراح UI/UX برای اپلیکیشن موبایل",
-    company: "استارتاپ تهیکس",
-    location: "اصفهان",
-    province: "اصفهان",
-    description: "طراحی رابط کاربری جذاب برای اپلیکیشن‌های موبایل",
-    category: "طراحی و گرافیک",
-    specialization: "طراحی UI/UX",
-    type: "پاره وقت",
-    salary: "۸,۰۰۰,۰۰۰ تومان",
-    applicants: 8,
-    date: "2024-09-10",
-    urgent: false,
-    gender: "both",
-    education: "associate",
-    experience: "2-5",
-    militaryService: "not-required",
-    responsibilities:
-      "طراحی رابط کاربری برای اپلیکیشن‌های موبایل، ایجاد پروتوتیپ‌های تعاملی، همکاری با تیم توسعه برای پیاده‌سازی طراحی، انجام تست‌های کاربری، و بهبود تجربه کاربری بر اساس بازخوردها",
-    requirements:
-      "مهارت بالا در Figma، دانش اصول UX design، تجربه طراحی هم‌رسان (Responsive)، درک رابط کاربری موبایل، توانایی هماهنگی با توسعه‌دهندگان",
-    skills: "Figma, Adobe XD, Sketch, Prototyping, Mobile Design",
-    benefits: [
-      "دسترسی به ابزارهای پیشرفته",
-      "تجربه کاری در استارتاپ",
-      "کیفیت کار پویا",
-    ],
-  },
-  {
-    id: 3,
-    title: "مدیر محصول دیجیتال",
-    company: "شرکت بازرگانی پارسه",
-    location: "مشهد",
-    province: "خراسان رضوی",
-    description: "مدیریت محصول برای پلتفرم‌های دیجیتال B2B",
-    category: "مدیریت پروژه",
-    specialization: "مدیریت محصول",
-    type: "تمام وقت",
-    salary: "۱۸,۰۰۰,۰۰۰ تومان",
-    applicants: 5,
-    date: "2024-09-09",
-    urgent: true,
-    gender: "both",
-    education: "master",
-    experience: "5+",
-    militaryService: "completed",
-    responsibilities:
-      "تحقیق و تحلیل市场需求، تعریف استراتژی محصول، مدیریت محصول پیشرفته، همکاری با تیم‌های فنی، نظارت بر توسعه محصول، تحلیل عملکرد محصول از طریق داده‌ها",
-    requirements:
-      "تجربه مدیریت محصول بالا، دانش تحلیل داده، مهارت ارتباطی عالی، تجربه رهبری تیم، درک فناوری دیجیتال",
-    skills:
-      "Product Management, Data Analysis, Agile/Scrum, SQL, Analytics Tools",
-    benefits: [
-      "چالش‌های منحصر به فرد",
-      "توسعه حرفه‌ای سریع",
-      "تمام مزایای قانونی",
-      "کیفیت همکاری عالی",
-    ],
-  },
-  {
-    id: 4,
-    title: "کارشناس سئو و بازاریابی دیجیتال",
-    company: "آژانس تبلیغات مدیا",
-    location: "شیراز",
-    province: "فارس",
-    description:
-      "بهینه‌سازی وب‌سایت‌ها و پیاده‌سازی استراتژی‌های بازاریابی دیجیتال",
-    category: "بازاریابی و فروش",
-    specialization: "SEO/SEM",
-    type: "تمام وقت",
-    salary: "۱۲,۰۰۰,۰۰۰ تومان",
-    applicants: 15,
-    date: "2024-09-08",
-    urgent: false,
-    gender: "both",
-    education: "bachelor",
-    experience: "2-5",
-    militaryService: "exempted",
-    responsibilities:
-      "اجرای استراتژی‌های SEO، اجرای تبلیغات گوگل، مدیریت کمپین‌های دیجیتال، تحلیل عملکرد محتوا، تولید گزارش‌های تحلیلی، بهینه‌سازی نرخ تبدیل",
-    requirements:
-      "مهارت‌های SEO پیشرفته، تجربه تبلیغات گوگل، توانمند در گوگل آنالیتیکس، درک دیجیتال مارکهای، مهارت تولید محتوا",
-    skills: "SEO, Google Ads, Google Analytics, Content Marketing, SEM",
-    benefits: [
-      "آموزش‌های مستمر",
-      "کیفیت پروژه‌های متنوع",
-      "کیفیت همکاری مناسب",
-      "زمان انعطاف‌پذیر",
-    ],
-  },
-  {
-    id: 5,
-    title: "توسعه‌دهنده Node.js - Backend",
-    company: "شرکت نرم‌افزاری آپادانا",
-    location: "کرج",
-    province: "البرز",
-    description: "توسعه سرویس‌های سمت سرور با استفاده از Node.js",
-    category: "فناوری اطلاعات",
-    specialization: "پایگاه داده",
-    type: "تمام وقت",
-    salary: "۱۶,۰۰۰,۰۰۰ تومان",
-    applicants: 9,
-    date: "2024-09-07",
-    urgent: false,
-    gender: "male",
-    education: "bachelor",
-    experience: "2-5",
-    militaryService: "completed",
-    responsibilities:
-      "طراحی و توسعه میکروسرویس‌ها، پیادهسازی APIهای RESTful، ادغام با انواع پایگاه داده‌ها، بهینه‌سازی عملکرد سرور، تست و عیب‌یابی سیستم‌ها",
-    requirements:
-      "تسلط کامل به Node.js، تجربه ادغام فرهنگستان حداقل ۲ سال، مهارت پایگاه داده‌های SQL/NoSQL، دانش اصول RESTful API",
-    skills: "Node.js, Express.js, MongoDB, PostgreSQL, Docker, REST API",
-    benefits: [
-      "محیط کاری پویا",
-      "کیفیت پروژه‌های پیشرفته",
-      "دسترسی به تکنولوژی‌های نوین",
-      "کیفیت协作 خوب",
-    ],
-  },
-];
-
-export default function AdvertisementsContainer() {
+export default function AdvertisementsContainer({
+  initialAds = [],
+  initialMeta = { total: 0, per_page: 20, current_page: 1, last_page: 0 },
+  apiError = null,
+  searchParams = {},
+}) {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const [ads, setAds] = useState([]);
-  const [filteredAds, setFilteredAds] = useState([]);
-  const [searchFilter, setSearchFilter] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [sortBy, setSortBy] = useState("newest");
-  const [salaryRange, setSalaryRange] = useState([5000000, 50000000]);
+  const urlSearchParams = useSearchParams();
+
+  // Initialize state with server-side API data only
+  const [ads, setAds] = useState(initialAds);
+  const [meta, setMeta] = useState(initialMeta);
+  const [filteredAds, setFilteredAds] = useState(initialAds);
+  const [searchFilter, setSearchFilter] = useState(searchParams.search || "");
+  const [selectedCategory, setSelectedCategory] = useState(
+    searchParams.jobCategory || ""
+  );
+  const [sortBy, setSortBy] = useState(searchParams.sortBy || "newest");
+  const [salaryRange, setSalaryRange] = useState([
+    parseInt(searchParams.salaryMin) || 5000000,
+    parseInt(searchParams.salaryMax) || 50000000,
+  ]);
   const [showNegotiable, setShowNegotiable] = useState(false);
   const [showNoLimit, setShowNoLimit] = useState(false);
   const [showRangeFilter, setShowRangeFilter] = useState(false);
-  const [selectedProvince, setSelectedProvince] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
-  const [selectedEmploymentType, setSelectedEmploymentType] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedProvince, setSelectedProvince] = useState(
+    searchParams.province || ""
+  );
+  const [selectedCity, setSelectedCity] = useState(searchParams.city || "");
+  const [selectedEmploymentType, setSelectedEmploymentType] = useState(
+    searchParams.employmentType || ""
+  );
+  const [currentPage, setCurrentPage] = useState(
+    parseInt(searchParams.page) || 1
+  );
   const [itemsPerPage] = useState(12);
 
-  const userType = searchParams.get("userType");
-  const jobCategory = searchParams.get("jobCategory");
-  const specialization = searchParams.get("specialization");
+  const userType = urlSearchParams.get("userType");
+  const jobCategory = urlSearchParams.get("jobCategory");
+  const specialization = urlSearchParams.get("specialization");
+
+  // Show API error if exists
+  useEffect(() => {
+    if (apiError) {
+    }
+  }, [apiError]);
 
   // Load advertisements data
   useEffect(() => {
-    let allAds = [];
+    let allAds = [...initialAds];
     if (typeof window !== "undefined") {
       if (userType === "employer") {
         const savedJobs = localStorage.getItem("allJobs");
@@ -200,7 +65,7 @@ export default function AdvertisementsContainer() {
           const employerJobs = JSON.parse(savedJobs).filter(
             (job) => job.userType === "employer"
           );
-          allAds = [...employerJobs];
+          allAds = [...allAds, ...employerJobs];
         }
 
         const postedJobs = localStorage.getItem("postedJobs");
@@ -212,19 +77,10 @@ export default function AdvertisementsContainer() {
           allAds = [...allAds, ...newPostedJobs];
         }
       } else {
-        allAds = [...sampleAdvertisements];
-
         const savedJobs = localStorage.getItem("allJobs");
         if (savedJobs) {
           const parsedJobs = JSON.parse(savedJobs);
-          const newJobs = parsedJobs.filter((job) => {
-            const exists = sampleAdvertisements.some(
-              (sample) =>
-                sample.title === job.title && sample.company === job.company
-            );
-            return !exists;
-          });
-          allAds = [...allAds, ...newJobs];
+          allAds = [...allAds, ...parsedJobs];
         }
 
         const postedJobs = localStorage.getItem("postedJobs");
@@ -285,44 +141,75 @@ export default function AdvertisementsContainer() {
       result = result.filter((ad) => ad.location === selectedCity);
     }
 
-    // Salary filtering logic
-    result = result.filter((ad) => {
-      const isNegotiableSalary = ad.salary.toLowerCase().includes("توافقی");
-
-      if (showNoLimit) return true;
-      if (showNegotiable) return isNegotiableSalary;
-
-      if (showRangeFilter) {
-        if (isNegotiableSalary) return false;
-
-        const persianDigits = ad.salary.match(/[\u06F0-\u06F9]/g);
-        if (!persianDigits) return false;
-
-        const englishDigits = persianDigits
-          .map((digit) => {
-            const charCode = digit.charCodeAt(0);
-            return String(charCode - "\u06F0".charCodeAt(0));
-          })
-          .join("");
-
-        const salaryNum = parseInt(englishDigits, 10);
-        return salaryNum >= salaryRange[0] && salaryNum <= salaryRange[1];
+    // Helper function to safely handle salary filtering
+    const getSalaryInfo = (salary) => {
+      // If salary is null or undefined, treat as negotiable
+      if (!salary && salary !== 0) {
+        return { isNegotiable: true, numericValue: 0 };
       }
 
-      if (isNegotiableSalary) return true;
+      // If salary is already a number, use it directly
+      if (typeof salary === "number") {
+        return { isNegotiable: false, numericValue: salary };
+      }
 
-      const persianDigits = ad.salary.match(/[\u06F0-\u06F9]/g);
-      if (!persianDigits) return false;
+      // If salary is a string, process it
+      if (typeof salary === "string") {
+        const salaryStr = salary.trim();
 
-      const englishDigits = persianDigits
-        .map((digit) => {
-          const charCode = digit.charCodeAt(0);
-          return String(charCode - "\u06F0".charCodeAt(0));
-        })
-        .join("");
+        // Check if it's negotiable salary
+        if (salaryStr.toLowerCase().includes("توافقی")) {
+          return { isNegotiable: true, numericValue: 0 };
+        }
 
-      const salaryNum = parseInt(englishDigits, 10);
-      return salaryNum >= salaryRange[0] && salaryNum <= salaryRange[1];
+        // Try to extract numeric value from Persian digits
+        const persianDigits = salaryStr.match(/[\u06F0-\u06F9]/g);
+        if (persianDigits) {
+          const englishDigits = persianDigits
+            .map((digit) => {
+              const charCode = digit.charCodeAt(0);
+              return String(charCode - "\u06F0".charCodeAt(0));
+            })
+            .join("");
+          return {
+            isNegotiable: false,
+            numericValue: parseInt(englishDigits, 10) || 0,
+          };
+        }
+
+        // Try to extract numeric value from regular digits
+        const regularDigits = salaryStr.match(/\d+/g);
+        if (regularDigits) {
+          const numericValue = parseInt(regularDigits.join(""), 10);
+          return { isNegotiable: false, numericValue: numericValue || 0 };
+        }
+      }
+
+      // If we can't parse it, treat as 0
+      return { isNegotiable: false, numericValue: 0 };
+    };
+
+    // Salary filtering logic
+    result = result.filter((ad) => {
+      const salaryInfo = getSalaryInfo(ad.salary);
+
+      if (showNoLimit) return true;
+      if (showNegotiable) return salaryInfo.isNegotiable;
+
+      if (showRangeFilter) {
+        if (salaryInfo.isNegotiable) return false;
+        return (
+          salaryInfo.numericValue >= salaryRange[0] &&
+          salaryInfo.numericValue <= salaryRange[1]
+        );
+      }
+
+      // Default behavior: show both negotiable and within range
+      if (salaryInfo.isNegotiable) return true;
+      return (
+        salaryInfo.numericValue >= salaryRange[0] &&
+        salaryInfo.numericValue <= salaryRange[1]
+      );
     });
 
     // Sorting logic
@@ -381,10 +268,6 @@ export default function AdvertisementsContainer() {
     setSelectedCity("");
   }, [selectedProvince]);
 
-  const handleViewAd = (adId) => {
-    router.push(`/advertisements/${adId}`);
-  };
-
   // Pagination calculations
   const totalItems = ads.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -440,7 +323,7 @@ export default function AdvertisementsContainer() {
           <div className="w-full">
             {totalItems > 0 ? (
               <div>
-                <AdvertisementsList ads={currentAds} onViewAd={handleViewAd} />
+                <AdvertisementsList ads={currentAds} />
 
                 <AdvertisementsPagination
                   currentPage={currentPage}

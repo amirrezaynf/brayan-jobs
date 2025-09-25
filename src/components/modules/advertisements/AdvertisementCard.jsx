@@ -1,4 +1,6 @@
 import React from "react";
+import Link from "next/link";
+
 export default function AdvertisementCard({ ad, onViewAd }) {
   const toJalali = (gregorianDate) => {
     const gDate = new Date(gregorianDate);
@@ -7,6 +9,59 @@ export default function AdvertisementCard({ ad, onViewAd }) {
       month: "long",
       day: "numeric",
     });
+  };
+
+  // Helper function to format salary
+  const formatSalary = (salary) => {
+    // If salary is null, undefined, or 0, show as negotiable
+    if (!salary || salary === 0) {
+      return "توافقی";
+    }
+
+    // If salary is already a formatted string, return as is
+    if (typeof salary === "string") {
+      // If it already contains "تومان" or "توافقی", return as is
+      if (salary.includes("تومان") || salary.includes("توافقی")) {
+        return salary;
+      }
+      // If it's a string number, convert to number first
+      const numericSalary = parseInt(salary.replace(/[^\d]/g, ""), 10);
+      if (isNaN(numericSalary)) {
+        return "توافقی";
+      }
+      salary = numericSalary;
+    }
+
+    // If salary is a number, format it
+    if (typeof salary === "number") {
+      // Format number with commas
+      const formattedNumber = salary.toLocaleString("en-US");
+      return `${formattedNumber} تومان`;
+    }
+
+    return "توافقی";
+  };
+
+  // Helper function to safely get company name
+  const getCompanyName = (company) => {
+    if (typeof company === "string") {
+      return company;
+    }
+    if (typeof company === "object" && company !== null) {
+      return company.display_name || company.name || "شرکت نامشخص";
+    }
+    return "شرکت نامشخص";
+  };
+
+  // Helper function to safely get category name
+  const getCategoryName = (category) => {
+    if (typeof category === "string") {
+      return category;
+    }
+    if (typeof category === "object" && category !== null) {
+      return category.name || "دسته‌بندی نامشخص";
+    }
+    return "دسته‌بندی نامشخص";
   };
 
   return (
@@ -82,7 +137,9 @@ export default function AdvertisementCard({ ad, onViewAd }) {
             </p>
 
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-400">{ad.company}</span>
+              <span className="text-sm text-gray-400">
+                {getCompanyName(ad.company)}
+              </span>
               <span className="text-sm text-gray-500">{toJalali(ad.date)}</span>
             </div>
           </div>
@@ -92,19 +149,21 @@ export default function AdvertisementCard({ ad, onViewAd }) {
       <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-700">
         <div className="flex items-center gap-2">
           <span className="bg-yellow-500/20 text-yellow-400 text-xs px-2 py-1 rounded-full font-medium">
-            {ad.category}
+            {getCategoryName(ad.category)}
           </span>
           <span className="text-sm text-gray-400">{ad.type}</span>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-yellow-400 font-bold">{ad.salary}</span>
-          <button
-            onClick={() => onViewAd(ad.id)}
-            className="bg-yellow-500 hover:bg-yellow-500 text-black px-4 py-2 rounded-lg font-medium transition-colors duration-200 text-sm"
+          <span className="text-yellow-400 font-bold">
+            {formatSalary(ad.salary)}
+          </span>
+          <Link
+            href={`/advertisements/${ad.id}`}
+            className="bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-lg font-medium transition-colors duration-200 text-sm inline-block"
           >
             مشاهده
-          </button>
+          </Link>
         </div>
       </div>
     </div>

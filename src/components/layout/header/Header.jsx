@@ -114,6 +114,9 @@ export default function Header() {
           </div>
 
           <nav className="hidden lg:flex items-center space-x-8  font-medium">
+            <Link href="/about" className="header-link text-gray-300">
+              درباره ما
+            </Link>
             <Link href="#" className="header-link text-gray-300">
               بهترین آگهی‌ها
             </Link>
@@ -175,6 +178,9 @@ export default function Header() {
               </button>
             </div>
             <nav className="flex flex-col space-y-6 text-lg items-start">
+              <Link href="/about" className="header-link text-gray-300 w-full pb-2">
+                درباره ما
+              </Link>
               <Link href="#" className="header-link text-gray-300 w-full pb-2">
                 بهترین آگهی‌ها
               </Link>
