@@ -39,7 +39,7 @@ function VacanciesContent() {
     setIsLoading(true);
     try {
       let result;
-      
+
       // Use different endpoints based on filter
       if (filter === "expired") {
         result = await getUserExpiredVacancies();
@@ -47,7 +47,7 @@ function VacanciesContent() {
         // For "active", "draft", and "all" filters, use active endpoint
         result = await getUserActiveVacancies();
       }
-      
+
       if (result.success) {
         // Map API data to component format with enhanced information
         const mappedVacancies = result.data.map(vacancy => {
@@ -69,12 +69,12 @@ function VacanciesContent() {
             id: vacancy.id,
             title: vacancy.title,
             company: vacancy.company?.display_name || vacancy.company?.name || "شرکت نامشخص",
-            date: vacancy.published_at ? new Date(vacancy.published_at).toLocaleDateString("fa-IR") : 
-                  vacancy.created_at ? new Date(vacancy.created_at).toLocaleDateString("fa-IR") : 
+            date: vacancy.published_at ? new Date(vacancy.published_at).toLocaleDateString("fa-IR") :
+                  vacancy.created_at ? new Date(vacancy.created_at).toLocaleDateString("fa-IR") :
                   new Date().toLocaleDateString("fa-IR"),
             applicants: vacancy.applicants_count || 0,
             status: vacancy.status || "active",
-            
+
             // Enhanced information from API
             contract_type: vacancy.contract_type,
             salary: formattedSalary,
@@ -83,18 +83,18 @@ function VacanciesContent() {
             is_remote_possible: vacancy.is_remote_possible,
             days_until_expiry: daysUntilExpiry,
             expires_at: vacancy.expires_at,
-            
+
             // Keep original API data for editing
             ...vacancy
           };
         });
-        
+
         setVacancies(mappedVacancies);
       } else {
         // If API fails, show empty list
         console.error("❌ Failed to load vacancies from API:", result.error);
         setVacancies([]);
-        
+
         // Show error message if API failed
         if (result.error) {
           showErrorMessage(result.error);
@@ -142,7 +142,7 @@ function VacanciesContent() {
     // Close form
     setShowCreateForm(false);
     setEditingJob(null);
-    
+
     // Reload jobs from API to get the latest data
     loadJobs();
   };
@@ -154,7 +154,7 @@ function VacanciesContent() {
       setEditingJob(null);
       return;
     }
-    
+
     // If a different job is being edited, close form first then open with new job
     if (showCreateForm) {
       setShowCreateForm(false);
@@ -187,7 +187,7 @@ function VacanciesContent() {
     if (window.confirm("آیا از حذف این آگهی اطمینان دارید؟")) {
       try {
         const result = await deleteVacancy(jobId);
-        
+
         if (result.success) {
           showSuccessMessage(result.message || "آگهی با موفقیت حذف شد!");
           // Reload jobs from API to get the latest data
@@ -528,7 +528,7 @@ function VacanciesContent() {
             هیچ آگهی‌ای یافت نشد
           </h3>
           <p className="text-gray-500 mb-4">
-            {filter === "all" 
+            {filter === "all"
               ? "هنوز آگهی‌ای ایجاد نکرده‌اید"
               : `هیچ آگهی ${filter === "active" ? "فعال" : filter === "draft" ? "پیش‌نویس" : "منقضی"}ی وجود ندارد`
             }
