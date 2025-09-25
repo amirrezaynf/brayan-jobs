@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { testAPIConnection, testAuthToken } from "@/app/actions/vacancy";
+import { getActiveVacancies, getUserActiveVacancies } from "@/app/actions/vacancy";
 
 export default function APIDebugger() {
   const [isLoading, setIsLoading] = useState(false);
@@ -27,18 +27,20 @@ export default function APIDebugger() {
           return;
         }
         
-        // Test with a mock vacancy data that includes the token
-        const mockVacancyData = {
-          title: "تست احراز هویت",
-          description: "تست",
-          requirements: "تست",
-          _authToken: authToken
-        };
+        // Test auth by trying to get user's active vacancies (requires authentication)
+        testResult = await getUserActiveVacancies();
         
-        // Test auth with the token from localStorage
-        testResult = await testAuthToken(authToken);
+        // Add token info to result for debugging
+        if (testResult.success) {
+          testResult.details = {
+            ...testResult.details,
+            tokenFound: true,
+            tokenLength: authToken.length
+          };
+        }
       } else {
-        testResult = await testAPIConnection();
+        // Test basic API connection by getting public active vacancies
+        testResult = await getActiveVacancies({ per_page: 1 });
       }
       setResult(testResult);
     } catch (error) {

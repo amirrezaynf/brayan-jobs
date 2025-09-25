@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تست API ثبت آگهی شغلی</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: #f9f9f9;
+        }
+        
+        .test-section h3 {
+            color: #555;
+            margin-top: 0;
+        }
+        
+        button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .result.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        
+        .result.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        
+        .result.info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .status.ready {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status.testing {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .console-output {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        
+        .progress {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 تست API ثبت آگهی شغلی</h1>
+        
+        <div class="test-section">
+            <h3>🔧 تست سریع دیباگ</h3>
+            <p>بررسی پیش‌نیازهای API (توکن احراز هویت و شناسه شرکت)</p>
+            <button onclick="runDebugTest()">🔍 بررسی پیش‌نیازها</button>
+            <div id="debug-result" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔗 تست اتصال API</h3>
+            <p>بررسی اتصال به سرور و صحت تنظیمات</p>
+            <button onclick="runConnectionTest()">📡 تست اتصال</button>
+            <span id="connection-status" class="status">آماده</span>
+            <div id="connection-result" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📋 تست دریافت آگهی‌ها</h3>
+            <p>دریافت لیست آگهی‌های فعال از سرور</p>
+            <button onclick="runGetVacanciesTest()">📥 دریافت آگهی‌ها</button>
+            <span id="get-status" class="status">آماده</span>
+            <div id="get-result" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📝 تست ثبت آگهی</h3>
+            <p>ثبت یک آگهی نمونه برای تست عملکرد</p>
+            <button onclick="runCreateTest()">➕ ثبت آگهی نمونه</button>
+            <span id="create-status" class="status">آماده</span>
+            <div id="create-result" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🎯 تست کامل</h3>
+            <p>اجرای تمام تست‌ها به صورت متوالی</p>
+            <button onclick="runAllTests()" id="run-all-btn">🚀 اجرای تمام تست‌ها</button>
+            <div class="progress">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <div id="all-result" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="console-output" id="console-output">
+            <div>🎯 Vacancy API Test Console</div>
+            <div>💡 برای شروع، یکی از دکمه‌های بالا را کلیک کنید</div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import API functions
+        import { createVacancy, testAPIConnection, getActiveVacancies } from './src/utils/vacancyAPI.js';
+        
+        // Console output management
+        const consoleOutput = document.getElementById('console-output');
+        
+        function addToConsole(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString('fa-IR');
+            const div = document.createElement('div');
+            div.style.color = type === 'error' ? '#ff6b6b' : type === 'success' ? '#51cf66' : '#00ff00';
+            div.textContent = `[${timestamp}] ${message}`;
+            consoleOutput.appendChild(div);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+        
+        function showResult(elementId, content, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.textContent = content;
+            element.className = `result ${type}`;
+            element.style.display = 'block';
+        }
+        
+        function setStatus(elementId, text, type = 'ready') {
+            const element = document.getElementById(elementId);
+            element.textContent = text;
+            element.className = `status ${type}`;
+        }
+        
+        // Debug test
+        window.runDebugTest = async function() {
+            addToConsole('🔧 شروع تست دیباگ...');
+            
+            try {
+                const authToken = localStorage.getItem("auth_token") || localStorage.getItem("authToken") || localStorage.getItem("token");
+                const userProfile = JSON.parse(localStorage.getItem("userProfile") || "{}");
+                const companyData = JSON.parse(localStorage.getItem("companyData") || "{}");
+                const user = JSON.parse(localStorage.getItem("user") || "{}");
+                
+                const hasToken = !!authToken;
+                const hasCompanyId = !!(userProfile.company_id || companyData.id || user.company_id);
+                
+                let result = `🔑 توکن احراز هویت: ${hasToken ? '✅ موجود' : '❌ موجود نیست'}\n`;
+                result += `🏢 شناسه شرکت: ${hasCompanyId ? '✅ موجود' : '❌ موجود نیست'}\n\n`;
+                
+                if (hasToken) {
+                    result += `🔑 Token: ${authToken.substring(0, 20)}...\n`;
+                }
+                
+                if (userProfile.company_id) {
+                    result += `🏢 Company ID (userProfile): ${userProfile.company_id}\n`;
+                }
+                if (companyData.id) {
+                    result += `🏢 Company ID (companyData): ${companyData.id}\n`;
+                }
+                if (user.company_id) {
+                    result += `🏢 Company ID (user): ${user.company_id}\n`;
+                }
+                
+                result += `\n📊 وضعیت کلی: `;
+                if (hasToken && hasCompanyId) {
+                    result += `✅ آماده برای استفاده از API`;
+                    showResult('debug-result', result, 'success');
+                } else {
+                    result += `❌ نیاز به تکمیل پیش‌نیازها`;
+                    if (!hasToken) result += `\n💡 ابتدا وارد حساب کاربری شوید`;
+                    if (!hasCompanyId) result += `\n💡 پروفایل شرکت را تکمیل کنید`;
+                    showResult('debug-result', result, 'error');
+                }
+                
+                addToConsole('✅ تست دیباگ تکمیل شد', 'success');
+                
+            } catch (error) {
+                addToConsole(`❌ خطا در تست دیباگ: ${error.message}`, 'error');
+                showResult('debug-result', `خطا: ${error.message}`, 'error');
+            }
+        };
+        
+        // Connection test
+        window.runConnectionTest = async function() {
+            setStatus('connection-status', 'در حال تست...', 'testing');
+            addToConsole('🔗 شروع تست اتصال...');
+            
+            try {
+                const result = await testAPIConnection();
+                
+                if (result.success) {
+                    addToConsole('✅ اتصال موفق!', 'success');
+                    setStatus('connection-status', 'موفق', 'ready');
+                    showResult('connection-result', `✅ اتصال برقرار شد\nStatus: ${result.status}\nMessage: ${result.message}`, 'success');
+                } else {
+                    addToConsole(`❌ اتصال ناموفق: ${result.error}`, 'error');
+                    setStatus('connection-status', 'ناموفق', 'error');
+                    showResult('connection-result', `❌ خطا در اتصال\nError: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                addToConsole(`❌ خطا در تست اتصال: ${error.message}`, 'error');
+                setStatus('connection-status', 'خطا', 'error');
+                showResult('connection-result', `خطا: ${error.message}`, 'error');
+            }
+        };
+        
+        // Get vacancies test
+        window.runGetVacanciesTest = async function() {
+            setStatus('get-status', 'در حال دریافت...', 'testing');
+            addToConsole('📋 شروع تست دریافت آگهی‌ها...');
+            
+            try {
+                const result = await getActiveVacancies();
+                
+                if (result.success) {
+                    const count = result.data?.length || 0;
+                    addToConsole(`✅ ${count} آگهی دریافت شد`, 'success');
+                    setStatus('get-status', 'موفق', 'ready');
+                    
+                    let resultText = `✅ آگهی‌ها دریافت شد\nتعداد: ${count}\n`;
+                    if (result.meta) {
+                        resultText += `\nاطلاعات صفحه‌بندی:\n${JSON.stringify(result.meta, null, 2)}`;
+                    }
+                    showResult('get-result', resultText, 'success');
+                } else {
+                    addToConsole(`❌ خطا در دریافت: ${result.error}`, 'error');
+                    setStatus('get-status', 'ناموفق', 'error');
+                    showResult('get-result', `❌ خطا در دریافت آگهی‌ها\nError: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                addToConsole(`❌ خطا در تست دریافت: ${error.message}`, 'error');
+                setStatus('get-status', 'خطا', 'error');
+                showResult('get-result', `خطا: ${error.message}`, 'error');
+            }
+        };
+        
+        // Create vacancy test
+        window.runCreateTest = async function() {
+            setStatus('create-status', 'در حال ثبت...', 'testing');
+            addToConsole('📝 شروع تست ثبت آگهی...');
+            
+            const sampleVacancy = {
+                title: "برنامه‌نویس React - تست API",
+                type: "تمام وقت",
+                location: "تهران، سعادت‌آباد",
+                description: "این یک آگهی تستی برای بررسی عملکرد API است.",
+                requirements: "حداقل 2 سال تجربه کار با React",
+                salary: "25000000",
+                experience: "۲-۵ سال",
+                education: "کارشناسی",
+                gender: "مرد و زن",
+                benefits: ["بیمه تکمیلی", "وام بدون بهره"],
+                skills: ["React", "TypeScript", "JavaScript"],
+                remoteWork: true,
+                urgent: true
+            };
+            
+            try {
+                const result = await createVacancy(sampleVacancy);
+                
+                if (result.success) {
+                    addToConsole('✅ آگهی با موفقیت ثبت شد!', 'success');
+                    setStatus('create-status', 'موفق', 'ready');
+                    showResult('create-result', `✅ آگهی ثبت شد\nID: ${result.data?.id}\nMessage: ${result.message}`, 'success');
+                } else {
+                    addToConsole(`❌ خطا در ثبت: ${result.error}`, 'error');
+                    setStatus('create-status', 'ناموفق', 'error');
+                    
+                    let errorText = `❌ خطا در ثبت آگهی\nError: ${result.error}\n\n`;
+                    if (result.error.includes("شرکت")) {
+                        errorText += "💡 راهنمایی: ابتدا پروفایل شرکت را تکمیل کنید";
+                    } else if (result.error.includes("احراز هویت")) {
+                        errorText += "💡 راهنمایی: دوباره وارد حساب کاربری شوید";
+                    }
+                    
+                    showResult('create-result', errorText, 'error');
+                }
+            } catch (error) {
+                addToConsole(`❌ خطا در تست ثبت: ${error.message}`, 'error');
+                setStatus('create-status', 'خطا', 'error');
+                showResult('create-result', `خطا: ${error.message}`, 'error');
+            }
+        };
+        
+        // Run all tests
+        window.runAllTests = async function() {
+            const button = document.getElementById('run-all-btn');
+            const progressBar = document.getElementById('progress-bar');
+            
+            button.disabled = true;
+            button.textContent = '🔄 در حال اجرا...';
+            
+            addToConsole('🚀 شروع تست کامل API...');
+            
+            const tests = [
+                { name: 'Debug', func: runDebugTest },
+                { name: 'Connection', func: runConnectionTest },
+                { name: 'Get Vacancies', func: runGetVacanciesTest },
+                { name: 'Create Vacancy', func: runCreateTest }
+            ];
+            
+            let passed = 0;
+            
+            for (let i = 0; i < tests.length; i++) {
+                const test = tests[i];
+                addToConsole(`📋 اجرای تست ${i + 1}/${tests.length}: ${test.name}`);
+                
+                try {
+                    await test.func();
+                    passed++;
+                } catch (error) {
+                    addToConsole(`❌ تست ${test.name} ناموفق: ${error.message}`, 'error');
+                }
+                
+                // Update progress
+                const progress = ((i + 1) / tests.length) * 100;
+                progressBar.style.width = `${progress}%`;
+                
+                // Wait a bit between tests
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+            
+            // Final results
+            const resultText = `🎯 نتایج نهایی:\n✅ موفق: ${passed}/${tests.length}\n❌ ناموفق: ${tests.length - passed}/${tests.length}`;
+            
+            if (passed === tests.length) {
+                addToConsole('🎉 تمام تست‌ها موفق بودند!', 'success');
+                showResult('all-result', resultText + '\n\n🎉 API کاملاً عملکرد صحیح دارد!', 'success');
+            } else if (passed > 0) {
+                addToConsole('⚠️ برخی تست‌ها ناموفق بودند', 'error');
+                showResult('all-result', resultText + '\n\n⚠️ برخی مشکلات وجود دارد. لاگ‌ها را بررسی کنید.', 'error');
+            } else {
+                addToConsole('❌ تمام تست‌ها ناموفق بودند', 'error');
+                showResult('all-result', resultText + '\n\n❌ مشکل جدی در تنظیمات API وجود دارد.', 'error');
+            }
+            
+            button.disabled = false;
+            button.textContent = '🚀 اجرای تمام تست‌ها';
+        };
+        
+        addToConsole('🎯 تست API آماده است!');
+        addToConsole('💡 برای شروع، دکمه "بررسی پیش‌نیازها" را کلیک کنید');
+    </script>
+</body>
+</html>
