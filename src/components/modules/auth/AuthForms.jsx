@@ -11,7 +11,7 @@ import { login } from "@/app/actions/auth";
 // --- Main AuthForms Component ---
 export default function AuthForms() {
   const router = useRouter();
-  const [userRole, setUserRole] = useState("specialist");
+  const [userRole, setUserRole] = useState("jobSeeker");
   const [activeTab, setActiveTab] = useState("login");
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -29,7 +29,7 @@ export default function AuthForms() {
   });
 
   // Register flows for both user types
-  const specialistRegisterFlow = useRegisterFlow(
+  const jobSeekerRegisterFlow = useRegisterFlow(
     {
       contact: "",
       verificationCode: "",
@@ -41,7 +41,7 @@ export default function AuthForms() {
       age: "",
       education: "",
     },
-    "specialist"
+    "jobSeeker"
   );
 
   const employerRegisterFlow = useRegisterFlow(
@@ -69,15 +69,6 @@ export default function AuthForms() {
       const result = await login(loginData.contact, loginData.password);
 
       if (result.success) {
-        // Store token in both formats for compatibility
-        localStorage.setItem("authToken", result.token);
-        localStorage.setItem("auth_token", result.token);
-        
-        // Also set cookie for server-side access
-        document.cookie = `auth_token=${result.token}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
-        
-        console.log("✅ Login successful, token stored:", result.token ? `${result.token.substring(0, 10)}...` : "null");
-        
         // Redirect based on user role
         const redirectUrl = result.user.role === 2 ? "/employer" : "/karjoo";
         router.push(redirectUrl);
@@ -103,17 +94,8 @@ export default function AuthForms() {
       );
 
       if (result.success) {
-        // Store token in both formats for compatibility
-        localStorage.setItem("authToken", result.token);
-        localStorage.setItem("auth_token", result.token);
-        
-        // Also set cookie for server-side access
-        document.cookie = `auth_token=${result.token}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
-        
-        console.log("✅ Employer login successful, token stored:", result.token ? `${result.token.substring(0, 10)}...` : "null");
-        
         // Redirect based on user role
-        const redirectUrl = result.user.role === 2 ? "/employer/dashboard" : "/karjoo";
+        const redirectUrl = result.user.role === 2 ? "/dashboard" : "/karjoo";
         router.push(redirectUrl);
       } else {
         setEmployerErrors({ general: result.error });
@@ -142,9 +124,9 @@ export default function AuthForms() {
         {/* Role Tabs */}
         <div className="flex items-center justify-center gap-4 mb-6">
           <AuthTab
-            onClick={() => setUserRole("specialist")}
+            onClick={() => setUserRole("jobSeeker")}
             className={
-              userRole === "specialist"
+              userRole === "jobSeeker"
                 ? "bg-yellow-400 text-gray-900 font-bold shadow-lg"
                 : "bg-gray-700/50 text-gray-300"
             }
@@ -186,8 +168,8 @@ export default function AuthForms() {
           </div>
 
           <div className="p-8">
-            {/* Specialist */}
-            {userRole === "specialist" &&
+            {/* jobSeeker */}
+            {userRole === "jobSeeker" &&
               (activeTab === "login" ? (
                 <LoginForm
                   data={loginData}
@@ -197,10 +179,7 @@ export default function AuthForms() {
                   onSubmit={handleLoginSubmit}
                 />
               ) : (
-                <RegisterSteps
-                  flow={specialistRegisterFlow}
-                  role="specialist"
-                />
+                <RegisterSteps flow={jobSeekerRegisterFlow} role="jobSeeker" />
               ))}
 
             {/* Employer */}
