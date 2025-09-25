@@ -1,3 +1,6 @@
+import { CheckCircleGoldIcon } from "@/icons";
+import Image from "next/image";
+
 export default function BenefitsSection() {
   return (
     <section className="py-16 bg-[#121212] text-white mb-10">
@@ -10,9 +13,11 @@ export default function BenefitsSection() {
           بهترین استعدادها برای تیم‌تان، ما ابزارها و فرصت‌ها را در اختیار شما
           قرار می‌دهیم.
         </p>
-        <div className="flex flex-col md:flex-row items-center gap-12">
-          <div className="md:w-1/2">
-            <img
+        <div className="flex flex-col md:flex-row items-center gap-12 h-full">
+          <div className="md:w-1/2 relative h-full">
+            <Image
+              width={1000}
+              height={1000}
               src="/picture/bg-main-1.jpg"
               alt="رشد کسب‌وکار و مسیر شغلی"
               className="rounded-lg shadow-2xl w-full h-auto object-cover"
@@ -26,20 +31,7 @@ export default function BenefitsSection() {
 
               <ul className="space-y-4 text-gray-300">
                 <li className="flex items-start">
-                  <svg
-                    className="w-6 h-6 text-yellow-500 ml-3 flex-shrink-0 mt-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    ></path>
-                  </svg>
+                  <CheckCircleGoldIcon className="w-6 h-6 text-yellow-500 ml-3 flex-shrink-0 mt-1" />
                   <span>
                     <strong className="text-white">فرصت‌های شغلی متنوع:</strong>{" "}
                     به هزاران موقعیت شغلی تمام‌وقت، پاره‌وقت و پروژه‌ای در
@@ -48,20 +40,7 @@ export default function BenefitsSection() {
                 </li>
 
                 <li className="flex items-start">
-                  <svg
-                    className="w-6 h-6 text-yellow-500 ml-3 flex-shrink-0 mt-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    ></path>
-                  </svg>
+                  <CheckCircleGoldIcon className="w-6 h-6 text-yellow-500 ml-3 flex-shrink-0 mt-1" />
                   <span>
                     <strong className="text-white">مستقیماً دیده شوید:</strong>{" "}
                     با قرار گرفتن در لیست کارجویان، به کارفرمایان برتر اجازه
@@ -78,20 +57,7 @@ export default function BenefitsSection() {
 
               <ul className="space-y-4 text-gray-300">
                 <li className="flex items-start">
-                  <svg
-                    className="w-6 h-6 text-yellow-500 ml-3 flex-shrink-0 mt-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    ></path>
-                  </svg>
+                  <CheckCircleGoldIcon className="w-6 h-6 text-yellow-500 ml-3 flex-shrink-0 mt-1" />
                   <span>
                     <strong className="text-white">
                       دسترسی سریع به نیروی کار:
@@ -101,20 +67,7 @@ export default function BenefitsSection() {
                   </span>
                 </li>
                 <li className="flex items-start">
-                  <svg
-                    className="w-6 h-6 text-yellow-500 ml-3 flex-shrink-0 mt-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    ></path>
-                  </svg>
+                  <CheckCircleGoldIcon className="w-6 h-6 text-yellow-500 ml-3 flex-shrink-0 mt-1" />
                   <span>
                     <strong className="text-white">
                       مقایسه و استخدام حرفه‌ای‌ها:
@@ -124,20 +77,7 @@ export default function BenefitsSection() {
                   </span>
                 </li>
                 <li className="flex items-start">
-                  <svg
-                    className="w-6 h-6 text-yellow-500 ml-3 flex-shrink-0 mt-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    ></path>
-                  </svg>
+                  <CheckCircleGoldIcon className="w-6 h-6 text-yellow-500 ml-3 flex-shrink-0 mt-1" />
                   <span>
                     <strong className="text-white">
                       مدیریت آسان فرآیند جذب:

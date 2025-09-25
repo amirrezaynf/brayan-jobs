@@ -2,7 +2,6 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Header from "@/components/layout/header/Header";
 import Footer from "@/components/layout/footer/Footer";
-import NextAuthProvider from "@/components/layout/provider/NextAuthProvider";
 
 const yekanBakh = localFont({
   src: [
@@ -34,9 +33,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="fa" dir="rtl">
-      <body>
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

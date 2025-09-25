@@ -3,9 +3,12 @@
 import React, { useState } from "react";
 import NotificationModal from "@/components/ui/modals/NotificationModal";
 import ProfileDropdown from "@/components/ui/dropdowns/ProfileDropdown";
+import { useRouter } from "next/navigation";
+import { logout } from "@/app/actions/auth";
 
 export default function KarjooHeader() {
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
+  const router = useRouter();
 
   const handleNotificationClick = () => {
     setIsNotificationModalOpen(true);
@@ -13,6 +16,17 @@ export default function KarjooHeader() {
 
   const handleCloseNotificationModal = () => {
     setIsNotificationModalOpen(false);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (_) {}
+    try {
+      document.cookie = "auth_user=; path=/; max-age=0";
+      document.cookie = "auth_token=; path=/; max-age=0";
+    } catch (_) {}
+    router.push("/auth");
   };
 
   return (
@@ -64,6 +78,14 @@ export default function KarjooHeader() {
             </button>
 
             <ProfileDropdown />
+
+            {/* Logout */}
+            <button
+              onClick={handleLogout}
+              className="bg-red-500/80 hover:bg-red-500 text-white px-3 py-1.5 rounded-lg transition duration-300 text-sm"
+            >
+              خروج
+            </button>
           </div>
         </div>
       </header>
